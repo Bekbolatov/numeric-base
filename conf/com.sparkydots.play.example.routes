@@ -1,0 +1,16 @@
+# Routes
+
+GET     /                   com.sparkydots.play.example.controllers.Application.index
+GET     /assets/*file       controllers.Assets.at(path="/public", file)
+
+GET     /nog                   com.sparkydots.play.example.controllers.Angular.index
+
+
+GET     /content                com.sparkydots.play.example.controllers.Application.getContentDirectly(address: Option[String])
+GET     /second                 com.sparkydots.play.example.controllers.SecondApp.index
+
+
+
+
+POST    /addClient          com.sparkydots.play.example.controllers.Application.addClient()
+GET     /clients            com.sparkydots.play.example.controllers.Application.getClients

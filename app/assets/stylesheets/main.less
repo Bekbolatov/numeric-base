@@ -1,0 +1,44 @@
+@import "utils/_layout.less";
+
+@some-blue: #0372CD;
+@some-red: #CC5854;
+
+@nice-blue: #5B83AD;
+@light-blue: @nice-blue + #111;
+
+ul {
+  background: @some-blue;
+}
+
+
+.box {
+    color: @some-red;
+    .bordered
+}
+
+
+//parametric mixin
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+
+.button {
+  .border-radius(20px);
+}
+
+
+//nesting and cascading
+
+#header {
+  color: black;
+  .navigation {
+    font-size: 12px;
+  }
+  .logo {
+    width: 300px;
+  }
+}
+

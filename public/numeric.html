@@ -1,0 +1,87 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/newtask/{{ numericApp.currentTaskType }}"></a>
+    <h2 class="title">{{ numericApp.currentTaskType }}</h2>
+</header>
+
+    <div class="content">
+
+        <!--   problem statement -->
+        <div class="numeric numeric-problem">
+            {{ numeric.question.statement }} {{ numeric.answer | questionMark }}
+        </div>
+
+        <!--  feedback result displayed here -->
+        <div class="numeric numeric-result numeric-result-{{numeric.result.class}}">
+            {{ numeric.result.verbal }}
+        </div>
+
+
+        <!--  input is done here -->
+        <div ng-show="numericApp.currentTaskAnswerType == 'numeric'" class="numeric numeric-keypad">
+            <table class="numeric">
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(1)">1</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(2)">2</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(3)">3</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(4)">4</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(5)">5</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(6)">6</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(7)">7</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(8)">8</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(9)">9</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.clear()">Clear</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressed(0)">0</button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.enter()">Enter</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div ng-show="numericApp.currentTaskAnswerType == 'multiple'" class="numeric numeric-keypad">
+            multiple choice
+        </div>
+
+
+
+        <div>
+            &nbsp;
+        </div>
+        <div class="numeric numeric-stats">
+            {{ numeric.statsCorrect }} correct and {{ numeric.statsWrong }} wrong
+        </div>
+        <div class="numeric-completed">
+            <div class="numeric-completed-incorrect">3 + 4 = 5 (5 sec)</div>
+            <div class="numeric-completed-correct">32 + 41 = 75 (13 sec)</div>
+        </div>
+    </div>
+

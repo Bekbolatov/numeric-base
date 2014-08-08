@@ -1,0 +1,22 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/listtasks"></a>
+
+    <h1 class="title">{{ numericApp.currentTaskType }} Options</h1>
+    <a class="icon icon-right-nav pull-right" href="#/task/{{task.answerType}}"></a>
+</header>
+
+
+<div class="content">
+
+    <div ng-repeat="(paramKey, param) in task.parameters">
+
+        <div class="optionBlock">
+            <span class="paramName">{{ param.name | firstCapital }}</span>
+
+            <span ng-repeat="level in param.levels">
+                <button class="btn{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">{{ level }}</button>
+            </span>
+
+        </div>
+    </div>
+</div>
