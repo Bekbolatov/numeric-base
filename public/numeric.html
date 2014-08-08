@@ -1,5 +1,12 @@
 <header class="bar bar-nav">
     <a class="icon icon-left-nav pull-left" href="#/newtask/{{ numericApp.currentTaskType }}"></a>
+    <!--
+    <a href="#/listtasks">
+        <button class="btn btn-primary pull-left">
+            Change
+        </button>
+    </a>
+    -->
     <h2 class="title">{{ numericApp.currentTaskType }}</h2>
 </header>
 
@@ -80,8 +87,8 @@
             {{ numeric.statsCorrect }} correct and {{ numeric.statsWrong }} wrong
         </div>
         <div class="numeric-completed">
-            <div class="numeric-completed-incorrect">3 + 4 = 5 (5 sec)</div>
-            <div class="numeric-completed-correct">32 + 41 = 75 (13 sec)</div>
+            <div class="numeric-completed-incorrect">3 + 4 ≠ 5 (5 sec) <span class="icon icon-close"></span></div>
+            <div class="numeric-completed-correct">32 + 41 = 75 (13 sec) <span class="icon icon-check"></span></div>
         </div>
     </div>
 

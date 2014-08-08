@@ -9,14 +9,16 @@ document.numeric.numericTasks['Addition'] =
     parameters: {
         level: {
                 name: 'level',
+                description: 'How difficult should the questions be?',
                 type: 'discrete',
-                levels: [ 'supereasy', 'easy', 'medium', 'hard'],
+                levels: [ 'trivial', 'easy', 'medium', 'hard'],
                 selectedValue: 'medium'
         },
         quantity: {
                 name: 'quantity',
+                description: 'how many questions to put in this task?',
                 type: 'discrete',
-                levels: [ 20, 50 ],
+                levels: [ 10, 20, 50 ],
                 selectedValue: 20
         }
     },
@@ -32,7 +34,7 @@ document.numeric.numericTasks['Addition'] =
         var min = 1;
         var max = 9;
 
-        if (_isLevel('supereasy')) {
+        if (_isLevel('trivial')) {
             min = 1;
             max = 9;
         } else if (_isLevel('easy')) {

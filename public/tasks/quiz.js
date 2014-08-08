@@ -11,12 +11,14 @@ document.numeric.numericTasks['QuizDEV'] =
     parameters: {
         level: {
                 name: 'level',
+                description: 'How difficult should the questions be?',
                 type: 'discrete',
                 levels: [ 'easy', 'medium', 'hard'],
                 selectedValue: 'medium'
         },
         quantity: {
                 name: 'quantity',
+                description: 'How many questions to put in this task?',
                 type: 'discrete',
                 levels: [ 20, 50 ],
                 selectedValue: 20

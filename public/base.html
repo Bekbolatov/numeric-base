@@ -3,23 +3,19 @@
 <div ng-view></div>
 
 <nav class="bar bar-tab">
-    <a class="tab-item active"  ng-class="{active: $route.current.activetab == ''}" href="#">
-        <span class="icon icon-compose"></span>
-        <span class="tab-label">Main</span>
+    <a class="tab-item active" href="#/home">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
     </a>
-    <a class="tab-item active"  ng-class="{active: $route.current.activetab == ''}" href="#/listtasks">
-        <span class="icon icon-compose"></span>
-        <span class="tab-label">list</span>
-    </a>
-    <a class="tab-item active"  ng-class="{active: $route.current.activetab == ''}" href="#/newtask">
-        <span class="icon icon-compose"></span>
-        <span class="tab-label">new</span>
-    </a>
-    <a class="tab-item" ng-class="{active: $route.current.activetab == 'stats'}" href="#/stats">
+    <a class="tab-item active" href="#/stats">
         <span class="icon icon-pages"></span>
         <span class="tab-label">Stats</span>
     </a>
-    <a class="tab-item"  ng-class="{active: $route.current.activetab == 'configure'}" href="#/configure">
+    <a class="tab-item active" href="#/social">
+        <span class="icon icon-compose"></span>
+        <span class="tab-label">Social</span>
+    </a>
+    <a class="tab-item active" href="#/settings">
         <span class="icon icon-gear"></span>
         <span class="tab-label">Settings</span>
     </a>

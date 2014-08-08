@@ -3,9 +3,9 @@ angular.module('AppOne', ['ngRoute', 'numeric'])
 angular.module('AppOne')
 .config(['$routeProvider', ($routeProvider) ->
     $routeProvider
-    .when('/splash', {
-        templateUrl: 'assets/splash.html'
-        controller: 'SplashCtrl'
+    .when('/home', {
+        templateUrl: 'assets/home.html'
+        controller: 'HomeCtrl'
     })
     .when('/listtasks', {
         templateUrl: 'assets/tasksList.html'
@@ -19,12 +19,20 @@ angular.module('AppOne')
         templateUrl: 'assets/numeric.html'
         controller: 'NumericCtrl'
     })
-    .when('/configure', {
+    .when('/stats', {
         template: '<h1> {{ test }} </h1>'
-        controller: 'NumericConfigureCtrl'
+        controller: 'StatsCtrl'
+    })
+    .when('/social', {
+        template: '<h1> {{ test }} </h1>'
+        controller: 'SocialCtrl'
+    })
+    .when('/settings', {
+        template: '<h1> {{ test }} </h1>'
+        controller: 'SettingsCtrl'
     })
     .otherwise({
-        redirectTo: '/splash'
+        redirectTo: '/home'
     })
 ])
 
@@ -37,7 +45,7 @@ angular.module('AppOne')
     $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|ftp|mailto|file|tel):/
 ])
 
-.controller('SplashCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+.controller('HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.numericApp = NumericApp
 ])
 
@@ -65,7 +73,24 @@ angular.module('AppOne')
     NumericData.setTaskEngine(NumericApp.getCurrentTask())
 ])
 
-.controller('NumericConfigureCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+.controller('StatsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.test = '...stats...'
+    $scope.numericApp = NumericApp
+    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
+            $scope.$apply()
+    )
+])
+
+.controller('SocialCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.test = '...social...'
+    $scope.numericApp = NumericApp
+    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
+            $scope.$apply()
+    )
+])
+
+.controller('SettingsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.test = '...settings...'
     $scope.numericApp = NumericApp
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()

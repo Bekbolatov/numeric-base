@@ -1,20 +1,44 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href="#/listtasks"></a>
+    <!-- <a class="icon icon-left-nav pull-left" href="#/listtasks"></a> -->
+    <a href="#/listtasks">
+        <!--
+        <button class="btn btn-primary pull-left">
+            Back
+        </button>
+        -->
+        <button class="btn btn-link btn-nav pull-left">
+            <span class="icon icon-left-nav"></span>
+            Back
+        </button>
+    </a>
 
-    <h1 class="title">{{ numericApp.currentTaskType }} Options</h1>
-    <a class="icon icon-right-nav pull-right" href="#/task/{{task.answerType}}"></a>
+    <h1 class="title">Configure the task</h1>
+    <!-- <a class="icon icon-right-nav pull-right" href="#/task/{{task.answerType}}"></a> -->
+    <a href="#/task/{{task.answerType}}">
+        <!--
+        <button class="btn btn-primary pull-right">
+            Start
+        </button> -->
+        <button class="btn btn-link btn-nav pull-right">
+            Start
+            <span class="icon icon-right-nav"></span>
+        </button>
+    </a>
 </header>
 
 
 <div class="content">
 
+    <div class="optionBlock">
+        <div class="paramName">Task "{{ numericApp.currentTaskType}}" has the following configuration options:</div>
+    </div>
+
     <div ng-repeat="(paramKey, param) in task.parameters">
 
         <div class="optionBlock">
-            <span class="paramName">{{ param.name | firstCapital }}</span>
-
-            <span ng-repeat="level in param.levels">
-                <button class="btn{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">{{ level }}</button>
+            <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
+            <span class="paramName" ng-repeat="level in param.levels">
+                <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">{{ level }}</button>
             </span>
 
         </div>
