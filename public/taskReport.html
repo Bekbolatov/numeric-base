@@ -1,0 +1,27 @@
+<header class="bar bar-nav">
+    <a href="#/listtasks">
+        <button class="btn btn-primary pull-left">
+            New Task
+        </button>
+    </a>
+    <h2 class="title">Task Report</h2>
+    <a href="#/newtask/{{ task.name }}">
+        <button class="btn btn-primary pull-right">
+            Restart
+        </button>
+    </a>
+</header>
+
+<div class="content">
+    <div>Task: {{numeric.taskName }}</div>
+    <div>{{ numeric.statsCorrect + numeric.statsWrong}} questions</div>
+    <div>Number of correct answers: {{numeric.statsCorrect}} ({{ 100*numeric.statsCorrect/ (numeric.statsCorrect + numeric.statsWrong) }}%)</div>
+    <div>Number of wrong answers: {{numeric.statsWrong}} ({{ 100*numeric.statsWrong/ (numeric.statsCorrect + numeric.statsWrong) }}%)</div>
+    <div>Total time: {{numeric.totalTime }} - convert seconds to human-readable</div>
+    <div>Average time: {{numeric.totalTime / (numeric.statsCorrect + numeric.statsWrong) }}</div>
+    <div>detailed list...</div>
+</div>
+
+
+
+totalTime

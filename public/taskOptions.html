@@ -29,15 +29,11 @@
 
 <div class="content">
 
-    <div class="optionBlock">
-        <div class="paramName">Task "{{ numericApp.currentTaskType}}" has the following configuration options:</div>
-    </div>
-
     <div ng-repeat="(paramKey, param) in task.parameters">
 
         <div class="optionBlock">
             <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
-            <span class="paramName" ng-repeat="level in param.levels">
+            <span ng-repeat="level in param.levels">
                 <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">{{ level }}</button>
             </span>
 

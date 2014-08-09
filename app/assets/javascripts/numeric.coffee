@@ -46,23 +46,62 @@ angular.module('numeric')
             @statsCorrect = 0
             @statsWrong = 0
 
+        _clearLastQuestion: () ->
+            @answeredQuestion =
+                statement: ''
+                class: 'correct'
+                time: ''
+
 
         # Problem construction and check
-        setTaskEngine: (@newTaskEngine) ->
+        setTaskEngine: (@newTaskEngine, @scope) ->
             @_clearResult()
             @resetStats()
             @_newQuestion()
+            @taskName = @newTaskEngine.name
+            @_clearLastQuestion()
+            @startTime = new Date()
+
+        getTaskName: ->
+            @newTaskEngine.name
 
         _newQuestion: () ->
             @answer = undefined
-            @question = @newTaskEngine.createNextQuestion()
+            @question = @newTaskEngine.createNextQuestion(@statsCorrect + @statsWrong)
+            if @question == undefined
+                @scope.$broadcast('end-of-test')
+                @scope.$broadcast('timer-stop')
+                @endTime = new Date()
+                @totalTime = Math.round( (@endTime - @startTime) / 1000 )
+                return
+            @questionStatement = @question.statement
+            if @newTaskEngine.answerType == 'numeric'
+                @questionStatement = @questionStatement + ' = '
+            @questionStatementChoices = @question.choices
 
-        _checkAnswer: () ->
-            if (@question.checkAnswer(@answer))
+            @scope.$broadcast('timer-start')
+
+        _checkAnswer: (answer) ->
+            @scope.$broadcast('timer-stop')
+            if @newTaskEngine.answerType == 'numeric'
+                answerString = answer
+            else
+                answerString = @questionStatementChoices[answer]
+
+            if @question.checkAnswer(answer)
                 @_markCorrectResult()
+                @answeredQuestion =
+                    statement: @question.statement
+                    answer: answerString
+                    result: true
+                    time: Math.round(@scope.elapsedTime/1000)
             else
                 @_markWrongResult()
-
+                @answeredQuestion =
+                    statement: @question.statement
+                    answer: answerString
+                    result: false
+                    time: Math.round(@scope.elapsedTime/1000)
 
         # User keypad entries
         pressed: (digit) ->
@@ -74,14 +113,19 @@ angular.module('numeric')
             @answer = undefined
         enter: () ->
             if (@answer != undefined)
-                @_checkAnswer()
+                @_checkAnswer(@answer)
                 @_newQuestion()
+        # User multiple-choice entries
+        pressedChoice: (choice) ->
+            @_checkAnswer(choice)
+            @_newQuestion()
 
 
 
         constructor: () ->
             @_clearResult()
             @resetStats()
+            @_clearLastQuestion()
 
     new Numeric()
 

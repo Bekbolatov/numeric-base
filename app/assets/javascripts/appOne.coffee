@@ -1,4 +1,4 @@
-angular.module('AppOne', ['ngRoute', 'numeric'])
+angular.module('AppOne', ['ngRoute', 'numeric', 'timer'])
 
 angular.module('AppOne')
 .config(['$routeProvider', ($routeProvider) ->
@@ -11,14 +11,27 @@ angular.module('AppOne')
         templateUrl: 'assets/tasksList.html'
         controller: 'TaskListCtrl'
     })
+    .when('/tasksManaging', {
+        templateUrl: 'assets/tasksManaging.html'
+        controller: 'TasksManagingCtrl'
+    })
+    .when('/tasksMarketplace', {
+        templateUrl: 'assets/tasksMarketplace.html'
+        controller: 'TasksMarketplaceCtrl'
+    })
     .when('/newtask/:taskType', {
         templateUrl: 'assets/taskOptions.html'
         controller: 'TaskOptionsCtrl'
     })
     .when('/task/:taskAnswerType', {
-        templateUrl: 'assets/numeric.html'
-        controller: 'NumericCtrl'
+        templateUrl: 'assets/task.html'
+        controller: 'TaskCtrl'
     })
+    .when('/report', {
+        templateUrl: 'assets/taskReport.html'
+        controller: 'ReportCtrl'
+    })
+
     .when('/stats', {
         template: '<h1> {{ test }} </h1>'
         controller: 'StatsCtrl'
@@ -27,7 +40,7 @@ angular.module('AppOne')
         template: '<h1> {{ test }} </h1>'
         controller: 'SocialCtrl'
     })
-    .when('/settings', {
+    .when('/settings/:section', {
         template: '<h1> {{ test }} </h1>'
         controller: 'SettingsCtrl'
     })
@@ -56,6 +69,18 @@ angular.module('AppOne')
     )
 ])
 
+.controller('TasksManagingCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.numericApp = NumericApp
+])
+
+.controller('TasksMarketplaceCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.numericApp = NumericApp
+    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
+            $scope.$apply()
+    )
+    $scope.test = 'todo: tasks marketplace'
+])
+
 .controller('TaskOptionsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.numericApp = NumericApp
     NumericApp.currentTaskType = $routeParams.taskType
@@ -66,15 +91,31 @@ angular.module('AppOne')
         NumericApp.getCurrentTask().parameters[key].selectedValue = value
 ])
 
-.controller('NumericCtrl', ['$scope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $routeParams, NumericData, NumericApp ) ->
+.controller('TaskCtrl', ['$scope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, NumericData, NumericApp ) ->
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
     NumericApp.currentTaskAnswerType = $routeParams.taskAnswerType
-    NumericData.setTaskEngine(NumericApp.getCurrentTask())
+    NumericData.setTaskEngine(NumericApp.getCurrentTask(), $scope)
+    $scope.resetTimer =  () ->
+        $scope.$broadcast('timer-start');
+    $scope.$on 'timer-tick', (event, args) ->
+        $scope.elapsedTime = args.millis
+    $scope.$on 'end-of-test', (event, args) ->
+        $scope.endOfTestReached = 'reached'
+        $location.path('/report')
+])
+
+.controller('ReportCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
+    $scope.task = NumericApp.getCurrentTask()
+    $scope.numericApp = NumericApp
+    $scope.numeric = NumericData
+    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
+            $scope.$apply()
+    )
 ])
 
 .controller('StatsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.test = '...stats...'
+    $scope.test = 'todo: stats...'
     $scope.numericApp = NumericApp
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()
@@ -82,7 +123,7 @@ angular.module('AppOne')
 ])
 
 .controller('SocialCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.test = '...social...'
+    $scope.test = 'todo: social...'
     $scope.numericApp = NumericApp
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()
@@ -90,7 +131,7 @@ angular.module('AppOne')
 ])
 
 .controller('SettingsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.test = '...settings...'
+    $scope.test = 'todo: settings...'
     $scope.numericApp = NumericApp
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()

@@ -7,32 +7,36 @@ document.numeric.numericTasks['Addition'] =
     complexity: 10,
 
     parameters: {
-        level: {
+        p10_quantity: {
+                name: 'quantity',
+                description: 'how many questions to put in this task?',
+                type: 'discrete',
+                levels: [ 2, 10, 20, 50 ],
+                selectedValue: 20
+        },
+        p20_level: {
                 name: 'level',
                 description: 'How difficult should the questions be?',
                 type: 'discrete',
                 levels: [ 'trivial', 'easy', 'medium', 'hard'],
                 selectedValue: 'medium'
-        },
-        quantity: {
-                name: 'quantity',
-                description: 'how many questions to put in this task?',
-                type: 'discrete',
-                levels: [ 10, 20, 50 ],
-                selectedValue: 20
         }
     },
 
     questionType: 'text',
     answerType: 'numeric',
 
-    createNextQuestion: function() {
+    createNextQuestion: function(numberOfQuestionsSoFar) {
         var self = this;
         var _randomInt = function (lower, upper) { return Math.floor((Math.random() * (upper - lower + 1)) + lower) };
-        var _isLevel = function (level) { return self.parameters.level.selectedValue == level};
+        var _isLevel = function (level) { return self.parameters.p20_level.selectedValue == level};
+        var _shouldFinish = function (numQuestions) { return self.parameters.p10_quantity.selectedValue <= numQuestions};
 
-        var min = 1;
-        var max = 9;
+        if (_shouldFinish(numberOfQuestionsSoFar)) {
+            return undefined
+        }
+
+        var min, max;
 
         if (_isLevel('trivial')) {
             min = 1;
@@ -51,7 +55,7 @@ document.numeric.numericTasks['Addition'] =
         var partA = _randomInt(min, max);
         var partB = _randomInt(min, max);
 
-        var statement = partA + ' + ' + partB + " = ";
+        var statement = partA + ' + ' + partB;
         var correctAnswer = partA + partB;
 
         return {

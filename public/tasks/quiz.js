@@ -1,7 +1,7 @@
 document.numeric.numericTasks['QuizDEV'] =
 {
     // REQUIRED FIELD
-    name: 'Quiz',
+    name: 'Odd One Out (KidPack 1)',
     description: 'Practice multiplying numbers',
     authorName: 'Renat Bekbolatov',
     authorEmail: 'renatbek@gmail.com',
@@ -9,53 +9,104 @@ document.numeric.numericTasks['QuizDEV'] =
 
     // REQUIRED FIELD - follow pattern
     parameters: {
-        level: {
-                name: 'level',
-                description: 'How difficult should the questions be?',
-                type: 'discrete',
-                levels: [ 'easy', 'medium', 'hard'],
-                selectedValue: 'medium'
-        },
-        quantity: {
+        p10_quantity: {
                 name: 'quantity',
                 description: 'How many questions to put in this task?',
                 type: 'discrete',
-                levels: [ 20, 50 ],
+                levels: [ 2, 20, 50 ],
                 selectedValue: 20
         }
     },
 
+    // REQUIRED FIELD - follow pattern
+    // taskCompletionType is 'fixedNumberOfQuestions' or 'fixedTime'
+    taskCompletionType: 'fixedNumberOfQuestions',
     questionType: 'text',
     answerType: 'multiple',
 
     // REQUIRED FIELD - follow pattern
-    createNextQuestion: function() {
+    // if taskCompletionType is fixedNumberOfQuestions then argument is number of questions answered so far
+    // if taskCompletionType is fixedTime then not used
+    createNextQuestion: function(numberOfQuestionsSoFar) {
         var self = this;
-        var _randomInt = function (lower, upper) { return Math.floor((Math.random() * (upper - lower + 1)) + lower) };
-        var _isLevel = function (level) { return self.parameters.level.selectedValue == level};
+        var _randomInt = function (lowest, highest) { return Math.floor((Math.random() * (highest - lowest + 1)) + lowest) };
+        var _shouldFinish = function (numQuestions) { return self.parameters.p10_quantity.selectedValue <= numQuestions};
 
-        var min = 1;
-        var max = 9;
-        if (_isLevel('easy')) {
-            min = 1;
-            max = 9;
-        } else if (_isLevel('medium')) {
-            min = 11;
-            max = 50;
-        } else {
-            min = 21;
-            max = 99;
+        if (_shouldFinish(numberOfQuestionsSoFar)) {
+            return undefined
         }
 
-        var partA = _randomInt(min, max);
-        var partB = _randomInt(min, max);
+        var problemNumber = _randomInt(0, self.questionBank.length - 1);
+        var problem = self.questionBank[problemNumber];
 
-        var statement = partA + ' x ' + partB + " = ";
-        var correctAnswer = partA * partB;
+        var statement = self.questionBankStrings.odd;
+        var choices = problem.choices;
+        var correctAnswer = problem.correct;
 
+        // statement, checkAnswer(answer)  for answerType: numeric
+        // statement, choices[0,1,2,3], checkAnswer(answer) for answerType: multiple
         return {
             statement: statement,
+            choices: choices,
             checkAnswer: function(answer) { return answer == correctAnswer }
         }
-    }
+    },
+
+    // whatever comes below is up to the task writer - this is how info to generate questions is stored
+    // ideally you want to compress to some degree to limit the file size
+    questionBankStrings: {
+        odd: 'Which is the odd one out?'
+    },
+    questionBank : [
+
+        {
+            choices: ['Book','Apple','Orange','Banana'],
+            correct: 0
+        },
+        {
+            choices: ['Airplane','Apple','Car','Boat'],
+            correct: 1
+        },
+        {
+            choices: ['Meat','Fish','Orange','Desk'],
+            correct: 3
+        },
+        {
+            choices: ['Water','Juice','Oil','Brick'],
+            correct: 3
+        },
+        {
+            choices: ['Bottle','Iron','Wood','Aluminum'],
+            correct: 0
+        },
+        {
+            choices: ['Teacher','Ball','Policeman','Firefighter'],
+            correct: 1
+        },
+        {
+            choices: ['Pencil','Pen','Desk','Marker'],
+            correct: 2
+        },
+        {
+            choices: ['Swim','Run','Sleep','Walk'],
+            correct: 2
+        },
+        {
+            choices: ['Cat','Dog','Orange','Hamster'],
+            correct: 2
+        },
+        {
+            choices: ['Book','Happy','Sad','Excited'],
+            correct: 0
+        },
+        {
+            choices: ['Duck','Feather','Falcon','Penguin'],
+            correct: 1
+        },
+        {
+            choices: ['Rabbit','Bull','Sheep','Farm'],
+            correct: 3
+        }
+    ]
+
 };

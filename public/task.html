@@ -7,14 +7,24 @@
         </button>
     </a>
     -->
-    <h2 class="title">{{ numericApp.currentTaskType }}</h2>
+    <h2 class="title">{{ numericApp.currentTaskType }} </h2>
+
+
+    <div class="btn btn-link pull-right" ng-click="resetTimer()">
+        <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
+    </div>
+
 </header>
 
-    <div class="content">
+<div class="content">
+    <div class="content-inner">
 
         <!--   problem statement -->
-        <div class="numeric numeric-problem">
-            {{ numeric.question.statement }} {{ numeric.answer | questionMark }}
+        <div ng-show="numericApp.currentTaskAnswerType == 'numeric'" class="numeric numeric-problem">
+            {{ numeric.questionStatement }}{{ numeric.answer | questionMark }}
+        </div>
+        <div ng-show="numericApp.currentTaskAnswerType == 'multiple'" class="multiple-choice-problem">
+            {{ numeric.questionStatement }}
         </div>
 
         <!--  feedback result displayed here -->
@@ -75,9 +85,33 @@
         </div>
 
         <div ng-show="numericApp.currentTaskAnswerType == 'multiple'" class="numeric numeric-keypad">
-            multiple choice
+            <table class="numeric">
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressedChoice(0)">
+                            {{numeric.questionStatementChoices[0]}}
+                        </button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressedChoice(1)">
+                            {{numeric.questionStatementChoices[1]}}
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressedChoice(2)">
+                            {{numeric.questionStatementChoices[2]}}
+                        </button>
+                    </td>
+                    <td class="numeric-td">
+                        <button class="numeric-digit" ng-click="numeric.pressedChoice(3)">
+                            {{numeric.questionStatementChoices[3]}}
+                        </button>
+                    </td>
+                </tr>
+            </table>
         </div>
-
 
 
         <div>
@@ -87,8 +121,14 @@
             {{ numeric.statsCorrect }} correct and {{ numeric.statsWrong }} wrong
         </div>
         <div class="numeric-completed">
-            <div class="numeric-completed-incorrect">3 + 4 ≠ 5 (5 sec) <span class="icon icon-close"></span></div>
-            <div class="numeric-completed-correct">32 + 41 = 75 (13 sec) <span class="icon icon-check"></span></div>
+            <div ng-show="numeric.answeredQuestion.statement">Previous question took {{numeric.answeredQuestion.time}}
+                sec
+            </div>
+            <div ng-show="numeric.answeredQuestion.statement" class="numeric-completed-{{numeric.answeredQuestion.result && 'correct' || 'incorrect' }}">
+                <div>Question: {{numeric.answeredQuestion.statement}}</div>
+                <div>Your answer: {{numeric.answeredQuestion.answer}}<span ng-show="numeric.answeredQuestion.result" class="icon icon-{{numeric.answeredQuestion.result && 'check' || 'close' }}"></span></div>
+            </div>
         </div>
     </div>
+</div>
 
