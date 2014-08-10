@@ -9,7 +9,7 @@
                 <h2 class="title">{{ numericApp.currentTaskType }} </h2>
 
                 <button class="btn btn-link btn-nav pull-right" ng-click="isFlipped=!isFlipped">
-                    <span class="icon icon-{{ isFlipped && 'check' || 'more' }}"></span>
+                    <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>
                 </button>
             </header>
 
@@ -152,7 +152,7 @@
             </div>
 
         </div>  <!--  closing flipcard face front -->
-        <div class="face back"> <!--  opening flipcard face back -->
+        <div class="face back" ng-click="isFlipped=!isFlipped"> <!--  opening flipcard face back -->
 
             <!--
             <span class="slide-text">

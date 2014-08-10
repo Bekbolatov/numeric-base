@@ -108,9 +108,9 @@ angular.module('AppOne')
         $location.path('/report')
     #for options
     $scope.selectParamValue = (key, value) ->
-        console.log("setting " + key + " to " + value)
-        console.log("(Before: " +  NumericApp.currentTask.parameters[key].selectedValue)
         NumericApp.currentTask.parameters[key].selectedValue = value
+        NumericData.newQuestion()
+        NumericData.clearResult()
 ])
 
 .controller('TaskSummaryCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
