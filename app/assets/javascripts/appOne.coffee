@@ -69,21 +69,6 @@ angular.module('AppOne')
     )
 ])
 
-.controller('TasksManagingCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.numericApp = NumericApp
-])
-
-.controller('TasksMarketplaceCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.numericApp = NumericApp
-    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
-            $scope.$apply()
-    )
-    $scope.test = 'todo: tasks marketplace'
-])
-
-.controller('TaskOptionsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.task = NumericApp.currentTask
-])
 
 .controller('TaskCtrl', ['$scope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, NumericData, NumericApp ) ->
     if ($routeParams.taskType != undefined && $routeParams.taskType != '' && NumericApp.hasTaskType($routeParams.taskType))
@@ -105,7 +90,7 @@ angular.module('AppOne')
         $scope.elapsedTime = args.millis
     $scope.$on 'end-of-test', (event, args) ->
         $scope.endOfTestReached = 'reached'
-        $location.path('/report')
+        $location.path('/taskSummary')
     #for options
     $scope.selectParamValue = (key, value) ->
         NumericApp.currentTask.parameters[key].selectedValue = value
@@ -113,15 +98,31 @@ angular.module('AppOne')
         NumericData.clearResult()
 ])
 
-.controller('TaskSummaryCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
+.controller('TaskSummaryCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, $location, NumericData, NumericApp ) ->
     $scope.task = NumericApp.currentTask
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
+    if NumericData.statsCorrect == 0 && NumericData.statsWrong == 0
+        $location.path('/')
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()
     )
 ])
 
+# managing Activities (aka Tasks),getting new, removing old etc
+.controller('TasksManagingCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.numericApp = NumericApp
+])
+
+.controller('TasksMarketplaceCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.numericApp = NumericApp
+    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
+            $scope.$apply()
+    )
+    $scope.test = 'todo: tasks marketplace'
+])
+
+# statistics and reports
 .controller('StatsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.test = 'todo: stats...'
     $scope.numericApp = NumericApp

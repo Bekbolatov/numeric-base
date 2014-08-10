@@ -25,7 +25,7 @@
 
 
                 <div class="btn btn-link pull-left">
-                    <span class="colorGreen">{{ numeric.statsCorrect }}</span>/<span class="colorRed">{{ numeric.statsWrong }}</span>/<span>{{ numeric.statsCorrect + numeric.statsWrong }}</span>
+                    <span class="colorGreen">{{ numeric.statsCorrect }}</span>/<span class="colorRed">{{ numeric.statsWrong }}</span>/<span>{{ numeric.statsCorrect + numeric.statsWrong }}</span> <span>{{numeric.totalTime | secondsToClock}}</span>
                 </div>
                 <div class="btn btn-link pull-right">
                     <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
@@ -204,7 +204,7 @@
 <div class="bar bar-standard bar-footer-secondary before-footer">
 
     <a href="#/taskSummary">
-        <button class="btn btn-primary btn-block">Finish Practice</button>
+        <button class="btn btn-primary btn-block">Finish Activity</button>
     </a>
 
 

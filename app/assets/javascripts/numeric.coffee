@@ -43,6 +43,28 @@ angular.module('numeric')
             return "" + minutes + " minutes, " + seconds + " seconds"
         return "" + seconds + " seconds"
 
+.filter 'secondsToClock', ->
+    (allSeconds) ->
+        if allSeconds == undefined || isNaN(allSeconds)
+            return ""
+        allHours = allSeconds/3600
+        hours = Math.floor(allHours)
+        allSeconds = allSeconds - hours*3600
+
+        allMinutes = allSeconds/60
+        minutes = Math.floor(allMinutes)
+        if minutes < 10
+            minutes = "0" + minutes
+        allSeconds = allSeconds - minutes*60
+
+        seconds = allSeconds
+        if seconds < 10
+            seconds = "0" + seconds
+
+        if (hours > 0)
+            return "" + hours + ":" + minutes + ":" + seconds + ""
+        return "" + minutes + ":" + seconds + ""
+
 .factory("NumericData", ['$timeout', ($timeout) ->
     class Numeric
         # Stats and Result communication
@@ -63,6 +85,8 @@ angular.module('numeric')
         resetStats: () ->
             @statsCorrect = 0
             @statsWrong = 0
+            @totalTime = NaN
+            @startTime = new Date()
 
         _clearLastQuestion: () ->
             @answeredQuestion =
