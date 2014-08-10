@@ -1,27 +1,14 @@
 <header class="bar bar-nav">
-    <!-- <a class="icon icon-left-nav pull-left" href="#/listtasks"></a> -->
-    <a href="#/listtasks">
-        <!--
-        <button class="btn btn-primary pull-left">
-            Back
-        </button>
-        -->
+    <a href="#/task">
         <button class="btn btn-link btn-nav pull-left">
             <span class="icon icon-left-nav"></span>
-            Back
         </button>
     </a>
 
-    <h1 class="title">Configure the task</h1>
-    <!-- <a class="icon icon-right-nav pull-right" href="#/task/{{task.answerType}}"></a> -->
-    <a href="#/task/{{task.answerType}}">
-        <!--
-        <button class="btn btn-primary pull-right">
-            Start
-        </button> -->
+    <h1 class="title">Options</h1>
+    <a href="#/task">
         <button class="btn btn-link btn-nav pull-right">
-            Start
-            <span class="icon icon-right-nav"></span>
+            Restart
         </button>
     </a>
 </header>
@@ -29,14 +16,27 @@
 
 <div class="content">
 
-    <div ng-repeat="(paramKey, param) in task.parameters">
+    <div ng-show="task.parameters != undefined">
+        <div ng-repeat="(paramKey, param) in task.parameters">
 
-        <div class="optionBlock">
-            <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
+            <div class="optionBlock">
+                <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
             <span ng-repeat="level in param.levels">
-                <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">{{ level }}</button>
+                <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">
+                    {{ level }}
+                </button>
             </span>
 
+            </div>
         </div>
     </div>
+    <div ng-show="task.parameters == undefined">
+        <div class="optionBlock">
+            This activity has no options.
+        </div>
+    </div>
+    <button class="btn btn-primary btn-block">
+        <span class="icon icon-left-nav pull-left"></span>
+        back to activity
+    </button>
 </div>

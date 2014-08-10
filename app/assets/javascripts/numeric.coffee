@@ -38,7 +38,7 @@ angular.module('numeric')
             @result =
                 class: 'incorrect'
                 verbal: 'Wrong...'
-        _clearResult: () ->
+        clearResult: () ->
             @result =
                 class: 'none'
                 verbal: '&nbsp;'
@@ -54,20 +54,20 @@ angular.module('numeric')
 
 
         # Problem construction and check
-        setTaskEngine: (@newTaskEngine, @scope) ->
-            @_clearResult()
+        setTask: (@currentTask, @scope) ->
+            @clearResult()
             @resetStats()
-            @_newQuestion()
-            @taskName = @newTaskEngine.name
+            @newQuestion()
+            @taskName = @currentTask.name
             @_clearLastQuestion()
             @startTime = new Date()
 
         getTaskName: ->
-            @newTaskEngine.name
+            @currentTask.name
 
-        _newQuestion: () ->
+        newQuestion: () ->
             @answer = undefined
-            @question = @newTaskEngine.createNextQuestion(@statsCorrect + @statsWrong)
+            @question = @currentTask.createNextQuestion(@statsCorrect + @statsWrong)
             if @question == undefined
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')
@@ -75,7 +75,7 @@ angular.module('numeric')
                 @totalTime = Math.round( (@endTime - @startTime) / 1000 )
                 return
             @questionStatement = @question.statement
-            if @newTaskEngine.answerType == 'numeric'
+            if @currentTask.answerType == 'numeric'
                 @questionStatement = @questionStatement + ' = '
             @questionStatementChoices = @question.choices
 
@@ -83,7 +83,7 @@ angular.module('numeric')
 
         _checkAnswer: (answer) ->
             @scope.$broadcast('timer-stop')
-            if @newTaskEngine.answerType == 'numeric'
+            if @currentTask.answerType == 'numeric'
                 answerString = answer
             else
                 answerString = @questionStatementChoices[answer]
@@ -105,7 +105,7 @@ angular.module('numeric')
 
         # User keypad entries
         pressed: (digit) ->
-            @_clearResult()
+            @clearResult()
             if (@answer == undefined)
                 @answer = 0
             @answer = @answer * 10 + digit
@@ -114,16 +114,16 @@ angular.module('numeric')
         enter: () ->
             if (@answer != undefined)
                 @_checkAnswer(@answer)
-                @_newQuestion()
+                @newQuestion()
         # User multiple-choice entries
         pressedChoice: (choice) ->
             @_checkAnswer(choice)
-            @_newQuestion()
+            @newQuestion()
 
 
 
         constructor: () ->
-            @_clearResult()
+            @clearResult()
             @resetStats()
             @_clearLastQuestion()
 

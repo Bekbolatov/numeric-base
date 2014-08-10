@@ -7,7 +7,7 @@ angular.module('AppOne')
         templateUrl: 'assets/home.html'
         controller: 'HomeCtrl'
     })
-    .when('/listtasks', {
+    .when('/tasksList', {
         templateUrl: 'assets/tasksList.html'
         controller: 'TaskListCtrl'
     })
@@ -19,11 +19,15 @@ angular.module('AppOne')
         templateUrl: 'assets/tasksMarketplace.html'
         controller: 'TasksMarketplaceCtrl'
     })
-    .when('/newtask/:taskType', {
+    .when('/taskOptions', {
         templateUrl: 'assets/taskOptions.html'
         controller: 'TaskOptionsCtrl'
     })
-    .when('/task/:taskAnswerType', {
+    .when('/task', {
+        templateUrl: 'assets/task.html'
+        controller: 'TaskCtrl'
+    })
+    .when('/task/:taskType', {
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })
@@ -82,20 +86,23 @@ angular.module('AppOne')
 ])
 
 .controller('TaskOptionsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.numericApp = NumericApp
-    NumericApp.currentTaskType = $routeParams.taskType
-    $scope.task = NumericApp.getCurrentTask()
+    $scope.task = NumericApp.currentTask
     $scope.selectParamValue = (key, value) ->
-        console.log('Set key ' + key + ' to value ' + value)
-        #NumericApp.taskTypes[NumericApp.currentTaskType].parameters[key].selectedValue = value
-        NumericApp.getCurrentTask().parameters[key].selectedValue = value
+        NumericApp.currentTask.parameters[key].selectedValue = value
 ])
 
 .controller('TaskCtrl', ['$scope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, NumericData, NumericApp ) ->
+    if ($routeParams.taskType != undefined && $routeParams.taskType != '')
+        NumericApp.setTaskType($routeParams.taskType)
+        NumericData.setTask(NumericApp.currentTask, $scope)
+    else
+        NumericData.newQuestion()
+        NumericData.clearResult()
+
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
-    NumericApp.currentTaskAnswerType = $routeParams.taskAnswerType
-    NumericData.setTaskEngine(NumericApp.getCurrentTask(), $scope)
+    $scope.task = NumericApp.currentTask
+
     $scope.resetTimer =  () ->
         $scope.$broadcast('timer-start');
     $scope.$on 'timer-tick', (event, args) ->
@@ -142,10 +149,10 @@ angular.module('AppOne')
 .factory("NumericApp", ['$rootScope', ($rootScope) ->
     class NumericApp
         taskTypes: {}
-        getTask: (taskName) ->
-            @taskTypes[taskName]
-        getCurrentTask: () ->
-            @getTask(@currentTaskType)
+        setTaskType: (taskType) ->
+            @currentTaskType = taskType
+            @currentTask = @taskTypes[@currentTaskType]
+            @currentTaskAnswerType = @currentTask.answerType
 
         registerTask: (task) ->
             if (task.name in @taskTypes)

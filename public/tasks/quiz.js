@@ -7,16 +7,8 @@ document.numeric.numericTasks['QuizDEV'] =
     authorEmail: 'renatbek@gmail.com',
     complexity: 50,
 
-    // REQUIRED FIELD - follow pattern
-    parameters: {
-        p10_quantity: {
-                name: 'quantity',
-                description: 'How many questions to put in this task?',
-                type: 'discrete',
-                levels: [ 2, 20, 50 ],
-                selectedValue: 20
-        }
-    },
+    // follow pattern:
+    // parameters: {  param1: {}, param2: {} },  or not set if no params
 
     // REQUIRED FIELD - follow pattern
     // taskCompletionType is 'fixedNumberOfQuestions' or 'fixedTime'
@@ -27,14 +19,9 @@ document.numeric.numericTasks['QuizDEV'] =
     // REQUIRED FIELD - follow pattern
     // if taskCompletionType is fixedNumberOfQuestions then argument is number of questions answered so far
     // if taskCompletionType is fixedTime then not used
-    createNextQuestion: function(numberOfQuestionsSoFar) {
+    createNextQuestion: function() {
         var self = this;
         var _randomInt = function (lowest, highest) { return Math.floor((Math.random() * (highest - lowest + 1)) + lowest) };
-        var _shouldFinish = function (numQuestions) { return self.parameters.p10_quantity.selectedValue <= numQuestions};
-
-        if (_shouldFinish(numberOfQuestionsSoFar)) {
-            return undefined
-        }
 
         var problemNumber = _randomInt(0, self.questionBank.length - 1);
         var problem = self.questionBank[problemNumber];

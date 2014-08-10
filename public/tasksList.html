@@ -1,10 +1,10 @@
 <header class="bar bar-nav">
-    <h2 class="title">Create a new task</h2>
+    <h2 class="title">Pick activity</h2>
 </header>
 
 <ul class="content table-view">
     <li class="table-view-cell" ng-repeat="taskType in numericApp.taskTypes | orderObjectBy:'complexity':false">
-        <a class="navigate-right" ng-href="#/newtask/{{ taskType.name }}">
+        <a class="navigate-right" ng-href="#/task/{{ taskType.name }}">
             {{ taskType.name }}
         </a>
     </li>
