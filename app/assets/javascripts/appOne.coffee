@@ -27,9 +27,9 @@ angular.module('AppOne')
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })
-    .when('/taskReport', {
-        templateUrl: 'assets/taskReport.html'
-        controller: 'TaskReportCtrl'
+    .when('/taskSummary', {
+        templateUrl: 'assets/taskSummary.html'
+        controller: 'TaskSummaryCtrl'
     })
 
     .when('/stats', {
@@ -113,7 +113,7 @@ angular.module('AppOne')
         NumericApp.currentTask.parameters[key].selectedValue = value
 ])
 
-.controller('TaskReportCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
+.controller('TaskSummaryCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
     $scope.task = NumericApp.currentTask
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
