@@ -19,10 +19,6 @@ angular.module('AppOne')
         templateUrl: 'assets/tasksMarketplace.html'
         controller: 'TasksMarketplaceCtrl'
     })
-    .when('/taskOptions', {
-        templateUrl: 'assets/taskOptions.html'
-        controller: 'TaskOptionsCtrl'
-    })
     .when('/task', {
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
@@ -31,9 +27,9 @@ angular.module('AppOne')
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })
-    .when('/report', {
+    .when('/taskReport', {
         templateUrl: 'assets/taskReport.html'
-        controller: 'ReportCtrl'
+        controller: 'TaskReportCtrl'
     })
 
     .when('/stats', {
@@ -87,17 +83,17 @@ angular.module('AppOne')
 
 .controller('TaskOptionsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.task = NumericApp.currentTask
-    $scope.selectParamValue = (key, value) ->
-        NumericApp.currentTask.parameters[key].selectedValue = value
 ])
 
 .controller('TaskCtrl', ['$scope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, NumericData, NumericApp ) ->
-    if ($routeParams.taskType != undefined && $routeParams.taskType != '')
+    if ($routeParams.taskType != undefined && $routeParams.taskType != '' && NumericApp.hasTaskType($routeParams.taskType))
         NumericApp.setTaskType($routeParams.taskType)
         NumericData.setTask(NumericApp.currentTask, $scope)
-    else
+    else if (NumericData.currentTask != undefined && NumericData.currentTask.name != undefined)
         NumericData.newQuestion()
         NumericData.clearResult()
+    else
+        $location.path('/')
 
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
@@ -110,10 +106,15 @@ angular.module('AppOne')
     $scope.$on 'end-of-test', (event, args) ->
         $scope.endOfTestReached = 'reached'
         $location.path('/report')
+    #for options
+    $scope.selectParamValue = (key, value) ->
+        console.log("setting " + key + " to " + value)
+        console.log("(Before: " +  NumericApp.currentTask.parameters[key].selectedValue)
+        NumericApp.currentTask.parameters[key].selectedValue = value
 ])
 
-.controller('ReportCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
-    $scope.task = NumericApp.getCurrentTask()
+.controller('TaskReportCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, NumericData, NumericApp ) ->
+    $scope.task = NumericApp.currentTask
     $scope.numericApp = NumericApp
     $scope.numeric = NumericData
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
@@ -153,6 +154,8 @@ angular.module('AppOne')
             @currentTaskType = taskType
             @currentTask = @taskTypes[@currentTaskType]
             @currentTaskAnswerType = @currentTask.answerType
+        hasTaskType: (taskType) ->
+            @taskTypes[taskType] != undefined
 
         registerTask: (task) ->
             if (task.name in @taskTypes)

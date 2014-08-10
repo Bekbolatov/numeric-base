@@ -1,13 +1,6 @@
-<div class="flip">
-<div class="blackBackground">
-
-    <div class="flipcard" ng-class="{'flipped':isFlipped}">
-
-
-        <div class="face front">
 
             <header class="bar bar-nav">
-                <a href="#/tasksList">
+                <a ng-show="!isFlipped" href="#/tasksList">
                     <button class="btn btn-link btn-nav pull-left">
                         <span class="icon icon-left-nav"></span>
                     </button>
@@ -16,14 +9,24 @@
                 <h2 class="title">{{ numericApp.currentTaskType }} </h2>
 
                 <button class="btn btn-link btn-nav pull-right" ng-click="isFlipped=!isFlipped">
-                    <span class="icon icon-more"></span>
+                    <span class="icon icon-{{ isFlipped && 'check' || 'more' }}"></span>
                 </button>
             </header>
 
+<div class="flip flip-content">
+    <div class="blackBackground">
+
+        <div class="flipcard" ng-class="{'flipped':isFlipped}">
+
+
+            <div class="face front">
 
             <div class="content">
 
 
+                <div class="btn btn-link pull-left">
+                    <span class="colorGreen">{{ numeric.statsCorrect }}</span>/<span class="colorRed">{{ numeric.statsWrong }}</span>/<span>{{ numeric.statsCorrect + numeric.statsWrong }}</span>
+                </div>
                 <div class="btn btn-link pull-right">
                     <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
                 </div>
@@ -40,7 +43,7 @@
                     </div>
 
                     <!--  feedback result displayed here -->
-                    <div class="numeric numeric-result numeric-result-{{numeric.result.class}}">
+                    <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{numeric.result.class}}">
                         {{ numeric.result.verbal }}
                     </div>
 
@@ -129,21 +132,20 @@
                     <div>
                         &nbsp;
                     </div>
-                    <div class="numeric numeric-stats">
-                        {{ numeric.statsCorrect }} correct and {{ numeric.statsWrong }} wrong
-                    </div>
                     <div class="numeric-completed">
-                        <div ng-show="numeric.answeredQuestion.statement">Previous question took
-                            {{numeric.answeredQuestion.time}}
-                            sec
-                        </div>
-                        <div ng-show="numeric.answeredQuestion.statement" class="numeric-completed-{{numeric.answeredQuestion.result && 'correct' || 'incorrect' }}">
-                            <div>Question: {{numeric.answeredQuestion.statement}}</div>
-                            <div>Your answer:
-                                {{numeric.answeredQuestion.answer}}<span ng-show="numeric.answeredQuestion.result" class="icon icon-{{numeric.answeredQuestion.result && 'check' || 'close' }}"></span>
+                        <div ng-show="numeric.answeredQuestion.statement">
+                            <div>Previous question: {{numeric.answeredQuestion.statement}}</div>
+                            <div ng-show="numeric.answeredQuestion.statement">
+                                <div>Your answer:
+                                    <span class="numeric-completed-{{numeric.answeredQuestion.result && 'correct' || 'incorrect' }}">
+                                        {{numeric.answeredQuestion.answer}}
+                                        <span ng-show="numeric.answeredQuestion.result" class="icon icon-{{numeric.answeredQuestion.result && 'check' || 'close' }}"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -152,17 +154,20 @@
         </div>  <!--  closing flipcard face front -->
         <div class="face back"> <!--  opening flipcard face back -->
 
+            <!--
             <span class="slide-text">
                 <button class="btn btn-primary" ng-click="isFlipped=!isFlipped">
                     <span class="icon icon-left-nav pull-left"></span>
                     back to activity
                 </button>
-            </span>
+            </span>-->
 
             <div ng-show="task.parameters != undefined">
 
-                <div class="optionBlock">
-                    Configuration options for activity "{{task.name}}":
+                <div class="optionBlockJustified">
+                    <p>
+                    Configuration options for activity <i>"{{task.name}}"</i>
+                    </p>
                 </div>
 
                 <div ng-repeat="(paramKey, param) in task.parameters">
@@ -194,4 +199,14 @@
 </div>
 
 
+
+
+<div class="bar bar-standard bar-footer-secondary before-footer">
+
+    <a href="#/taskReport">
+        <button class="btn btn-primary btn-block">Finish Practice</button>
+    </a>
+
+
+</div>
 

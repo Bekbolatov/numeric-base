@@ -1,4 +1,12 @@
 
+.colorGreen {
+    color: green;
+}
+
+.colorRed {
+    color: red;
+}
+
 .insideWindow {
     margin-left: 5px;
     margin-right: 5px;
@@ -26,6 +34,12 @@
 .optionBlock {
     margin: 20px;
     margin-bottom: 30px;
+}
+
+.optionBlockJustified {
+    text-align: justify;
+    text-justify: inter-word;
+    .optionBlock
 }
 
 .numeric {
@@ -69,6 +83,11 @@
 
 .numeric-result-correct  {
     background-color: green;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
 }
 
 .numeric-result-incorrect {
@@ -152,6 +171,12 @@ body {
     background: black;
   width: 100%;
   height: 100%;
+  z-index: -50;
+  position: absolute;
+}
+
+.flip-content {
+    margin-top: 44px;
 }
 
 .flip {
@@ -203,4 +228,11 @@ body {
     color: black;
       position: absolute;
 
+}
+
+
+
+
+.before-footer {
+    margin-bottom: 6px;
 }

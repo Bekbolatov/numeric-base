@@ -25,7 +25,25 @@ angular.module('numeric')
             filtered.reverse()
         filtered
 
-.factory "NumericData", () ->
+.filter 'secondsToHuman', ->
+    (allSeconds) ->
+        allHours = allSeconds/3600
+        hours = Math.floor(allHours)
+        allSeconds = allSeconds - hours*3600
+
+        allMinutes = allSeconds/60
+        minutes = Math.floor(allMinutes)
+        allSeconds = allSeconds - minutes*60
+
+        seconds = allSeconds
+
+        if (hours > 0)
+            return "" + hours + " hours, " + minutes + " minutes, " + seconds + " seconds"
+        if (minutes > 0)
+            return "" + minutes + " minutes, " + seconds + " seconds"
+        return "" + seconds + " seconds"
+
+.factory("NumericData", ['$timeout', ($timeout) ->
     class Numeric
         # Stats and Result communication
         _markCorrectResult: () ->
@@ -68,11 +86,10 @@ angular.module('numeric')
         newQuestion: () ->
             @answer = undefined
             @question = @currentTask.createNextQuestion(@statsCorrect + @statsWrong)
+            @totalTime = Math.round( (new Date() - @startTime) / 1000 )
             if @question == undefined
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')
-                @endTime = new Date()
-                @totalTime = Math.round( (@endTime - @startTime) / 1000 )
                 return
             @questionStatement = @question.statement
             if @currentTask.answerType == 'numeric'
@@ -81,7 +98,7 @@ angular.module('numeric')
 
             @scope.$broadcast('timer-start')
 
-        _checkAnswer: (answer) ->
+        _checkAnswer: (answer) =>
             @scope.$broadcast('timer-stop')
             if @currentTask.answerType == 'numeric'
                 answerString = answer
@@ -102,6 +119,10 @@ angular.module('numeric')
                     answer: answerString
                     result: false
                     time: Math.round(@scope.elapsedTime/1000)
+            $timeout( \
+                () =>
+                    @result.class = 'none'
+                , 500)
 
         # User keypad entries
         pressed: (digit) ->
@@ -128,5 +149,5 @@ angular.module('numeric')
             @_clearLastQuestion()
 
     new Numeric()
-
+])
 
