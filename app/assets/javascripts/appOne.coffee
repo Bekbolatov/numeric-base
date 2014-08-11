@@ -1,62 +1,4 @@
-angular.module('AppOne', ['ngRoute', 'numeric', 'timer'])
-
-angular.module('AppOne')
-.config(['$routeProvider', ($routeProvider) ->
-    $routeProvider
-    .when('/home', {
-        templateUrl: 'assets/home.html'
-        controller: 'HomeCtrl'
-    })
-    .when('/tasksList', {
-        templateUrl: 'assets/tasksList.html'
-        controller: 'TaskListCtrl'
-    })
-    .when('/tasksManaging', {
-        templateUrl: 'assets/tasksManaging.html'
-        controller: 'TasksManagingCtrl'
-    })
-    .when('/tasksMarketplace', {
-        templateUrl: 'assets/tasksMarketplace.html'
-        controller: 'TasksMarketplaceCtrl'
-    })
-    .when('/task', {
-        templateUrl: 'assets/task.html'
-        controller: 'TaskCtrl'
-    })
-    .when('/task/:taskType', {
-        templateUrl: 'assets/task.html'
-        controller: 'TaskCtrl'
-    })
-    .when('/taskSummary', {
-        templateUrl: 'assets/taskSummary.html'
-        controller: 'TaskSummaryCtrl'
-    })
-
-    .when('/stats', {
-        template: '<h1> {{ test }} </h1>'
-        controller: 'StatsCtrl'
-    })
-    .when('/social', {
-        template: '<h1> {{ test }} </h1>'
-        controller: 'SocialCtrl'
-    })
-    .when('/settings/:section', {
-        template: '<h1> {{ test }} </h1>'
-        controller: 'SettingsCtrl'
-    })
-    .otherwise({
-        redirectTo: '/home'
-    })
-])
-
-
-.run(['$route', ($route) ->
-  $route.reload();
-])
-
-.config(['$compileProvider', ($compileProvider) ->
-    $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|ftp|mailto|file|tel):/
-])
+angular.module('AppOne', ['ngRoute', 'timer', 'numeric', 'filters'])
 
 .controller('HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.numericApp = NumericApp
@@ -68,7 +10,6 @@ angular.module('AppOne')
             $scope.$apply()
     )
 ])
-
 
 .controller('TaskCtrl', ['$scope', '$routeParams', '$location', '$sce', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, $sce, NumericData, NumericApp ) ->
     if ($routeParams.taskType != undefined && $routeParams.taskType != '' && NumericApp.hasTaskType($routeParams.taskType))
@@ -128,14 +69,6 @@ angular.module('AppOne')
 # statistics and reports
 .controller('StatsCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
     $scope.test = 'todo: stats...'
-    $scope.numericApp = NumericApp
-    $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
-            $scope.$apply()
-    )
-])
-
-.controller('SocialCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
-    $scope.test = 'todo: social...'
     $scope.numericApp = NumericApp
     $rootScope.$on('NumericAppUpdated', (ev, newNumericApp) ->
             $scope.$apply()
