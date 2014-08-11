@@ -1,0 +1,21 @@
+# first hash on the line, rest of line is ignored
+# tab-separated
+# first readable line is reserved for question set description
+# Name of question set, major version of DATA, minor version of DATA
+nameMultiple    Choice
+formatVersion   1
+#uninterrupted (no comments) data starts after a single line of "DATA"
+#  Question statement, correct choice 1-based index, choices
+DATA
+Which is the odd one out?	2	Apple	Book	Orange	Banana
+Which is the odd one out?	2	Airplane	Apple	Car	Boat
+Which is the odd one out?	4	Meat	Fish	Orange	Desk	
+Which is the odd one out?	4	Water	Juice	Oil	Brick	
+Which is the odd one out?	1	Bottle	Iron	Wood	Aluminum	
+Which is the odd one out?	2	Teacher	Ball	Policeman	Firefighter	
+Which is the odd one out?	3	Pencil	Pen	Desk	Marker	
+Which is the odd one out?	3	Swim	Run	Sleep	Walk	
+Which is the odd one out?	3	Cat	Dog	Orange	Hamster	
+Which is the odd one out?	1	Book	Happy	Sad	Excited	
+Which is the odd one out?	1	Duck	Feather	Falcon	Penguin	
+Which is the odd one out?	4	Rabbit	Bull	Sheep	Farm	

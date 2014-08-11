@@ -1,6 +1,48 @@
-angular.module('numeric', [])
-.factory("NumericData", ['$timeout','$sce', ($timeout, $sce) ->
-    class Numeric
+angular.module('AppOne')
+
+.factory("ActivityDriver", ['$timeout','$sce', ($timeout, $sce) ->
+    class Activity
+        constructor: (@currentTask) ->
+            @name = @currentTask.name
+            @parameters = @currentTask.parameters
+            if @currentTask.answerType == 'numeric'
+                @inputTypeNumeric = true
+                @inputTypeMultipleChoice = false
+            else if @currentTask.answerType == 'multiple'
+                @inputTypeNumeric = false
+                @inputTypeMultipleChoice = true
+
+        newQuestion: ->
+            @question = @currentTask.createNextQuestion()
+            if @question == undefined
+                return undefined
+            @questionStatement_ = @question.statement
+            @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
+            if @currentTask.answerType == 'numeric'
+                @questionStatement = @questionStatement_ + ' = '
+            if @currentTask.answerType == 'multiple'
+                @questionStatement = @questionStatement_
+            @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
+            @questionStatementChoices = @question.choices
+            returnQuestion =
+                questionStatement_ : @questionStatement_
+                questionStatementAsHTML_ : @questionStatementAsHTML_
+                questionStatement : @questionStatement
+                questionStatementAsHTML : @questionStatementAsHTML
+                questionStatementChoices : @questionStatementChoices
+            returnQuestion
+        answerString: (answer) ->
+            answerString = answer
+            if @currentTask.answerType == 'multiple'
+                answerString = @questionStatementChoices[answer]
+            answerString
+
+        checkAnswer: (answer) ->
+            @question.checkAnswer(answer)
+
+
+
+    class ActivityDriver
         # Stats and Result communication
         _markCorrectResult: () ->
             @statsCorrect = @statsCorrect + 1
@@ -28,46 +70,38 @@ angular.module('numeric', [])
                 class: 'correct'
                 time: ''
 
-
         # Problem construction and check
         setTask: (@currentTask, @scope) ->
             @clearResult()
             @resetStats()
-            @newQuestion()
+            @currentActivity = new Activity(@currentTask)
             @taskName = @currentTask.name
             @_clearLastQuestion()
+            @newQuestion()
             @startTime = new Date()
 
-        getTaskName: ->
-            @currentTask.name
-
         newQuestion: () ->
-            @answer = undefined
-            @question = @currentTask.createNextQuestion(@statsCorrect + @statsWrong)
             @totalTime = Math.round( (new Date() - @startTime) / 1000 )
+            @answer = undefined
+            @question = @currentActivity.newQuestion()
             if @question == undefined
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')
                 return
-            @questionStatement_ = @question.statement
-            @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
-            if @currentTask.answerType == 'numeric'
-                @questionStatement = @questionStatement_ + ' = '
-            if @currentTask.answerType == 'multiple'
-                @questionStatement = @questionStatement_
-            @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
-            @questionStatementChoices = @question.choices
+
+            @questionStatement_ = @question.questionStatement_
+            @questionStatementAsHTML_ = @question.questionStatementAsHTML_
+            @questionStatement = @question.questionStatement
+            @questionStatementAsHTML = @question.questionStatementAsHTML
+            @questionStatementChoices = @question.questionStatementChoices
 
             @scope.$broadcast('timer-start')
 
         _checkAnswer: (answer) =>
             @scope.$broadcast('timer-stop')
-            if @currentTask.answerType == 'numeric'
-                answerString = answer
-            else
-                answerString = @questionStatementChoices[answer]
+            answerString = @currentActivity.answerString(answer)
 
-            if @question.checkAnswer(answer)
+            if @currentActivity.checkAnswer(answer)
                 @_markCorrectResult()
                 @answeredQuestion =
                     statement: @questionStatement_
@@ -112,6 +146,6 @@ angular.module('numeric', [])
             @resetStats()
             @_clearLastQuestion()
 
-    new Numeric()
+    new ActivityDriver()
 ])
 

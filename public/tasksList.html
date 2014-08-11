@@ -3,7 +3,7 @@
 </header>
 
 <ul class="content table-view">
-    <li class="table-view-cell" ng-repeat="taskType in numericApp.taskTypes | orderObjectBy:'complexity':false">
+    <li class="table-view-cell" ng-repeat="taskType in listOfAvailableActivities | orderObjectBy:'complexity':false">
         <a class="navigate-right" ng-href="#/task/{{ taskType.name }}">
             {{ taskType.name }}
         </a>

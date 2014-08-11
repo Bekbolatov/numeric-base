@@ -4,6 +4,7 @@ document.numeric.numericTasks['T_BasicMath'] =
     description: 'Practice adding numbers',
     authorName: 'Renat Bekbolatov',
     authorEmail: 'renatbek@gmail.com',
+    answerType: 'numeric',
     complexity: 10,
 
     parameters: {
@@ -23,8 +24,6 @@ document.numeric.numericTasks['T_BasicMath'] =
         }
     },
 
-    questionType: 'text',
-    answerType: 'numeric',
 
     createNextQuestion: function() {
         var self = this;
