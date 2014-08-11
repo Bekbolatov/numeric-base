@@ -95,7 +95,7 @@ document.numeric.numericTasks['T_BasicMath'] =
             }
             var partA = _randomInt(min, max);
             var partB = _randomInt(min, max);
-            statement = (partA*partB) + ' / ' + partB;
+            statement = (partA*partB) + ' ÷ ' + partB;
             correctAnswer = partA;
         } else if (_isOp('square root')) {
             if (_isLevel('easy')) {
@@ -109,7 +109,7 @@ document.numeric.numericTasks['T_BasicMath'] =
                 max = 99;
             }
             var partA = _randomInt(min, max);
-            statement = '' + (partA*partA);
+            statement = '<span class="activity-math-sq" style="font-size: 125%;">√</span><span style="border-top:2px solid; padding:0 0.1em;">' + (partA*partA) + '</span>';
             correctAnswer = partA;
         } else {
             console.log("some unrecognized operation")

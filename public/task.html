@@ -36,7 +36,10 @@
 
                     <!--   problem statement -->
                     <div ng-show="numericApp.currentTaskAnswerType == 'numeric'" class="numeric numeric-problem">
+                        <span ng-bind-html="numeric.questionStatementAsHTML"></span>{{ numeric.answer | questionMark }}
+                        <!--
                         {{ numeric.questionStatement }}{{ numeric.answer | questionMark }}
+                        -->
                     </div>
                     <div ng-show="numericApp.currentTaskAnswerType == 'multiple'" class="multiple-choice-problem">
                         {{ numeric.questionStatement }}
@@ -134,7 +137,7 @@
                     </div>
                     <div class="numeric-completed">
                         <div ng-show="numeric.answeredQuestion.statement">
-                            <div>Previous question: {{numeric.answeredQuestion.statement}}</div>
+                            <div>Previous question: <span ng-bind-html="numeric.answeredQuestion.statementAsHTML"></span></div>
                             <div ng-show="numeric.answeredQuestion.statement">
                                 <div>Your answer:
                                     <span class="numeric-completed-{{numeric.answeredQuestion.result && 'correct' || 'incorrect' }}">

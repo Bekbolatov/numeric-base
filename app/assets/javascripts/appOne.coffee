@@ -70,7 +70,7 @@ angular.module('AppOne')
 ])
 
 
-.controller('TaskCtrl', ['$scope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, NumericData, NumericApp ) ->
+.controller('TaskCtrl', ['$scope', '$routeParams', '$location', '$sce', 'NumericData', 'NumericApp', ($scope, $routeParams, $location, $sce, NumericData, NumericApp ) ->
     if ($routeParams.taskType != undefined && $routeParams.taskType != '' && NumericApp.hasTaskType($routeParams.taskType))
         NumericApp.setTaskType($routeParams.taskType)
         NumericData.setTask(NumericApp.currentTask, $scope)
@@ -96,6 +96,9 @@ angular.module('AppOne')
         NumericApp.currentTask.parameters[key].selectedValue = value
         NumericData.newQuestion()
         NumericData.clearResult()
+
+
+    $scope.stringOne = $sce.trustAsHtml('hello<i>sd</i>')
 ])
 
 .controller('TaskSummaryCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'NumericData', 'NumericApp', ($scope, $rootScope, $routeParams, $location, NumericData, NumericApp ) ->

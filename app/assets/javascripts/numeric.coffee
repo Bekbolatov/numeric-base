@@ -65,7 +65,7 @@ angular.module('numeric')
             return "" + hours + ":" + minutes + ":" + seconds + ""
         return "" + minutes + ":" + seconds + ""
 
-.factory("NumericData", ['$timeout', ($timeout) ->
+.factory("NumericData", ['$timeout','$sce', ($timeout, $sce) ->
     class Numeric
         # Stats and Result communication
         _markCorrectResult: () ->
@@ -115,9 +115,11 @@ angular.module('numeric')
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')
                 return
-            @questionStatement = @question.statement
+            @questionStatement_ = @question.statement
+            @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
             if @currentTask.answerType == 'numeric'
-                @questionStatement = @questionStatement + ' = '
+                @questionStatement = @questionStatement_ + ' = '
+            @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
             @questionStatementChoices = @question.choices
 
             @scope.$broadcast('timer-start')
@@ -132,14 +134,16 @@ angular.module('numeric')
             if @question.checkAnswer(answer)
                 @_markCorrectResult()
                 @answeredQuestion =
-                    statement: @question.statement
+                    statement: @questionStatement_
+                    statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
                     result: true
                     time: Math.round(@scope.elapsedTime/1000)
             else
                 @_markWrongResult()
                 @answeredQuestion =
-                    statement: @question.statement
+                    statement: @questionStatement_
+                    statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
                     result: false
                     time: Math.round(@scope.elapsedTime/1000)
