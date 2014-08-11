@@ -53,6 +53,8 @@ angular.module('numeric', [])
             @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
             if @currentTask.answerType == 'numeric'
                 @questionStatement = @questionStatement_ + ' = '
+            if @currentTask.answerType == 'multiple'
+                @questionStatement = @questionStatement_
             @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
             @questionStatementChoices = @question.choices
 

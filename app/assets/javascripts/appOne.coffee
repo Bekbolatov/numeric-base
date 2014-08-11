@@ -84,6 +84,12 @@ angular.module('AppOne', ['ngRoute', 'timer', 'numeric', 'filters'])
 ])
 
 
+.controller('TestCtrl', ['$scope', '$rootScope', '$routeParams', 'NumericApp', ($scope, $rootScope, $routeParams, NumericApp ) ->
+    $scope.numericApp = NumericApp
+    $scope.test = 'testt'
+])
+
+
 .factory("NumericApp", ['$rootScope', ($rootScope) ->
     class NumericApp
         taskTypes: {}

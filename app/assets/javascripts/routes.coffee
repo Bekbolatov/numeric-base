@@ -47,6 +47,14 @@ angular.module('AppOne')
         template: '<h1> {{ test }} </h1>'
         controller: 'SettingsCtrl'
     })
+
+    # for testing only
+    .when('/test', {
+        templateUrl: 'assets/test.html'
+        controller: 'TestCtrl'
+    })
+
+
     .otherwise({
         redirectTo: '/'
     })
