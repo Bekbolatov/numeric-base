@@ -6,16 +6,16 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
 ]
 
 .controller 'TaskListCtrl', ['$scope', '$rootScope', 'ActivityManager', ($scope, $rootScope, ActivityManager) ->
-    $scope.listOfAvailableActivities = ActivityManager.taskTypes
+    $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
     $rootScope.$on 'activitiesListUpdated', (ev, data) ->
         $scope.$apply()
     ]
 
 .controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'ActivityDriver', 'ActivityManager', ($scope, $routeParams, $location, ActivityDriver, ActivityManager ) ->
-    if $routeParams.taskType == undefined || $routeParams.taskType == '' || !ActivityManager.hasTaskType($routeParams.taskType)
+    taskId = $routeParams.taskId
+    if taskId == undefined || taskId == '' || ActivityManager.getActivity(taskId) == undefined
         return $location.path('/')
-    ActivityManager.setTaskType($routeParams.taskType)
-    ActivityDriver.setTask(ActivityManager.currentTask, $scope)
+    ActivityDriver.setTask(ActivityManager.getActivity($routeParams.taskId), $scope)
 
     $scope.activityDriver = ActivityDriver
     $scope.currentActivity = ActivityDriver.currentActivity
@@ -27,26 +27,45 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     $scope.$on 'end-of-test', (event, args) ->
         $scope.endOfTestReached = 'reached'
         $location.path('/taskSummary')
-    #for options
+
+    # confirm finish activity
+    $scope.finishActivityPopup = () ->
+        if navigator.notification.alert != undefined
+            navigator.notification.alert('confirm', finishActivity, 'Finish activity?', ['No, go back', 'Yes, finish'])
+
+    $scope.finishActivity = (buttonNumber) ->
+        if buttonNumber == 1
+            $location('/taskSummary')
+
+    # for options
     $scope.selectParamValue = (key, value) ->
         ActivityDriver.currentActivity.parameters[key].selectedValue = value
         ActivityDriver.newQuestion()
         ActivityDriver.clearResult()
     ]
 
-.controller 'TaskSummaryCtrl', ['$scope', '$location', 'ActivityDriver', 'ActivityManager', ($scope, $location, ActivityDriver, ActivityManager) ->
-    $scope.task = ActivityManager.currentTask
-    $scope.activityManager = ActivityManager
-    $scope.numeric = ActivityDriver
+.controller 'TaskSummaryCtrl', ['$scope', '$location', 'ActivityDriver', ($scope, $location, ActivityDriver) ->
     if ActivityDriver.currentActivity == undefined
         $location.path('/')
+    $scope.task = ActivityDriver.currentTask
+    $scope.numeric = ActivityDriver
     ]
 
 # managing Activities (aka Tasks),getting new, removing old etc
 .controller 'TasksManagingCtrl', ['$scope', ($scope) -> ]
 
-.controller 'TasksMarketplaceCtrl', ['$scope', ($scope) ->
+.controller 'TasksMarketplaceCtrl', ['$scope', '$rootScope', 'ActivityManager', ($scope, $rootScope, ActivityManager) ->
     $scope.test = 'todo: tasks marketplace'
+    $scope.currentTab = 'installed'
+    $scope.isTabSelected = (tab) ->
+        $scope.currentTab == tab
+    $scope.tabSelected = (tab) ->
+        $scope.currentTab = tab
+    $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
+    $scope.removeInstalledActivity = (activityId) ->
+        ActivityManager.deregisterTask(activityId)
+    $rootScope.$on 'activitiesListUpdated', (ev, data) ->
+        $scope.$apply()
     ]
 
 # statistics and reports

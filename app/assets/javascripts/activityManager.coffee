@@ -2,45 +2,78 @@ angular.module('AppOne')
 
 .factory("ActivityManager", ['$rootScope', ($rootScope) ->
     class ActivityManager
-        taskTypes: {}
-        setTaskType: (taskType) ->
-            @currentTaskType = taskType
-            @currentTask = @taskTypes[@currentTaskType]
-            @currentTaskAnswerType = @currentTask.answerType
-        hasTaskType: (taskType) ->
-            @taskTypes[taskType] != undefined
+        # One 'Activity' (aka 'task', 'practice set') <-> One JS script, loaded into DOM
+        # One 'Activity' <=> One Id - probably use com.sparkydots.numeric.tasks.t.basic_math
+        _taskIdToScriptId: {}  # to keep track of which DOM element contains the script for this activity
+        activities: {}
+        getAllActivities: ->
+            @activities
+        getActivity: (key) ->
+            @activities[key]
 
-        registerTask: (task) ->
-            if (task.name in @taskTypes)
-                console.log('task ' + task.name + ' is already registered')
+        registerTask: (key, task) ->
+            if (@activities[key])
+                console.log('key ' + key + ' is already used by an exiting task ' + @activities[key].name + ', will not overwrite with new task ' + task.name)
             else
-                @taskTypes[task.name] = task
-        deregisterTask: (taskName) ->
-            if (taskName in @taskTypes)
-                delete @taskTypes[taskName]
+                console.log('adding activity with id ' + key + ' and name ' + task.name)
+                task.id = key
+                task.scriptId = @_taskIdToScriptId[key]
+                @activities[task.id] = task
+                console.log('added activity ' + task.name + ' with id ' + task.id)
+
+        deregisterTask: (taskId) ->
+            if (@activities[taskId])
+                console.log('removing activity with id ' + taskId + ' and name ' + @activities[taskId].name)
+                element = document.getElementById(@activities[taskId].scriptId)
+                element.parentElement.removeChild(element)
+                delete @activities[taskId]
+                console.log('removed activity with id ' + taskId)
             else
-                console.log('task ' + taskName + ' is already registered')
+                console.log('activity with id ' + taskId + ' has not been registered before')
+
+        _fileNameFromURL: (url) ->
+            namejs = url.split(/\/+/).pop()
+            name = namejs.substring(0, namejs.length-3)
+            name
+
+        _hash: (someString) ->
+            hash = 0
+            for i in [0...(someString.length-1)]
+                hash = ((hash << 5) - hash) + someString.charCodeAt(i)
+                hash |= 0
+            Math.abs(hash)
+
+        _allJsLoaded: ->
+            return true
 
         loadScript: (url) ->
+            scriptId = 'script_' + @_fileNameFromURL(url)
             newScript = document.createElement('script')
             newScript.type = 'text/javascript'
+            newScript.id = scriptId
             newScript.onload = () =>
-                console.log(document.numeric.numericTasks);
-                for key, task of document.numeric.numericTasks
-                    console.log('constructor task key: ' + key);
-                    @registerTask(task)
+                taskId = document.numeric.numericTasksList[document.numeric.numericTasksList.length - 1]
+                @_taskIdToScriptId[taskId] = scriptId
+                if @_allJsLoaded()
+                    console.log('numericTasks: ')
+                    console.log(document.numeric.numericTasks)
+                    console.log("scriptId: " + scriptId)
+                    for key, task of document.numeric.numericTasks
+                        console.log('constructor task key: ' + key);
+                        @registerTask(key, task)
                     $rootScope.$broadcast('activitiesListUpdated', @)
+
             newScript.src = url
             document.getElementsByTagName('head')[0].appendChild(newScript);
 
 
         loadScripts: (scriptSeq) ->
             for task in scriptSeq
-                console.log('constructor task: ' + task);
                 @loadScript(task)
 
         constructor: () ->
             @loadScripts(document.numeric.defaultTaskList)
 
+    console.log('CALL TO FACTORY: ActivityManager')
     new ActivityManager()
 ])

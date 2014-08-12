@@ -31,6 +31,12 @@ angular.module('AppOne')
                 questionStatementAsHTML : @questionStatementAsHTML
                 questionStatementChoices : @questionStatementChoices
             returnQuestion
+
+        questionString: ->
+            answerString = answer
+            if @currentTask.answerType == 'multiple'
+                answerString = @questionStatementChoices[answer]
+            answerString
         answerString: (answer) ->
             answerString = answer
             if @currentTask.answerType == 'multiple'
@@ -146,6 +152,7 @@ angular.module('AppOne')
             @resetStats()
             @_clearLastQuestion()
 
+    console.log('CALL TO FACTORY: ActivityDriver')
     new ActivityDriver()
 ])
 

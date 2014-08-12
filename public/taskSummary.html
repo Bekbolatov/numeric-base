@@ -1,16 +1,37 @@
 <header class="bar bar-nav">
+    <button class="btn btn-primary pull-left" ng-show="!repeatOptions && !submitOptions" ng-click="repeatOptions = !repeatOptions">
+        Practice Again
+    </button>
+    <button class="btn btn-negative pull-left" ng-show="repeatOptions" ng-click="repeatOptions = !repeatOptions">
+        Cancel
+    </button>
     <a href="#/tasksList">
-        <button class="btn btn-primary pull-left">
-            New Activity
+        <button class="btn btn-negative pull-left" ng-show="repeatOptions">
+            Different Activity
+        </button>
+    </a>
+    <a href="#/task/{{ task.id }}">
+        <button class="btn btn-negative pull-left" ng-show="repeatOptions">
+            Same Activity
         </button>
     </a>
 
+
     <h2 class="title">Task Summary</h2>
-    <a href="#/task/{{ task.name }}">
-        <button class="btn btn-primary pull-right">
-            Practice Again
+
+
+    <button class="btn btn-primary pull-right" ng-show="!repeatOptions && !submitOptions" ng-click="submitOptions = !submitOptions">
+        Submit
+    </button>
+    <button class="btn btn-negative pull-right" ng-show="submitOptions" ng-click="submitOptions = !submitOptions">
+        Cancel
+    </button>
+    <a href="#/tasksSubmit">
+        <button class="btn btn-negative pull-right" ng-show="submitOptions">
+            Confirm Submit
         </button>
     </a>
+
 </header>
 
 <div class="content">
@@ -98,19 +119,30 @@
 
 
 
-
-
-
-            <div class="content-paragraph">
-                <p>
-                    <a class="center" ng-href="#/tasksMarketplace">
-                        Get more activities from <a href="#/tasksMarketplace"><button class="btn btn-primary btn-outlined btn-name">Activity Marketplace</button></a>
-                    </a>
-                </p>
-            </div>
-
         </div>
 
 
     </div>
 </div>
+
+
+
+<!--  BOTTOM NAV -->
+<nav class="bar bar-tab">
+    <a class="tab-item active" href="#/home">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+    </a>
+    <a class="tab-item active" href="#/stats">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">Stats</span>
+    </a>
+    <a class="tab-item active" href="#/test">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">TestPage</span>
+    </a>
+    <a class="tab-item active" href="#/settings">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+    </a>
+</nav>

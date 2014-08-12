@@ -1,4 +1,5 @@
-document.numeric.numericTasks['QuizDEV'] =
+document.numeric.numericTasksList.push('com.sparkydots.numeric.tasks.t.multiple_choice');
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] =
 {
     name: 'Odd One Out (KidPack 1)',
     description: 'Practice multiplying numbers',

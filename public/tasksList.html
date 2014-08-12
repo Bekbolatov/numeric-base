@@ -4,21 +4,39 @@
 
 <ul class="content table-view">
     <li class="table-view-cell" ng-repeat="taskType in listOfAvailableActivities | orderObjectBy:'complexity':false">
-        <a class="navigate-right" ng-href="#/task/{{ taskType.name }}">
+        <a class="navigate-right" ng-href="#/task/{{ taskType.id }}">
             {{ taskType.name }}
         </a>
     </li>
     <li class="table-view-cell">
         <p>
             <a class="center" ng-href="#/tasksMarketplace">
-                <i>Manage activities ...</i>
+                <button class="btn btn-primary">
+                    <i>Manage activities ...</i>
+                </button>
             </a>
         </p>
-
-
-
-
 
     </li>
 </ul>
 
+
+<!--  BOTTOM NAV -->
+<nav class="bar bar-tab">
+    <a class="tab-item active" href="#/home">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+    </a>
+    <a class="tab-item active" href="#/stats">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">Stats</span>
+    </a>
+    <a class="tab-item active" href="#/test">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">TestPage</span>
+    </a>
+    <a class="tab-item active" href="#/settings">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+    </a>
+</nav>

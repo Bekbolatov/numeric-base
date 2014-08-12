@@ -1,15 +1,38 @@
 <header class="bar bar-nav">
+    <!-- Maybe hide back button, so student can focus on this activity
     <a ng-show="!isFlipped" href="#/tasksList">
         <button class="btn btn-link btn-nav pull-left">
             <span class="icon icon-left-nav"></span>
         </button>
     </a>
+    -->
+
+    <a href="#/tasksList" ng-show="!showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0">
+        <button class="btn btn-primary pull-left" ng-click="showFinish = !showFinish">
+            Close
+        </button>
+    </a>
+
+    <button class="btn btn-primary pull-left" ng-show="!showFinish && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)" ng-click="showFinish = !showFinish">
+        Finish
+    </button>
+
+    <a href="#/taskSummary" ng-show="showFinish">
+        <button class="btn btn-negative pull-right">
+            Finish Activity?
+        </button>
+    </a>
+
+    <button class="btn btn-primary pull-left"  ng-show="showFinish" ng-click="showFinish = !showFinish">
+        Cancel
+    </button>
 
     <h2 class="title">{{ currentActivity.name }} </h2>
 
-    <button class="btn btn-link btn-nav pull-right" ng-click="isFlipped=!isFlipped">
+    <button class="btn btn-link btn-nav pull-right" ng-show="!showFinish" ng-click="isFlipped=!isFlipped">
         <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>
     </button>
+
 </header>
 
 
@@ -100,7 +123,7 @@
                         </div>
 
                         <div ng-show="currentActivity.inputTypeMultipleChoice" class="numeric numeric-keypad">
-                            <table class="numeric">
+                            <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 4">
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
@@ -126,6 +149,39 @@
                                     </td>
                                 </tr>
                             </table>
+                            <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 5">
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
+                                            {{activityDriver.questionStatementChoices[0]}}
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
+                                            {{activityDriver.questionStatementChoices[1]}}
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
+                                            {{activityDriver.questionStatementChoices[2]}}
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
+                                            {{activityDriver.questionStatementChoices[3]}}
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(4)">
+                                            {{activityDriver.questionStatementChoices[4]}}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
 
 
@@ -144,10 +200,9 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
-
-
-
 
                     </div>
 
@@ -157,14 +212,6 @@
             </div>
             <!--  closing flipcard face front -->
             <div class="face back" ng-click="isFlipped=!isFlipped"> <!--  opening flipcard face back -->
-
-                <!--
-                <span class="slide-text">
-                    <button class="btn btn-primary" ng-click="isFlipped=!isFlipped">
-                        <span class="icon icon-left-nav pull-left"></span>
-                        back to activity
-                    </button>
-                </span>-->
 
                 <div class="content">
 
@@ -207,13 +254,4 @@
     </div>
 </div>
 
-
-<div class="bar bar-standard bar-footer-secondary before-footer">
-
-    <a href="#/taskSummary">
-        <button class="btn btn-primary btn-block">Finish Activity</button>
-    </a>
-
-
-</div>
 

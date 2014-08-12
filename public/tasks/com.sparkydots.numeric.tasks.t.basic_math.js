@@ -1,4 +1,5 @@
-document.numeric.numericTasks['T_BasicMath'] =
+document.numeric.numericTasksList.push('com.sparkydots.numeric.tasks.t.basic_math');
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 {
     name: 'Basic Math',
     description: 'Practice adding numbers',

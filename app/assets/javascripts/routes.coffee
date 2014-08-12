@@ -14,7 +14,7 @@ angular.module('AppOne')
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })
-    .when('/task/:taskType', {
+    .when('/task/:taskId', {
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })

@@ -1,6 +1,6 @@
-document.numeric.numericTasks['QuizDEV'] =
+document.numeric.numericTasksList.push('com.sparkydots.numeric.tasks.t.quiz');
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.quiz'] =
 {
-    // REQUIRED FIELD
     name: 'Odd One Out (KidPack 1)',
     description: 'Practice multiplying numbers',
     authorName: 'Renat Bekbolatov',
