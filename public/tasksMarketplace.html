@@ -50,7 +50,7 @@
                         {{ activity.name }}
                         <p>
                             {{ activity.shortDescription }}<br>
-                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined">
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined">
                                 Cancel
                             </button>
                             <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; uninstallActivity(activity.id)">
@@ -82,7 +82,7 @@
 
             <div ng-show="errorStatus">
                 <div class="media-body">
-                    Could not connect to the server
+                    Could not connect to the server, please report to <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
                     <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
                         Try again
                     </button>
@@ -98,7 +98,7 @@
 
                         <p>
                         {{ activity.shortDescription }}<br>
-                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined">
+                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined">
                             Cancel
                         </button>
                         <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; installNewActivity(activity.id)">
