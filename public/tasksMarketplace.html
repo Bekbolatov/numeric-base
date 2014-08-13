@@ -53,7 +53,7 @@
                             <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined">
                                 Cancel
                             </button>
-                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="uninstallActivity(activity.id)">
+                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; uninstallActivity(activity.id)">
                                 Confirm Remove
                             </button>
 
@@ -101,7 +101,7 @@
                         <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined">
                             Cancel
                         </button>
-                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="installNewActivity(activity.id)">
+                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; installNewActivity(activity.id)">
                             Confirm Add
                         </button>
 

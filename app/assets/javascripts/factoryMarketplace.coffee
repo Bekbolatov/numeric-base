@@ -7,6 +7,9 @@ angular.module('AppOne')
             localTasksBase: 'assets/tasks/'
             activitiesPublic: 'assets/tasks/activitiesPublic.js'
 
+        activityFileFromLocalStore: (activityId) ->
+            @config.localTasksBase + activityId + '.js'
+
         writeToScopePublicActivities: ($scope, fieldData, fieldError, searchTerm, pageNumber)->
             searchTermArg = ""
             if searchTerm != undefined

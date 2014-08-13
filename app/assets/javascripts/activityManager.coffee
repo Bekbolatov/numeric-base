@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("ActivityManager", ['$rootScope', ($rootScope) ->
+.factory("ActivityManager", ['$rootScope', 'Marketplace' , ($rootScope, Marketplace ) ->
     class ActivityManager
         # One 'Activity' (aka 'task', 'practice set') <-> One JS script, loaded into DOM
         # One 'Activity' <=> One Id - probably use com.sparkydots.numeric.tasks.t.basic_math
@@ -50,7 +50,9 @@ angular.module('AppOne')
 
         # TODO
         installActivity: (activityId) ->
-            console.log('todo: install activity: ' + activityId)
+            #first try local store
+            localStoreUrl = Marketplace.activityFileFromLocalStore(activityId)
+            @loadScriptsBatch([localStoreUrl])
 
         loadScript: (url) ->
             scriptId = @_scriptIdFromActivityId(@_activityIdFromURL(url))
@@ -91,6 +93,7 @@ angular.module('AppOne')
 
 
         loadScriptsBatch: (scriptSeq) ->
+            document.numeric.numericTasks = {}
             for task in scriptSeq
                 @loadScriptPartOfBatch(task)
 
