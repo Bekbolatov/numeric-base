@@ -48,7 +48,9 @@ angular.module('AppOne')
         _allJsLoaded: ->
             return true
 
-        loadAndRegisterTask: (url) ->
+        # TODO
+        installActivity: (activityId) ->
+            console.log('todo: install activity: ' + activityId)
 
         loadScript: (url) ->
             scriptId = @_scriptIdFromActivityId(@_activityIdFromURL(url))
@@ -68,6 +70,7 @@ angular.module('AppOne')
             newScript.src = url
             document.getElementsByTagName('head')[0].appendChild(newScript);
 
+        # TODO  - try to load/register once
         loadScriptPartOfBatch: (url) ->
             scriptId = @_scriptIdFromActivityId(@_activityIdFromURL(url))
             newScript = document.createElement('script')

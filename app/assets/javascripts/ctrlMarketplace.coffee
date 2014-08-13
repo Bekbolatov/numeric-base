@@ -10,17 +10,29 @@ angular.module('AppOne')
         $scope.currentTab == tab
     $scope.tabSelected = (tab) ->
         $scope.currentTab = tab
+
+    $scope.isInstalled = (activityId) ->
+        ActivityManager.getActivity(activityId) != undefined
+
+    # Removing/Uninstalling activities (tab: installed")
+    ## population
     $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
-    $scope.removeInstalledActivity = (activityId) ->
-        ActivityManager.deregisterTask(activityId)
     $rootScope.$on 'activitiesListUpdated', (ev, data) ->
         $scope.$apply()
+    ## actual removal
+    $scope.confirmRemoveId = undefined
+    $scope.uninstallActivity = (activityId) ->
+        ActivityManager.deregisterTask(activityId)
 
-
+    # Adding/Installing public activities (tab: public)
+    ## population
     $scope.pageNumber = 0
     Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', $scope.searchTermPublic, $scope.pageNumber)
     $scope.tryGettingPublicAgain = () ->
         Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', $scope.searchTermPublic, $scope.pageNumber)
+    ## actual install
+    $scope.installNewActivity = (activityId) ->
+        ActivityManager.installActivity(activityId)
 
     ]
 

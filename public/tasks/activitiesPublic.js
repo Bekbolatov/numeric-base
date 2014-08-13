@@ -1,18 +1,18 @@
 {
     "activities": [
         {
-            "name": "Sample Activity from data",
-            "shortDescr": "Descr here",
-            "id": "com.sparkydots.numeric.tasks.t.quiz"
+            "name": "Basic Math",
+            "shortDescription": "Practice basic math operations, such as addition, subtraction, multiplication, division",
+            "id": "com.sparkydots.numeric.tasks.t.basic_math"
         },
         {
-            "name": "Sample Activity2 from data",
-            "shortDescr": "Descr here",
-            "id": "com.sparkydots.numeric.tasks.t.quiz"
+            "name": "Odd One Out (KidPack 2)",
+            "shortDescription": "Descr here",
+            "id": "com.sparkydots.numeric.tasks.t.multiple_choice"
         },
         {
-            "name": "Sample Activity 3 from data",
-            "shortDescr": "Descr here",
+            "name": "Odd One Out (KidPack 1)",
+            "shortDescription": "Descr here",
             "id": "com.sparkydots.numeric.tasks.t.quiz"
         }
     ]
