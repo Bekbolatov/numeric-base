@@ -17,11 +17,6 @@ module.exports = function(grunt) {
                 dest: sourceJs + 'oneApp.js',
             },
             appJsCordova: {
-                options: {
-                  process: function (content, srcpath) {
-                    return content.replace(/\/assets\/tasks/g,"js\/tasks");
-                  }
-                },
                 src: appJsSourcesCordova,
                 dest: sourceJs + 'oneAppCordova.js',
             }

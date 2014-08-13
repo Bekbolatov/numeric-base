@@ -1,6 +1,7 @@
 document.numeric = {
-    numericTasksList: [],  // preserves order, used for async loading of js sources
-    numericTasks: {}, // 'keys of this' = numericTasksList
+    localTasksBaseUrl: '/assets/tasks/',
+    publicTasksUrlLocal: '/assets/tasks/activitiesPublic.js',
+    numericTasks: {},
     defaultTaskList: [
         '/assets/tasks/com.sparkydots.numeric.tasks.t.basic_math.js',
         '/assets/tasks/com.sparkydots.numeric.tasks.t.quiz.js',

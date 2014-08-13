@@ -3,9 +3,8 @@ angular.module('AppOne')
 .factory("Marketplace", ['$rootScope', '$http', ($rootScope, $http) ->
     class Marketplace
         config:
-            localBase: 'assets/'
-            localTasksBase: 'assets/tasks/'
-            activitiesPublic: 'assets/tasks/activitiesPublic.js'
+            localTasksBase: document.numeric.localTasksBaseUrl
+            activitiesPublic: document.numeric.publicTasksUrlLocal
 
         activityFileFromLocalStore: (activityId) ->
             @config.localTasksBase + activityId + '.js'
