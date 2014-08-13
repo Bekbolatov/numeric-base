@@ -11,8 +11,11 @@ angular.module('AppOne')
     $scope.tabSelected = (tab) ->
         $scope.currentTab = tab
 
+    # Utility methods
     $scope.isInstalled = (activityId) ->
         ActivityManager.getActivity(activityId) != undefined
+    $scope.getInfo = (activityId) ->
+        $scope.info = 'todo'
 
     # Removing/Uninstalling activities (tab: installed")
     ## population

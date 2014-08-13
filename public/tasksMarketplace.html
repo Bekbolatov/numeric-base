@@ -61,7 +61,7 @@
                                 Remove
                             </button>
 
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="getInfo(activity.id); $parent.confirmAddId = undefined">
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = undefined; getInfo(activity.id) ">
                                 Info
                             </button>
                         </p>
@@ -113,7 +113,7 @@
                             <i>Installed</i>
                         </button>
 
-                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmAddId || $parent.confirmAddId != activity.id" ng-click="getInfo(activity.id); $parent.confirmAddId = undefined">
+                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmAddId || $parent.confirmAddId != activity.id" ng-click="$parent.confirmAddId = undefined; getInfo(activity.id) ">
                             Info
                         </button>
                         </p>
