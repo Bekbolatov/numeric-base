@@ -3,9 +3,10 @@
 </header>
 
 <ul class="content table-view">
-    <li class="table-view-cell" ng-repeat="taskType in listOfAvailableActivities | orderObjectBy:'complexity':false">
+    <li class="table-view-cell" ng-repeat="taskType in listOfAvailableActivities">
         <a class="navigate-right" ng-href="#/task/{{ taskType.id }}">
             {{ taskType.name }}
+            <p>{{ taskType.shortDescription }}</p>
         </a>
     </li>
     <li class="table-view-cell">

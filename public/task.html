@@ -27,7 +27,7 @@
         Cancel
     </button>
 
-    <h2 class="title">{{ currentActivity.name }} </h2>
+    <h2 class="title" ng-class="{colorWhite: showFinish}">{{ currentActivity.name }} </h2>
 
     <button class="btn btn-link btn-nav pull-right" ng-show="!showFinish" ng-click="isFlipped=!isFlipped">
         <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>

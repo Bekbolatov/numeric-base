@@ -4,20 +4,19 @@ angular.module('AppOne')
     class ActivityManager
         # One 'Activity' (aka 'task', 'practice set') <-> One JS script, loaded into DOM
         # One 'Activity' <=> One Id - probably use com.sparkydots.numeric.tasks.t.basic_math
-        _taskIdToScriptId: {}  # to keep track of which DOM element contains the script for this activity
         activities: {}
         getAllActivities: ->
             @activities
         getActivity: (key) ->
             @activities[key]
 
-        registerTask: (key, task) ->
+        registerLoadedTask: (key, task) ->
             if (@activities[key])
                 console.log('key ' + key + ' is already used by an exiting task ' + @activities[key].name + ', will not overwrite with new task ' + task.name)
             else
                 console.log('adding activity with id ' + key + ' and name ' + task.name)
                 task.id = key
-                task.scriptId = @_taskIdToScriptId[key]
+                task.scriptId = @_scriptIdFromActivityId(key)
                 @activities[task.id] = task
                 console.log('added activity ' + task.name + ' with id ' + task.id)
 
@@ -31,10 +30,13 @@ angular.module('AppOne')
             else
                 console.log('activity with id ' + taskId + ' has not been registered before')
 
-        _fileNameFromURL: (url) ->
+        _activityIdFromURL: (url) ->
             namejs = url.split(/\/+/).pop()
             name = namejs.substring(0, namejs.length-3)
             name
+
+        _scriptIdFromActivityId: (activityId) ->
+            'script_' + activityId
 
         _hash: (someString) ->
             hash = 0
@@ -46,33 +48,51 @@ angular.module('AppOne')
         _allJsLoaded: ->
             return true
 
+        loadAndRegisterTask: (url) ->
+
         loadScript: (url) ->
-            scriptId = 'script_' + @_fileNameFromURL(url)
+            scriptId = @_scriptIdFromActivityId(@_activityIdFromURL(url))
             newScript = document.createElement('script')
             newScript.type = 'text/javascript'
             newScript.id = scriptId
             newScript.onload = () =>
-                taskId = document.numeric.numericTasksList[document.numeric.numericTasksList.length - 1]
-                @_taskIdToScriptId[taskId] = scriptId
                 if @_allJsLoaded()
                     console.log('numericTasks: ')
                     console.log(document.numeric.numericTasks)
                     console.log("scriptId: " + scriptId)
                     for key, task of document.numeric.numericTasks
                         console.log('constructor task key: ' + key);
-                        @registerTask(key, task)
+                        @registerLoadedTask(key, task)
                     $rootScope.$broadcast('activitiesListUpdated', @)
 
             newScript.src = url
             document.getElementsByTagName('head')[0].appendChild(newScript);
 
+        loadScriptPartOfBatch: (url) ->
+            scriptId = @_scriptIdFromActivityId(@_activityIdFromURL(url))
+            newScript = document.createElement('script')
+            newScript.type = 'text/javascript'
+            newScript.id = scriptId
+            newScript.onload = () =>
+                if @_allJsLoaded()
+                    console.log('numericTasks: ')
+                    console.log(document.numeric.numericTasks)
+                    console.log("scriptId: " + scriptId)
+                    for key, task of document.numeric.numericTasks
+                        console.log('constructor task key: ' + key);
+                        @registerLoadedTask(key, task)
+                    $rootScope.$broadcast('activitiesListUpdated', @)
 
-        loadScripts: (scriptSeq) ->
+            newScript.src = url
+            document.getElementsByTagName('head')[0].appendChild(newScript)
+
+
+        loadScriptsBatch: (scriptSeq) ->
             for task in scriptSeq
-                @loadScript(task)
+                @loadScriptPartOfBatch(task)
 
         constructor: () ->
-            @loadScripts(document.numeric.defaultTaskList)
+            @loadScriptsBatch(document.numeric.defaultTaskList)
 
     console.log('CALL TO FACTORY: ActivityManager')
     new ActivityManager()

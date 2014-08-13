@@ -51,22 +51,7 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     $scope.numeric = ActivityDriver
     ]
 
-# managing Activities (aka Tasks),getting new, removing old etc
-.controller 'TasksManagingCtrl', ['$scope', ($scope) -> ]
 
-.controller 'TasksMarketplaceCtrl', ['$scope', '$rootScope', 'ActivityManager', ($scope, $rootScope, ActivityManager) ->
-    $scope.test = 'todo: tasks marketplace'
-    $scope.currentTab = 'installed'
-    $scope.isTabSelected = (tab) ->
-        $scope.currentTab == tab
-    $scope.tabSelected = (tab) ->
-        $scope.currentTab = tab
-    $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
-    $scope.removeInstalledActivity = (activityId) ->
-        ActivityManager.deregisterTask(activityId)
-    $rootScope.$on 'activitiesListUpdated', (ev, data) ->
-        $scope.$apply()
-    ]
 
 # statistics and reports
 .controller 'StatsCtrl', ['$scope', ($scope) ->

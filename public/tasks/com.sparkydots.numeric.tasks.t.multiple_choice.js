@@ -1,14 +1,14 @@
-document.numeric.numericTasksList.push('com.sparkydots.numeric.tasks.t.multiple_choice');
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] =
 {
     name: 'Odd One Out (KidPack 1)',
+    shortDescription: 'Practice multiplying numbers',
     description: 'Practice multiplying numbers',
     authorName: 'Renat Bekbolatov',
     authorEmail: 'renatbek@gmail.com',
+    answerType: 'multiple',
+
     dataFile: 'multipleChoice_1.data',
     questionBank: [],
-    answerType: 'multiple',
-    complexity: 60,
 
 
     // follow pattern:

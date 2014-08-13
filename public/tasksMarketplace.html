@@ -33,120 +33,73 @@
                    <span class="control-item" ng-class="{active: isTabSelected('subscriptions')}" ng-click="tabSelected('subscriptions')">
                        Subscriptions
                    </span>
-               </div>
+            </div>
             <div class="content-inner">
-                   <div class="control-content" ng-class="{active: isTabSelected('installed')}" >
-                       <!--  installed -->
+                <div class="control-content" ng-class="{active: isTabSelected('installed')}">
+
+                    <!--  installed -->
 
 
-                                   <div class='search-view'>
-                                       <input class='search-key' type="search" placeholder="Search"/>
+                    <div class='search-view'>
+                        <input class='search-key' type="search" placeholder="Search"/>
 
-                                       <ul class="table-view">
+                        <ul class="table-view">
 
-                                           <li class="table-view-cell media activityMarketplace" ng-repeat="activity in listOfAvailableActivities  | orderObjectBy:'complexity':false">
-                                               <div class="media-body">
-                                                   {{ activity.name }}
-                                                   <p>{{ activity.description }}
-                                                       <button class="btn btn-negative pull-right" ng-click="removeInstalledActivity(activity.id)">remove</button>
-                                                   </p>
-                                               </div>
-                                           </li>
+                            <li class="table-view-cell media activityMarketplace" ng-repeat="activity in listOfAvailableActivities">
+                                <div class="media-body">
+                                    {{ activity.name }}
+                                    <p>{{ activity.shortDescription }}
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-click="removeInstalledActivity(activity.id)">
+                                            Remove
+                                        </button>
 
-                                       </ul>
-                                   </div>
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-click="getInfo(activity.id)">
+                                            Info
+                                        </button>
+                                    </p>
+                                </div>
+                            </li>
 
+                        </ul>
+                    </div>
 
+                </div>
+                <div class="control-content" ng-class="{active: isTabSelected('public')}">
 
-
-                   </div>
-                   <span class="control-content" ng-class="{active: isTabSelected('public')}">
-                        <!--  public -->
-
-                                   <div class='search-view'>
-                                       <input class='search-key' type="search" placeholder="Search"/>
-
-                                       <ul class="table-view">
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace" ng-repeat="actname in ['Sample1', 'Sample2', 'Sample3', 'Sample4', 'Sample5', 'Sample6', 'Sample7', 'Sample8']">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   {{actname}}
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                       </ul>
-                                   </div>
+                    <!--  public -->
 
 
+                    <div class='search-view'>
+                        <input class='search-key' type="search" placeholder="Search" ng-model="searchTermPublic" />
+
+                        <div ng-show="errorStatus">
+                            <div class="media-body">
+                                Could not connect to the server
+                                <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
+                                    Try again
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <ul class="table-view" ng-show="!errorStatus">
+
+                            <li class="table-view-cell media activityMarketplace" ng-repeat="activity in publicActivities.activities">
+                                <div class="media-body">
+                                    {{ activity.name }}
+                                    <p>{{ activity.shortDescr }}
+                                        <button class="btn btn-primary pull-right" ng-click="getData()">
+                                            add
+                                        </button>
+                                    </p>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
 
 
-                   </span>
+                </div>
                    <span class="control-content" ng-class="{active: isTabSelected('subscriptions')}">
                                               <!--  subscriptions -->
 
@@ -160,7 +113,8 @@
 
                                                <div class="media-body">
                                                    Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -173,7 +127,8 @@
 
                                                <div class="media-body">
                                                    Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -185,7 +140,8 @@
 
                                                <div class="media-body">
                                                    Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -197,7 +153,8 @@
 
                                                <div class="media-body">
                                                    Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -209,7 +166,8 @@
 
                                                <div class="media-body">
                                                    Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -221,7 +179,8 @@
 
                                                <div class="media-body">
                                                    {{actname}}
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                       eiusmod tempor
                                                        incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
                                                        <button class="btn btn-primary pull-right">add</button>
                                                    </p>
@@ -232,36 +191,31 @@
                                    </div>
 
                    </span>
-               </div>
+            </div>
 
 
+            <div>
+                <p class="content-paragraph">
+                    <i>
+                        If you need a new activity, submit a request with activity description:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
 
-        <div>
-            <p class="content-paragraph">
-                <i>
-                    If you need a new activity, submit a request with activity description:
-                    <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
+                    </i>
+                </p>
 
-                </i>
-            </p>
+                <p class="content-paragraph">
+                    <i>
 
-            <p class="content-paragraph">
-                <i>
-
-                    If you are a developer, you can create and share new activities:
-                    <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Submitting%20a%20New%20Activities">info@sparkydots.com</a>
-                </i>
-            </p>
-        </div>
-
-
+                        If you are a developer, you can create and share new activities:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Submitting%20a%20New%20Activities">info@sparkydots.com</a>
+                    </i>
+                </p>
+            </div>
 
 
         </div>
     </div>
 </div>
-
-
 
 
 <!--  BOTTOM NAV -->
