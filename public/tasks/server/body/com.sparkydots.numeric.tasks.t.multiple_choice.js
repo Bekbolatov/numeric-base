@@ -1,10 +1,5 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] =
 {
-    name: 'Odd One Out (KidPack 2)',
-    shortDescription: 'Practice multiplying numbers',
-    description: 'Practice multiplying numbers',
-    authorName: 'Renat Bekbolatov',
-    authorEmail: 'renatbek@gmail.com',
     answerType: 'multiple',
 
     dataFile: 'multipleChoice_1.data',

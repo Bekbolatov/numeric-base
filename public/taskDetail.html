@@ -1,0 +1,58 @@
+<header class="bar bar-nav">
+    <h1 class="title">Activity Info</h1>
+</header>
+
+
+<div class="content">
+    <div class="content-inner content-inner-marketplace">
+        <div ng-show="noSuchTask != undefined">
+            Activity Info was not found for id {{ noSuchTask }}
+        </div>
+
+        <div ng-show="noSuchTask == undefined">
+            {{ activityMeta.name }}
+            <p>{{ activityMeta.authorName }}</p>
+            <p>{{ activityMeta.authorEmail }}</p>
+            <p>{{ activityMeta.authorDate }}</p>
+            <p>{{ activityMeta.description }}</p>
+
+            <div ng-show="!activity.bookmark">
+                <button class="btn btn-primary pull-right btn-marketplace" ng-click="bookmarkDialog(activityMeta.Id)">
+                    bookmark it?
+                </button>
+            </div>
+
+            <div ng-show="activity.bookmark">
+                <button class="btn btn-primary pull-right btn-marketplace" ng-click="bookmarkDialog(activityMeta.id)">
+                    bookmarked at {{ activityMeta.bookmark }}, move?
+                </button>
+            </div>
+
+            <div>
+                <a class="navigate-right" ng-href="#/task/{{ activity.id }}">
+                    <button class="btn btn-primary pull-right btn-marketplace">Start</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  BOTTOM NAV -->
+<nav class="bar bar-tab">
+    <a class="tab-item active" href="#/home">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+    </a>
+    <a class="tab-item active" href="#/stats">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">Stats</span>
+    </a>
+    <a class="tab-item active" href="#/test">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">TestPage</span>
+    </a>
+    <a class="tab-item active" href="#/settings">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+    </a>
+</nav>

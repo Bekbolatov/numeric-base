@@ -7,6 +7,11 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
+pipelineStages := Seq(uglify)
+
+includeFilter in uglify := GlobFilter("javascripts/*.js")
+
+
 //scalaVersion := "2.11.1"
 
 scalaVersion := "2.10.3"  

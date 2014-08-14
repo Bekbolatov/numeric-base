@@ -5,7 +5,7 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
         $scope.$apply()
 ]
 
-.controller 'TaskListCtrl', ['$scope', '$rootScope', 'ActivityManager', ($scope, $rootScope, ActivityManager) ->
+.controller 'TaskListCtrl', ['$scope', '$rootScope', 'ActivityManager', ($scope, $rootScope, ActivityManager ) ->
     $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
     $rootScope.$on 'activitiesListUpdated', (ev, data) ->
         $scope.$apply()
@@ -44,7 +44,7 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
         ActivityDriver.clearResult()
     ]
 
-.controller 'TaskSummaryCtrl', ['$scope', '$location', 'ActivityDriver', ($scope, $location, ActivityDriver) ->
+.controller 'TaskSummaryCtrl', ['$scope', '$location', 'ActivityDriver', ($scope, $location, ActivityDriver ) ->
     if ActivityDriver.currentActivity == undefined
         $location.path('/')
     $scope.task = ActivityDriver.currentTask
@@ -52,14 +52,14 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     ]
 
 
-
 # statistics and reports
 .controller 'StatsCtrl', ['$scope', ($scope) ->
     $scope.test = 'todo: stats...'
     ]
 # app settings
-.controller 'SettingsCtrl', ['$scope', ($scope) ->
-    $scope.test = 'todo: settings...'
+.controller 'SettingsCtrl', ['$scope', 'ActivityLoader', ($scope, ActivityLoader ) ->
+    $scope.clearLocalStorage = ->
+        ActivityLoader.clearLocalStorage()
     ]
 
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', 'ActivityManager', ($scope, $rootScope, $routeParams, ActivityManager ) ->

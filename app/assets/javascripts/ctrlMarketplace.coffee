@@ -39,3 +39,16 @@ angular.module('AppOne')
 
     ]
 
+.controller 'TaskDetailCtrl', ['$scope', '$routeParams', '$location', 'ActivityMeta', ($scope, $routeParams, $location, ActivityMeta ) ->
+    activityId = $routeParams.taskId
+    if activityId == undefined || activityId == ''
+        $scope.noSuchTask = ''
+        return
+
+    ActivityMeta.get(activityId).then( \
+        (data) ->
+            $scope.activityMeta = data
+        (status) ->
+            $scope.noSuchTask = activityId
+        )
+    ]

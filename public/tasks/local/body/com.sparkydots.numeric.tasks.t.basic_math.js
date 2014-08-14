@@ -1,10 +1,5 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 {
-    name: 'Basic Math',
-    shortDescription: 'Practice adding numbers',
-    description: 'Practice adding numbers',
-    authorName: 'Renat Bekbolatov',
-    authorEmail: 'renatbek@gmail.com',
     answerType: 'numeric',
 
     parameters: {

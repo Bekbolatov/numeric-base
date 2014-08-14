@@ -32,6 +32,10 @@ angular.module('AppOne')
         templateUrl: 'assets/tasksMarketplace.html'
         controller: 'TasksMarketplaceCtrl'
     })
+    .when('/taskDetail/:taskId', {
+        templateUrl: 'assets/taskDetail.html'
+        controller: 'TaskDetailCtrl'
+    })
 
     # Stats/Reports
     .when('/stats', {
@@ -40,11 +44,11 @@ angular.module('AppOne')
     })
     # Settings
     .when('/settings', {
-        template: '<h1> {{ test }} </h1>'
+        templateUrl: 'assets/settings.html'
         controller: 'SettingsCtrl'
     })
     .when('/settings/:section', {
-        template: '<h1> {{ test }} </h1>'
+        templateUrl: 'assets/settings.html'
         controller: 'SettingsCtrl'
     })
 

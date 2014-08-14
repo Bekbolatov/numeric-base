@@ -1,11 +1,5 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.quiz'] =
 {
-    name: 'Odd One Out (KidPack 1)',
-    shortDescription: 'Practice multiplying numbers',
-    description: 'Practice multiplying numbers',
-    authorName: 'Renat Bekbolatov',
-    authorEmail: 'renatbek@gmail.com',
-
     // follow pattern:
     // parameters: {  param1: {}, param2: {} },  or not set if no params
 
