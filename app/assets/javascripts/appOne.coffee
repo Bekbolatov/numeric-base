@@ -57,9 +57,9 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     $scope.test = 'todo: stats...'
     ]
 # app settings
-.controller 'SettingsCtrl', ['$scope', 'ActivityLoader', ($scope, ActivityLoader ) ->
+.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', ($scope, ActivityMeta ) ->
     $scope.clearLocalStorage = ->
-        ActivityLoader.clearLocalStorage()
+        ActivityMeta.clearLocalStorage()
     ]
 
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', 'ActivityManager', ($scope, $rootScope, $routeParams, ActivityManager ) ->

@@ -1,16 +1,11 @@
 angular.module('AppOne')
 
 .factory("ActivityMeta", ['$q', '$http' , ($q, $http ) ->
-
     class ActivityMeta
         _key: 'numericActivitiesMeta'
         _urls:
-            metaLocal: document.numeric.urlActivityMetaLocal
-            bodyLocal: document.numeric.urlActivityBodyLocal
-            metaServer: document.numeric.urlActivityMetaServer
-            bodyServer: document.numeric.urlActivityBodyServer
-            publicActivitiesList: document.numeric.urlActivityMetaListServer
-
+            local: document.numeric.urlActivityMetaLocal
+            remote: document.numeric.urlActivityMetaServer
         _read: ->
             JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) ->
@@ -34,23 +29,52 @@ angular.module('AppOne')
             if !table
                 @_clear()
 
+        _httpGet: (url, key) =>
+            =>
+                deferred = $q.defer()
+                console.log('trying ' + url + ' ...')
+                $http.get(url)
+                .then( \
+                    (response) =>
+                        data = response.data
+                        data.id = key
+                        @_add(key, data)
+                        deferred.resolve(data)
+                    (status) =>
+                        deferred.reject(status)
+                )
+                deferred.promise
+
         clearLocalStorage: ->
             @_clear()
+
+        newget: (key) ->
+            deferred = $q.defer()
+            cached = @_get(key)
+            if cached
+                deferred.resolve(cached)
+                return deferred.promise
+
+            @_httpGet(@_urls.local + key + '.json', key)()
+            .catch(@_httpGet(@_urls.remote + key + '.json', key))
+            .catch(@_httpGet(@_urls.remote + key + '.json', key))
+
+
         get: (key) ->
             deferred = $q.defer()
             cached = @_get(key)
             if cached
                 deferred.resolve(cached)
             else
-                $http.get(@_urls.metaLocal + key + '.json')
-                .then( \
+                $http.get(@_urls.local + key + '.json')
+                .then(\
                     (response, status, headers, config) =>
                         data = response.data
                         data.id = key
                         @_add(key, data)
                         deferred.resolve(data)
                     (data, status, headers, config) =>
-                        $http.get(@_urls.metaServer + key + '.json')
+                        $http.get(@_urls.remote + key + '.json')
                             .then( \
                                 (response, status, headers, config) =>
                                     data = response.data

@@ -45,7 +45,7 @@ angular.module('AppOne')
         $scope.noSuchTask = ''
         return
 
-    ActivityMeta.get(activityId).then( \
+    ActivityMeta.newget(activityId).then( \
         (data) ->
             $scope.activityMeta = data
         (status) ->
