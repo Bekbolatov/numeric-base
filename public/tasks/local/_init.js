@@ -1,4 +1,8 @@
 document.numeric = {
+    keys: {
+        numericActivitiesMeta: 'numericActivitiesMeta'
+    },
+
     urlActivityMetaListServer: '/assets/tasks/server/activitiesPublic',
 
     urlActivityMetaServer: '/assets/tasks/server/meta/',
