@@ -11,6 +11,7 @@ angular.module('AppOne')
         getActivityInfo: (key) ->
             @ActivityMeta.get(key)
 
+        #maybe unused
         activityFileFromLocalStore: (activityId) ->
             @config.localTasksBase + activityId + '.js'
 

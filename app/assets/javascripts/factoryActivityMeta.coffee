@@ -49,7 +49,7 @@ angular.module('AppOne')
 
         clearLocalStorage: -> @_clear()
 
-        get: (key) ->
+        get: (key) -> # tries localStorage, then localWWW, then remote server
             console.log('Looking for activity ' + key)
             @_cacheGet(key)
             .catch(@_httpGet(@_urls.local + key + '.json', key))

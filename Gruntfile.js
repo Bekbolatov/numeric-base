@@ -4,8 +4,8 @@ module.exports = function(grunt) {
     var appJsSources = [
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
-                    sourceJs + 'activityMeta.js', 
-                    sourceJs + 'activity.js', 
+                    sourceJs + 'factoryActivityMeta.js', 
+                    sourceJs + 'factoryActivityBody.js', 
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'factoryMarketplace.js', 
                     sourceJs + 'ctrlMarketplace.js', 

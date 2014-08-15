@@ -32,17 +32,27 @@
 
 </p>
         <div>
-            <button class="btn btn-negative" ng-click="downloadToFile1()">download to file</button>
+            <button class="btn btn-negative" ng-click="downloadToFile1()">load script1</button>
         </div>
         <div>
-            <button class="btn btn-negative" ng-click="downloadToFile2()">download to file</button>
+            <button class="btn btn-negative" ng-click="downloadToFile2()">load script2</button>
+        </div>
+        <div>
+            <button class="btn btn-negative" ng-click="downloadToFile3()">load script3</button>
+        </div>
+        <div>
+            <button class="btn btn-negative" ng-click="downloadJs()">download to file</button>
         </div>
 
 
 
         <div>
-            <img id="logoman" src="cdvfile://localhost/persistent/temp/file.png" alt="img here">
+            <!-- <img id="logoman" src="cdvfile://localhost/persistent/temp/file.png" alt="img here"> -->
         </div>
+        <script src="file:///android_asset/www/js/test.js" id="greens"></script>
+        <script src="cdvfile://localhost/persistent/activities/body/somefile.js" id="yellows"></script>
+
+
     </div>
 </div>
 

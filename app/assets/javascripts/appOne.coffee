@@ -57,29 +57,31 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     $scope.test = 'todo: stats...'
     ]
 # app settings
-.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', 'Activity', ($scope, ActivityMeta, Activity ) ->
+.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', 'ActivityBody', ($scope, ActivityMeta, ActivityBody ) ->
     $scope.clearLocalStorage = -> ActivityMeta.clearLocalStorage()
-    uri1 = encodeURI("http://upload.wikimedia.org/wikipedia/meta/b/be/Wikipedia-logo-v2_2x.png")
-    uri2 = encodeURI("http://www.clker.com/cliparts/5/2/e/9/119498684762751185simple_teddy_bear_gerald_01.svg.med.png")
-    fileURL = "cdvfile://localhost/persistent/temp/file.png"
+
 
     $scope.downloadToFile1 = ->
-        Activity._copy(uri1, fileURL)
-        .then( (result) ->
-            console.log('result: ' + result)
-            document.getElementById('logoman').src = document.getElementById('logoman').src
-        )
-        .catch( (status) -> console.log('error status: ' + status))
+        console.log('remove')
+        ActivityBody.unloadActivity('com.sparkydots.numeric.tasks.t.basic_math')
 
     $scope.downloadToFile2 = ->
-        Activity._copy(uri2, fileURL)
-        .then( (result) ->
-            console.log('result: ' + result)
-            src = document.getElementById('logoman').src
-            document.getElementById('logoman').src = ""
-            document.getElementById('logoman').src = src
-        )
-        .catch( (status) -> console.log('error status: ' + status))
+        console.log('downloadtofile2')
+        ActivityBody.loadScriptLocalCDV('com.sparkydots.numeric.tasks.t.basic_math')
+        .then((result) -> console.log('result: ' + result))
+        .catch((status) -> console.log('error status: ' + status))
+
+    $scope.downloadToFile3 = ->
+        console.log('downloadtofile3')
+        ActivityBody.loadScriptLocalCDV('com.sparkydots.numeric.tasks.t.multiple_choice')
+        .then((result) -> console.log('result: ' + result))
+        .catch((status) -> console.log('error status: ' + status))
+
+    $scope.downloadJs = ->
+        console.log('js download 3')
+        ActivityBody._downloadActivityFromRemote('com.sparkydots.numeric.tasks.t.multiple_choice')
+        .then((result) -> console.log('result: ' + result))
+        .catch((status) -> console.log('error status: ' + status))
     ]
 
 
