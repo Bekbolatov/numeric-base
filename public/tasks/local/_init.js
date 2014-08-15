@@ -12,7 +12,6 @@ document.numeric = {
     urlActivityBodyLocal: '/assets/tasks/local/body/',
 
     directoryActivityBody: 'cdvfile://localhost/persistent/activities/body/',
-    directoryActivityBodyFS: 'file:///activities/body/',
 
     numericTasks: {},
     defaultActivitiesList: [

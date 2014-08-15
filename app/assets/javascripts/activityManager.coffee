@@ -1,11 +1,9 @@
 angular.module('AppOne')
 
-.factory("ActivityManager", ['$rootScope', '$q', 'Marketplace', 'ActivityMeta' , ($rootScope, $q, Marketplace, ActivityMeta ) ->
+.factory("ActivityManager", ['$rootScope', '$q', 'Marketplace', 'ActivityMeta', 'ActivityBody' , ($rootScope, $q, Marketplace, ActivityMeta, ActivityBody ) ->
     class ActivityManager
-
-
         constructor: () ->
-            @loadScripts(document.numeric.defaultActivitiesList)
+            ActivityBody.loadActivities(document.numeric.defaultActivitiesList)
             .then((result) -> console.log('result: ' + result))
             .catch((status) -> console.log('error loading scripts: ' + status))
 

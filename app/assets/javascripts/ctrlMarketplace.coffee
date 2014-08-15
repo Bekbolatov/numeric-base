@@ -3,7 +3,7 @@ angular.module('AppOne')
 # managing Activities (aka Tasks),getting new, removing old etc
 .controller 'TasksManagingCtrl', ['$scope', ($scope) -> ]
 
-.controller 'TasksMarketplaceCtrl', ['$scope', '$rootScope', '$http', 'ActivityManager', 'Marketplace', ($scope, $rootScope, $http, ActivityManager, Marketplace ) ->
+.controller 'TasksMarketplaceCtrl', ['$scope', '$rootScope', '$http', 'ActivityBody', 'Marketplace', 'ActivityManager', ($scope, $rootScope, $http, ActivityBody, Marketplace, ActivityManager ) ->
     $scope.test = 'todo: tasks marketplace'
     $scope.currentTab = 'installed'
     $scope.isTabSelected = (tab) ->
@@ -13,19 +13,24 @@ angular.module('AppOne')
 
     # Utility methods
     $scope.isInstalled = (activityId) ->
-        ActivityManager.getActivity(activityId) != undefined
+        ActivityBody.get(activityId) != undefined
     $scope.getInfo = (activityId) ->
         $scope.info = 'todo'
 
     # Removing/Uninstalling activities (tab: installed")
     ## population
-    $scope.listOfAvailableActivities = ActivityManager.getAllActivities()
-    $rootScope.$on 'activitiesListUpdated', (ev, data) ->
-        $scope.$apply()
+    $scope.listOfAvailableActivities = ActivityBody.all()
+
+
+    #$rootScope.$on 'activitiesListUpdated', (ev, data) ->
+    #    $scope.$apply()
+
+
+
     ## actual removal
     $scope.confirmRemoveId = undefined
     $scope.uninstallActivity = (activityId) ->
-        ActivityManager.deregisterTask(activityId)
+        ActivityBody.unloadActivity(activityId)
 
     # Adding/Installing public activities (tab: public)
     ## population
@@ -35,7 +40,7 @@ angular.module('AppOne')
         Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', $scope.searchTermPublic, $scope.pageNumber)
     ## actual install
     $scope.installNewActivity = (activityId) ->
-        ActivityManager.installActivity(activityId)
+        ActivityBody.loadActivity(activityId)
 
     ]
 

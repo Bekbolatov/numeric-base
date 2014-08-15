@@ -64,22 +64,23 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
     $scope.downloadToFile1 = ->
         console.log('remove')
         ActivityBody.unloadActivity('com.sparkydots.numeric.tasks.t.basic_math')
+        ActivityBody.unloadActivity('com.sparkydots.numeric.tasks.t.multiple_choice')
 
     $scope.downloadToFile2 = ->
         console.log('downloadtofile2')
-        ActivityBody.loadScriptLocalCDV('com.sparkydots.numeric.tasks.t.basic_math')
+        ActivityBody.loadActivity('com.sparkydots.numeric.tasks.t.basic_math')
         .then((result) -> console.log('result: ' + result))
         .catch((status) -> console.log('error status: ' + status))
 
     $scope.downloadToFile3 = ->
         console.log('downloadtofile3')
-        ActivityBody.loadScriptLocalCDV('com.sparkydots.numeric.tasks.t.multiple_choice')
+        ActivityBody.loadActivity('com.sparkydots.numeric.tasks.t.multiple_choice')
         .then((result) -> console.log('result: ' + result))
         .catch((status) -> console.log('error status: ' + status))
 
     $scope.downloadJs = ->
-        console.log('js download 3')
-        ActivityBody._downloadActivityFromRemote('com.sparkydots.numeric.tasks.t.multiple_choice')
+        console.log('multiple_choiced')
+        ActivityBody.loadActivity('com.sparkydots.numeric.tasks.t.multiple_choiced')
         .then((result) -> console.log('result: ' + result))
         .catch((status) -> console.log('error status: ' + status))
     ]

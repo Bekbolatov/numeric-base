@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("ActivityBody", ['$q', '$http' , ($q, $http ) ->
+.factory("ActivityBody", ['$q', '$http', 'ActivityMeta', ($q, $http, ActivityMeta ) ->
     class FileDownloader
         constructor: ->
             if window.requestFileSystem
@@ -22,22 +22,18 @@ angular.module('AppOne')
                 dfd.reject(msg)
         onInitFs: (uri, fileURL, dfd) ->
             (fs) ->
-                console.log("Opened file system: " + fs.name + " : " + fs.root.fullPath);
                 fileTransfer = new FileTransfer();
                 fileTransfer.download(
                     uri
                     fileURL
                     (entry) ->
-                        console.log("download complete: " + entry.fullPath)
                         dfd.resolve('ok')
                     (error) ->
-                        console.log("download error source " + error.source)
                         dfd.reject(error.code)
                     false
                     {
                         headers:
                             "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-
                     }
             )
         download: (uri, fileURL) ->
@@ -50,25 +46,14 @@ angular.module('AppOne')
         _scriptId: (activityId) -> 'script_' + activityId
         _downloader: new FileDownloader()
         _uriCdv: (activityId) -> document.numeric.directoryActivityBody + activityId + '.js'
-        _uriFS: (activityId) -> document.numeric.directoryActivityBodyFS + activityId + '.js'
         _uriLocal: (activityId) -> document.numeric.urlActivityBodyLocal + activityId + '.js'
         _uriRemote: (activityId) -> document.numeric.urlActivityBodyServer + activityId + '.js'
-        _downloadActivityFromLocal: (key) -> @_downloader.download(@_uriLocal(key), @_uriCdv(key))
-        _downloadActivityFromRemote: (key) -> @_downloader.download(@_uriRemote(key), @_uriCdv(key))
 
-        get: (activityId) -> @_activities[activityId]
-
-        unloadActivity: (activityId) ->
-            if (@_activities[activityId])
-                element = document.getElementById(@_scriptId(activityId))
-                element.parentElement.removeChild(element)
-                delete @_activities[activityId]
-
-        attachActivityMeta: (key)=>
+        _attachActivityMeta: (key)=>
             deferred = $q.defer()
             ActivityMeta.get(key)
             .then(
-                (data)->
+                (data)=>
                     @_activities[key].id = key
                     @_activities[key].meta = data
                     deferred.resolve('attached meta')
@@ -77,12 +62,19 @@ angular.module('AppOne')
             )
             deferred.promise
 
-        loadScriptLocalwww: (key) => @loadScript_(@_uriLocal(key), key) #works when exists in distribution
-        loadScriptLocalFS: (key) => @loadScript_(@_uriFS(key), key)
-        loadScriptLocalCDV: (key) => @loadScript_(@_uriCdv(key), key)
+        _loadScript: (uri, key) =>
+            deferred = $q.defer()
+            @__loadScript(uri, key)
+            .then (result) =>
+                deferred.resolve(result)
+            .catch (status) =>
+                element = document.getElementById(@_scriptId(key))
+                element.parentElement.removeChild(element)
+                deferred.reject(status)
+            deferred.promise
 
-        loadScript_: (uri, key) => # removes the added dom element script if failed
-            console.log('tryin to load script with key: ' + key + ' and uri: ' + uri)
+        __loadScript: (uri, key) => # removes the added dom element script if failed
+            console.log('__ attempt to load script with key: ' + key + ' and uri: ' + uri)
             deferred = $q.defer()
             scriptId = @_scriptId(key)
             newScript = document.createElement('script')
@@ -96,59 +88,40 @@ angular.module('AppOne')
                     @_activities[key].id = key
                     deferred.resolve('script loaded: ' + scriptId)
                 else
-                    element = document.getElementById(scriptId)
-                    element.parentElement.removeChild(element)
                     deferred.reject('script did not load: ' + scriptId)
             newScript.onerror = =>
-                element = document.getElementById(scriptId)
-                element.parentElement.removeChild(element)
                 deferred.reject('error occured, script did not load: ' + scriptId)
             newScript.src = uri
             document.getElementsByTagName('head')[0].appendChild(newScript);
             deferred.promise
 
+        unloadActivity: (activityId) ->
+            if (@_activities[activityId])
+                element = document.getElementById(@_scriptId(activityId))
+                element.parentElement.removeChild(element)
+                delete @_activities[activityId]
 
-        loadScript: (key) => # removes the added dom element script if failed
-            console.log('tryin to load script with key: ' + key)
-            deferred = $q.defer()
-            scriptId = @_scriptId(key)
-            uri = @_uriCdv(key)
-            if @_downloader.webkit
-                uri = @_uriLocal(key) #uri CVD - testing in webapp
-            newScript = document.createElement('script')
-            newScript.type = 'text/javascript'
-            newScript.id = scriptId
-            newScript.onload = =>
-                console.log('script onload')
-                if document.numeric.numericTasks[key]
-                    @_activities[key] = document.numeric.numericTasks[key]
-                    delete document.numeric.numericTasks[key]
-                    @_activities[key].id = key
-                    deferred.resolve('script loaded: ' + scriptId)
-                else
-                    element = document.getElementById(scriptId)
-                    element.parentElement.removeChild(element)
-                    deferred.reject('script did not load: ' + scriptId)
-            newScript.src = uri
-            document.getElementsByTagName('head')[0].appendChild(newScript);
-            deferred.promise
+        loadActivity: (activityId) => # if on web, maybe can use @downloader.webkit to determine and bypass downloads to local (insteads, always use from remote)
+            console.log('Call to load script with activityId: ' + activityId)
+            if @_activities[activityId]
+                return @q.defer().resolve('already loaded')
+            @_loadScript(@_uriLocal(activityId), activityId)
+            .catch => @_loadScript(@_uriCdv(activityId), activityId)
+            .catch =>
+                @_downloader.download(@_uriRemote(activityId), @_uriCdv(activityId))
+                .then => @_loadScript(@_uriCdv(activityId), activityId)
+            .then => @_attachActivityMeta(activityId)
+
+        all: -> @_activities
+        get: (activityId) -> @_activities[activityId]
 
 
-
-        loadScripts: (scriptSeq) ->
-            console.log('loadScripts called with ' + scriptSeq)
-            document.numeric.numericTasks = {}
+        loadActivities: (activities) ->
+            console.log('loadScripts called with ' + activities)
             promises = []
-            for task in scriptSeq #angular.forEach( $scope.testArray, function(value){
-                promises.push(@loadScriptFunction(task))
-                #promises.push(@attachActivityMeta(task))
+            for activityId in activities
+                promises.push(@loadActivity(activityId))
             $q.all(promises)
-            #.then(@registerLoadedNumericTasks)
-
-        loadActivity: (activityId) ->
-            #first try local store
-            localStoreUrl = Marketplace.activityFileFromLocalStore(activityId)
-            @loadScripts([activityId])
 
 
     new ActivityBody()
