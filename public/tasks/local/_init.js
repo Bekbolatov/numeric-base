@@ -3,16 +3,15 @@ document.numeric = {
         numericActivitiesMeta: 'numericActivitiesMeta'
     },
 
-    //urlActivityMetaListServer: '/assets/tasks/server/activitiesPublic',
-
-    urlActivityMetaServerFakeLocal: '/assets/tasks/server/meta/',
-    urlActivityBodyServerFakeLocal: '/assets/tasks/server/body/',
+    urlActivityMetaListServer: '/assets/tasks/server/activitiesPublic',
 
     urlActivityMetaServer: 'http://console.sparkydots.com:8080/numeric/server/meta/',
     urlActivityBodyServer: 'http://console.sparkydots.com:8080/numeric/server/body/',
 
     urlActivityMetaLocal: '/assets/tasks/local/meta/',
     urlActivityBodyLocal: '/assets/tasks/local/body/',
+
+    directoryActivityBody: 'cdvfile://localhost/persistent/activities/body/',
 
     numericTasks: {},
     defaultActivitiesList: [

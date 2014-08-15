@@ -5,6 +5,7 @@ module.exports = function(grunt) {
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
                     sourceJs + 'activityMeta.js', 
+                    sourceJs + 'activity.js', 
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'factoryMarketplace.js', 
                     sourceJs + 'ctrlMarketplace.js', 

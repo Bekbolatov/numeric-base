@@ -1,17 +1,15 @@
 angular.module('AppOne')
 
-.factory("Marketplace", ['$rootScope', '$http', '$q', ($rootScope, $http, $q) ->
+.factory("Marketplace", ['$rootScope', '$http', '$q', 'ActivityMeta', ($rootScope, $http, $q, ActivityMeta ) ->
     class Marketplace
-        activitiesMetaInfo: new ActivitiesMetaInfo()
-
         config:
             localTasksBase: document.numeric.localTasksBaseUrl
-            activitiesPublic: document.numeric.publicTasksUrlLocal
+            activitiesPublic: document.numeric.urlActivityMetaListServer
 
         # stores meta-data about the task, a limited-version of all activity info
         # todo - hook up
         getActivityInfo: (key) ->
-            @activitiesMetaInfo.getMetaInfo(key)
+            @ActivityMeta.get(key)
 
         activityFileFromLocalStore: (activityId) ->
             @config.localTasksBase + activityId + '.js'

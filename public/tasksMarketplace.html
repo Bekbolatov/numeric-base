@@ -35,9 +35,9 @@
 
                 <li class="table-view-cell media activityMarketplace" ng-repeat="activity in listOfAvailableActivities">
                     <div class="media-body">
-                        {{ activity.name }}
+                        {{ activity.meta.name }}
                         <p>
-                            {{ activity.shortDescription }}<br>
+                            {{ activity.meta.shortDescription }}<br>
                             <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined">
                                 Cancel
                             </button>
