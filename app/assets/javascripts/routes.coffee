@@ -68,6 +68,7 @@ angular.module('AppOne')
   $route.reload();
 ])
 
-.config(['$compileProvider', ($compileProvider) ->
+.config(['$compileProvider', '$httpProvider', ($compileProvider, $httpProvider) ->
     $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|ftp|mailto|file|tel):/
+    $httpProvider.defaults.useXDomain = true
 ])

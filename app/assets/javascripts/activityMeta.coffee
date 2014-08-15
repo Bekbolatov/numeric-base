@@ -20,29 +20,29 @@ angular.module('AppOne')
                 @_write(table)
         _cacheGet: (key) =>
             deferred = $q.defer()
-            console.log('| trying localStorage...')
+            console.log('|- trying localStorage...')
             cached = @_get(key)
             if cached
-                console.log('| found in localStorage.')
+                console.log('| |- found in localStorage.')
                 deferred.resolve(cached)
             else
-                console.log('| not found in localStorage.')
+                console.log('| |- not found in localStorage.')
                 deferred.reject()
             deferred.promise
         _httpGet: (url, key) =>
             =>
                 deferred = $q.defer()
-                console.log('| trying ' + url + ' ...')
+                console.log('|- trying ' + url + ' ...')
                 $http.get(url)
                 .then( \
                     (response) =>
-                        console.log('| found at ' + url)
+                        console.log('| |- found at ' + url)
                         data = response.data
                         data.id = key
                         @_add(key, data)
                         deferred.resolve(data)
                     (status) =>
-                        console.log('| not found at ' + url)
+                        console.log('| |- not found at ' + url)
                         deferred.reject(status)
                 )
                 deferred.promise
