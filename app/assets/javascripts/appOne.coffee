@@ -13,9 +13,12 @@ angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
 
 .controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'ActivityDriver', 'ActivityManager', ($scope, $routeParams, $location, ActivityDriver, ActivityManager ) ->
     taskId = $routeParams.taskId
-    if taskId == undefined || taskId == '' || ActivityManager.getActivity(taskId) == undefined
+    if taskId == undefined || taskId == ''
         return $location.path('/')
-    ActivityDriver.setTask(ActivityManager.getActivity($routeParams.taskId), $scope)
+    activity = ActivityManager.getActivity(taskId)
+    if activity == undefined
+        return $location.path('/')
+    ActivityDriver.setTask(activity, $scope)
 
     $scope.activityDriver = ActivityDriver
     $scope.currentActivity = ActivityDriver.currentActivity

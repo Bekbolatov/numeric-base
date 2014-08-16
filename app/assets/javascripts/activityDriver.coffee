@@ -81,7 +81,7 @@ angular.module('AppOne')
             @clearResult()
             @resetStats()
             @currentActivity = new Activity(@currentTask)
-            @taskName = @currentTask.name
+            @taskName = @currentTask.meta.name
             @_clearLastQuestion()
             @newQuestion()
             @startTime = new Date()

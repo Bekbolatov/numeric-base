@@ -3,7 +3,7 @@ document.numeric = {
         numericActivitiesMeta: 'numericActivitiesMeta'
     },
 
-    urlActivityMetaListServer: '/assets/tasks/server/activitiesPublic',
+    urlActivityMetaListServer: 'http://console.sparkydots.com:8080/numeric/server/activitiesPublic',
 
     urlActivityMetaServer: 'http://console.sparkydots.com:8080/numeric/server/meta/',
     urlActivityBodyServer: 'http://console.sparkydots.com:8080/numeric/server/body/',

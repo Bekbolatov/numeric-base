@@ -1,18 +1,18 @@
 <header class="bar bar-nav">
     <button class="btn btn-primary pull-left" ng-show="!repeatOptions && !submitOptions" ng-click="repeatOptions = !repeatOptions">
-        Practice Again
+        Practice More
     </button>
     <button class="btn btn-primary pull-left" ng-show="repeatOptions" ng-click="repeatOptions = !repeatOptions">
         Cancel
     </button>
     <a href="#/tasksList">
         <button class="btn btn-negative pull-left" ng-show="repeatOptions">
-            Different Activity
+            Other
         </button>
     </a>
     <a href="#/task/{{ task.id }}">
         <button class="btn btn-negative pull-left" ng-show="repeatOptions">
-            Same Activity
+            Same
         </button>
     </a>
 

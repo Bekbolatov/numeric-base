@@ -1,5 +1,6 @@
 <header class="bar bar-nav">
     <a class="icon icon-left-nav pull-left" href="#/"></a>
+
     <h1 class="title">Manage Activities</h1>
 </header>
 
@@ -34,23 +35,19 @@
             <ul class="table-view">
 
                 <li class="table-view-cell media activityMarketplace" ng-repeat="activity in listOfAvailableActivities">
-                    <div class="media-body">
+                    <div class="media-body" ng-click="getMeta(activity.id)">
                         {{ activity.meta.name }}
                         <p>
                             {{ activity.meta.shortDescription }}<br>
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined">
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
                                 Cancel
                             </button>
-                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; uninstallActivity(activity.id)">
+                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(activity.id)">
                                 Confirm Remove
                             </button>
 
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = activity.id">
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = activity.id; $event.stopPropagation()">
                                 Remove
-                            </button>
-
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = undefined; getInfo(activity.id) ">
-                                Info
                             </button>
                         </p>
                     </div>
@@ -70,7 +67,8 @@
 
             <div ng-show="errorStatus">
                 <div class="media-body">
-                    Could not connect to the server, please report to <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
+                    Could not connect to the server, please report to
+                    <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
                     <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
                         Try again
                     </button>
@@ -81,29 +79,26 @@
             <ul class="table-view" ng-show="!errorStatus">
 
                 <li class="table-view-cell media activityMarketplace" ng-repeat="activity in publicActivities.activities">
-                    <div class="media-body">
+                    <div class="media-body" ng-click="getMeta(activity.id)">
                         {{ activity.name }}
 
                         <p>
-                        {{ activity.shortDescription }}<br>
-                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined">
-                            Cancel
-                        </button>
-                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; installNewActivity(activity.id)">
-                            Confirm Add
-                        </button>
+                            {{ activity.shortDescription }}<br>
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
+                                Cancel
+                            </button>
+                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(activity.id)">
+                                Confirm Add
+                            </button>
 
-                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(activity.id) && (!$parent.confirmAddId || $parent.confirmAddId != activity.id)" ng-click="$parent.confirmAddId = activity.id">
-                            Add
-                        </button>
+                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(activity.id) && (!$parent.confirmAddId || $parent.confirmAddId != activity.id)" ng-click="$parent.confirmAddId = activity.id; $event.stopPropagation()">
+                                Add
+                            </button>
 
-                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(activity.id)">
-                            <i>Installed</i>
-                        </button>
+                            <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(activity.id)">
+                                <i>Installed</i>
+                            </button>
 
-                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmAddId || $parent.confirmAddId != activity.id" ng-click="$parent.confirmAddId = undefined; getInfo(activity.id) ">
-                            Info
-                        </button>
                         </p>
 
                     </div>
@@ -205,6 +200,23 @@
                                    </div>
 
                    </span>
+</div>
+
+
+<div id="activityDetail" class="modal" ng-class="{active: detailsFor != undefined}" ng-click="detailsFor=undefined">
+    <header class="bar bar-nav">
+        <div class="icon icon-close pull-right" ng-click="detailsFor=undefined"></div>
+        <h1 class="title">{{ detailsFor.name }}</h1>
+    </header>
+
+    <div class="content">
+        <div class="content-inner">
+            <p class="content-padded">
+                <p>{{ detailsFor.description }}<p>
+                <p> <i>Author: <a href="mailto:f{{ detailsFor.authorEmail }}">{{ detailsFor.authorName }}</a> ({{ detailsFor.authorDate }}) </i></p>
+            </p>
+        </div>
+    </div>
 </div>
 
 

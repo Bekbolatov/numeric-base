@@ -43,6 +43,8 @@ angular.module('AppOne')
 
     class ActivityBody
         _activities: {}
+        all: -> @_activities
+        get: (activityId) -> @_activities[activityId]
         _scriptId: (activityId) -> 'script_' + activityId
         _downloader: new FileDownloader()
         _uriCdv: (activityId) -> document.numeric.directoryActivityBody + activityId + '.js'
@@ -104,17 +106,16 @@ angular.module('AppOne')
         loadActivity: (activityId) => # if on web, maybe can use @downloader.webkit to determine and bypass downloads to local (insteads, always use from remote)
             console.log('Call to load script with activityId: ' + activityId)
             if @_activities[activityId]
-                return @q.defer().resolve('already loaded')
-            @_loadScript(@_uriLocal(activityId), activityId)
-            .catch => @_loadScript(@_uriCdv(activityId), activityId)
-            .catch =>
-                @_downloader.download(@_uriRemote(activityId), @_uriCdv(activityId))
-                .then => @_loadScript(@_uriCdv(activityId), activityId)
-            .then => @_attachActivityMeta(activityId)
-
-        all: -> @_activities
-        get: (activityId) -> @_activities[activityId]
-
+                deferred = $q.defer()
+                deferred.resolve('already loaded')
+                deferred.promise
+            else
+                @_loadScript(@_uriLocal(activityId), activityId)
+                .catch => @_loadScript(@_uriCdv(activityId), activityId)
+                .catch =>
+                    @_downloader.download(@_uriRemote(activityId), @_uriCdv(activityId))
+                    .then => @_loadScript(@_uriCdv(activityId), activityId)
+                .then => @_attachActivityMeta(activityId)
 
         loadActivities: (activities) ->
             console.log('loadScripts called with ' + activities)
@@ -122,7 +123,6 @@ angular.module('AppOne')
             for activityId in activities
                 promises.push(@loadActivity(activityId))
             $q.all(promises)
-
 
     new ActivityBody()
 ])
