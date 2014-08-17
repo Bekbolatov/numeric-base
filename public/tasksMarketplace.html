@@ -1,246 +1,148 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href="#/"></a>
-
+    <a class="icon icon-left-nav pull-left" href="#/tasksList"></a>
     <h1 class="title">Manage Activities</h1>
+    <a class="icon icon-refresh pull-right" href="#/tasksMarketplace" ng-click="searchPublicNow()"></a>
+</header>
+<header class="bar bar-standard bar-header-secondary">
+    <div class="segmented-control">
+        <span class="control-item" ng-class="{active: isTabSelected('installed')}" ng-click="detailsId = undefined; tabSelected('installed')">
+           Installed
+        </span>
+        <span class="control-item" ng-class="{active: isTabSelected('public')}" ng-click="detailsId = undefined; tabSelected('public')">
+           Available
+        </span>
+    </div>
 </header>
 
 
+
 <div class="content">
+    <div class="content-inner content-inner-marketplace">
+        <div class="media-body">
+            <div class="content-inner">
 
 
-<div class="content-inner content-inner-marketplace">
-<div class="media-body">
+                <!--  installed -->
+                <div class="control-content" ng-class="{active: isTabSelected('installed')}">
+                    <ul class="table-view table-marketplace">
 
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == activity.id }" ng-repeat="activity in listOfAvailableActivities">
+                            <div class="media-body" ng-click="toggleDetailsId(activity.id)">
+                                {{ activity.meta.name }}
+                                    <p>
 
-<div class="segmented-control">
-                   <span class="control-item" ng-class="{active: isTabSelected('installed')}" ng-click="tabSelected('installed')">
-                       Installed
-                   </span>
-                   <span class="control-item" ng-class="{active: isTabSelected('public')}" ng-click="tabSelected('public')">
-                       Public
-                   </span>
-                   <span class="control-item" ng-class="{active: isTabSelected('subscriptions')}" ng-click="tabSelected('subscriptions')">
-                       Subscriptions
-                   </span>
-</div>
-<div class="content-inner">
-    <div class="control-content" ng-class="{active: isTabSelected('installed')}">
+                                        <span ng-show="$parent.detailsId != activity.id">{{ activity.meta.shortDescription }}</span>
+                                        <span ng-show="$parent.detailsId == activity.id">
+                                            {{ activity.meta.description }}
+                                            <i>
+                                                <br>&nbsp;
+                                                <br>Creation date: {{ activity.meta.authorDate }}
+                                                <br>Author: {{ activity.meta.authorName }}
+                                                <br>Email: {{ activity.meta.authorEmail }}
+                                            </i>
+                                        </span>
+                                        <div>
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
+                                                Cancel
+                                            </button>
+                                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(activity.id)">
+                                                Confirm Remove
+                                            </button>
 
-        <!--  installed -->
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = activity.id; $event.stopPropagation()">
+                                                Remove
+                                            </button>
+                                        </div>
 
+                                </p>
+                            </div>
+                        </li>
 
-        <div class='search-view'>
-            <input class='search-key' type="search" placeholder="Search"/>
+                    </ul>
+                </div>
 
-            <ul class="table-view">
+                <!--  available -->
+                <div class="control-content" ng-class="{active: isTabSelected('public')}">
 
-                <li class="table-view-cell media activityMarketplace" ng-repeat="activity in listOfAvailableActivities">
-                    <div class="media-body" ng-click="getMeta(activity.id)">
-                        {{ activity.meta.name }}
-                        <p>
-                            {{ activity.meta.shortDescription }}<br>
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
-                                Cancel
+                    <div ng-show="errorStatus">
+                        <div class="media-body">
+                            Could not connect to the server, please report to
+                            <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
+                            <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
+                                Try again
                             </button>
-                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(activity.id)">
-                                Confirm Remove
-                            </button>
+                        </div>
 
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = activity.id; $event.stopPropagation()">
-                                Remove
-                            </button>
-                        </p>
                     </div>
-                </li>
 
-            </ul>
-        </div>
+                    <ul class="table-view table-marketplace" ng-show="!errorStatus">
 
-    </div>
-    <div class="control-content" ng-class="{active: isTabSelected('public')}">
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == activity.id }" ng-repeat="activity in publicActivities.activities">
+                            <div class="media-body" ng-click="toggleDetailsId(activity.id)">
+                                {{ activity.name }}
+                                <p>
+                                    <span ng-show="$parent.detailsId != activity.id">{{ activity.shortDescription }}</span>
+                                    <span ng-show="$parent.detailsId == activity.id">
+                                        {{ $parent.detailsFor.description }}
+                                        <i>
+                                            <br>&nbsp;
+                                            <br>Creation Date: {{ $parent.detailsFor.authorDate }}
+                                            <br>Author: {{ $parent.detailsFor.authorName }}
+                                            <br>Email: {{ $parent.detailsFor.authorEmail }}
+                                        </i>
+                                    </span>
 
-        <!--  public -->
+                                    <div>
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(activity.id)">
+                                            Confirm Add
+                                        </button>
 
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(activity.id) && (!$parent.confirmAddId || $parent.confirmAddId != activity.id)" ng-click="$parent.confirmAddId = activity.id; $event.stopPropagation()">
+                                            Add
+                                        </button>
 
-        <div class='search-view'>
-            <input class='search-key' type="search" placeholder="Search" ng-model="searchTermPublic"/>
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(activity.id)">
+                                            <i>Installed</i>
+                                        </button>
+                                    </div>
+                                </p>
+                            </div>
+                        </li>
 
-            <div ng-show="errorStatus">
-                <div class="media-body">
-                    Could not connect to the server, please report to
-                    <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
-                    <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
-                        Try again
-                    </button>
+                    </ul>
                 </div>
 
             </div>
 
-            <ul class="table-view" ng-show="!errorStatus">
 
-                <li class="table-view-cell media activityMarketplace" ng-repeat="activity in publicActivities.activities">
-                    <div class="media-body" ng-click="getMeta(activity.id)">
-                        {{ activity.name }}
+            <!--  BOTTOM CONTACT INFO -->
+            <div>
+                <p class="content-paragraph">
+                    <i>
+                        If you need a new activity, submit a request with activity description:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
 
-                        <p>
-                            {{ activity.shortDescription }}<br>
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
-                                Cancel
-                            </button>
-                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(activity.id)">
-                                Confirm Add
-                            </button>
+                    </i>
+                </p>
 
-                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(activity.id) && (!$parent.confirmAddId || $parent.confirmAddId != activity.id)" ng-click="$parent.confirmAddId = activity.id; $event.stopPropagation()">
-                                Add
-                            </button>
+                <p class="content-paragraph">
+                    <i>
 
-                            <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(activity.id)">
-                                <i>Installed</i>
-                            </button>
-
-                        </p>
-
-                    </div>
-                </li>
-
-            </ul>
-        </div>
+                        If you are a developer, you can create and share new activities:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Submitting%20a%20New%20Activities">info@sparkydots.com</a>
+                    </i>
+                </p>
+            </div>
 
 
-    </div>
-                   <span class="control-content" ng-class="{active: isTabSelected('subscriptions')}">
-                                              <!--  subscriptions -->
-
-                                   <div class='search-view'>
-                                       <input class='search-key' type="search" placeholder="Search"/>
-
-                                       <ul class="table-view">
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
 
 
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
 
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   Sample Activity ...
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                           <li class="table-view-cell media activityMarketplace" ng-repeat="actname in ['Sample1', 'Sample2', 'Sample3', 'Sample4', 'Sample5', 'Sample6', 'Sample7', 'Sample8']">
-                                               <img class="media-object pull-left" src="http://placehold.it/42x42">
-
-                                               <div class="media-body">
-                                                   {{actname}}
-                                                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                       eiusmod tempor
-                                                       incididunt ut labore et dolore. Lorem ipsum dolor sit amet.
-                                                       <button class="btn btn-primary pull-right">add</button>
-                                                   </p>
-                                               </div>
-                                           </li>
-
-                                       </ul>
-                                   </div>
-
-                   </span>
-</div>
-
-
-<div id="activityDetail" class="modal" ng-class="{active: detailsFor != undefined}" ng-click="detailsFor=undefined">
-    <header class="bar bar-nav">
-        <div class="icon icon-close pull-right" ng-click="detailsFor=undefined"></div>
-        <h1 class="title">{{ detailsFor.name }}</h1>
-    </header>
-
-    <div class="content">
-        <div class="content-inner">
-            <p class="content-padded">
-                <p>{{ detailsFor.description }}<p>
-                <p> <i>Author: <a href="mailto:f{{ detailsFor.authorEmail }}">{{ detailsFor.authorName }}</a> ({{ detailsFor.authorDate }}) </i></p>
-            </p>
         </div>
     </div>
-</div>
-
-
-<div>
-    <p class="content-paragraph">
-        <i>
-            If you need a new activity, submit a request with activity description:
-            <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
-
-        </i>
-    </p>
-
-    <p class="content-paragraph">
-        <i>
-
-            If you are a developer, you can create and share new activities:
-            <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Submitting%20a%20New%20Activities">info@sparkydots.com</a>
-        </i>
-    </p>
-</div>
-
-
-</div>
-</div>
 </div>
 
 

@@ -33,7 +33,7 @@ angular.module('AppOne')
             =>
                 deferred = $q.defer()
                 console.log('|- trying ' + url + ' ...')
-                $http.get(url)
+                $http.get(url, { cache: false })
                 .then( \
                     (response) =>
                         console.log('| |- found at ' + url)

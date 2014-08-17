@@ -35,19 +35,43 @@ angular.module('AppOne')
     # Adding/Installing public activities (tab: public)
     ## population
     $scope.pageNumber = 0
-    Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', $scope.searchTermPublic, $scope.pageNumber)
-    $scope.tryGettingPublicAgain = () ->
+
+
+
+    $scope.searchPublicNow = () ->
         Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', $scope.searchTermPublic, $scope.pageNumber)
+
+    $scope.searchPublic = () ->
+        term = $scope.searchTermPublic
+        if term == undefined
+            return
+
+        term = term.trim()
+        if term.length < 3
+            return
+        Marketplace.writeToScopePublicActivities($scope, 'publicActivities', 'errorStatus', term, $scope.pageNumber)
+
+    $scope.searchPublicNow()
+    $scope.tryGettingPublicAgain = () -> $scope.searchPublicNow()
+
     ## actual install
     $scope.installNewActivity = (activityId) ->
         ActivityBody.loadActivity(activityId)
 
-    $scope.getMeta = (activityId) ->
+    getMeta = (activityId) ->
         ActivityMeta.get(activityId)
         .then(
             (data) -> $scope.detailsFor = data
             (status) -> $scope.detailsFor = undefined
         )
+
+    $scope.toggleDetailsId = (activityId) ->
+        if $scope.detailsId != activityId
+            getMeta(activityId)
+            $scope.detailsId = activityId
+        else
+            $scope.detailsId = undefined
+
 
 
 

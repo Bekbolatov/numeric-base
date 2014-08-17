@@ -18,9 +18,9 @@ angular.module('AppOne')
         writeToScopePublicActivities: ($scope, fieldData, fieldError, searchTerm, pageNumber)->
             searchTermArg = ""
             if searchTerm != undefined
-                searchTermArg = "&q=" + searchTerm
+                searchTermArg = "&q=" + searchTerm.trim()
 
-            $http.get(@config.activitiesPublic + "?p=" + pageNumber + searchTermArg)
+            $http.get(@config.activitiesPublic + "?p=" + pageNumber + searchTermArg, { cache: false })
                 .success (data, status, headers, config) ->
                     $scope[fieldData] = data;
                 .error (data, status, headers, config) ->

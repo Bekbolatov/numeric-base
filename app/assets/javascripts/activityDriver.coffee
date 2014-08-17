@@ -3,7 +3,7 @@ angular.module('AppOne')
 .factory("ActivityDriver", ['$timeout','$sce', ($timeout, $sce) ->
     class Activity
         constructor: (@currentTask) ->
-            @name = @currentTask.name
+            @name = @currentTask.meta.name
             @parameters = @currentTask.parameters
             if @currentTask.answerType == 'numeric'
                 @inputTypeNumeric = true
