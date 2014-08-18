@@ -8,7 +8,9 @@ module.exports = function(grunt) {
                     sourceJs + 'factoryActivityBody.js', 
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'factoryMarketplace.js', 
+                    sourceJs + 'ctrlTask.js', 
                     sourceJs + 'ctrlMarketplace.js', 
+                    sourceJs + 'ctrlSettings.js', 
                     sourceJs + 'routes.js', 
                     sourceJs + 'activityDriver.js'];
     var appJsSourcesCordova = appJsSources.concat([sourceJs + 'attachfs.js']);

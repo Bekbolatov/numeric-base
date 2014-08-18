@@ -10,10 +10,6 @@ angular.module('AppOne')
         templateUrl: 'assets/tasksList.html'
         controller: 'TaskListCtrl'
     })
-    .when('/task', {
-        templateUrl: 'assets/task.html'
-        controller: 'TaskCtrl'
-    })
     .when('/task/:taskId', {
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
@@ -58,14 +54,37 @@ angular.module('AppOne')
         controller: 'TestCtrl'
     })
 
-
     .otherwise({
         redirectTo: '/'
     })
 ])
 
-.run(['$route', ($route) ->
-  $route.reload();
+.run(['$route', '$location', 'ActivityDriver', ($route, $location, ActivityDriver ) ->
+  $route.reload()
+  document.addEventListener(
+    "backbutton"
+    =>
+        currentPath = $location.path()
+        console.log('back button, current: ' + currentPath )
+        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+            return
+        $location.path('/')
+        $route.reload()
+    false
+    )
+  document.addEventListener(
+    "menubutton"
+    =>
+        currentPath = $location.path()
+        console.log('menu button, current: ' + currentPath )
+        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+            return
+        if currentPath != undefined && currentPath.substr(0,9) == "/settings"
+            return
+        $location.path('/settings')
+        $route.reload()
+    false
+    )
 ])
 
 .config(['$compileProvider', '$httpProvider', ($compileProvider, $httpProvider) ->
