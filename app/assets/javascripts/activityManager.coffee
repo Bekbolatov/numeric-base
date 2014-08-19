@@ -8,8 +8,12 @@ angular.module('AppOne')
         isInstalled: (activityId) -> @bookmarks[activityId] != undefined
         installActivity: (activityId) ->
             Bookmarks.add(activityId)
-            # maybe also need to download the activity body
-        uninstallActivity: (activityId) -> Bookmarks.remove(activityId)
+            # 1. maybe also need to download the activity body
+            # if no local cdvfile is present
+        uninstallActivity: (activityId) ->
+            Bookmarks.remove(activityId)
+            # 1. maybe also remove the cdvfile is there was one
+            # 2. maybe also try to unload from memory
 
         loadActivity: (activityId) -> ActivityBody.getOrLoad(activityId)
 

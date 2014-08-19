@@ -26,8 +26,7 @@ angular.module('AppOne')
             )
             deferred.promise
 
-        _downloadActivityBody: (activityId)->
-            FileDownload.download(@_uriRemote(activityId), @_uriCdv(activityId))
+        _downloadActivityBody: (activityId)-> FileDownload.download(@_uriRemote(activityId), @_uriCdv(activityId))
 
         _loadScript: (uri, key) =>
             deferred = $q.defer()

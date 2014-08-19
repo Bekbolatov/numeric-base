@@ -8,7 +8,7 @@ angular.module('AppOne')
             else
                 window.requestFileSystem = window.webkitRequestFileSystem
                 @webkit = true
-            console.log('requestFileSystem webkit=' + @webkit)
+            console.log('requestFileSystem webkit: ' + @webkit)
         errorHandler = (dfd) ->
             (e) ->
                 msg = switch e.code
