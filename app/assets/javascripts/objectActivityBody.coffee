@@ -5,7 +5,7 @@ angular.module('AppOne')
 # ActivityBody.all()/.get('com.sparkydots.groupa.activitya') - gives all registered activities or one specific activity by id
 # loadActivity('com.sparkydots.groupa.activitya') - obtains activity, local cache, or remote server and loads JS in a new script tag in the head - makes available for .get(...)
 # unloadActivity('com.sparkydots.groupa.activitya')
-.factory("ActivityBody", ['$q', '$http', 'ActivityMeta', 'FileDownload', ($q, $http, ActivityMeta, FileDownload ) ->
+.factory("ActivityBody", ['$q', 'ActivityMeta', 'FileDownload', ($q, ActivityMeta, FileDownload ) ->
     class ActivityBody
         _activities: {}
         _scriptId: (activityId) -> 'script_' + activityId

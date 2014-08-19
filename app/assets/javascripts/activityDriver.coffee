@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("ActivityDriver", ['$timeout','$sce', 'Bookmarks', ($timeout, $sce, Bookmarks ) ->
+.factory("ActivityDriver", ['$timeout','$sce', ($timeout, $sce ) ->
     class Activity
         constructor: (@currentTask) ->
             @name = @currentTask.meta.name
@@ -148,7 +148,6 @@ angular.module('AppOne')
 
 
         constructor: () ->
-            @bookmarks = Bookmarks
             @clearResult()
             @resetStats()
             @_clearLastQuestion()

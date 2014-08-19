@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("Marketplace", ['$rootScope', '$http', '$q', 'ActivityMeta', ($rootScope, $http, $q, ActivityMeta ) ->
+.factory("Marketplace", ['$http', ($http ) ->
     class Marketplace
         config:
             activitiesPublic: document.numeric.urlActivityMetaListServer
