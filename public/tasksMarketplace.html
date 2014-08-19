@@ -26,30 +26,30 @@
                 <div class="control-content" ng-class="{active: isTabSelected('installed')}">
                     <ul class="table-view table-marketplace">
 
-                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == activity.id }" ng-repeat="activity in listOfAvailableActivities">
-                            <div class="media-body" ng-click="toggleDetailsId(activity.id)">
-                                {{ activity.meta.name }}
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in mapOfAvailableActivities">
+                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                                {{ meta.name }}
                                     <p>
 
-                                        <span ng-show="$parent.detailsId != activity.id">{{ activity.meta.shortDescription }}</span>
-                                        <span ng-show="$parent.detailsId == activity.id">
-                                            {{ activity.meta.description }}
+                                        <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
+                                        <span ng-show="$parent.detailsId == id">
+                                            {{ meta.description }}
                                             <i>
                                                 <br>&nbsp;
-                                                <br>Creation date: {{ activity.meta.authorDate }}
-                                                <br>Author: {{ activity.meta.authorName }}
-                                                <br>Email: {{ activity.meta.authorEmail }}
+                                                <br>Creation date: {{ meta.authorDate }}
+                                                <br>Author: {{ meta.authorName }}
+                                                <br>Email: {{ meta.authorEmail }}
                                             </i>
                                         </span>
                                         <div>
-                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
                                                 Cancel
                                             </button>
-                                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == activity.id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(activity.id)">
+                                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(id)">
                                                 Confirm Remove
                                             </button>
 
-                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != activity.id" ng-click="$parent.confirmRemoveId = activity.id; $event.stopPropagation()">
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != id" ng-click="$parent.confirmRemoveId = id; $event.stopPropagation()">
                                                 Remove
                                             </button>
                                         </div>
@@ -77,34 +77,34 @@
 
                     <ul class="table-view table-marketplace" ng-show="!errorStatus">
 
-                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == activity.id }" ng-repeat="activity in publicActivities.activities">
-                            <div class="media-body" ng-click="toggleDetailsId(activity.id)">
-                                {{ activity.name }}
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in publicActivitiesMeta">
+                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                                {{ meta.name }}
                                 <p>
-                                    <span ng-show="$parent.detailsId != activity.id">{{ activity.shortDescription }}</span>
-                                    <span ng-show="$parent.detailsId == activity.id">
-                                        {{ $parent.detailsFor.description }}
+                                    <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
+                                    <span ng-show="$parent.detailsId == id">
+                                        {{ meta.description }}
                                         <i>
                                             <br>&nbsp;
-                                            <br>Creation Date: {{ $parent.detailsFor.authorDate }}
-                                            <br>Author: {{ $parent.detailsFor.authorName }}
-                                            <br>Email: {{ $parent.detailsFor.authorEmail }}
+                                            <br>Creation Date: {{ meta.authorDate }}
+                                            <br>Author: {{ meta.authorName }}
+                                            <br>Email: {{ meta.authorEmail }}
                                         </i>
                                     </span>
 
                                     <div>
-                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == activity.id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(activity.id)">
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id)">
                                             Confirm Add
                                         </button>
 
-                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(activity.id) && (!$parent.confirmAddId || $parent.confirmAddId != activity.id)" ng-click="$parent.confirmAddId = activity.id; $event.stopPropagation()">
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(id) && (!$parent.confirmAddId || $parent.confirmAddId != id)" ng-click="$parent.confirmAddId = id; $event.stopPropagation()">
                                             Add
                                         </button>
 
-                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(activity.id)">
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(id)">
                                             <i>Installed</i>
                                         </button>
                                     </div>

@@ -1,0 +1,35 @@
+{
+    "activities": {
+
+        "com.sparkydots.numeric.tasks.t.basic_math.json" :
+            {
+                "name": "Basic Math",
+                "shortDescription": "Practice adding numbers",
+                "description": "Practice adding numbers",
+                "authorName": "Renat Bekbolatov",
+                "authorEmail": "renatbek@gmail.com",
+                "authorDate": "8/1/2014"
+            },
+
+        "com.sparkydots.numeric.tasks.t.multiple_choice.json" :
+            {
+                "name": "Odd One Out (KidPack 2)",
+                "shortDescription": "Practice multiplying numbers",
+                "description": "Practice multiplying numbers",
+                "authorName": "Renat Bekbolatov",
+                "authorEmail": "renatbek@gmail.com",
+                "authorDate": "8/1/2014"
+            },
+
+        "com.sparkydots.numeric.tasks.t.quiz.json" :
+            {
+                "name": "Odd One Out (KidPack 1)",
+                "shortDescription": "Practice multiplying numbers",
+                "description": "Practice multiplying numbers",
+                "authorName": "Renat Bekbolatov",
+                "authorEmail": "renatbek@gmail.com",
+                "authorDate": "8/1/2014"
+            }
+
+    }
+}

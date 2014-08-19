@@ -7,15 +7,9 @@
     </button>
     <a href="#/tasksList">
         <button class="btn btn-negative pull-left" ng-show="repeatOptions">
-            Other
+            Start Another Activity
         </button>
     </a>
-    <a href="#/task/{{ task.id }}">
-        <button class="btn btn-negative pull-left" ng-show="repeatOptions">
-            Same
-        </button>
-    </a>
-
 
     <h2 class="title" ng-class="{colorWhite: repeatOptions || submitOptions}">Task Summary</h2>
 

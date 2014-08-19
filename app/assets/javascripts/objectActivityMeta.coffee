@@ -1,7 +1,11 @@
 angular.module('AppOne')
+
+# This only retrieves, and caches, ActivityMeta info - depends only on $q and $http and nothing else
+# Main way of using this will be: ActivityMeta.get('com.sparkydots.groupa.activityA') which returns Meta info for this task
+# occasionally, for debugging maybe, we can use: ActivityMeta.clearLocalStorage()
 .factory("ActivityMeta", ['$q', '$http' , ($q, $http ) ->
     class ActivityMeta
-        _key: document.numeric.keys.numericActivitiesMeta
+        _key: document.numeric.keys.activitiesMeta
         _urls:
             local: document.numeric.urlActivityMetaLocal
             remote: document.numeric.urlActivityMetaServer
@@ -47,6 +51,10 @@ angular.module('AppOne')
                 )
                 deferred.promise
 
+        constructor: ->
+            if !@_read()
+                @_clear()
+
         clearLocalStorage: -> @_clear()
 
         get: (key) -> # tries localStorage, then localWWW, then remote server
@@ -55,9 +63,6 @@ angular.module('AppOne')
             .catch(@_httpGet(@_urls.local + key + '.json', key))
             .catch(@_httpGet(@_urls.remote + key + '.json', key))
 
-        constructor: ->
-            if !@_read()
-                @_clear()
-
+    console.log('CALL TO FACTORY: ActivityMeta')
     new ActivityMeta()
 ])

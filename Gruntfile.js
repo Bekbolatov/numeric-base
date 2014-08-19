@@ -4,15 +4,22 @@ module.exports = function(grunt) {
     var appJsSources = [
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
-                    sourceJs + 'factoryActivityMeta.js', 
-                    sourceJs + 'factoryActivityBody.js', 
+
+                    sourceJs + 'objectActivityMeta.js', 
+                    sourceJs + 'objectActivityBody.js', 
+                    sourceJs + 'objectBookmarks.js', 
+                    sourceJs + 'objectMarketplace.js', 
+
                     sourceJs + 'activityManager.js', 
-                    sourceJs + 'factoryMarketplace.js', 
+                    sourceJs + 'activityDriver.js',
+
                     sourceJs + 'ctrlTask.js', 
                     sourceJs + 'ctrlMarketplace.js', 
                     sourceJs + 'ctrlSettings.js', 
-                    sourceJs + 'routes.js', 
-                    sourceJs + 'activityDriver.js'];
+                    sourceJs + 'ctrlOthers.js', 
+
+                    sourceJs + 'routes.js' 
+                    ];
     var appJsSourcesCordova = appJsSources.concat([sourceJs + 'attachfs.js']);
     grunt.initConfig({
         concat: {

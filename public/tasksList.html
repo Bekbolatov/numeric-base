@@ -3,10 +3,10 @@
 </header>
 
 <ul class="content table-view">
-    <li class="table-view-cell" ng-repeat="activity in listOfAvailableActivities">
-        <a class="navigate-right" ng-href="#/task/{{ activity.id }}">
-            {{ activity.meta.name }}
-            <p>{{ activity.meta.shortDescription }}</p>
+    <li class="table-view-cell" ng-repeat="(id, meta) in tableOfAvailableActivities">
+        <a class="navigate-right" ng-href="#/task/{{ id }}">
+            {{ meta.name }}
+            <p>{{ meta.shortDescription }}</p>
         </a>
     </li>
     <li class="table-view-cell">

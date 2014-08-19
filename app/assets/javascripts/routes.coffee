@@ -59,6 +59,7 @@ angular.module('AppOne')
     })
 ])
 
+
 .run(['$route', '$location', 'ActivityDriver', ($route, $location, ActivityDriver ) ->
   $route.reload()
   document.addEventListener(
@@ -66,7 +67,7 @@ angular.module('AppOne')
     =>
         currentPath = $location.path()
         console.log('back button, current: ' + currentPath )
-        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+        if currentPath != undefined && (currentPath.substr(0,6) == "/task/" || currentPath.substr(0,12) == "/taskSummary")
             return
         $location.path('/')
         $route.reload()
@@ -77,7 +78,7 @@ angular.module('AppOne')
     =>
         currentPath = $location.path()
         console.log('menu button, current: ' + currentPath )
-        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+        if currentPath != undefined && (currentPath.substr(0,6) == "/task/" || currentPath.substr(0,12) == "/taskSummary")
             return
         if currentPath != undefined && currentPath.substr(0,9) == "/settings"
             return
@@ -91,3 +92,4 @@ angular.module('AppOne')
     $compileProvider.aHrefSanitizationWhitelist /^\s*(https?|cdvfile|ftp|mailto|file|tel):/
     $httpProvider.defaults.useXDomain = true
 ])
+

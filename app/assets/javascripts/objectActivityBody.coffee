@@ -1,5 +1,10 @@
 angular.module('AppOne')
 
+# depends only on $q, $http and ActivityMeta
+# Most common uses:
+# ActivityBody.all()/.get('com.sparkydots.groupa.activitya') - gives all registered activities or one specific activity by id
+# loadActivity('com.sparkydots.groupa.activitya') - obtains activity, local cache, or remote server and loads JS in a new script tag in the head - makes available for .get(...)
+# unloadActivity('com.sparkydots.groupa.activitya')
 .factory("ActivityBody", ['$q', '$http', 'ActivityMeta', ($q, $http, ActivityMeta ) ->
     class FileDownloader
         constructor: ->
@@ -43,8 +48,6 @@ angular.module('AppOne')
 
     class ActivityBody
         _activities: {}
-        all: -> @_activities
-        get: (activityId) -> @_activities[activityId]
         _scriptId: (activityId) -> 'script_' + activityId
         _downloader: new FileDownloader()
         _uriCdv: (activityId) -> document.numeric.directoryActivityBody + activityId + '.js'
@@ -124,5 +127,9 @@ angular.module('AppOne')
                 promises.push(@loadActivity(activityId))
             $q.all(promises)
 
+        all: -> @_activities
+        get: (activityId) -> @_activities[activityId]
+
+    console.log('CALL TO FACTORY: ActivityBody')
     new ActivityBody()
 ])

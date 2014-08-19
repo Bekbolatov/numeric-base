@@ -77,7 +77,7 @@ angular.module('AppOne')
                 time: ''
 
         # Problem construction and check
-        setTask: (@currentTask, @scope) ->
+        setActivity: (@currentTask, @scope) ->
             @clearResult()
             @resetStats()
             @currentActivity = new Activity(@currentTask)

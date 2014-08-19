@@ -1,14 +1,14 @@
 angular.module('AppOne')
 
-.factory("ActivityManager", ['$rootScope', '$q', 'Marketplace', 'ActivityMeta', 'ActivityBody' , ($rootScope, $q, Marketplace, ActivityMeta, ActivityBody ) ->
+.factory("ActivityManager", ['Bookmarks', 'ActivityBody', (Bookmarks, ActivityBody ) ->
     class ActivityManager
-        constructor: () ->
-            ActivityBody.loadActivities(document.numeric.defaultActivitiesList)
-            .then((result) -> console.log('result: ' + result))
-            .catch((status) -> console.log('error loading scripts: ' + status))
-
-        getAllActivities: -> ActivityBody.all()
-        getActivity: (activityId) -> ActivityBody.get(activityId)
+        getInstalledActivitiesMeta: -> Bookmarks.getAll()
+        getInstalledActivityMeta: (activityId) -> Bookmarks.get(activityId)
+        isInstalled: (activityId) -> (Bookmarks.get(activityId) != undefined)
+        installActivity: (activityId) ->
+            Bookmarks.add(activityId)
+        uninstallActivity: (activityId) ->
+            Bookmarks.remove(activityId)
 
     console.log('CALL TO FACTORY: ActivityManager')
     new ActivityManager()
