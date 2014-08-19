@@ -8,7 +8,7 @@
         <span class="control-item" ng-class="{active: isTabSelected('installed')}" ng-click="detailsId = undefined; tabSelected('installed')">
            Installed
         </span>
-        <span class="control-item" ng-class="{active: isTabSelected('public')}" ng-click="detailsId = undefined; tabSelected('public')">
+        <span class="control-item" ng-class="{active: isTabSelected('available')}" ng-click="detailsId = undefined; tabSelected('available')">
            Available
         </span>
     </div>
@@ -24,7 +24,11 @@
 
                 <!--  installed -->
                 <div class="control-content" ng-class="{active: isTabSelected('installed')}">
-                    <ul class="table-view table-marketplace">
+                    <p ng-show="!somethingInstalled()">
+                        Looks like you do not have any activities installed.
+                        <br>Install some activities from the "Available" tab.
+                    </p>
+                    <ul class="table-view table-marketplace"  ng-show="somethingInstalled()">
 
                         <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in mapOfAvailableActivities">
                             <div class="media-body" ng-click="toggleDetailsId(id)">
@@ -62,7 +66,7 @@
                 </div>
 
                 <!--  available -->
-                <div class="control-content" ng-class="{active: isTabSelected('public')}">
+                <div class="control-content" ng-class="{active: isTabSelected('available')}">
 
                     <div ng-show="errorStatus">
                         <div class="media-body">

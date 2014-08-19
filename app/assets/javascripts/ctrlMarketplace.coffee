@@ -19,6 +19,7 @@ angular.module('AppOne')
     # install/uninstall
     $scope.mapOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
     $scope.isInstalled = (activityId) -> ActivityManager.isInstalled(activityId)
+    $scope.somethingInstalled = -> Object.keys(ActivityManager.getInstalledActivitiesMeta()).length > 0
     $scope.uninstallActivity = (activityId) -> ActivityManager.uninstallActivity(activityId)
     $scope.installNewActivity = (activityId) -> ActivityManager.installActivity(activityId)
 
@@ -30,9 +31,7 @@ angular.module('AppOne')
     writeToScopePublicActivities = (searchTerm)->
         Marketplace.getPublicActivitiesMeta($scope.pageNumber, searchTerm)
             .then(
-
                 (response) ->
-                    console.log(response.data.activities)
                     $scope.publicActivitiesMeta = response.data.activities
                 (status) ->
                     console.log('could not get list of activity metas from server, status: ' + status)

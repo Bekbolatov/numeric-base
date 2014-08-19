@@ -6,36 +6,54 @@ angular.module('AppOne')
 # depends on ActivityMeta
 .factory("Bookmarks", ['ActivityMeta', (ActivityMeta ) ->
     class Bookmarks
+        bookmarks: {} # allows dirty-checking, writes-through to localStorage
+        get: (activityId) -> @bookmarks[activityId]
+
         _key: document.numeric.keys.bookmarkedActivities
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
+
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
-        _get: (activityId) -> @_read()[activityId]
         _add: (activityId, metaData) ->
             table = @_read()
             table[activityId] = metaData
             @_write(table)
+
         _remove: (activityId) ->
             table = @_read()
             if table[activityId]
                 delete table[activityId]
                 @_write(table)
 
+        clear: () ->
+            for id, meta of @bookmarks
+                delete @bookmarks[id]
+            @_clear()
+
         add: (activityId) =>
             ActivityMeta.get(activityId)
             .then(
-                (data) => @_add(activityId, data)
+                (data) =>
+                    @bookmarks[activityId] = data
+                    @_add(activityId, data)
                 (status) -> console.log(status)
             )
-        remove: (activityId) -> @_remove(activityId)
-        get: (activityId) -> @_get(activityId)
-        getAll: (activityId) -> @_read()
+
+        remove: (activityId) ->
+            if @bookmarks[activityId]
+                delete @bookmarks[activityId]
+            @_remove(activityId)
+
 
         constructor: ->
-            if !@_read() # bootstrap is nothing was stored before
+            if !@_read() # bootstrap with default given in _init.js (if nothing was stored before)
                 @_clear()
                 for activityId in document.numeric.defaultActivitiesList
                     @add(activityId)
+            else # load previously saved
+                previous = @_read()
+                for id, meta of previous
+                    @bookmarks[id] = meta
 
     console.log('CALL TO FACTORY: Bookmarks')
     new Bookmarks()

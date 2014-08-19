@@ -5,6 +5,7 @@ module.exports = function(grunt) {
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
 
+                    sourceJs + 'objectFileDownload.js', 
                     sourceJs + 'objectActivityMeta.js', 
                     sourceJs + 'objectActivityBody.js', 
                     sourceJs + 'objectBookmarks.js', 

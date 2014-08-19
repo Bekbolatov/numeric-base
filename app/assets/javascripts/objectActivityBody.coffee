@@ -1,55 +1,14 @@
 angular.module('AppOne')
 
-# depends only on $q, $http and ActivityMeta
+# depends only on $q, ActivityMeta, FileDownload
 # Most common uses:
 # ActivityBody.all()/.get('com.sparkydots.groupa.activitya') - gives all registered activities or one specific activity by id
 # loadActivity('com.sparkydots.groupa.activitya') - obtains activity, local cache, or remote server and loads JS in a new script tag in the head - makes available for .get(...)
 # unloadActivity('com.sparkydots.groupa.activitya')
-.factory("ActivityBody", ['$q', '$http', 'ActivityMeta', ($q, $http, ActivityMeta ) ->
-    class FileDownloader
-        constructor: ->
-            if window.requestFileSystem
-                @webkit = false
-            else
-                window.requestFileSystem = window.webkitRequestFileSystem
-                @webkit = true
-            console.log('requestFileSystem webkit=' + @webkit)
-        errorHandler = (dfd) ->
-            (e) ->
-                msg = switch e.code
-                    when FileError.QUOTA_EXCEEDED_ERR then 'QUOTA_EXCEEDED_ERR'
-                    when FileError.NOT_FOUND_ERR then 'NOT_FOUND_ERR'
-                    when FileError.SECURITY_ERR then 'SECURITY_ERR'
-                    when FileError.INVALID_MODIFICATION_ERR then 'INVALID_MODIFICATION_ERR'
-                    when FileError.INVALID_STATE_ERR then 'INVALID_STATE_ERR'
-                    else 'Unknown Error'
-                console.log('ERROR: ' + msg)
-                dfd.reject(msg)
-        onInitFs: (uri, fileURL, dfd) ->
-            (fs) ->
-                fileTransfer = new FileTransfer();
-                fileTransfer.download(
-                    uri
-                    fileURL
-                    (entry) ->
-                        dfd.resolve('ok')
-                    (error) ->
-                        dfd.reject(error.code)
-                    false
-                    {
-                        headers:
-                            "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-                    }
-            )
-        download: (uri, fileURL) ->
-            deferred = $q.defer()
-            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, @onInitFs(uri, fileURL, deferred), @errorHandler)
-            deferred.promise
-
+.factory("ActivityBody", ['$q', '$http', 'ActivityMeta', 'FileDownload', ($q, $http, ActivityMeta, FileDownload ) ->
     class ActivityBody
         _activities: {}
         _scriptId: (activityId) -> 'script_' + activityId
-        _downloader: new FileDownloader()
         _uriCdv: (activityId) -> document.numeric.directoryActivityBody + activityId + '.js'
         _uriLocal: (activityId) -> document.numeric.urlActivityBodyLocal + activityId + '.js'
         _uriRemote: (activityId) -> document.numeric.urlActivityBodyServer + activityId + '.js'
@@ -66,6 +25,9 @@ angular.module('AppOne')
                     deferred.reject(status)
             )
             deferred.promise
+
+        _downloadActivityBody: (activityId)->
+            FileDownload.download(@_uriRemote(activityId), @_uriCdv(activityId))
 
         _loadScript: (uri, key) =>
             deferred = $q.defer()
@@ -116,7 +78,7 @@ angular.module('AppOne')
                 @_loadScript(@_uriLocal(activityId), activityId)
                 .catch => @_loadScript(@_uriCdv(activityId), activityId)
                 .catch =>
-                    @_downloader.download(@_uriRemote(activityId), @_uriCdv(activityId))
+                    @_downloadActivityBody(activityId)
                     .then => @_loadScript(@_uriCdv(activityId), activityId)
                 .then => @_attachActivityMeta(activityId)
 
@@ -127,8 +89,26 @@ angular.module('AppOne')
                 promises.push(@loadActivity(activityId))
             $q.all(promises)
 
-        all: -> @_activities
+        #marked for del
+        #all: -> @_activities
         get: (activityId) -> @_activities[activityId]
+        getOrLoad: (activityId) =>
+            deferred = $q.defer()
+            activity = @_activities[activityId]
+            if activity
+                deferred.resolve(activity)
+            else
+                @loadActivity(activityId)
+                .then(
+                    =>
+                        activity = @_activities[activityId]
+                        if activity
+                            deferred.resolve(activity)
+                        else
+                            deferred.reject('could not load activity')
+                    (status) -> deferred.reject(status)
+                )
+            deferred.promise
 
     console.log('CALL TO FACTORY: ActivityBody')
     new ActivityBody()

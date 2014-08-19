@@ -1,19 +1,12 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] =
 {
     answerType: 'multiple',
-
-    dataFile: 'multipleChoice_1.data',
-    questionBank: [],
-
-
     // follow pattern:
     // parameters: {  param1: {}, param2: {} },  or not set if no params
 
     // REQUIRED FIELD
     createNextQuestion: function() {
         var self = this;
-        self.questionBank = self.questionBankMock;
-
         var _randomInt = function (lowest, highest) { return Math.floor((Math.random() * (highest - lowest + 1)) + lowest) };
 
         var problemNumber = _randomInt(0, self.questionBank.length - 1);
@@ -32,7 +25,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] 
         }
     },
 
-    questionBankMock : [
+    questionBank : [
 
         {
             statement: 'Which is the odd one out?',

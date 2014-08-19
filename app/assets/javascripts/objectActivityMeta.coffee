@@ -60,8 +60,8 @@ angular.module('AppOne')
         get: (key) -> # tries localStorage, then localWWW, then remote server
             console.log('Looking for activity ' + key)
             @_cacheGet(key)
-            .catch(@_httpGet(@_urls.local + key + '.json', key))
-            .catch(@_httpGet(@_urls.remote + key + '.json', key))
+            .catch(@_httpGet(@_urls.local + key, key))
+            .catch(@_httpGet(@_urls.remote + key, key))
 
     console.log('CALL TO FACTORY: ActivityMeta')
     new ActivityMeta()

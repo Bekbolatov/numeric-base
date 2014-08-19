@@ -1,8 +1,13 @@
 angular.module('AppOne')
 
 # app settings
-.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', 'ActivityBody', ($scope, ActivityMeta, ActivityBody ) ->
-    $scope.clearLocalStorage = -> ActivityMeta.clearLocalStorage()
+.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, ActivityMeta, ActivityBody, Bookmarks ) ->
+
+    $scope.clearLocalStorage = -> window.localStorage.clear()
+
+    $scope.uninstallAllActivities = ->
+        console.log('clear')
+        Bookmarks.clear()
 
 
     $scope.downloadToFile1 = ->
@@ -10,11 +15,7 @@ angular.module('AppOne')
         ActivityBody.unloadActivity('com.sparkydots.numeric.tasks.t.basic_math')
         ActivityBody.unloadActivity('com.sparkydots.numeric.tasks.t.multiple_choice')
 
-    $scope.downloadToFile2 = ->
-        console.log('downloadtofile2')
-        ActivityBody.loadActivity('com.sparkydots.numeric.tasks.t.basic_math')
-        .then((result) -> console.log('result: ' + result))
-        .catch((status) -> console.log('error status: ' + status))
+
 
     $scope.downloadToFile3 = ->
         console.log('downloadtofile3')
