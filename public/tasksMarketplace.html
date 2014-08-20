@@ -80,12 +80,6 @@
                     </div>
 
 
-                    <div ng-show="loadingList">
-                        <div class="media-body">
-                            Loading available activities...
-                        </div>
-                    </div>
-
                     <ul class="table-view table-marketplace" ng-show="!errorStatus">
 
                         <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in publicActivitiesMeta">
@@ -130,6 +124,19 @@
                         </li>
 
                     </ul>
+
+
+
+                    <div ng-show="loadingList">
+                        <div class="media-body">
+                            <p>
+                                Loading available activities...
+                            </p>
+                        </div>
+                    </div>
+
+
+
                 </div>
 
             </div>
