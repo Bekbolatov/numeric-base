@@ -74,12 +74,16 @@ angular.module('AppOne')
                 deferred.resolve('already loaded')
                 deferred.promise
             else
-                @_loadScript(@_uriLocal(activityId), activityId)
-                .catch => @_loadScript(@_uriCdv(activityId), activityId)
-                .catch =>
-                    @_downloadActivityBody(activityId)
-                    .then => @_loadScript(@_uriCdv(activityId), activityId)
-                .then => @_attachActivityMeta(activityId)
+                if FileDownload.webkit
+                    @_loadScript(@_uriRemote(activityId), activityId)
+                    .then => @_attachActivityMeta(activityId)
+                else
+                    @_loadScript(@_uriLocal(activityId), activityId)
+                    .catch => @_loadScript(@_uriCdv(activityId), activityId)
+                    .catch =>
+                        @_downloadActivityBody(activityId)
+                        .then => @_loadScript(@_uriCdv(activityId), activityId)
+                    .then => @_attachActivityMeta(activityId)
 
         loadActivities: (activities) ->
             console.log('loadScripts called with ' + activities)
