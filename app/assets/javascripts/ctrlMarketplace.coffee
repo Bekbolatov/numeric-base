@@ -11,6 +11,14 @@ angular.module('AppOne')
 
     # see more details
     $scope.toggleDetailsId = (activityId) ->
+        if $scope.confirmRemoveId != undefined
+            $scope.confirmRemoveId = undefined
+            return
+        if $scope.confirmAddId != undefined
+            $scope.confirmAddId = undefined
+            return
+
+
         if $scope.detailsId != activityId
             $scope.detailsId = activityId
         else

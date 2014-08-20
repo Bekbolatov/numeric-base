@@ -6,6 +6,7 @@ angular.module('AppOne')
         getInstalledActivitiesMeta: -> @bookmarks
         getInstalledActivityMeta: (activityId) -> @bookmarks[activityId]
         isInstalled: (activityId) -> @bookmarks[activityId] != undefined
+
         installActivity: (activityId) ->
             deferred = $q.defer()
             ActivityBody
@@ -24,12 +25,10 @@ angular.module('AppOne')
                     deferred.reject(status)
             )
             deferred.promise
-            # 1. maybe also need to download the activity body
-            # if no local cdvfile is present
+
         uninstallActivity: (activityId) ->
+            ActivityBody.unloadActivity(activityId)
             Bookmarks.remove(activityId)
-            # 1. maybe also remove the cdvfile is there was one
-            # 2. maybe also try to unload from memory
 
         loadActivity: (activityId) -> ActivityBody.getOrLoad(activityId)
 
