@@ -25,6 +25,10 @@ angular.module('filters', [])
 
 .filter 'secondsToHuman', ->
     (allSeconds) ->
+        allDays = allSeconds/86400
+        days = Math.floor(allDays)
+        allSeconds = allSeconds - days*86400
+
         allHours = allSeconds/3600
         hours = Math.floor(allHours)
         allSeconds = allSeconds - hours*3600
@@ -35,10 +39,18 @@ angular.module('filters', [])
 
         seconds = allSeconds
 
-        if (hours > 0)
+        if (days > 1)
+            return "" + days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds"
+        if (days == 1)
+            return "1 day, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds"
+        if (hours > 1)
             return "" + hours + " hours, " + minutes + " minutes, " + seconds + " seconds"
-        if (minutes > 0)
+        if (hours == 1)
+            return "1 hour, " + minutes + " minutes, " + seconds + " seconds"
+        if (minutes > 1)
             return "" + minutes + " minutes, " + seconds + " seconds"
+        if (minutes == 1)
+            return "1 minute, " + seconds + " seconds"
         return "" + seconds + " seconds"
 
 .filter 'secondsToClock', ->

@@ -2,7 +2,8 @@ document.numeric = {
     numericTasks: {}, // needed when js loading new activities
     keys: {
         activitiesMeta: 'numericActivitiesMeta',
-        bookmarkedActivities: 'numericBookmarkedActivities'
+        bookmarkedActivities: 'numericBookmarkedActivities',
+        currentActivitySummary: 'numericCurrentActivitySummary'
     },
 
     urlActivityMetaListServer: 'http://console.sparkydots.com:8080/numeric/server/meta/activitiesPublic', // Marketplace

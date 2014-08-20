@@ -1,20 +1,14 @@
 <header class="bar bar-nav">
-    <button class="btn btn-primary pull-left" ng-show="!repeatOptions && !submitOptions" ng-click="repeatOptions = !repeatOptions">
-        Practice More
-    </button>
-    <button class="btn btn-primary pull-left" ng-show="repeatOptions" ng-click="repeatOptions = !repeatOptions">
-        Cancel
-    </button>
-    <a href="#/tasksList">
-        <button class="btn btn-negative pull-left" ng-show="repeatOptions">
-            Start Another Activity
+    <a href="#/">
+        <button class="btn btn-primary pull-left" ng-show="!submitOptions">
+            Home
         </button>
     </a>
 
     <h2 class="title" ng-class="{colorWhite: repeatOptions || submitOptions}">Task Summary</h2>
 
 
-    <button class="btn btn-primary pull-right" ng-show="!repeatOptions && !submitOptions" ng-click="submitOptions = !submitOptions">
+    <button class="btn btn-primary pull-right" ng-show="!submitOptions" ng-click="submitOptions = !submitOptions">
         Submit
     </button>
     <button class="btn btn-primary pull-right" ng-show="submitOptions" ng-click="submitOptions = !submitOptions">

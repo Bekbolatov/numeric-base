@@ -10,6 +10,7 @@ module.exports = function(grunt) {
                     sourceJs + 'objectActivityBody.js', 
                     sourceJs + 'objectBookmarks.js', 
                     sourceJs + 'objectMarketplace.js', 
+                    sourceJs + 'objectActivitySummary.js', 
 
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'activityDriver.js',
@@ -17,6 +18,7 @@ module.exports = function(grunt) {
                     sourceJs + 'ctrlTask.js', 
                     sourceJs + 'ctrlMarketplace.js', 
                     sourceJs + 'ctrlSettings.js', 
+                    sourceJs + 'ctrlSummary.js', 
                     sourceJs + 'ctrlOthers.js', 
 
                     sourceJs + 'routes.js' 

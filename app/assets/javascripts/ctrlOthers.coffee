@@ -9,14 +9,6 @@ angular.module('AppOne')
         $location.path('/tasksMarketplace')
     ]
 
-.controller 'TaskSummaryCtrl', ['$scope', '$location', 'ActivityDriver', ($scope, $location, ActivityDriver ) ->
-    if ActivityDriver.currentActivity == undefined
-        $location.path('/')
-    $scope.task = ActivityDriver.currentTask
-    $scope.numeric = ActivityDriver
-    ]
-
-
 # statistics and reports
 .controller 'StatsCtrl', ['$scope', ($scope) ->
     $scope.test = 'todo: stats...'
