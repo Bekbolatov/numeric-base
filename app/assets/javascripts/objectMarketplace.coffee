@@ -3,7 +3,7 @@ angular.module('AppOne')
 .factory("Marketplace", ['$http', ($http ) ->
     class Marketplace
         config:
-            activitiesPublic: document.numeric.urlActivityMetaListServer
+            activitiesPublic: document.numeric.url.base.server + document.numeric.path.meta + document.numeric.path.list
 
         getPublicActivitiesMeta: (pageNumber, searchTerm, keepCache) ->
             st = ""

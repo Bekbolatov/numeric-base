@@ -5,10 +5,10 @@ angular.module('AppOne')
 # occasionally, for debugging maybe, we can use: ActivityMeta.clearLocalStorage()
 .factory("ActivityMeta", ['$q', '$http' , ($q, $http ) ->
     class ActivityMeta
-        _key: document.numeric.keys.activitiesMeta
+        _key: document.numeric.key.activitiesMeta
         _urls:
-            local: document.numeric.urlActivityMetaLocal
-            remote: document.numeric.urlActivityMetaServer
+            local: document.numeric.url.base.local + document.numeric.path.meta
+            remote: document.numeric.url.base.server + document.numeric.path.meta
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))

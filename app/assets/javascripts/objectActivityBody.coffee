@@ -9,9 +9,9 @@ angular.module('AppOne')
     class ActivityBody
         _activities: {}
         _scriptId: (activityId) -> 'script_' + activityId
-        _uriCdv: (activityId) -> document.numeric.directoryActivityBody + activityId + '.js'
-        _uriLocal: (activityId) -> document.numeric.urlActivityBodyLocal + activityId + '.js'
-        _uriRemote: (activityId) -> document.numeric.urlActivityBodyServer + activityId + '.js'
+        _uriCdv: (activityId) -> document.numeric.url.base.fs + document.numeric.path.body + activityId
+        _uriLocal: (activityId) -> document.numeric.url.base.local + document.numeric.path.body + activityId
+        _uriRemote: (activityId) -> document.numeric.url.base.server + document.numeric.path.body + activityId
 
         _attachActivityMeta: (key)=>
             deferred = $q.defer()

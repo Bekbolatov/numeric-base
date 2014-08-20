@@ -3,23 +3,41 @@
 </header>
 
 <ul class="content table-view">
+    <li class="table-view-cell" ng-show="noActivities">
+        <p>
+            It looks like you do not have any activities installed.
+        </p>
+    </li>
+
     <li class="table-view-cell" ng-repeat="(id, meta) in tableOfAvailableActivities">
         <a class="navigate-right" ng-href="#/task/{{ id }}">
             {{ meta.name }}
             <p>{{ meta.shortDescription }}</p>
         </a>
     </li>
+
     <li class="table-view-cell">
         <p>
             <a class="center" ng-href="#/tasksMarketplace">
-                <button class="btn btn-primary">
-                    <i>Manage activities ...</i>
-                </button>
+                <p class="content-paragraph">
+                    <button class="btn btn-primary">
+                        <i>Manage activities ...</i>
+                    </button>
+                </p>
             </a>
         </p>
 
     </li>
+
 </ul>
+
+
+
+
+
+        <div class="media-body">
+
+        </div>
 
 
 <!--  BOTTOM NAV -->

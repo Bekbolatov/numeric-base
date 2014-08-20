@@ -5,7 +5,10 @@ angular.module('AppOne')
 
 .controller 'TasksMarketplaceCtrl', ['$scope', 'Marketplace', 'ActivityManager', ($scope, Marketplace, ActivityManager ) ->
     # tabs (ui)
-    $scope.currentTab = 'installed'
+    if Object.keys(ActivityManager.getInstalledActivitiesMeta()).length < 1
+        $scope.currentTab = 'available'
+    else
+        $scope.currentTab = 'installed'
     $scope.isTabSelected = (tab) -> $scope.currentTab == tab
     $scope.tabSelected = (tab) -> $scope.currentTab = tab
 
@@ -29,7 +32,12 @@ angular.module('AppOne')
     $scope.isInstalled = (activityId) -> ActivityManager.isInstalled(activityId)
     $scope.somethingInstalled = -> Object.keys(ActivityManager.getInstalledActivitiesMeta()).length > 0
     $scope.uninstallActivity = (activityId) -> ActivityManager.uninstallActivity(activityId)
-    $scope.installNewActivity = (activityId) -> ActivityManager.installActivity(activityId)
+    $scope.installNewActivity = (activityId) ->
+        $scope.loadingActivity = activityId
+        ActivityManager.installActivity(activityId)
+        .then(
+            () => $scope.loadingActivity = undefined
+        )
 
 
     # search/listing public activities
@@ -37,13 +45,16 @@ angular.module('AppOne')
     $scope.pageNumber = 0
 
     writeToScopePublicActivities = (searchTerm)->
+        $scope.loadingList = true
         Marketplace.getPublicActivitiesMeta($scope.pageNumber, searchTerm)
             .then(
                 (response) ->
                     $scope.publicActivitiesMeta = response.data.activities
+                    $scope.loadingList = false
                 (status) ->
                     console.log('could not get list of activity metas from server, status: ' + status)
                     $scope.errorStatus = status
+                    $scope.loadingList = false
             )
     writeToScopePublicActivities($scope.searchTermPublic)
     $scope.tryGettingPublicAgain = () -> writeToScopePublicActivities($scope.searchTermPublic)

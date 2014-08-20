@@ -1,7 +1,7 @@
 <header class="bar bar-nav">
     <a class="icon icon-left-nav pull-left" href="#/tasksList"></a>
     <h1 class="title">Manage Activities</h1>
-    <a class="icon icon-refresh pull-right" href="#/tasksMarketplace" ng-click="tryGettingPublicAgain()"></a>
+    <a class="icon icon-refresh pull-right" href="#/tasksMarketplace" ng-click="tryGettingPublicAgain()" ng-show="!loadingList"></a>
 </header>
 <header class="bar bar-standard bar-header-secondary">
     <div class="segmented-control">
@@ -25,7 +25,7 @@
                 <!--  installed -->
                 <div class="control-content" ng-class="{active: isTabSelected('installed')}">
                     <p ng-show="!somethingInstalled()">
-                        Looks like you do not have any activities installed.
+                        No activities installed.
                         <br>Install some activities from the "Available" tab.
                     </p>
                     <ul class="table-view table-marketplace"  ng-show="somethingInstalled()">
@@ -79,6 +79,13 @@
 
                     </div>
 
+
+                    <div ng-show="loadingList">
+                        <div class="media-body">
+                            Loading available activities...
+                        </div>
+                    </div>
+
                     <ul class="table-view table-marketplace" ng-show="!errorStatus">
 
                         <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in publicActivitiesMeta">
@@ -97,18 +104,24 @@
                                     </span>
 
                                     <div>
-                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmAddId == id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
+
+                                        &nbsp;
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity == id">
+                                            <i>Installing...</i>
+                                        </button>
+
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id)">
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id)">
                                             Confirm Add
                                         </button>
 
-                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="!isInstalled(id) && (!$parent.confirmAddId || $parent.confirmAddId != id)" ng-click="$parent.confirmAddId = id; $event.stopPropagation()">
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && !isInstalled(id) && (!$parent.confirmAddId || $parent.confirmAddId != id)" ng-click="$parent.confirmAddId = id; $event.stopPropagation()">
                                             Add
                                         </button>
 
-                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="isInstalled(id)">
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id)">
                                             <i>Installed</i>
                                         </button>
                                     </div>

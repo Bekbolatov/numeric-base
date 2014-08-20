@@ -9,7 +9,7 @@ angular.module('AppOne')
         bookmarks: {} # allows dirty-checking, writes-through to localStorage
         get: (activityId) -> @bookmarks[activityId]
 
-        _key: document.numeric.keys.bookmarkedActivities
+        _key: document.numeric.key.bookmarkedActivities
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
 

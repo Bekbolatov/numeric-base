@@ -3,11 +3,13 @@
 <div class="media-body">
 <div class="content-inner">
 
-{{ test }}
 
 
-<button ng-click="showScriptsInHead()">show scripts in head</button>
+<br><button ng-click="getHttpsData()">Test encrypted request</button><br>
+Encrypted response: {{ httpsdata.id }}
 
+
+<br><button ng-click="showScriptsInHead()">show scripts in head</button><br>
 <ol>
     <li ng-repeat="script in scripts">
         <span ng-class-odd="'test-odd'" ng-class-even="'test-even'">
@@ -17,6 +19,8 @@
             </span>
     </li>
 </ol>
+
+
 
 <!--  long long -->
 <p>
