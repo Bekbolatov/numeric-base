@@ -4,7 +4,7 @@ angular.module('AppOne')
 # At Activity Finish, flush to disk
 # Ability to load some past summary from disk, possibly one just saved, to feed ctrlSummary
 .factory("ActivitySummary", ['$q', ($q) ->
-    class ActivityMeta
+    class ActivitySummary
         _key: document.numeric.keys.currentActivitySummary
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
