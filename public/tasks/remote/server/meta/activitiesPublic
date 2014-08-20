@@ -11,6 +11,16 @@
                 "authorDate": "8/1/2014"
             },
 
+        "com.sparkydots.numeric.tasks.t.basic_math_improved" :
+            {
+                "name": "Basic Math v2",
+                "shortDescription": "Practice adding numbers",
+                "description": "Practice adding numbers",
+                "authorName": "Renat Bekbolatov",
+                "authorEmail": "renatbek@gmail.com",
+                "authorDate": "8/1/2014"
+            },
+
         "com.sparkydots.numeric.tasks.t.multiple_choice" :
             {
                 "name": "Odd One Out (KidPack 2)",

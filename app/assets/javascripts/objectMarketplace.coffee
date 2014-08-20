@@ -5,12 +5,17 @@ angular.module('AppOne')
         config:
             activitiesPublic: document.numeric.urlActivityMetaListServer
 
-        getPublicActivitiesMeta: (pageNumber, searchTerm) ->
-            searchTermArg = ""
+        getPublicActivitiesMeta: (pageNumber, searchTerm, keepCache) ->
+            st = ""
             if searchTerm != undefined
-                searchTermArg = "&q=" + searchTerm.trim()
+                st = "&q=" + searchTerm.trim()
+
+            cb = ""
+            if !keepCache
+                cb = "&cb=" + Math.round( (new Date()) / 15000 )
+
             $http.get(
-                @config.activitiesPublic + "?p=" + pageNumber + searchTermArg
+                @config.activitiesPublic + "?p=" + pageNumber + st + cb
                 { cache: false })
 
     new Marketplace()
