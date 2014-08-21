@@ -17,11 +17,9 @@
         Finish
     </button>
 
-    <a href="#/taskSummary" ng-show="showFinish">
-        <button class="btn btn-negative pull-right">
-            Finish Activity?
-        </button>
-    </a>
+    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="showFinish">
+        Finish Activity?
+    </button>
 
     <button class="btn btn-primary pull-left"  ng-show="showFinish" ng-click="showFinish = !showFinish">
         Cancel
@@ -230,7 +228,7 @@
                                 <div class="optionBlock">
                                     <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
                                 <span ng-repeat="level in param.levels">
-                                    <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">
+                                    <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="activityDriver.selectParamValue(paramKey, level)">
                                         {{ level }}
                                     </button>
                                 </span>

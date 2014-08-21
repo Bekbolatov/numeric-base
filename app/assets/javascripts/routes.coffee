@@ -33,10 +33,9 @@ angular.module('AppOne')
         controller: 'TaskDetailCtrl'
     })
 
-    # Stats/Reports
-    .when('/stats', {
+    .when('/history', {
         template: '<h1> {{ test }} </h1>'
-        controller: 'StatsCtrl'
+        controller: 'HistoryCtrl'
     })
     # Settings
     .when('/settings', {

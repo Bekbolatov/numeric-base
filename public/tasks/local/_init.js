@@ -19,6 +19,7 @@ document.numeric = {
     path: {
         meta: 'meta/',
         body: 'body/',
+        result: 'result/',
         list: 'list' // Marketplace: list of public activities -> url.base.server + path.meta + path.list
     },
 

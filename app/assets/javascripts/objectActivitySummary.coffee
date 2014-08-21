@@ -5,26 +5,55 @@ angular.module('AppOne')
 # Ability to load some past summary from disk, possibly one just saved, to feed ctrlSummary
 .factory("ActivitySummary", ['$q', ($q) ->
     class ActivitySummary
+        __baseFormat: ->
+            {
+                activityId: ''
+                activityName: ''
+                runningTotals:
+                    correct: 0
+                    wrong: 0
+                responses: []
+            }
         _key: document.numeric.key.currentActivitySummary
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
-        _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
 
-        _get: (fieldName) -> @_read()[fieldName]
-        _add: (fieldName, data) ->
-            table = @_read()
-            table[fieldName] = data
-            @_write(table)
-        _remove: (fieldName) ->
-            table = @_read()
-            if table[fieldName]
-                delete table[fieldName]
-                @_write(table)
+        # read and write is better done in bulk here
+        init: (activityId, activityName)->
+            buffer = @__baseFormat()
+            buffer.activityId = activityId
+            buffer.activityName = activityName
+            buffer.startTime = new Date()
+            @_write(buffer)
+            @questionStartTime = new Date()
 
-        constructor: ->
-            if !@_read()
-                @_clear()
+        add: (answeredQuestion) ->
+            buffer = @_read()
+            if answeredQuestion.result
+                buffer.runningTotals.correct = buffer.runningTotals.correct + 1
+            else
+                buffer.runningTotals.wrong = buffer.runningTotals.wrong + 1
+            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.result, (new Date()) - @questionStartTime])
+            @_write(buffer)
+            @questionStartTime = new Date()
+            console.log('contents of ActivitySummary:')
+            console.log(@_read())
 
+        finish: ->
+            deferred = $q.defer()
+            buffer = @_read()
+            buffer.endTime = new Date()
+            filename = document.numeric.path.result + (buffer.endTime - buffer.startTime)
+            FileWrite.writeToFile(filename, buffer)
+            .then(
+                () ->
+                    @_write({})
+                    deferred.resolve('ok')
+            )
+            .catch(
+                (status) -> deferred.reject(status)
+            )
+            deferred.promise
 
     console.log('CALL TO FACTORY: ActivitySummary')
     new ActivitySummary()

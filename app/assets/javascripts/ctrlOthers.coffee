@@ -9,9 +9,9 @@ angular.module('AppOne')
         $scope.noActivities = true
     ]
 
-# statistics and reports
-.controller 'StatsCtrl', ['$scope', ($scope) ->
-    $scope.test = 'todo: stats...'
+# history (some reports maybe at some point somewhere)
+.controller 'HistoryCtrl', ['$scope', ($scope) ->
+    $scope.test = 'todo: history...'
     ]
 
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', ($scope, $rootScope, $routeParams, $http, ActivityManager ) ->

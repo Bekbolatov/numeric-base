@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("ActivityDriver", ['$timeout','$sce', ($timeout, $sce ) ->
+.factory("ActivityDriver", ['$timeout','$sce', 'ActivitySummary', ($timeout, $sce, ActivitySummary ) ->
     class Activity
         constructor: (@currentTask) ->
             @name = @currentTask.meta.name
@@ -85,8 +85,27 @@ angular.module('AppOne')
             @_clearLastQuestion()
             @newQuestion()
             @startTime = new Date()
+            ActivitySummary.init(@currentTask.id, @currentTask.meta.name)
+            @currentActivity
 
-        newQuestion: () ->
+        tryFinishActivity : ->
+            deferred = $q.defer()
+            ActivitySummary.finish()
+            .then(
+                (data) -> deferred.resolve(data)
+            )
+            .catch(
+                (status) ->
+                    console.log('error finishing task:' + status)
+                    deferred.reject(status)
+            )
+            deferred.promise
+
+        selectParamValue: (key, value) ->
+            @currentActivity.parameters[key].selectedValue = value
+            @newQuestion(true) # arg true - keep clock (do not reset for this question)
+
+        newQuestion: (keepClock) ->
             @totalTime = Math.round( (new Date() - @startTime) / 1000 )
             @answer = undefined
             @question = @currentActivity.newQuestion()
@@ -101,7 +120,8 @@ angular.module('AppOne')
             @questionStatementAsHTML = @question.questionStatementAsHTML
             @questionStatementChoices = @question.questionStatementChoices
 
-            @scope.$broadcast('timer-start')
+            if !keepClock
+                @scope.$broadcast('timer-start')
 
         _checkAnswer: (answer) =>
             @scope.$broadcast('timer-stop')
@@ -114,7 +134,6 @@ angular.module('AppOne')
                     statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
                     result: true
-                    time: Math.round(@scope.elapsedTime/1000)
             else
                 @_markWrongResult()
                 @answeredQuestion =
@@ -122,7 +141,7 @@ angular.module('AppOne')
                     statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
                     result: false
-                    time: Math.round(@scope.elapsedTime/1000)
+            ActivitySummary.add(@answeredQuestion)
             $timeout( \
                 () =>
                     @result.class = 'none'
@@ -144,7 +163,6 @@ angular.module('AppOne')
         pressedChoice: (choice) ->
             @_checkAnswer(choice)
             @newQuestion()
-
 
 
         constructor: () ->
