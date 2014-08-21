@@ -1,16 +1,16 @@
 angular.module('AppOne')
 
-# managing Activities (aka Tasks),getting new, removing old etc
-.controller 'TasksManagingCtrl', ['$scope', ($scope) -> ]
-
 .controller 'TasksMarketplaceCtrl', ['$scope', 'Marketplace', 'ActivityManager', ($scope, Marketplace, ActivityManager ) ->
     # tabs (ui)
     if Object.keys(ActivityManager.getInstalledActivitiesMeta()).length < 1
         $scope.currentTab = 'available'
     else
         $scope.currentTab = 'installed'
-    $scope.isTabSelected = (tab) -> $scope.currentTab == tab
-    $scope.tabSelected = (tab) -> $scope.currentTab = tab
+    $scope.selectTab = (tab) ->
+        $scope.currentTab = tab
+        $scope.confirmRemoveId = undefined
+        $scope.confirmAddId = undefined
+        $scope.detailsId = undefined
 
     # see more details
     $scope.toggleDetailsId = (activityId) ->
@@ -20,12 +20,10 @@ angular.module('AppOne')
         if $scope.confirmAddId != undefined
             $scope.confirmAddId = undefined
             return
-
-
-        if $scope.detailsId != activityId
-            $scope.detailsId = activityId
-        else
+        if $scope.detailsId == activityId
             $scope.detailsId = undefined
+            return
+        $scope.detailsId = activityId
 
     # install/uninstall
     $scope.mapOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
@@ -37,6 +35,11 @@ angular.module('AppOne')
         ActivityManager.installActivity(activityId)
         .then(
             () => $scope.loadingActivity = undefined
+        )
+        .catch(
+            (status) =>
+                console.log('error installing: ' + status)
+                $scope.loadingActivity = undefined
         )
 
 

@@ -12,8 +12,6 @@ document.numeric = {
             local: '/assets/tasks/local/',
             server: 'https://www.vicinitalk.com/plainmedia/numeric/server/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
-            // https://www.vicinitalk.com/plainmedia/numeric/server/
-            // http://console.sparkydots.com:8080/numeric/server/
         }
     },
     path: {

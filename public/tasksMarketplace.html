@@ -5,10 +5,10 @@
 </header>
 <header class="bar bar-standard bar-header-secondary">
     <div class="segmented-control">
-        <span class="control-item" ng-class="{active: isTabSelected('installed')}" ng-click="detailsId = undefined; tabSelected('installed')">
+        <span class="control-item" ng-class="{active: currentTab == 'installed' }" ng-click="selectTab('installed') ">
            Installed
         </span>
-        <span class="control-item" ng-class="{active: isTabSelected('available')}" ng-click="detailsId = undefined; tabSelected('available')">
+        <span class="control-item" ng-class="{active: currentTab == 'available' }" ng-click="selectTab('available') ">
            Available
         </span>
     </div>
@@ -23,7 +23,7 @@
 
 
                 <!--  installed -->
-                <div class="control-content" ng-class="{active: isTabSelected('installed')}">
+                <div class="control-content" ng-class="{active: currentTab == 'installed' }">
                     <p ng-show="!somethingInstalled()">
                         No activities installed.
                         <br>Install some activities from the "Available" tab.
@@ -66,7 +66,7 @@
                 </div>
 
                 <!--  available -->
-                <div class="control-content" ng-class="{active: isTabSelected('available')}">
+                <div class="control-content" ng-class="{active: currentTab == 'available' }">
 
                     <div ng-show="errorStatus">
                         <div class="media-body">

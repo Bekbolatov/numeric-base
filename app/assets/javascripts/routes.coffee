@@ -6,6 +6,7 @@ angular.module('AppOne')
         templateUrl: 'assets/home.html'
         controller: 'HomeCtrl'
     })
+    # start a task
     .when('/tasksList', {
         templateUrl: 'assets/tasksList.html'
         controller: 'TaskListCtrl'
@@ -14,39 +15,26 @@ angular.module('AppOne')
         templateUrl: 'assets/task.html'
         controller: 'TaskCtrl'
     })
-    .when('/taskSummary', {
-        templateUrl: 'assets/taskSummary.html'
-        controller: 'TaskSummaryCtrl'
-    })
-
-    # Activity Marketplace Hookups
-    .when('/tasksManaging', {
-        templateUrl: 'assets/tasksManaging.html'
-        controller: 'TasksManagingCtrl'
-    })
-    .when('/tasksMarketplace', {
-        templateUrl: 'assets/tasksMarketplace.html'
-        controller: 'TasksMarketplaceCtrl'
-    })
-    .when('/taskDetail/:taskId', {
-        templateUrl: 'assets/taskDetail.html'
-        controller: 'TaskDetailCtrl'
-    })
-
+    # lookup historical and also lookup last activitySummary
     .when('/history', {
         template: '<h1> {{ test }} </h1>'
         controller: 'HistoryCtrl'
     })
+    .when('/taskSummary', {
+        templateUrl: 'assets/taskSummary.html'
+        controller: 'TaskSummaryCtrl'
+    })
+    # Activity Marketplace
+    .when('/tasksMarketplace', {
+        templateUrl: 'assets/tasksMarketplace.html'
+        controller: 'TasksMarketplaceCtrl'
+    })
+
     # Settings
     .when('/settings', {
         templateUrl: 'assets/settings.html'
         controller: 'SettingsCtrl'
     })
-    .when('/settings/:section', {
-        templateUrl: 'assets/settings.html'
-        controller: 'SettingsCtrl'
-    })
-
     # for testing only
     .when('/test', {
         templateUrl: 'assets/test.html'
