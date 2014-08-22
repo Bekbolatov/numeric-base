@@ -34,6 +34,7 @@ angular.module('AppOne')
                     deferred.reject(status)
             )
             deferred.promise
+
         getFileSystem: =>
             deferred = $q.defer()
             if (typeof LocalFileSystem != 'undefined')
@@ -91,6 +92,9 @@ angular.module('AppOne')
                     directoryReader = dirEntry.createReader()
                     directoryReader.readEntries(@_printEntries, @_errorHandler))
 
+        getBaseContents: (dirName) =>
+            @getContents(document.numeric.url.base.fs + dirName)
+
         # file reader/writer
         getFileWriter: (fileName) ->
             deferred = $q.defer()
@@ -121,7 +125,7 @@ angular.module('AppOne')
             .then(
                 (fileWriter) ->
                     fileWriter.seek(0)
-                    fileWriter.write("hello") #textData)
+                    fileWriter.write(textData)
                     deferred.resolve('wrote to file: ' + fileName)
             )
             deferred.promise

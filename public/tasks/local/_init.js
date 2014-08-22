@@ -8,7 +8,8 @@ document.numeric = {
     },
     url: {
         base: {
-            fs: 'cdvfile://localhost/persistent/numericdata/',
+            fs: 'numericdata/',
+            cdv: 'cdvfile://localhost/persistent/',
             local: '/assets/tasks/local/',
             server: 'https://www.vicinitalk.com/plainmedia/numeric/server/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'

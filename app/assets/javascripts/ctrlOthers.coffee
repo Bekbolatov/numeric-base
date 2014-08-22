@@ -33,32 +33,17 @@ angular.module('AppOne')
                 (status) -> console.log('error: ' + status)
              )
 
-
-    $scope.writeToFile = () -> FS.writeToFile('testdata.txt', 'hellodata')
-
+    #   read write
+    $scope.writeToFile = () -> FS.writeToFile('testdata.txt', 'hsellodata')
     $scope.readFromFile = () ->
         FS.readFromFile('testdata.txt')
         .then(
             (data) -> $scope.readData = data
         )
 
-    $scope.getContents = () ->
-        FS.getContents(document.numeric.url.base.fs + document.numeric.path.body)
+    $scope.getContents = (path) -> FS.getContents(document.numeric.url.base.fs + document.numeric.path[path])
 
 
-
-    $scope.writeToFilePers = () -> FS.writeToFile('folder/testdatapers', 'hellodatas')
-
-    $scope.readFromFilePers = () ->
-        FS.readFromFile('folder/testdatapers')
-        .then(
-            (data) -> $scope.readDataPers = data
-        )
-
-    $scope.getContents = () ->
-        FS.getContents(document.numeric.url.base.fs + document.numeric.path.body)
-    $scope.getContentsBody = () ->
-        FS.getContents('body')
 
 
     ]

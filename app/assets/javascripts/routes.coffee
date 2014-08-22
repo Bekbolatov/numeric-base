@@ -52,9 +52,9 @@ angular.module('AppOne')
   document.addEventListener(
     "backbutton"
     =>
-        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+        if typeof currentPath != 'undefined' && currentPath.substr(0,6) == "/task/"
             return
-        if currentPath != undefined && currentPath.substr(0,12) == "/taskSummary"
+        if typeof currentPath != 'undefined' && currentPath.substr(0,12) == "/taskSummary"
             $location.path('/history')
             return
         $location.path('/')
@@ -66,9 +66,9 @@ angular.module('AppOne')
     =>
         currentPath = $location.path()
         console.log('menu button, current: ' + currentPath )
-        if currentPath != undefined && currentPath.substr(0,6) == "/task/"
+        if typeof currentPath != 'undefined' && currentPath.substr(0,6) == "/task/"
             return
-        if currentPath != undefined && currentPath.substr(0,9) == "/settings"
+        if typeof currentPath != 'undefined' && currentPath.substr(0,9) == "/settings"
             return
         $location.path('/settings')
         $route.reload()
