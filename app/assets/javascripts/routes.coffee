@@ -52,6 +52,7 @@ angular.module('AppOne')
   document.addEventListener(
     "backbutton"
     =>
+        currentPath = $location.path()
         if typeof currentPath != 'undefined' && currentPath.substr(0,6) == "/task/"
             return
         if typeof currentPath != 'undefined' && currentPath.substr(0,12) == "/taskSummary"
