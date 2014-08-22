@@ -67,14 +67,14 @@ angular.module('AppOne')
                 element.parentElement.removeChild(element)
                 delete @_activities[activityId]
 
-        loadActivity: (activityId) => # if on web, maybe can use @downloader.webkit to determine and bypass downloads to local (insteads, always use from remote)
+        loadActivity: (activityId) =>
             console.log('Call to load script with activityId: ' + activityId)
             if @_activities[activityId]
                 deferred = $q.defer()
                 deferred.resolve('already loaded')
                 deferred.promise
             else
-                if FileDownload.webkit
+                if typeof LocalFileSystem == 'undefined'
                     @_loadScript(@_uriRemote(activityId), activityId)
                     .then => @_attachActivityMeta(activityId)
                 else

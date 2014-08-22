@@ -1,5 +1,5 @@
 document.numeric = {
-    numericTasks: {}, // needed when js loading new activities
+    numericTasks: {},
 
     key: {
         activitiesMeta: 'numericActivitiesMeta',
@@ -8,21 +8,21 @@ document.numeric = {
     },
     url: {
         base: {
-            fs: 'cdvfile://localhost/persistent/',
+            fs: 'cdvfile://localhost/persistent/numericdata/',
             local: '/assets/tasks/local/',
             server: 'https://www.vicinitalk.com/plainmedia/numeric/server/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
         }
     },
     path: {
-        meta: 'meta/',
-        body: 'body/',
-        result: 'result/',
-        list: 'list' // Marketplace: list of public activities -> url.base.server + path.meta + path.list
+        list: 'activity/meta/list', // Marketplace: list of public activities
+        meta: 'activity/meta/',
+        body: 'activity/body/',
+        result: 'result/' // Store activity summaries
     },
 
     defaultActivitiesList: [
-        'com.sparkydots.numeric.tasks.t.basic_math',     //Bookmarks (default list)
+        'com.sparkydots.numeric.tasks.t.basic_math',
         'com.sparkydots.numeric.tasks.t.quiz'
     ]
 }

@@ -7,8 +7,19 @@
 
 <br><button ng-click="getHttpsData()">Test encrypted request</button><br>
 Encrypted response: {{ httpsdata.id }}
-
-
+<hr>
+<button ng-click="writeToFile()">Test write</button><br>
+<button ng-click="readFromFile()">Test read</button><br>
+data: {{ readData }}
+<hr>
+<button ng-click="writeToFilePers()">Test write localfsPers</button><br>
+<button ng-click="readFromFilePers()">Test read localfsPers</button><br>
+data: {{ readDataPers }}
+<hr>
+<button ng-click="getContents()">getcontents cdv</button><br>
+<hr>
+<button ng-click="getContentsBody()">getcontents body</button><br>
+<hr>
 <br><button ng-click="showScriptsInHead()">show scripts in head</button><br>
 <ol>
     <li ng-repeat="script in scripts">

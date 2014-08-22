@@ -3,7 +3,7 @@ angular.module('AppOne')
 # Keep track and add elements to summary for current activity: continually check-point after each answer
 # At Activity Finish, flush to disk
 # Ability to load some past summary from disk, possibly one just saved, to feed ctrlSummary
-.factory("ActivitySummary", ['$q', ($q) ->
+.factory("ActivitySummary", ['$q', 'FS', ($q, FS) ->
     class ActivitySummary
         __baseFormat: ->
             {
@@ -23,9 +23,9 @@ angular.module('AppOne')
             buffer = @__baseFormat()
             buffer.activityId = activityId
             buffer.activityName = activityName
-            buffer.startTime = new Date()
+            buffer.startTime = (new Date()).getTime()
             @_write(buffer)
-            @questionStartTime = new Date()
+            @questionStartTime = (new Date()).getTime()
 
         add: (answeredQuestion) ->
             buffer = @_read()
@@ -42,9 +42,10 @@ angular.module('AppOne')
         finish: ->
             deferred = $q.defer()
             buffer = @_read()
-            buffer.endTime = new Date()
-            filename = document.numeric.path.result + (buffer.endTime - buffer.startTime)
-            FileWrite.writeToFile(filename, buffer)
+            buffer.endTime = (new Date()).getTime()
+            filename = document.numeric.url.base.fs  + document.numeric.path.result + buffer.endTime
+            console.log('trying to write to filename: ' + filename)
+            FS.writeDataToFile(filename, buffer)
             .then(
                 () ->
                     @_write({})

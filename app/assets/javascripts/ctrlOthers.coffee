@@ -5,8 +5,7 @@ angular.module('AppOne')
 
 .controller 'TaskListCtrl', ['$scope', '$rootScope', '$location', 'ActivityManager', ($scope, $rootScope, $location, ActivityManager ) ->
     $scope.tableOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
-    if Object.keys($scope.tableOfAvailableActivities).length < 1
-        $scope.noActivities = true
+    $scope.noActivities = (Object.keys($scope.tableOfAvailableActivities).length < 1)
     ]
 
 # history (some reports maybe at some point somewhere)
@@ -14,7 +13,7 @@ angular.module('AppOne')
     $scope.test = 'todo: history...'
     ]
 
-.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', ($scope, $rootScope, $routeParams, $http, ActivityManager ) ->
+.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', 'FS', ($scope, $rootScope, $routeParams, $http, ActivityManager, FS ) ->
     $scope.activityManager = ActivityManager
     $scope.test = 'testt'
 
@@ -33,4 +32,33 @@ angular.module('AppOne')
                     $scope.httpsdata = response.data
                 (status) -> console.log('error: ' + status)
              )
+
+
+    $scope.writeToFile = () -> FS.writeToFile('testdata.txt', 'hellodata')
+
+    $scope.readFromFile = () ->
+        FS.readFromFile('testdata.txt')
+        .then(
+            (data) -> $scope.readData = data
+        )
+
+    $scope.getContents = () ->
+        FS.getContents(document.numeric.url.base.fs + document.numeric.path.body)
+
+
+
+    $scope.writeToFilePers = () -> FS.writeToFile('folder/testdatapers', 'hellodatas')
+
+    $scope.readFromFilePers = () ->
+        FS.readFromFile('folder/testdatapers')
+        .then(
+            (data) -> $scope.readDataPers = data
+        )
+
+    $scope.getContents = () ->
+        FS.getContents(document.numeric.url.base.fs + document.numeric.path.body)
+    $scope.getContentsBody = () ->
+        FS.getContents('body')
+
+
     ]

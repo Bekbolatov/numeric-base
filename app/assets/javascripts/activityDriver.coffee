@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("ActivityDriver", ['$timeout','$sce', 'ActivitySummary', ($timeout, $sce, ActivitySummary ) ->
+.factory("ActivityDriver", ['$timeout','$sce', '$q', 'ActivitySummary', ($timeout, $sce, $q, ActivitySummary ) ->
     class Activity
         constructor: (@currentTask) ->
             @name = @currentTask.meta.name

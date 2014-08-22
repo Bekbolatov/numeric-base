@@ -3,9 +3,10 @@ angular.module('AppOne')
 .factory("Marketplace", ['$http', ($http ) ->
     class Marketplace
         config:
-            activitiesLocal: document.numeric.url.base.local + document.numeric.path.meta + document.numeric.path.list
-            activitiesPublic: document.numeric.url.base.server + document.numeric.path.meta + document.numeric.path.list
+            activitiesLocal: document.numeric.url.base.local + document.numeric.path.list
+            activitiesPublic: document.numeric.url.base.server + document.numeric.path.list
 
+        getLocalActivitiesMeta: -> $http.get(@config.activitiesLocal)
         getPublicActivitiesMeta: (pageNumber, searchTerm, keepCache) ->
             st = ""
             if searchTerm != undefined
@@ -17,7 +18,7 @@ angular.module('AppOne')
 
             $http.get(
                 @config.activitiesPublic + "?p=" + pageNumber + st + cb
-                { cache: false })
+                { timeout: 7000, cache: false })
 
     new Marketplace()
 ])

@@ -11,7 +11,8 @@ angular.module('AppOne')
     ActivityManager.loadActivity(taskId)
     .then((activity) ->
         $scope.currentActivity = ActivityDriver.setActivity(activity, $scope)
-        $scope.finishActivity = ActivityDriver.tryFinishActivity()
+        $scope.finishActivity = ->
+            ActivityDriver.tryFinishActivity()
             .then((data) -> $location.path('/taskSummary'))
             .catch((status) -> console.log('could not finish activity: ' + status))
         )

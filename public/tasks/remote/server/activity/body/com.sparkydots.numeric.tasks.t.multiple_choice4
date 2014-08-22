@@ -1,4 +1,4 @@
-document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] =
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice4'] =
 {
     answerType: 'multiple',
     // follow pattern:

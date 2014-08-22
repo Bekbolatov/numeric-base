@@ -33,34 +33,33 @@ angular.module('AppOne')
     $scope.installNewActivity = (activityId) ->
         $scope.loadingActivity = activityId
         ActivityManager.installActivity(activityId)
-        .then(
-            () => $scope.loadingActivity = undefined
-        )
-        .catch(
-            (status) =>
-                console.log('error installing: ' + status)
-                $scope.loadingActivity = undefined
-        )
+        .catch((status) => console.log('error installing: ' + status))
+        .then(-> $scope.loadingActivity = undefined)
 
 
     # search/listing public activities
     # still a lot of work needs to be done here, in conjunction with the server work
     $scope.pageNumber = 0
 
-    writeToScopePublicActivities = (searchTerm)->
+    getPublicActivities = (searchTerm)->
         $scope.loadingList = true
-        Marketplace.getPublicActivitiesMeta($scope.pageNumber, searchTerm)
-            .then(
-                (response) ->
-                    $scope.publicActivitiesMeta = response.data.activities
-                    $scope.loadingList = false
-                (status) ->
-                    console.log('could not get list of activity metas from server, status: ' + status)
-                    $scope.errorStatus = status
-                    $scope.loadingList = false
-            )
-    writeToScopePublicActivities($scope.searchTermPublic)
-    $scope.tryGettingPublicAgain = () -> writeToScopePublicActivities($scope.searchTermPublic)
+        Marketplace
+        .getPublicActivitiesMeta($scope.pageNumber, searchTerm)
+        .then((response) ->
+            $scope.errorStatus = undefined
+            $scope.availableActivitiesMeta = response.data.activities
+        )
+        .catch((status) ->
+            console.log('Could not get list of activity metas from server, status: ' + status)
+            $scope.errorStatus = status
+            Marketplace
+            .getLocalActivitiesMeta()
+            .then((response) -> $scope.availableActivitiesMeta = response.data.activities)
+            .catch((status) -> console.log('error getting local available activities list: ' + status)))
+        .then(-> $scope.loadingList = false)
+
+    getPublicActivities($scope.searchTermPublic)
+    $scope.tryGettingPublicAgain = () -> getPublicActivities($scope.searchTermPublic)
 
     $scope.searchPublic = () ->
         term = $scope.searchTermPublic
@@ -69,6 +68,6 @@ angular.module('AppOne')
         term = term.trim()
         if term.length < 3
             return
-        writeToScopePublicActivities(term)
+        getPublicActivities(term)
 
     ]

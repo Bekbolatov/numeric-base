@@ -6,6 +6,7 @@ module.exports = function(grunt) {
                     sourceJs + 'appOne.js', 
 
                     sourceJs + 'objectFileDownload.js', 
+                    sourceJs + 'objectFS.js', 
                     sourceJs + 'objectActivityMeta.js', 
                     sourceJs + 'objectActivityBody.js', 
                     sourceJs + 'objectBookmarks.js', 

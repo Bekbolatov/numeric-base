@@ -1,5 +1,5 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href="#/tasksList"></a>
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
     <h1 class="title">Manage Activities</h1>
     <a class="icon icon-refresh pull-right" href="#/tasksMarketplace" ng-click="tryGettingPublicAgain()" ng-show="!loadingList"></a>
 </header>
@@ -16,7 +16,7 @@
 
 
 
-<div class="content">
+<div class="content content-bg">
     <div class="content-inner content-inner-marketplace">
         <div class="media-body">
             <div class="content-inner">
@@ -68,21 +68,19 @@
                 <!--  available -->
                 <div class="control-content" ng-class="{active: currentTab == 'available' }">
 
-                    <div ng-show="errorStatus">
-                        <div class="media-body">
-                            Could not connect to the server, please report to
-                            <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Cannot%20get%20public%20activities">info@sparkydots.com</a>
-                            <button class="btn btn-primary pull-right" ng-click="tryGettingPublicAgain()">
-                                Try again
-                            </button>
-                        </div>
+                    <ul class="table-view table-marketplace">
 
-                    </div>
+                        <li class="table-view-cell media activityMarketplace" ng-show="errorStatus">
+                            <div class="media-body">
+                                <p>
+                                    <i>
+                                        Could not get the current list of activities from the server, instead here is a list of locally available activities:
+                                    </i>
+                                </p>
+                            </div>
+                        </li>
 
-
-                    <ul class="table-view table-marketplace" ng-show="!errorStatus">
-
-                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in publicActivitiesMeta">
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in availableActivitiesMeta">
                             <div class="media-body" ng-click="toggleDetailsId(id)">
                                 {{ meta.name }}
                                 <p>

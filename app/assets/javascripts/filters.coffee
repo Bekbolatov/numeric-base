@@ -7,6 +7,17 @@ angular.module('filters', [])
         else
             input
 
+.filter 'truncate', ->
+    (text, length, end) ->
+        if isNaN(length)
+            length = 27
+        if !end
+            end = "..."
+        if text.length <= length || (text.length - end.length) <= length
+            text
+        else
+            String(text).substring(0, length - end.length) + end
+
 .filter 'firstCapital', ->
     (input) ->
         if input == undefined
