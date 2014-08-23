@@ -8,7 +8,7 @@ angular.module('AppOne')
         constructor: ->
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
-                
+                FS.getDirEntry(document.numeric.path.result, {create:true})
         __baseFormat: ->
             {
                 activityId: ''
@@ -25,7 +25,11 @@ angular.module('AppOne')
         _keyAllSummaries: document.numeric.key.storedActivitySummaries
         _readAllSummaries: -> JSON.parse(window.localStorage.getItem(@_keyAllSummaries))
         _writeAllSummaries: (table) -> window.localStorage.setItem(@_keyAllSummaries, JSON.stringify(table))
-
+        _addToAllSummaries: (summaryInfo) ->
+            console.log('adding record to allActivitySummaries')
+            table = @_readAllSummaries()
+            table.items.push(summaryInfo)
+            @_writeAllSummaries(table)
         # read and write is better done in bulk here
         init: (activityId, activityName)->
             buffer = @__baseFormat()
@@ -47,16 +51,23 @@ angular.module('AppOne')
             console.log('contents of ActivitySummary:')
             console.log(@_read())
 
-        finish: ->
+        finish: =>
             deferred = $q.defer()
             buffer = @_read()
             buffer.endTime = (new Date()).getTime()
-            filename = document.numeric.url.base.fs  + document.numeric.path.result + buffer.endTime
+            filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)
             FS.writeDataToFile(filename, buffer)
             .then(
-                () ->
-
+                () =>
+                    activitySummaryInfo = {
+                        activityName: buffer.activityName
+                        timestamp: buffer.endTime
+                        totalTime: buffer.endTime - buffer.startTime
+                        numberCorrect: buffer.runningTotals.correct
+                        numberWrong: buffer.runningTotals.wrong
+                    }
+                    @_addToAllSummaries(activitySummaryInfo)
                     @_write({})
                     deferred.resolve('ok')
             )

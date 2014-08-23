@@ -22,9 +22,12 @@ data: {{ readData }}
 <hr>
 <button ng-click="getContents('meta')">getcontents: activity/meta</button><br>
 <hr>
-<button ng-click="getContents('meta')">getcontents: result</button><br>
+<button ng-click="getContents('result')">getcontents: result</button><br>
 
 
+<hr>
+<button ng-click="getFromLocal(numericStoredActivitySummaries)">numericStoredActivitySummaries</button><br>
+data: {{ localData }}
 
 
 <hr>

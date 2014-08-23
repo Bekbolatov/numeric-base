@@ -13,7 +13,7 @@ angular.module('AppOne')
                     when FileError.SECURITY_ERR then 'SECURITY_ERR'
                     when FileError.INVALID_MODIFICATION_ERR then 'INVALID_MODIFICATION_ERR'
                     when FileError.INVALID_STATE_ERR then 'INVALID_STATE_ERR'
-                    else 'Unknown Error'
+                    else 'Unknown Error: ' + e.code
                 console.log('ERROR: ' + msg)
                 dfd.reject(msg)
 
@@ -22,18 +22,18 @@ angular.module('AppOne')
             for entry in entries
                 console.log(entry.name)
 
-        chromeRequestQuota: ->
-            deferred = $q.defer()
-            navigator.webkitPersistentStorage.requestQuota(
-                1024*1024
-                (bytes) ->
-                    console.log('obtained bytes: ' + bytes)
-                    deferred.resolve(bytes)
-                (status) ->
-                    console.log('could not request quota: ' + status)
-                    deferred.reject(status)
-            )
-            deferred.promise
+#        chromeRequestQuota: ->
+#            deferred = $q.defer()
+#            navigator.webkitPersistentStorage.requestQuota(
+#                1024*1024
+#                (bytes) ->
+#                    console.log('obtained bytes: ' + bytes)
+#                    deferred.resolve(bytes)
+#                (status) ->
+#                    console.log('could not request quota: ' + status)
+#                    deferred.reject(status)
+#            )
+#            deferred.promise
 
         getFileSystem: =>
             deferred = $q.defer()
@@ -44,24 +44,26 @@ angular.module('AppOne')
                 (fs) => deferred.resolve(fs)
                 @_errorHandler(deferred))
             else
-                @chromeRequestQuota()
-                .then( (bytes) =>
-                   window.requestFileSystem(
-                    window.PERSISTENT
-                    1024*1024
-                    (fs) => deferred.resolve(fs)
-                    @_errorHandler(deferred))
-                )
+                console.log('LocalFileSystem is undefined')
+#                @chromeRequestQuota()
+#                .then( (bytes) =>
+#                   window.requestFileSystem(
+#                    window.PERSISTENT
+#                    1024*1024
+#                    (fs) => deferred.resolve(fs)
+#                    @_errorHandler(deferred))
+#                )
             deferred.promise
 
-
+        # get Files and Dirs from here
         getDirEntry: (dirName, options) ->
+            console.log('getting dirEntry: ' + dirName)
             deferred = $q.defer()
             @getFileSystem()
             .then(
                 (fs) =>
                     fs.root.getDirectory(
-                        dirName
+                        document.numeric.url.base.fs + dirName
                         options
                         (dirEntry) -> deferred.resolve(dirEntry)
                         @_errorHandler(deferred))
@@ -69,12 +71,13 @@ angular.module('AppOne')
             deferred.promise
 
         getFileEntry: (fileName, options) ->
+            console.log('getting fileEntry: ' + fileName)
             deferred = $q.defer()
             @getFileSystem()
             .then(
                 (fs) =>
                     fs.root.getFile(
-                        fileName
+                        document.numeric.url.base.fs + fileName
                         options
                         (fileEntry) -> deferred.resolve(fileEntry)
                         @_errorHandler(deferred))
@@ -92,10 +95,7 @@ angular.module('AppOne')
                     directoryReader = dirEntry.createReader()
                     directoryReader.readEntries(@_printEntries, @_errorHandler))
 
-        getBaseContents: (dirName) =>
-            @getContents(document.numeric.url.base.fs + dirName)
-
-        # file reader/writer
+        # File reader/writer
         getFileWriter: (fileName) ->
             deferred = $q.defer()
             @getFileEntry(fileName, {create: true, exclusive: false})
@@ -124,6 +124,7 @@ angular.module('AppOne')
             @getFileWriter(fileName)
             .then(
                 (fileWriter) ->
+                    console.log('obtained filewriter for: ' + fileName)
                     fileWriter.seek(0)
                     fileWriter.write(textData)
                     deferred.resolve('wrote to file: ' + fileName)
