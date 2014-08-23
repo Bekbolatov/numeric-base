@@ -5,6 +5,10 @@ angular.module('AppOne')
 # Ability to load some past summary from disk, possibly one just saved, to feed ctrlSummary
 .factory("ActivitySummary", ['$q', 'FS', ($q, FS) ->
     class ActivitySummary
+        constructor: ->
+            if !@_readAllSummaries()
+                @_writeAllSummaries({items: []})
+                
         __baseFormat: ->
             {
                 activityId: ''
@@ -17,6 +21,10 @@ angular.module('AppOne')
         _key: document.numeric.key.currentActivitySummary
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
+
+        _keyAllSummaries: document.numeric.key.storedActivitySummaries
+        _readAllSummaries: -> JSON.parse(window.localStorage.getItem(@_keyAllSummaries))
+        _writeAllSummaries: (table) -> window.localStorage.setItem(@_keyAllSummaries, JSON.stringify(table))
 
         # read and write is better done in bulk here
         init: (activityId, activityName)->
@@ -48,6 +56,7 @@ angular.module('AppOne')
             FS.writeDataToFile(filename, buffer)
             .then(
                 () ->
+
                     @_write({})
                     deferred.resolve('ok')
             )

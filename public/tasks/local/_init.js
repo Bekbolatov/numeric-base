@@ -4,7 +4,8 @@ document.numeric = {
     key: {
         activitiesMeta: 'numericActivitiesMeta',
         bookmarkedActivities: 'numericBookmarkedActivities',
-        currentActivitySummary: 'numericCurrentActivitySummary'
+        currentActivitySummary: 'numericCurrentActivitySummary',
+        storedActivitySummaries: 'numericStoredActivitySummaries'
     },
     url: {
         base: {
