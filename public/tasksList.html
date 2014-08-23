@@ -3,60 +3,32 @@
     <h2 class="title">Pick Activity</h2>
 </header>
 
-<ul class="content table-view content-bg">
-    <li class="table-view-cell" ng-show="noActivities">
-        <p>
-            It looks like you do not have any activities installed.
-        </p>
-    </li>
+<div class="content content-bg">
+    <ul class="table-view table-view-list">
+        <li class="table-view-cell" ng-show="noActivities">
+            <p>
+                It looks like you do not have any activities installed.
+            </p>
+        </li>
 
-    <li class="table-view-cell" ng-repeat="(id, meta) in tableOfAvailableActivities">
-        <a class="navigate-right" ng-href="#/task/{{ id }}">
-            {{ meta.name }}
-            <p>{{ meta.shortDescription }}</p>
-        </a>
-    </li>
-
-    <li class="table-view-cell">
-        <p>
-            <a class="center" ng-href="#/tasksMarketplace">
-                <p class="content-paragraph">
-                    <button class="btn btn-primary">
-                        <i>Manage activities ...</i>
-                    </button>
-                </p>
+        <li class="table-view-cell" ng-repeat="(id, meta) in tableOfAvailableActivities">
+            <a class="navigate-right" ng-href="#/task/{{ id }}">
+                {{ meta.name }}
+                <p>{{ meta.shortDescription }}</p>
             </a>
-        </p>
+        </li>
 
-    </li>
+        <li class="table-view-cell">
+            <p>
+                <a class="center" ng-href="#/tasksMarketplace">
+                    <p class="content-paragraph">
+                        <button class="btn btn-primary">
+                            <i>Manage activities ...</i>
+                        </button>
+                    </p>
+                </a>
+            </p>
 
-</ul>
-
-
-
-
-
-        <div class="media-body">
-
-        </div>
-
-
-<!--  BOTTOM NAV -->
-<nav class="bar bar-tab">
-    <a class="tab-item active" href="#/home">
-        <span class="icon icon-home"></span>
-        <span class="tab-label">Home</span>
-    </a>
-    <a class="tab-item active" href="#/history">
-        <span class="icon icon-pages"></span>
-        <span class="tab-label">History</span>
-    </a>
-    <a class="tab-item active" href="#/test">
-        <span class="icon icon-pages"></span>
-        <span class="tab-label">TestPage</span>
-    </a>
-    <a class="tab-item active" href="#/settings">
-        <span class="icon icon-gear"></span>
-        <span class="tab-label">Settings</span>
-    </a>
-</nav>
+        </li>
+    </ul>
+</div>

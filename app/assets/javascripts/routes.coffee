@@ -6,6 +6,10 @@ angular.module('AppOne')
         templateUrl: 'assets/home.html'
         controller: 'HomeCtrl'
     })
+    .when('/info', {
+        templateUrl: 'assets/info.html'
+        controller: 'InfoCtrl'
+    })
     # start a task
     .when('/tasksList', {
         templateUrl: 'assets/tasksList.html'

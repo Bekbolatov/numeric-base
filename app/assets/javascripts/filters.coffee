@@ -10,7 +10,7 @@ angular.module('filters', [])
 .filter 'truncate', ->
     (text, length, end) ->
         if isNaN(length)
-            length = 20
+            length = 27
         if !end
             end = "..."
         if text.length <= length || (text.length - end.length) <= length
