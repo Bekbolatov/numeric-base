@@ -55,14 +55,14 @@ angular.module('AppOne')
             deferred.promise
 
 
-        getDirEntry: (dirName) ->
+        getDirEntry: (dirName, options) ->
             deferred = $q.defer()
             @getFileSystem()
             .then(
                 (fs) =>
                     fs.root.getDirectory(
                         dirName
-                        {create: false}
+                        options
                         (dirEntry) -> deferred.resolve(dirEntry)
                         @_errorHandler(deferred))
             )
@@ -83,7 +83,7 @@ angular.module('AppOne')
 
         getContents: (dirName) =>
             deferred = $q.defer()
-            @getDirEntry(dirName)
+            @getDirEntry(dirName, {create: false})
             .then(
                 (dirEntry) =>
                     console.log(dirEntry)
