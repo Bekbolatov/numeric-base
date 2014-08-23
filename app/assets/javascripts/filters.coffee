@@ -7,6 +7,13 @@ angular.module('filters', [])
         else
             input
 
+.filter 'textOrLoading', ->
+    (input) ->
+        if input == undefined
+            ''
+        else
+            input
+
 .filter 'truncate', ->
     (text, length, end) ->
         if isNaN(length)
