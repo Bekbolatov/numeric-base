@@ -23,6 +23,13 @@ data: {{ readData }}
 <button ng-click="getContents('meta')">getcontents: activity/meta</button><br>
 <hr>
 <button ng-click="getContents('result')">getcontents: result</button><br>
+<hr>
+<button ng-click="getContentsRaw('root')">getcontents: root</button><br>
+
+
+<hr>
+<input ng-model="query" type="text">
+<button ng-click="getContentsRaw(query)">getcontents: ?</button><br>
 
 
 <hr>

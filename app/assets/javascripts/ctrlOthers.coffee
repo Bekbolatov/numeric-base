@@ -44,6 +44,7 @@ angular.module('AppOne')
         )
 
     $scope.getContents = (path) -> FS.getContents(document.numeric.path[path])
+    $scope.getContentsRaw = (path) -> FS.getContents(path)
 
     $scope.getFromLocal = (key) ->
         $scope.localData = window.localStorage.getItem(key)

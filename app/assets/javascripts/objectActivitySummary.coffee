@@ -8,7 +8,7 @@ angular.module('AppOne')
         constructor: ->
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
-                FS.getDirEntry(document.numeric.path.result, {create:true})
+
         __baseFormat: ->
             {
                 activityId: ''

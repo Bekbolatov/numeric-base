@@ -4,6 +4,8 @@ angular.module('AppOne')
     class FS
         constructor: ->
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
+            @_getDirEntry(document.numeric.url.base.fs, {create:true})
+            .then( => @getDirEntry(document.numeric.path.result, {create:true}))
 
         _errorHandler: (dfd) ->
             (e) ->
@@ -56,34 +58,41 @@ angular.module('AppOne')
             deferred.promise
 
         # get Files and Dirs from here
-        getDirEntry: (dirName, options) ->
+        _getDirEntry: (dirName, options) ->
             console.log('getting dirEntry: ' + dirName)
             deferred = $q.defer()
             @getFileSystem()
             .then(
                 (fs) =>
-                    fs.root.getDirectory(
-                        document.numeric.url.base.fs + dirName
-                        options
-                        (dirEntry) -> deferred.resolve(dirEntry)
-                        @_errorHandler(deferred))
+                    if dirName == '/'
+                        deferred.resolve(fs.root)
+                    else
+                        fs.root.getDirectory(
+                            dirName
+                            options
+                            (dirEntry) -> deferred.resolve(dirEntry)
+                            @_errorHandler(deferred))
             )
             deferred.promise
 
-        getFileEntry: (fileName, options) ->
+        _getFileEntry: (fileName, options) ->
             console.log('getting fileEntry: ' + fileName)
             deferred = $q.defer()
             @getFileSystem()
             .then(
                 (fs) =>
                     fs.root.getFile(
-                        document.numeric.url.base.fs + fileName
+                        fileName
                         options
                         (fileEntry) -> deferred.resolve(fileEntry)
                         @_errorHandler(deferred))
             )
             deferred.promise
 
+        getDirEntry: (dirName, options) -> @_getDirEntry(document.numeric.url.base.fs + dirName, options)
+        getFileEntry: (fileName, options) -> @_getFileEntry(document.numeric.url.base.fs + fileName, options)
+
+        # ls contents
         getContents: (dirName) =>
             deferred = $q.defer()
             @getDirEntry(dirName, {create: false})
