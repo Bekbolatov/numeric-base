@@ -29,8 +29,11 @@
 
 </header>
 
+<div ng-show="currentActivity.name == undefined">
+    <p>loading...</p>
+</div>
 
-<div class="flip flip-content">
+<div class="flip flip-content" ng-show="currentActivity.name != undefined">
     <div class="blackBackground">
 
         <div class="flipcard" ng-class="{'flipped':isFlipped}">

@@ -5,20 +5,25 @@
 </header>
 
 <div class="content content-bg">
-    <ul class="table-view table-view-list">
+    <ul class="table-view table-view-history">
         <li class="table-view-cell" ng-show="noHistory">
             <p>
-                You do not have any activities completed.
+                There is no record of any completed activities.
             </p>
         </li>
 
         <li class="table-view-cell" ng-repeat="activitySummaryInfo in activitySummariesInfo">
             <a class="navigate-right" ng-href="#/taskSummary/{{activitySummaryInfo.timestamp }}">
-                {{ activitySummaryInfo.activityName }}  ({{activitySummaryInfo.timestamp }})
-                <p>correct: {{ activitySummaryInfo.numberCorrect }} </p>
-                <p>wrong: {{ activitySummaryInfo.numberWrong }}</p>
+                {{ activitySummaryInfo.activityName | truncate:25 }}
+                <p>{{activitySummaryInfo.timestamp | date:'MMM d, y hh:mm a' }}</p>
+                <p>
+                    Total questions: {{ activitySummaryInfo.numberCorrect + activitySummaryInfo.numberWrong }}
+                    ({{ activitySummaryInfo.numberCorrect }} correct and {{ activitySummaryInfo.numberWrong }} wrong)
+                </p>
+                <p>
+                    Time spent: {{ Math.round(activitySummaryInfo.totalTime/1000) | secondsToHuman }}
+                </p>
             </a>
         </li>
-
     </ul>
 </div>
