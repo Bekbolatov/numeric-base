@@ -20,6 +20,7 @@ module.exports = function(grunt) {
                     sourceJs + 'ctrlMarketplace.js', 
                     sourceJs + 'ctrlSettings.js', 
                     sourceJs + 'ctrlSummary.js', 
+                    sourceJs + 'ctrlTest.js', 
                     sourceJs + 'ctrlOthers.js', 
 
                     sourceJs + 'routes.js' 

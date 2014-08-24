@@ -1,1 +1,1 @@
-angular.module 'AppOne', ['ngRoute', 'timer', 'filters']
+angular.module 'AppOne', ['ngRoute', 'ngMd5', 'timer', 'filters']
