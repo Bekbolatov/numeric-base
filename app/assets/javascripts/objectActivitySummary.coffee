@@ -28,7 +28,7 @@ angular.module('AppOne')
         _addToAllSummaries: (summaryInfo) ->
             console.log('adding record to allActivitySummaries')
             table = @_readAllSummaries()
-            table.items.push(summaryInfo)
+            table.items.unshift(summaryInfo)
             @_writeAllSummaries(table)
         _removeFromAllSummaries: (timestamp) -> # not using right now
             console.log('removing record to allActivitySummaries')
