@@ -6,6 +6,13 @@
 
 <div class="content content-bg">
     <div class="content-inner content-inner-marketplace">
+        <p>
+            History page size:
+            <button class="btn {{ 2 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 2)">2</button>
+            <button class="btn {{ 10 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 10)">10</button>
+            <button class="btn {{ 20 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 20)">20</button>
+            <button class="btn {{ 30 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 30)">30</button>
+        </p>
 
         <p>
         <div>

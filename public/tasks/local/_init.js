@@ -2,6 +2,7 @@ document.numeric = {
     numericTasks: {},
 
     key: {
+        settings: 'numericSettings',
         activitiesMeta: 'numericActivitiesMeta',
         bookmarkedActivities: 'numericBookmarkedActivities',
         currentActivitySummary: 'numericCurrentActivitySummary',

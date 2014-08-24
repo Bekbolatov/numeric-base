@@ -37,13 +37,12 @@
             </div>
 
 
-            <div class="content-paragraph">
+            <div ng-show="!mismatch" class="content-paragraph">
                 <p>Details:</p>
                 <p ng-repeat="response in responses">
                     Question: {{ response[0] }}
-                    <br>You answer: {{ response[1] }}
-                    <br> correct? {{ response[2] }}
-                    (Took time: {{ response[3] }} ms)
+                    <br>Answer: {{ response[1] }} ({{ response[2] && 'Correct' || ' Incorrect' }})
+                    (Time taken: {{ response[3]  | secsToMillis | secondsToHuman }})
                 </p>
             </div>
 

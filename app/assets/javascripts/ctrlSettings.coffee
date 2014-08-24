@@ -1,7 +1,11 @@
 angular.module('AppOne')
 
 # app settings
-.controller 'SettingsCtrl', ['$scope', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, ActivityMeta, ActivityBody, Bookmarks ) ->
+.controller 'SettingsCtrl', ['$scope', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, Settings, ActivityMeta, ActivityBody, Bookmarks ) ->
+
+    $scope.historyPageSize = Settings.get('historyPageSize')
+    $scope.getAttr = (attr) -> Settings.get(attr)
+    $scope.setAttr = (attr, newVal) -> Settings.set(attr, newVal)
 
     $scope.clearLocalStorage = -> window.localStorage.clear()
 

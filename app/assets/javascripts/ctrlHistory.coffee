@@ -8,14 +8,41 @@ angular.module('AppOne')
     ]
 
 # history (some reports maybe at some point somewhere)
-.controller 'HistoryCtrl', ['$scope', 'ActivitySummary', ($scope, ActivitySummary ) ->
-    $scope.activitySummariesInfo = ActivitySummary.getAllSummaries()
-    $scope.noHistory = $scope.activitySummariesInfo.length < 1
+.controller 'HistoryCtrl', ['$scope', 'Settings', 'ActivitySummary', ($scope, Settings, ActivitySummary ) ->
+    $scope.activitySummariesInfoAll = ActivitySummary.getAllSummaries()
+    $scope.totalItems = $scope.activitySummariesInfoAll.length
+    $scope.noHistory = $scope.activitySummariesInfoAll.length < 1
     $scope.$watch(
-        'activitySummariesInfo'
+        'activitySummariesInfoAll'
         (newValue, oldValue) ->
             $scope.noHistory = newValue.length < 1
+            $scope.totalItems = newValue.length
         true)
+
+    $scope.getPage = (start, end) =>
+        $scope.activitySummariesInfo = ActivitySummary.getAllSummariesPage(start, end)
+    $scope.refreshList = -> $scope.getPage($scope.startIndex, $scope.endIndex)
+
+    $scope.pageSize = Settings.getHistoryPageSize()
+    $scope.turnPage = (distance) ->
+        $scope.startIndex = $scope.startIndex + distance
+        $scope.endIndex = $scope.endIndex + distance
+
+        if $scope.startIndex < 0 || $scope.totalItems < 1
+            $scope.startIndex = 0
+            $scope.endIndex = $scope.pageSize
+        else
+            if $scope.startIndex >= $scope.totalItems
+                pages = Math.floor( ($scope.totalItems - 1) / $scope.pageSize )
+                $scope.startIndex = pages * $scope.pageSize
+                $scope.endIndex = $scope.startIndex + $scope.pageSize
+        $scope.refreshList()
+
+    $scope.startIndex = -1
+    $scope.turnPage(0)
+
+
+
 ]
 
 .controller 'TaskSummaryCtrl', ['$scope', '$routeParams', '$location', 'ActivitySummary', ($scope, $routeParams, $location, ActivitySummary ) ->
@@ -23,8 +50,6 @@ angular.module('AppOne')
     if summaryId == undefined || summaryId == ''
         return $location.path('/')
 
-    $scope.summaryId = summaryId
-    console.log('in ctrl')
     ActivitySummary.getSummaryById(summaryId)
     .then(
         (data) ->
@@ -46,5 +71,7 @@ angular.module('AppOne')
         console.log(status)
         $scope.mismatch = true
         $scope.ready = true
-        )
+    )
+
+
     ]

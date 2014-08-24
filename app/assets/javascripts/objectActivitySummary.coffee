@@ -27,12 +27,10 @@ angular.module('AppOne')
         _readAllSummaries: -> JSON.parse(window.localStorage.getItem(@_keyAllSummaries))
         _writeAllSummaries: (table) -> window.localStorage.setItem(@_keyAllSummaries, JSON.stringify(table))
         _addToAllSummaries: (summaryInfo) ->
-            console.log('adding record to allActivitySummaries')
             table = @_readAllSummaries()
             table.items.unshift(summaryInfo)
             @_writeAllSummaries(table)
         _removeFromAllSummaries: (timestamp) -> # not using right now
-            console.log('removing record to allActivitySummaries')
             table = @_readAllSummaries()
             itemToDelete = 0
             newItems = item for item in table.items when item.timestamp != timestamp
@@ -40,15 +38,13 @@ angular.module('AppOne')
             @_writeAllSummaries(newItems)
 
         getAllSummaries: -> @_readAllSummaries().items
+        getAllSummariesPage: (start, end) -> @_readAllSummaries().items.slice(start, end)
         getFromAllSummaries: (timestamp) -> (item for item in @_readAllSummaries().items when item.timestamp = timestamp)[0]
+
         getSummaryById: (timestamp) ->
             deferred = $q.defer()
             summary = @getFromAllSummaries(timestamp)
             filename = document.numeric.path.result + timestamp
-            console.log('will try to read summary from file: ' + filename)
-            console.log('using h_:' + summary)
-            console.log(summary)
-            console.log('using h__:' + summary.hash)
             FS.readDataFromFile(filename, summary.hash)
             .then(
                 (buffer) => deferred.resolve(buffer)
@@ -73,8 +69,6 @@ angular.module('AppOne')
             buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.result, (new Date()) - @lastTimePoint])
             @_write(buffer)
             @lastTimePoint = (new Date()).getTime()
-            console.log('contents of ActivitySummary:')
-            console.log(@_read())
 
         finish: =>
             deferred = $q.defer()
