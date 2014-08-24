@@ -145,13 +145,21 @@ angular.module('AppOne')
             @getFileReader(fileName)
             .then(
                 (data) ->
-                    deferred.resolve('retrieved data: ' + data)
+                    deferred.resolve(data)
             )
             deferred.promise
 
 
         writeDataToFile: (fileName, buffer) -> @writeToFile(fileName, JSON.stringify(buffer))
-        readDataFromFile: (fileName) -> JSON.parse(@readFromFile(fileName))
+        readDataFromFile: (fileName) ->
+            deferred = $q.defer()
+            @readFromFile(fileName)
+            .then(
+                (data) ->
+                    deferred.resolve(JSON.parse(data))
+            )
+            deferred.promise
+
 
     console.log('CALL TO FACTORY: FS')
     new FS()

@@ -21,7 +21,7 @@
                     ({{ activitySummaryInfo.numberCorrect }} correct and {{ activitySummaryInfo.numberWrong }} wrong)
                 </p>
                 <p>
-                    Time spent: {{ Math.round(activitySummaryInfo.totalTime/1000) | secondsToHuman }}
+                    Time spent: {{ activitySummaryInfo.totalTime | secsToMillis | secondsToHuman }}
                 </p>
             </a>
         </li>

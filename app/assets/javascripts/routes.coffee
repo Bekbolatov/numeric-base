@@ -24,7 +24,7 @@ angular.module('AppOne')
         templateUrl: 'assets/history.html'
         controller: 'HistoryCtrl'
     })
-    .when('/taskSummary', {
+    .when('/taskSummary/:summaryId', {
         templateUrl: 'assets/taskSummary.html'
         controller: 'TaskSummaryCtrl'
     })

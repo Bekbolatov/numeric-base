@@ -39,6 +39,15 @@ angular.module('AppOne')
             @_writeAllSummaries(newItems)
 
         getAllSummaries: -> @_readAllSummaries().items
+        getSummaryById: (timestamp) ->
+            deferred = $q.defer()
+            filename = document.numeric.path.result + timestamp
+            console.log('will try to read summary from file: ' + filename)
+            FS.readDataFromFile(filename)
+            .then(
+                (buffer) => deferred.resolve(buffer)
+                (status) => deferred.reject(status))
+            deferred.promise
 
         # read and write is better done in bulk here
         init: (activityId, activityName)->
@@ -47,7 +56,7 @@ angular.module('AppOne')
             buffer.activityName = activityName
             buffer.startTime = (new Date()).getTime()
             @_write(buffer)
-            @questionStartTime = (new Date()).getTime()
+            @lastTimePoint = (new Date()).getTime()
 
         add: (answeredQuestion) ->
             buffer = @_read()
@@ -55,16 +64,16 @@ angular.module('AppOne')
                 buffer.runningTotals.correct = buffer.runningTotals.correct + 1
             else
                 buffer.runningTotals.wrong = buffer.runningTotals.wrong + 1
-            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.result, (new Date()) - @questionStartTime])
+            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.result, (new Date()) - @lastTimePoint])
             @_write(buffer)
-            @questionStartTime = new Date()
+            @lastTimePoint = (new Date()).getTime()
             console.log('contents of ActivitySummary:')
             console.log(@_read())
 
         finish: =>
             deferred = $q.defer()
             buffer = @_read()
-            buffer.endTime = (new Date()).getTime()
+            buffer.endTime = @lastTimePoint
             filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)
             FS.writeDataToFile(filename, buffer)

@@ -14,6 +14,13 @@ angular.module('filters', [])
         else
             input
 
+.filter 'secsToMillis', ->
+    (input) ->
+        if input == undefined || isNaN(input)
+            input
+        else
+            Math.round( input / 1000 )
+
 .filter 'truncate', ->
     (text, length, end) ->
         if isNaN(length)

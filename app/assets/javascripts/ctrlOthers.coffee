@@ -13,17 +13,6 @@ angular.module('AppOne')
         true)
 ]
 
-# history (some reports maybe at some point somewhere)
-.controller 'HistoryCtrl', ['$scope', 'ActivitySummary', ($scope, ActivitySummary ) ->
-    $scope.activitySummariesInfo = ActivitySummary.getAllSummaries()
-    $scope.noHistory = $scope.activitySummariesInfo.length < 1
-    $scope.$watch(
-        'activitySummariesInfo'
-        (newValue, oldValue) ->
-            $scope.noHistory = newValue.length < 1
-        true)
-]
-
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', 'FS', ($scope, $rootScope, $routeParams, $http, ActivityManager, FS ) ->
     $scope.activityManager = ActivityManager
     $scope.test = 'testt'
