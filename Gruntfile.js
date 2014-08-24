@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 
                     sourceJs + 'routes.js' 
                     ];
-    var appJsSourcesCordova = appJsSources.concat([sourceJs + 'attachfs.js']);
+    var appJsSourcesCordova = appJsSources.concat([sourceJs + 'bootstrapApp.js']);
     grunt.initConfig({
         concat: {
             appJs: {
