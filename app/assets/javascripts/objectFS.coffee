@@ -1,8 +1,9 @@
 angular.module('AppOne')
 
-.factory("FS", ['$q', ($q) ->
+.factory("FS", ['$q', 'md5', ($q, md5) ->
     class FS
         constructor: ->
+            @salt = 'only the first line of defence'
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
             @_getDirEntry(document.numeric.url.base.fs, {create:true})
             .then( => @getDirEntry(document.numeric.path.result, {create:true}))
@@ -150,13 +151,30 @@ angular.module('AppOne')
             deferred.promise
 
 
-        writeDataToFile: (fileName, buffer) -> @writeToFile(fileName, JSON.stringify(buffer))
-        readDataFromFile: (fileName) ->
+        writeDataToFile: (fileName, buffer, getHash) =>
+            deferred = $q.defer()
+            dataAsString = JSON.stringify(buffer)
+            @writeToFile(fileName, dataAsString)
+            .then(
+                =>
+                    if getHash
+                        deferred.resolve(md5.createHash(dataAsString + @salt))
+                        console.log("h:" + md5.createHash(dataAsString + @salt))
+                    else
+                        deferred.resolve('ok')
+            )
+            deferred.promise
+
+        readDataFromFile: (fileName, checkHash) =>
             deferred = $q.defer()
             @readFromFile(fileName)
             .then(
-                (data) ->
-                    deferred.resolve(JSON.parse(data))
+                (data) =>
+                    if checkHash && checkHash != md5.createHash(data + @salt)
+                        deferred.resolve('mismatch')
+                        console.log("H:" + md5.createHash(data + @salt))
+                    else
+                        deferred.resolve(JSON.parse(data))
             )
             deferred.promise
 

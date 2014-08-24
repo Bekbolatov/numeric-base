@@ -8,6 +8,7 @@ angular.module('AppOne')
         constructor: ->
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
+            @_extra = "Just the first line of defense."
 
         __baseFormat: ->
             {
@@ -39,11 +40,16 @@ angular.module('AppOne')
             @_writeAllSummaries(newItems)
 
         getAllSummaries: -> @_readAllSummaries().items
+        getFromAllSummaries: (timestamp) -> (item for item in @_readAllSummaries().items when item.timestamp = timestamp)[0]
         getSummaryById: (timestamp) ->
             deferred = $q.defer()
+            summary = @getFromAllSummaries(timestamp)
             filename = document.numeric.path.result + timestamp
             console.log('will try to read summary from file: ' + filename)
-            FS.readDataFromFile(filename)
+            console.log('using h_:' + summary)
+            console.log(summary)
+            console.log('using h__:' + summary.hash)
+            FS.readDataFromFile(filename, summary.hash)
             .then(
                 (buffer) => deferred.resolve(buffer)
                 (status) => deferred.reject(status))
@@ -76,15 +82,16 @@ angular.module('AppOne')
             buffer.endTime = @lastTimePoint
             filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)
-            FS.writeDataToFile(filename, buffer)
+            FS.writeDataToFile(filename, buffer, true)
             .then(
-                () =>
+                (hash) =>
                     activitySummaryInfo = {
                         activityName: buffer.activityName
                         timestamp: buffer.endTime
                         totalTime: buffer.endTime - buffer.startTime
                         numberCorrect: buffer.runningTotals.correct
                         numberWrong: buffer.runningTotals.wrong
+                        hash: hash
                     }
                     @_addToAllSummaries(activitySummaryInfo)
                     @_write({})

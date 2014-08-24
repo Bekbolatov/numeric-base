@@ -28,14 +28,23 @@ angular.module('AppOne')
     ActivitySummary.getSummaryById(summaryId)
     .then(
         (data) ->
-            $scope.activityName = data.activityName
-            $scope.responses = data.responses
+            if data == 'mismatch'
+                $scope.mismatch = true
+            else
+                $scope.mismatch = false
+                $scope.activityName = data.activityName
+                $scope.responses = data.responses
 
-            $scope.correct = data.runningTotals.correct
-            $scope.wrong = data.runningTotals.wrong
-            $scope.total = data.runningTotals.correct + data.runningTotals.wrong
-            $scope.totalSeconds = Math.round( (data.endTime - data.startTime) / 1000 )
-            $scope.avgSeconds = Math.round(  ( (data.endTime - data.startTime) / $scope.total ) / 1000 )
+                $scope.correct = data.runningTotals.correct
+                $scope.wrong = data.runningTotals.wrong
+                $scope.total = data.runningTotals.correct + data.runningTotals.wrong
+                $scope.totalSeconds = Math.round( (data.endTime - data.startTime) / 1000 )
+                $scope.avgSeconds = Math.round(  ( (data.endTime - data.startTime) / $scope.total ) / 1000 )
+            $scope.ready = true
     )
-    .catch((status) -> console.log(status))
+    .catch((status) ->
+        console.log(status)
+        $scope.mismatch = true
+        $scope.ready = true
+        )
     ]

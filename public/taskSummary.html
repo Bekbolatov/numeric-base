@@ -21,8 +21,12 @@
         <div class="media-body">
 
 
-            <div class="content-paragraph">
-                <table class="taskSummary">
+
+            <div class="content-paragraph" ng-show="ready">
+                <p ng-show="mismatch">
+                    It appears like the original record of this activity is no longer available.
+                </p>
+                <table ng-show="!mismatch" class="taskSummary">
                     <tr><td>Completed task:</td><td>{{activityName }}</td></tr>
                     <tr><td>Total questions:</td><td>{{ total }}</td></tr>
                     <tr><td>Correct:</td><td>{{correct}} ({{ 100*correct/total | number:0 }}%)</td></tr>
