@@ -1,19 +1,22 @@
 angular.module('AppOne')
 
-.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) ->
-    ]
-.controller 'InfoCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) ->
-    ]
+.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) -> ]
+.controller 'InfoCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) -> ]
 
 .controller 'TaskListCtrl', ['$scope', '$rootScope', '$location', 'ActivityManager', ($scope, $rootScope, $location, ActivityManager ) ->
     $scope.tableOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
     $scope.noActivities = (Object.keys($scope.tableOfAvailableActivities).length < 1)
-    ]
+    $scope.$watch(
+        'tableOfAvailableActivities'
+        (newValue, oldValue) ->
+            $scope.noActivities = (Object.keys($scope.tableOfAvailableActivities).length < 1)
+        true)
+]
 
 # history (some reports maybe at some point somewhere)
 .controller 'HistoryCtrl', ['$scope', ($scope) ->
     $scope.test = 'todo: history...'
-    ]
+]
 
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', 'FS', ($scope, $rootScope, $routeParams, $http, ActivityManager, FS ) ->
     $scope.activityManager = ActivityManager
