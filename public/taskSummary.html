@@ -41,8 +41,8 @@
                 <p>Details:</p>
                 <p ng-repeat="response in responses">
                     Question: {{ response[0] }}
-                    <br>Answer: {{ response[1] }} ({{ response[2] && 'Correct' || ' Incorrect' }})
-                    (Time taken: {{ response[3]  | secsToMillis | secondsToHuman }})
+                    <br>Answer: {{ response[1] }} ({{ response[2] && 'Correct' || 'Incorrect' }})
+                    <br>Time taken: {{ response[3]  | secsToMillis | secondsToHuman }}
                 </p>
             </div>
 

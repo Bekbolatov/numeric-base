@@ -25,17 +25,13 @@ angular.module('AppOne')
 
     $scope.pageSize = Settings.getHistoryPageSize()
     $scope.turnPage = (distance) ->
-        $scope.startIndex = $scope.startIndex + distance
-        $scope.endIndex = $scope.endIndex + distance
-
         if $scope.startIndex < 0 || $scope.totalItems < 1
             $scope.startIndex = 0
-            $scope.endIndex = $scope.pageSize
+        else if $scope.startIndex >= $scope.totalItems
+            $scope.startIndex = Math.floor( ($scope.totalItems - 1) / $scope.pageSize ) * $scope.pageSize
         else
-            if $scope.startIndex >= $scope.totalItems
-                pages = Math.floor( ($scope.totalItems - 1) / $scope.pageSize )
-                $scope.startIndex = pages * $scope.pageSize
-                $scope.endIndex = $scope.startIndex + $scope.pageSize
+            $scope.startIndex = $scope.startIndex + distance
+        $scope.endIndex = Math.min($scope.startIndex + $scope.pageSize, $scope.totalItems)
         $scope.refreshList()
 
     $scope.startIndex = -1

@@ -75,6 +75,8 @@ angular.module('filters', [])
             return "" + minutes + " minutes, " + seconds + " seconds"
         if (minutes == 1)
             return "1 minute, " + seconds + " seconds"
+        if (seconds == 1)
+            return "1 second"
         return "" + seconds + " seconds"
 
 .filter 'secondsToClock', ->
