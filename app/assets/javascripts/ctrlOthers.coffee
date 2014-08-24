@@ -14,8 +14,8 @@ angular.module('AppOne')
 ]
 
 # history (some reports maybe at some point somewhere)
-.controller 'HistoryCtrl', ['$scope', ($scope) ->
-    $scope.test = 'todo: history...'
+.controller 'HistoryCtrl', ['$scope', 'ActivitySummary', ($scope, ActivitySummary ) ->
+    $scope.activitySummariesInfo = ActivitySummary.getAllSummaries()
 ]
 
 .controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'ActivityManager', 'FS', ($scope, $rootScope, $routeParams, $http, ActivityManager, FS ) ->

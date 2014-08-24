@@ -21,7 +21,7 @@ angular.module('AppOne')
     })
     # lookup historical and also lookup last activitySummary
     .when('/history', {
-        template: 'assets/history.html'
+        templateUrl: 'assets/history.html'
         controller: 'HistoryCtrl'
     })
     .when('/taskSummary', {

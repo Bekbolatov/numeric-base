@@ -30,6 +30,16 @@ angular.module('AppOne')
             table = @_readAllSummaries()
             table.items.push(summaryInfo)
             @_writeAllSummaries(table)
+        _removeFromAllSummaries: (timestamp) -> # not using right now
+            console.log('removing record to allActivitySummaries')
+            table = @_readAllSummaries()
+            itemToDelete = 0
+            newItems = item for item in table.items when item.timestamp != timestamp
+            #also remove the file
+            @_writeAllSummaries(newItems)
+
+        getAllSummaries: -> @_readAllSummaries().items
+
         # read and write is better done in bulk here
         init: (activityId, activityName)->
             buffer = @__baseFormat()
