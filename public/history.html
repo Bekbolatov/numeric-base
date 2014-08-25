@@ -25,7 +25,7 @@
             </p>
         </li>
         <li class="table-view-cell" ng-repeat="activitySummaryInfo in activitySummariesInfo">
-            <a class="navigate-right" ng-href="#/taskSummary/{{activitySummaryInfo.timestamp }}">
+            <a class="navigate-right" ng-href="#/historyItem/{{activitySummaryInfo.timestamp }}">
                 {{ activitySummaryInfo.activityName | truncate:25 }}
                 <p>{{activitySummaryInfo.timestamp | date:'MMM d, y hh:mm a' }}</p>
                 <p>

@@ -89,12 +89,15 @@ angular.module('AppOne')
                     }
                     @_addToAllSummaries(activitySummaryInfo)
                     @_write({})
-                    deferred.resolve('ok')
+                    deferred.resolve(buffer.endTime)
             )
             .catch(
                 (status) -> deferred.reject(status)
             )
             deferred.promise
+
+        setFirstIndex: (newFirst) -> @newFirst = newFirst
+        getFirstIndex: -> @newFirst
 
     console.log('CALL TO FACTORY: ActivitySummary')
     new ActivitySummary()

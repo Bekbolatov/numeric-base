@@ -1,14 +1,6 @@
 angular.module('AppOne')
 
-.controller 'TaskSummaryCtrlOld', ['$scope', '$location', 'ActivityDriver', 'ActivitySummary', ($scope, $location, ActivityDriver, ActivitySummary ) ->
-    if ActivityDriver.currentActivity == undefined
-        $location.path('/')
-    $scope.task = ActivityDriver.currentTask
-    $scope.numeric = ActivityDriver
-    ]
-
-# history (some reports maybe at some point somewhere)
-.controller 'HistoryCtrl', ['$scope', 'Settings', 'ActivitySummary', ($scope, Settings, ActivitySummary ) ->
+.controller 'HistoryCtrl', ['$scope', '$routeParams', 'Settings', 'ActivitySummary', ($scope, $routeParams, Settings, ActivitySummary ) ->
     $scope.activitySummariesInfoAll = ActivitySummary.getAllSummaries()
     $scope.totalItems = $scope.activitySummariesInfoAll.length
     $scope.noHistory = $scope.activitySummariesInfoAll.length < 1
@@ -21,7 +13,9 @@ angular.module('AppOne')
 
     $scope.getPage = (start, end) =>
         $scope.activitySummariesInfo = ActivitySummary.getAllSummariesPage(start, end)
-    $scope.refreshList = -> $scope.getPage($scope.startIndex, $scope.endIndex)
+    $scope.refreshList = ->
+        ActivitySummary.setFirstIndex($scope.startIndex)
+        $scope.getPage($scope.startIndex, $scope.endIndex)
 
     $scope.pageSize = Settings.getHistoryPageSize()
     $scope.turnPage = (distance) ->
@@ -34,19 +28,22 @@ angular.module('AppOne')
         $scope.endIndex = Math.min($scope.startIndex + $scope.pageSize, $scope.totalItems)
         $scope.refreshList()
 
-    $scope.startIndex = -1
+    containedItem = $routeParams.containedItem
+    if containedItem != undefined && containedItem == 'continue'
+        $scope.startIndex = ActivitySummary.getFirstIndex()
+    else
+        $scope.startIndex = -1
+
     $scope.turnPage(0)
-
-
 
 ]
 
-.controller 'TaskSummaryCtrl', ['$scope', '$routeParams', '$location', 'ActivitySummary', ($scope, $routeParams, $location, ActivitySummary ) ->
-    summaryId = $routeParams.summaryId
-    if summaryId == undefined || summaryId == ''
+.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', 'ActivitySummary', ($scope, $routeParams, $location, ActivitySummary ) ->
+    itemId = $routeParams.itemId
+    if itemId == undefined || itemId == ''
         return $location.path('/')
 
-    ActivitySummary.getSummaryById(summaryId)
+    ActivitySummary.getSummaryById(itemId)
     .then(
         (data) ->
             if data == 'mismatch'

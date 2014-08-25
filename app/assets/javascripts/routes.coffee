@@ -24,9 +24,13 @@ angular.module('AppOne')
         templateUrl: 'assets/history.html'
         controller: 'HistoryCtrl'
     })
-    .when('/taskSummary/:summaryId', {
-        templateUrl: 'assets/taskSummary.html'
-        controller: 'TaskSummaryCtrl'
+    .when('/history/:containedItem', {
+        templateUrl: 'assets/history.html'
+        controller: 'HistoryCtrl'
+    })
+    .when('/historyItem/:itemId', {
+        templateUrl: 'assets/historyItem.html'
+        controller: 'HistoryItemCtrl'
     })
     # Activity Marketplace
     .when('/tasksMarketplace', {
