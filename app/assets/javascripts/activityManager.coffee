@@ -1,14 +1,16 @@
 angular.module('AppOne')
 
-.factory("ActivityManager", ['$q', 'Bookmarks', 'ActivityBody', ($q, Bookmarks, ActivityBody ) ->
+.factory("ActivityManager", ['$q', 'Bookmarks', 'ActivityBody', 'ActivityMeta', ($q, Bookmarks, ActivityBody, ActivityMeta ) ->
     class ActivityManager
         constructor: -> @bookmarks = Bookmarks.bookmarks
         getInstalledActivitiesMeta: -> @bookmarks
         getInstalledActivityMeta: (activityId) -> @bookmarks[activityId]
         isInstalled: (activityId) -> @bookmarks[activityId] != undefined
 
-        installActivity: (activityId) ->
+        installActivity: (activityId, meta) ->
             deferred = $q.defer()
+            if meta
+                ActivityMeta.set(activityId, meta)
             ActivityBody
             .loadActivity(activityId)
             .then(
@@ -16,7 +18,7 @@ angular.module('AppOne')
             )
             .then(
                 ->
-                    Bookmarks.add(activityId)
+                    Bookmarks.add(activityId, meta)
                     deferred.resolve('ok')
             )
             .catch(
@@ -27,8 +29,25 @@ angular.module('AppOne')
             deferred.promise
 
         uninstallActivity: (activityId) ->
+            deferred = $q.defer()
             ActivityBody.unloadActivity(activityId)
-            Bookmarks.remove(activityId)
+            ActivityBody.removeBody(activityId)
+            .then(
+                () =>
+                    Bookmarks.remove(activityId)
+                    deferred.resolve('ok')
+            )
+            deferred.promise
+
+        updateActivity: (activityId, meta) =>
+            deferred = $q.defer()
+            @uninstallActivity(activityId)
+            .then(
+                (data) =>
+                    @installActivity(activityId, meta)
+                    deferred.resolve(data)
+            )
+            deferred.promise
 
         loadActivity: (activityId) -> ActivityBody.getOrLoad(activityId)
 

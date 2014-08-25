@@ -5,10 +5,11 @@ angular.module('AppOne')
 # ActivityBody.all()/.get('com.sparkydots.groupa.activitya') - gives all registered activities or one specific activity by id
 # loadActivity('com.sparkydots.groupa.activitya') - obtains activity, local cache, or remote server and loads JS in a new script tag in the head - makes available for .get(...)
 # unloadActivity('com.sparkydots.groupa.activitya')
-.factory("ActivityBody", ['$q', 'ActivityMeta', 'FileDownload', ($q, ActivityMeta, FileDownload ) ->
+.factory("ActivityBody", ['$q', 'ActivityMeta', 'FileDownload', 'FS', ($q, ActivityMeta, FileDownload, FS ) ->
     class ActivityBody
         _activities: {}
         _scriptId: (activityId) -> 'script_' + activityId
+        _uriFS: (activityId) -> document.numeric.path.body + activityId
         _uriCdv: (activityId) -> document.numeric.url.base.cdv + document.numeric.url.base.fs + document.numeric.path.body + activityId
         _uriLocal: (activityId) -> document.numeric.url.base.local + document.numeric.path.body + activityId
         _uriRemote: (activityId) -> document.numeric.url.base.server + document.numeric.path.body + activityId
@@ -26,7 +27,19 @@ angular.module('AppOne')
             )
             deferred.promise
 
-        _downloadActivityBody: (activityId)-> FileDownload.download(@_uriRemote(activityId), @_uriCdv(activityId))
+        _downloadActivityBody: (activityId) ->
+            cb = "?cb=" + Math.round( (new Date()) / 1000 )
+            FileDownload.download(@_uriRemote(activityId) + cb, @_uriCdv(activityId))
+        _deleteDownloadedFile: (activityId) ->
+            deferred = $q.defer()
+            if typeof LocalFileSystem != 'undefined'
+                FS.tryDeleteFile(@_uriFS(activityId))
+                .then(
+                    () => deferred.resolve('deleted')
+                )
+            else
+                deferred.resolve('ok')
+            deferred.promise
 
         _loadScript: (uri, key) =>
             deferred = $q.defer()
@@ -61,6 +74,8 @@ angular.module('AppOne')
             document.getElementsByTagName('head')[0].appendChild(newScript);
             deferred.promise
 
+        removeBody: (activityId) -> @_deleteDownloadedFile(activityId)
+
         unloadActivity: (activityId) ->
             if (@_activities[activityId])
                 element = document.getElementById(@_scriptId(activityId))
@@ -75,14 +90,19 @@ angular.module('AppOne')
                 deferred.promise
             else
                 if typeof LocalFileSystem == 'undefined'
-                    @_loadScript(@_uriRemote(activityId), activityId)
+                    cb = "?cb=" + Math.round( (new Date()) / 1000 )
+                    @_loadScript(@_uriRemote(activityId) + cb, activityId)
                     .then => @_attachActivityMeta(activityId)
                 else
                     @_loadScript(@_uriLocal(activityId), activityId)
-                    .catch => @_loadScript(@_uriCdv(activityId), activityId)
+                    .catch =>
+                        cb = "?cb=" + Math.round( (new Date()) / 1000 )
+                        @_loadScript(@_uriCdv(activityId) + cb, activityId)
                     .catch =>
                         @_downloadActivityBody(activityId)
-                        .then => @_loadScript(@_uriCdv(activityId), activityId)
+                        .then =>
+                            cb = "?cb=" + Math.round( (new Date()) / 1000 )
+                            @_loadScript(@_uriCdv(activityId) + cb, activityId)
                     .then => @_attachActivityMeta(activityId)
 
         loadActivities: (activities) ->

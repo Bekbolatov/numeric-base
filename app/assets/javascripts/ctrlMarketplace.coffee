@@ -20,6 +20,9 @@ angular.module('AppOne')
         if $scope.confirmAddId != undefined
             $scope.confirmAddId = undefined
             return
+        if $scope.confirmUpdateId != undefined
+            $scope.confirmUpdateId = undefined
+            return
         if $scope.detailsId == activityId
             $scope.detailsId = undefined
             return
@@ -27,13 +30,27 @@ angular.module('AppOne')
 
     # install/uninstall
     $scope.mapOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
-    $scope.isInstalled = (activityId) -> ActivityManager.isInstalled(activityId)
     $scope.somethingInstalled = -> Object.keys(ActivityManager.getInstalledActivitiesMeta()).length > 0
+
+    $scope.isInstalled = (activityId) -> ActivityManager.isInstalled(activityId)
+    $scope.needsUpdate = (activityId, meta) ->
+        if !meta.version
+            return false
+        installedMeta = ActivityManager.getInstalledActivityMeta(activityId)
+        if !installedMeta.version
+            return true
+        meta.version > installedMeta.version
+
     $scope.uninstallActivity = (activityId) -> ActivityManager.uninstallActivity(activityId)
-    $scope.installNewActivity = (activityId) ->
+    $scope.installNewActivity = (activityId, meta) ->
         $scope.loadingActivity = activityId
-        ActivityManager.installActivity(activityId)
+        ActivityManager.installActivity(activityId, meta)
         .catch((status) => console.log('error installing: ' + status))
+        .then(-> $scope.loadingActivity = undefined)
+    $scope.updateActivity = (activityId, meta) ->
+        $scope.loadingActivity = activityId
+        ActivityManager.updateActivity(activityId, meta)
+        .catch((status) => console.log('error updating: ' + status))
         .then(-> $scope.loadingActivity = undefined)
 
 

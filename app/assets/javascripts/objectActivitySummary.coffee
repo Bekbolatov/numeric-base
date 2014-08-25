@@ -9,6 +9,7 @@ angular.module('AppOne')
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
             @_extra = "Just the first line of defense."
+            @failoverBuffer = {}
 
         __baseFormat: ->
             {
@@ -44,6 +45,11 @@ angular.module('AppOne')
         getSummaryById: (timestamp) ->
             deferred = $q.defer()
             summary = @getFromAllSummaries(timestamp)
+
+            if summary.hash == 'test'
+                deferred.resolve(@failoverBuffer[timestamp])
+                return deferred.promise
+
             filename = document.numeric.path.result + timestamp
             FS.readDataFromFile(filename, summary.hash)
             .then(
@@ -74,6 +80,23 @@ angular.module('AppOne')
             deferred = $q.defer()
             buffer = @_read()
             buffer.endTime = @lastTimePoint
+
+            if typeof LocalFileSystem == 'undefined'
+                activitySummaryInfo = {
+                    activityName: buffer.activityName
+                    timestamp: buffer.endTime
+                    totalTime: buffer.endTime - buffer.startTime
+                    numberCorrect: buffer.runningTotals.correct
+                    numberWrong: buffer.runningTotals.wrong
+                    hash: 'test'
+                }
+                @failoverBuffer[buffer.endTime] = buffer
+                @_addToAllSummaries(activitySummaryInfo)
+                @_write({})
+                @newFirst = 0
+                deferred.resolve('test')
+                return deferred.promise
+
             filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)
             FS.writeDataToFile(filename, buffer, true)
@@ -89,6 +112,7 @@ angular.module('AppOne')
                     }
                     @_addToAllSummaries(activitySummaryInfo)
                     @_write({})
+                    @newFirst = 0
                     deferred.resolve(buffer.endTime)
             )
             .catch(

@@ -30,7 +30,7 @@ angular.module('AppOne')
                 delete @bookmarks[id]
             @_clear()
 
-        add: (activityId) =>
+        add: (activityId, meta) =>
             ActivityMeta.get(activityId)
             .then(
                 (data) =>

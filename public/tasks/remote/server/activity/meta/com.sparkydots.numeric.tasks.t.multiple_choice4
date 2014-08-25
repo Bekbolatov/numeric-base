@@ -4,5 +4,6 @@
     "description": "Practice multiplying numbers",
     "authorName": "Renat Bekbolatov",
     "authorEmail": "renatbek@gmail.com",
-    "authorDate": "8/1/2014"
+    "authorDate": "8/1/2014",
+    "version": 2
 }

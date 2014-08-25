@@ -62,6 +62,9 @@ angular.module('AppOne')
             @_cacheGet(key)
             .catch(@_httpGet(@_urls.local + key, key))
             .catch(@_httpGet(@_urls.remote + key, key))
+        set: (key, meta) ->
+            console.log('Updating Meta Cache for activity ' + key)
+            @_add(key, meta)
 
     console.log('CALL TO FACTORY: ActivityMeta')
     new ActivityMeta()

@@ -9,17 +9,6 @@
                 "authorName": "Renat Bekbolatov",
                 "authorEmail": "renatbek@gmail.com",
                 "authorDate": "8/1/2014"
-            },
-
-        "com.sparkydots.numeric.tasks.t.quiz" :
-            {
-                "name": "Odd One Out (KidPack 1)",
-                "shortDescription": "Practice multiplying numbers",
-                "description": "Practice multiplying numbers",
-                "authorName": "Renat Bekbolatov",
-                "authorEmail": "renatbek@gmail.com",
-                "authorDate": "8/1/2014"
             }
-
     }
 }

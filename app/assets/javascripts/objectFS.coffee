@@ -178,6 +178,19 @@ angular.module('AppOne')
             )
             deferred.promise
 
+        tryDeleteFile: (fileName) =>
+            deferred = $q.defer()
+            @getFileEntry(fileName, {create: false})
+            .then(
+                (fileEntry) =>
+                    fileEntry.remove(
+                        (success) =>
+                            deferred.resolve('removed')
+                        (status) =>
+                            deferred.reject(status)
+                    )
+            )
+            deferred.promise
 
     console.log('CALL TO FACTORY: FS')
     new FS()

@@ -40,7 +40,7 @@ angular.module('AppOne')
 
 .controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', 'ActivitySummary', ($scope, $routeParams, $location, ActivitySummary ) ->
     itemId = $routeParams.itemId
-    if itemId == undefined || itemId == ''
+    if itemId == undefined || itemId == '' || itemId == 'test'
         return $location.path('/')
 
     ActivitySummary.getSummaryById(itemId)
@@ -64,6 +64,7 @@ angular.module('AppOne')
         console.log(status)
         $scope.mismatch = true
         $scope.ready = true
+        $location.path('/')
     )
 
 

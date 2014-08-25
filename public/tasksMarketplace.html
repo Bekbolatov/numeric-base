@@ -104,17 +104,30 @@
                                         <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
                                             Cancel
                                         </button>
-                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id)">
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id, meta)">
                                             Confirm Add
                                         </button>
-
                                         <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && !isInstalled(id) && (!$parent.confirmAddId || $parent.confirmAddId != id)" ng-click="$parent.confirmAddId = id; $event.stopPropagation()">
                                             Add
                                         </button>
 
-                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id)">
+
+
+
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmUpdateId == id" ng-click="$parent.confirmUpdateId = undefined; $event.stopPropagation()">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmUpdateId == id " ng-click="$parent.confirmUpdateId = undefined; ; $event.stopPropagation(); updateActivity(id, meta)">
+                                            Confirm Update
+                                        </button>
+                                        <button class="btn btn-primary btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id) && (!$parent.confirmUpdateId || $parent.confirmUpdateId != id) && needsUpdate(id, meta) "  ng-click="$parent.confirmUpdateId = id; $event.stopPropagation()">
+                                            <i>Update</i>
+                                        </button>
+
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id) && !needsUpdate(id, meta) ">
                                             <i>Installed</i>
                                         </button>
+
                                     </div>
                                 </p>
                             </div>

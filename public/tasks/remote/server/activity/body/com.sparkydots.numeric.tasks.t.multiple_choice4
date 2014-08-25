@@ -2,7 +2,29 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice4']
 {
     answerType: 'multiple',
     // follow pattern:
-    // parameters: {  param1: {}, param2: {} },  or not set if no params
+    parameters: {
+        p10_order: {
+                name: 'order',
+                description: 'In what order to show questions?',
+                type: 'discrete',
+                levels: [ 'random', 'ordered'],
+                selectedValue: 'random'
+        },
+        p20_repeat: {
+                name: 'repeat',
+                description: 'Allow questions repeat??',
+                type: 'discrete',
+                levels: [ 'yes', 'no'],
+                selectedValue: 'yes'
+        },
+         p30_questionNumber: {
+                 name: 'currentQuestion',
+                 description: 'Jump to question:',
+                 type: 'discrete',
+                 levels: [ 'first', 'middle'],
+                 selectedValue: 'first'
+         }
+    },
 
     // REQUIRED FIELD
     createNextQuestion: function() {
