@@ -8,6 +8,7 @@ module.exports = function(grunt) {
                     sourceJs + 'objectDeviceId.js', 
                     sourceJs + 'objectFileDownload.js', 
                     sourceJs + 'objectFS.js', 
+                    sourceJs + 'objectQRSignature.js', 
                     sourceJs + 'objectActivityMeta.js', 
                     sourceJs + 'objectActivityBody.js', 
                     sourceJs + 'objectBookmarks.js', 

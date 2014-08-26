@@ -1,13 +1,22 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
+    <h2 class="title">My Identity</h2>
+</header>
+
+
 <div class="content">
 <div class="content-inner content-inner-marketplace">
 <div class="media-body">
 <div class="content-inner">
 
-<table>
-    <tr><td>My Id:</td><td>{{ myId }}</td></tr>
-    <tr><td colspan="2">code here</td></tr>
-</table>
 
+
+    <button class="btn btn-primary btn-outlined btn-personal-id">{{ myId }}</button>
+    <!--
+    <button class="btn btn-primary btn-qrcode" ng-click="smaller()">&nbsp;-&nbsp;</button>
+    <button class="btn btn-primary btn-qrcode" ng-click="bigger()">&nbsp;+&nbsp;</button>
+    -->
+    <div id="qrcode"></div>
 
 
 </div>
