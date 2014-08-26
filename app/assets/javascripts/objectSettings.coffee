@@ -14,21 +14,23 @@ angular.module('AppOne')
             @_write(table)
         _remove: (attr) ->
             table = @_read()
-            if table[attr]
+            if table[attr] != undefined
                 delete table[attr]
                 @_write(table)
         defaults:
             historyPageSize: 10
+            historyServerSync: false
+            mainServerAddress: document.numeric.url.base.server
+
+        getDefault: (attr) -> @defaults[attr]
         get: (attr) ->
             storedValue = @_get(attr)
-            if storedValue
+            if storedValue != undefined
                 return storedValue
             else
                 return @defaults[attr]
         set: (attr, newValue) -> @_add(attr, newValue)
-
-        getHistoryPageSize: -> @get('historyPageSize')
-        setHistoryPageSize: (newValue) -> @set('historyPageSize', newValue)
+        unset: (attr) -> @_remove(attr)
 
         constructor: ->
             if !@_read()

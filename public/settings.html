@@ -6,13 +6,33 @@
 
 <div class="content content-bg">
     <div class="content-inner content-inner-marketplace">
+
+
+        <hr>
+        <h4>History</h4>
         <p>
-            History page size:
+            <b>Sync with server:</b>&nbsp;
+            <button class="btn {{ true == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', true)">yes</button>
+            <button class="btn {{ false == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', false)">no</button>
+        </p>
+        <p>
+            <b>Page size:</b>&nbsp;
             <button class="btn {{ 2 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 2)">2</button>
             <button class="btn {{ 10 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 10)">10</button>
             <button class="btn {{ 20 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 20)">20</button>
             <button class="btn {{ 30 == getAttr('historyPageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyPageSize', 30)">30</button>
         </p>
+
+        <hr>
+        <h4>Server</h4>
+        <p>
+            <b>Main server address:</b><br>
+            <input type="text" ng-model="newMainServerAddress" ng-class="{inputmodified: mainServerAddress != newMainServerAddress}">
+            <button class="btn" ng-class="{'btn-primary' : mainServerAddress != newMainServerAddress}" ng-click="mainServerAddress_set()">set</button>
+            <button class="btn" ng-class="{'btn-primary' : defaultMainServerAddress != mainServerAddress}" ng-click="mainServerAddress_reset()">reset</button>
+        </p>
+
+        <hr>
 
         <p>
             <div>
@@ -21,7 +41,6 @@
         </p>
 
 
-        <button class="btn btn-negative" ng-click="clearLocalStorage()">Clear localStorage</button>
 
 
     </div>

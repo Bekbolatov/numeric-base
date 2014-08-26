@@ -3,12 +3,12 @@ angular.module('AppOne')
 # This only retrieves, and caches, ActivityMeta info - depends only on $q and $http and nothing else
 # Main way of using this will be: ActivityMeta.get('com.sparkydots.groupa.activityA') which returns Meta info for this task
 # occasionally, for debugging maybe, we can use: ActivityMeta.clearLocalStorage()
-.factory("ActivityMeta", ['$q', '$http', 'DeviceId' , ($q, $http, DeviceId ) ->
+.factory("ActivityMeta", ['$q', '$http', 'Settings', 'DeviceId' , ($q, $http, Settings, DeviceId ) ->
     class ActivityMeta
         _key: document.numeric.key.activitiesMeta
         _urls:
-            local: document.numeric.url.base.local + document.numeric.path.meta
-            remote: document.numeric.url.base.server + document.numeric.path.meta + DeviceId.qsWithCb(1000)
+            local: -> document.numeric.url.base.local + document.numeric.path.meta
+            remote: -> Settings.get('mainServerAddress') + document.numeric.path.meta + DeviceId.qsWithCb(1000)
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
@@ -60,8 +60,8 @@ angular.module('AppOne')
         get: (key) -> # tries localStorage, then localWWW, then remote server
             console.log('Looking for activity ' + key)
             @_cacheGet(key)
-            .catch(@_httpGet(@_urls.local + key, key))
-            .catch(@_httpGet(@_urls.remote + key, key))
+            .catch(@_httpGet(@_urls.local() + key, key))
+            .catch(@_httpGet(@_urls.remote() + key, key))
         set: (key, meta) ->
             console.log('Updating Meta Cache for activity ' + key)
             @_add(key, meta)
