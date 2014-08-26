@@ -3,6 +3,7 @@ document.numeric = {
 
     key: {
         settings: 'numericSettings',
+        deviceId: 'numericDeviceId',
         activitiesMeta: 'numericActivitiesMeta',
         bookmarkedActivities: 'numericBookmarkedActivities',
         currentActivitySummary: 'numericCurrentActivitySummary',

@@ -13,7 +13,10 @@ angular.module('AppOne')
         $scope.currentActivity = ActivityDriver.setActivity(activity, $scope)
         $scope.finishActivity = ->
             ActivityDriver.tryFinishActivity()
-            .then((data) -> $location.path('/historyItem/' + data))
+            .then((data) ->
+                console.log(data)
+                $location.path('/historyItem/' + data)
+            )
             .catch((status) -> console.log('could not finish activity: ' + status))
         )
     .catch((status) -> $location.path('/'))

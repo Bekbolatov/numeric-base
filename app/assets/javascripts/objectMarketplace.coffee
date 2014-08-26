@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("Marketplace", ['$http', ($http ) ->
+.factory("Marketplace", ['$http', 'DeviceId', ($http, DeviceId ) ->
     class Marketplace
         config:
             activitiesLocal: document.numeric.url.base.local + document.numeric.path.list
@@ -17,8 +17,14 @@ angular.module('AppOne')
                 cb = "&cb=" + Math.round( (new Date()) / 15000 )
 
             $http.get(
-                @config.activitiesPublic + "?p=" + pageNumber + st + cb
-                { timeout: 7000, cache: false })
+                @config.activitiesPublic + "?p=" + pageNumber + st + DeviceId.qsAnd() + cb
+                {
+                    timeout: 7000
+                    cache: false
+                    headers: {
+                        "Authorization": "Basic " + DeviceId.deviceSecretId
+                    }
+                })
 
     new Marketplace()
 ])

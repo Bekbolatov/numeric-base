@@ -40,7 +40,12 @@ angular.module('AppOne')
 
         getAllSummaries: -> @_readAllSummaries().items
         getAllSummariesPage: (start, end) -> @_readAllSummaries().items.slice(start, end)
-        getFromAllSummaries: (timestamp) -> (item for item in @_readAllSummaries().items when item.timestamp = timestamp)[0]
+        getFromAllSummaries: (timestamp) ->
+            for item in @_readAllSummaries().items
+                console.log(item.timestamp)
+                if parseInt(item.timestamp) == parseInt(timestamp)
+                    return item
+            return undefined
 
         getSummaryById: (timestamp) ->
             deferred = $q.defer()

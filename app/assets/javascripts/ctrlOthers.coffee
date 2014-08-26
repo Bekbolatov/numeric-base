@@ -2,6 +2,7 @@ angular.module('AppOne')
 
 .controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) -> ]
 .controller 'InfoCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) -> ]
+.controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) -> ]
 
 .controller 'TaskListCtrl', ['$scope', 'ActivityManager', ($scope, ActivityManager ) ->
     $scope.tableOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()

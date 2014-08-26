@@ -2,7 +2,8 @@ angular.module('AppOne')
 
 .factory("ActivityManager", ['$q', 'Bookmarks', 'ActivityBody', 'ActivityMeta', ($q, Bookmarks, ActivityBody, ActivityMeta ) ->
     class ActivityManager
-        constructor: -> @bookmarks = Bookmarks.bookmarks
+        constructor: ->
+            @bookmarks = Bookmarks.bookmarks
         getInstalledActivitiesMeta: -> @bookmarks
         getInstalledActivityMeta: (activityId) -> @bookmarks[activityId]
         isInstalled: (activityId) -> @bookmarks[activityId] != undefined

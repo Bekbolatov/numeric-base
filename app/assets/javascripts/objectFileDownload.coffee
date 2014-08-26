@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.factory("FileDownload", ['$q', ($q) ->
+.factory("FileDownload", ['$q', 'DeviceId', ($q, DeviceId ) ->
     class FileDownload
         download: (uri, fileURL) ->
             console.log('downloading from: ' + uri + ' to: ' + fileURL)
@@ -14,7 +14,7 @@ angular.module('AppOne')
                 false
                 {
                     headers:
-                        "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+                        "Authorization": "Basic " + DeviceId.deviceSecretId
                 })
             deferred.promise
 

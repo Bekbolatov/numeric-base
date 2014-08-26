@@ -43,6 +43,25 @@ angular.module('AppOne')
         templateUrl: 'assets/settings.html'
         controller: 'SettingsCtrl'
     })
+
+    # Connect
+    .when('/connect', {
+        templateUrl: 'assets/connect.html'
+        controller: 'ConnectCtrl'
+    })
+    .when('/myIdentity', {
+        templateUrl: 'assets/myIdentity.html'
+        controller: 'MyIdentityCtrl'
+    })
+    .when('/teachers', {
+        templateUrl: 'assets/teachers.html'
+        controller: 'TeachersCtrl'
+    })
+    .when('/addTeacher', {
+        templateUrl: 'assets/addTeacher.html'
+        controller: 'AddTeacherCtrl'
+    })
+
     # for testing only
     .when('/test', {
         templateUrl: 'assets/test.html'

@@ -1,8 +1,6 @@
 angular.module('AppOne')
 
-.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', 'ActivityManager', 'FS', ($scope, $rootScope, $routeParams, $http, md5, ActivityManager, FS ) ->
-    $scope.activityManager = ActivityManager
-    $scope.test = 'testt'
+.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', 'FS', ($scope, $rootScope, $routeParams, $http, md5, FS ) ->
 
     $scope.showScriptsInHead = () ->
         tags = document.getElementsByTagName('script')
@@ -27,8 +25,6 @@ angular.module('AppOne')
         .then(
             (data) -> $scope.readData = data
         )
-
-    $scope.getContents = (path) -> FS.getContents(document.numeric.path[path])
     $scope.getContentsRaw = (path) -> FS.getContents(path)
 
     $scope.getFromLocal = (key) -> $scope.localData = window.localStorage.getItem(key)

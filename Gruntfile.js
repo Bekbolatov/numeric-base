@@ -5,6 +5,7 @@ module.exports = function(grunt) {
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
 
+                    sourceJs + 'objectDeviceId.js', 
                     sourceJs + 'objectFileDownload.js', 
                     sourceJs + 'objectFS.js', 
                     sourceJs + 'objectActivityMeta.js', 
@@ -21,6 +22,7 @@ module.exports = function(grunt) {
                     sourceJs + 'ctrlMarketplace.js', 
                     sourceJs + 'ctrlSettings.js', 
                     sourceJs + 'ctrlHistory.js', 
+                    sourceJs + 'ctrlConnections.js', 
                     sourceJs + 'ctrlTest.js', 
                     sourceJs + 'ctrlOthers.js', 
 

@@ -88,6 +88,9 @@ angular.module('AppOne')
                         (fileEntry) -> deferred.resolve(fileEntry)
                         @_errorHandler(deferred))
             )
+            .catch(
+                (status) -> deferred.reject(status)
+            )
             deferred.promise
 
         getDirEntry: (dirName, options) -> @_getDirEntry(document.numeric.url.base.fs + dirName, options)
@@ -171,6 +174,10 @@ angular.module('AppOne')
             .then(
                 (data) =>
                     if checkHash && checkHash != md5.createHash(data + @salt)
+                        console.log(checkHash)
+                        console.log(data)
+                        console.log(@salt)
+                        console.log(md5.createHash(data + @salt))
                         deferred.resolve('mismatch')
                         console.log("H:" + md5.createHash(data + @salt))
                     else
@@ -184,11 +191,10 @@ angular.module('AppOne')
             .then(
                 (fileEntry) =>
                     fileEntry.remove(
-                        (success) =>
-                            deferred.resolve('removed')
-                        (status) =>
-                            deferred.reject(status)
+                        (success) => deferred.resolve('removed')
+                        (status) => deferred.resolve('could not remove, but it is alright')
                     )
+                (status) -> deferred.resolve('could not remove, but it is alright')
             )
             deferred.promise
 

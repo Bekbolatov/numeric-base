@@ -3,12 +3,12 @@ angular.module('AppOne')
 # This only retrieves, and caches, ActivityMeta info - depends only on $q and $http and nothing else
 # Main way of using this will be: ActivityMeta.get('com.sparkydots.groupa.activityA') which returns Meta info for this task
 # occasionally, for debugging maybe, we can use: ActivityMeta.clearLocalStorage()
-.factory("ActivityMeta", ['$q', '$http' , ($q, $http ) ->
+.factory("ActivityMeta", ['$q', '$http', 'DeviceId' , ($q, $http, DeviceId ) ->
     class ActivityMeta
         _key: document.numeric.key.activitiesMeta
         _urls:
             local: document.numeric.url.base.local + document.numeric.path.meta
-            remote: document.numeric.url.base.server + document.numeric.path.meta
+            remote: document.numeric.url.base.server + document.numeric.path.meta + DeviceId.qsWithCb(1000)
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
@@ -37,7 +37,7 @@ angular.module('AppOne')
             =>
                 deferred = $q.defer()
                 console.log('|- trying ' + url + ' ...')
-                $http.get(url, { cache: false })
+                $http.get(url, { cache: false, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
                 .then( \
                     (response) =>
                         console.log('| |- found at ' + url)
