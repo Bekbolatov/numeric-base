@@ -1,5 +1,10 @@
 angular.module('AppOne')
 
+.controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) ->
+    $scope.teachers = [ {id: 1, name: 'Jimmy Johns', newItems: 3}, {id: 2, name: 'Bill Clinton', newItems: 2}]
+    $scope.noTeachers = false
+]
+
 .controller 'AddTeacherCtrl', ['$scope', ($scope ) ->
     $scope.scan = () ->
         cordova.plugins.barcodeScanner.scan(

@@ -6,16 +6,35 @@
     </a>
 </header>
 
+
 <div class="content content-bg">
-    <div class="optionBlock">
+    <ul class="table-view table-view-list">
 
-        <p class="paramName">
-            &nbsp;
-        </p>
+        <li class="table-view-cell" ng-show="noTeachers">
+            <p>
+                It looks like you are not connected to any teachers.
+            </p>
+        </li>
 
-        <div class="paramName">
-            <a href="#/teachers"><button class="btn btn-primary btn-block navigate-right">Teachers</button></a>
-        </div>
+        <li class="table-view-cell" ng-repeat="teacher in teachers">
+            <a class="navigate-right" ng-href="#/teacher/{{ teacher.id }}">
+                {{ teacher.name }}
+                <span class="badge badge-negative">{{ teacher.newItems}}</span>
+            </a>
+        </li>
+    </ul>
 
-    </div>
+    <div class="clearfix"></div>
+    <p>
+        <a class="center" ng-href="#/tasksMarketplace">
+            <p class="content-paragraph">
+                <a href="#/addTeacher">
+                    <button class="btn btn-primary">+ Add a Teacher</button>
+                </a>
+            </p>
+        </a>
+    </p>
+
+
+
 </div>
