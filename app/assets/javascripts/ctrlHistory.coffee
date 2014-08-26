@@ -17,7 +17,7 @@ angular.module('AppOne')
         ActivitySummary.setFirstIndex($scope.startIndex)
         $scope.getPage($scope.startIndex, $scope.endIndex)
 
-    $scope.pageSize = Settings.getHistoryPageSize()
+    $scope.pageSize = Settings.get('historyPageSize')
     $scope.turnPage = (distance) ->
         if $scope.startIndex + distance < 0 || $scope.totalItems < 1
             $scope.startIndex = 0
