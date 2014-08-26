@@ -17,9 +17,10 @@
         </li>
 
         <li class="table-view-cell" ng-repeat="teacher in teachers">
-            <a class="navigate-right" ng-href="#/teacher/{{ teacher.id }}">
+<!--            <a class="navigate-right" ng-href="#/teacher/{{ teacher.id }}"> -->
+            <a class="navigate-right" ng-href="#/tasksList">
                 {{ teacher.name }}
-                <span class="badge badge-negative">{{ teacher.newItems}}</span>
+                <span ng-show="teacher.newItems > 0" class="badge badge-negative">{{ teacher.newItems}}</span>
             </a>
         </li>
     </ul>

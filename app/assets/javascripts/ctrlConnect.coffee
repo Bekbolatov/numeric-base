@@ -1,7 +1,12 @@
 angular.module('AppOne')
 
 .controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) ->
-    $scope.teachers = [ {id: 1, name: 'Jimmy Johns', newItems: 3}, {id: 2, name: 'Bill Clinton', newItems: 2}]
+    $scope.teachers = [
+        {id: 0, name: 'Никола Тесла', newItems: 1}
+        {id: 1, name: 'Ms. Frizzle', newItems: 0}
+        {id: 2, name: 'Onizuka Eikichi 鬼塚 英吉', newItems: 3}
+        {id: 3, name: 'Jaime Escalante', newItems: 2}
+        ]
     $scope.noTeachers = false
 ]
 
