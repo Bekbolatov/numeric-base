@@ -1,7 +1,5 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 {
-    answerType: 'numeric',
-
     parameters: {
         p10_operation: {
                 name: 'operation',
@@ -30,6 +28,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 
 
         var statement, correctAnswer;
+
         if (_isOp('addition')) {
             if (_isLevel('easy')) {
                 min = 3;
@@ -101,7 +100,6 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
                 min = 9;
                 max = 99;
             }
-
             var partA = _randomInt(min, max);
             statement = '<span class="activity-math-sq" style="font-size: 125%;">√</span><span style="border-top:2px solid; padding:0 0.1em;">' + (partA*partA) + '</span>';
             correctAnswer = partA;
@@ -112,6 +110,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         }
 
         return {
+            answerType: 'numeric',
             statement: statement,
             checkAnswer: function(answer) { return answer == correctAnswer }
         }

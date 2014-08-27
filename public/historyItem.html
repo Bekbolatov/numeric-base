@@ -32,7 +32,7 @@
                     <tr><td>Correct:</td><td>{{correct}} ({{ 100*correct/total | number:0 }}%)</td></tr>
                     <tr><td>Wrong:</td><td>{{wrong}} ({{ 100*wrong/total | number:0}}%)</td></tr>
                     <tr><td>Total time:</td><td>{{ totalSeconds | secondsToHuman}}</td></tr>
-                    <tr><td>Average time:</td><td>{{ avgSeconds | number:1 }} seconds per question</td></tr>
+                    <tr><td>Average time:</td><td>{{ avgSeconds | secondsToHuman }} per question</td></tr>
                 </table>
             </div>
 

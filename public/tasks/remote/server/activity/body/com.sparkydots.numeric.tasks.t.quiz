@@ -6,8 +6,6 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.quiz'] =
     // REQUIRED FIELD - follow pattern
     // taskCompletionType is 'fixedNumberOfQuestions' or 'fixedTime'
     taskCompletionType: 'fixedNumberOfQuestions',
-    questionType: 'text',
-    answerType: 'multiple',
 
     // REQUIRED FIELD - follow pattern
     // if taskCompletionType is fixedNumberOfQuestions then argument is number of questions answered so far
@@ -26,6 +24,8 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.quiz'] =
         // statement, checkAnswer(answer)  for answerType: numeric
         // statement, choices[0,1,2,3], checkAnswer(answer) for answerType: multiple
         return {
+            questionType: 'text',
+            answerType: 'multiple',
             statement: statement,
             choices: choices,
             checkAnswer: function(answer) { return answer == correctAnswer }

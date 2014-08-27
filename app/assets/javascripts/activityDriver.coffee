@@ -5,23 +5,24 @@ angular.module('AppOne')
         constructor: (@currentTask) ->
             @name = @currentTask.meta.name
             @parameters = @currentTask.parameters
-            if @currentTask.answerType == 'numeric'
-                @inputTypeNumeric = true
-                @inputTypeMultipleChoice = false
-            else if @currentTask.answerType == 'multiple'
-                @inputTypeNumeric = false
-                @inputTypeMultipleChoice = true
 
         newQuestion: ->
             @question = @currentTask.createNextQuestion()
             if @question == undefined
                 return undefined
+
             @questionStatement_ = @question.statement
             @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
-            if @currentTask.answerType == 'numeric'
+
+            if @question.answerType == 'numeric'
+                @inputTypeNumeric = true
+                @inputTypeMultipleChoice = false
                 @questionStatement = @questionStatement_ + ' = '
-            if @currentTask.answerType == 'multiple'
+            if @question.answerType == 'multiple'
+                @inputTypeNumeric = false
+                @inputTypeMultipleChoice = true
                 @questionStatement = @questionStatement_
+
             @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
             @questionStatementChoices = @question.choices
             returnQuestion =
@@ -34,12 +35,12 @@ angular.module('AppOne')
 
         questionString: ->
             answerString = answer
-            if @currentTask.answerType == 'multiple'
+            if @inputTypeMultipleChoice
                 answerString = @questionStatementChoices[answer]
             answerString
         answerString: (answer) ->
             answerString = answer
-            if @currentTask.answerType == 'multiple'
+            if @inputTypeMultipleChoice
                 answerString = @questionStatementChoices[answer]
             answerString
 

@@ -355,5 +355,6 @@ angular.module('AppOne')
 
 
     console.log('KristaQuestion factory')
-    new KristaQuestion()
+    k = new KristaQuestion()
+    document.numeric.modules.KristaQuestion = k
 ]

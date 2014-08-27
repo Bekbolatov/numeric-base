@@ -1,4 +1,5 @@
 document.numeric = {
+    modules: {},
     numericTasks: {},
 
     key: {
@@ -28,7 +29,8 @@ document.numeric = {
     },
 
     defaultActivitiesList: [
-        'com.sparkydots.numeric.tasks.t.basic_math'
+        'com.sparkydots.numeric.tasks.t.basic_math',
+        'com.sparkydots.numeric.tasks.ssat.a.q04'
     ],
 
     defaultTeachersList: [

@@ -6,8 +6,8 @@
                 "name": "Basic Math",
                 "shortDescription": "Practice adding numbers",
                 "description": "Practice adding numbers",
-                "authorName": "Renat Bekbolatov",
-                "authorEmail": "renatbek@gmail.com",
+                "authorName": "Sparky Dots",
+                "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/1/2014"
             },
 
@@ -16,8 +16,8 @@
                 "name": "Odd One Out (KidPack 2)",
                 "shortDescription": "Practice multiplying numbers",
                 "description": "Practice multiplying numbers",
-                "authorName": "Renat Bekbolatov",
-                "authorEmail": "renatbek@gmail.com",
+                "authorName": "Sparky Dots",
+                "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/1/2014",
                 "version": 3
             },
@@ -27,10 +27,18 @@
                 "name": "Odd One Out (KidPack 1)",
                 "shortDescription": "Practice multiplying numbers",
                 "description": "Practice multiplying numbers",
-                "authorName": "Renat Bekbolatov",
-                "authorEmail": "renatbek@gmail.com",
+                "authorName": "Sparky Dots",
+                "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/1/2014"
+            },
+        "com.sparkydots.numeric.tasks.ssat.a.q04" :
+            {
+                "name": "Ratio problems",
+                "shortDescription": "Practice SSAT-style ratio problems.",
+                "description": "This practice set provides questions similar to SSAT Math section",
+                "authorName": "Sparky Dots",
+                "authorEmail": "info@sparkydots.com",
+                "authorDate": "8/27/2014"
             }
-
     }
 }

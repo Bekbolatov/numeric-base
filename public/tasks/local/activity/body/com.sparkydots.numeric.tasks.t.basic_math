@@ -1,7 +1,5 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 {
-    answerType: 'numeric',
-
     parameters: {
         p10_operation: {
                 name: 'operation',
@@ -112,6 +110,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         }
 
         return {
+            answerType: 'numeric',
             statement: statement,
             checkAnswer: function(answer) { return answer == correctAnswer }
         }
