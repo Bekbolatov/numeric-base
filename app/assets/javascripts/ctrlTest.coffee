@@ -32,8 +32,9 @@ angular.module('AppOne')
 
     ]
 
-.controller 'SampleQuestionCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', 'KristaQuestion', ($scope, $rootScope, $routeParams, $http, md5, KristaQuestion ) ->
-    $scope.twoNames = KristaQuestion.randomPairNames()
+.controller 'SampleQuestionCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', \
+        'KristaQuestion', 'KristaUtil', ($scope, $rootScope, $routeParams, $http, md5, KristaQuestion, KristaUtil ) ->
+    $scope.twoNames = KristaUtil.randomPairNames()
     $scope.cgen = KristaQuestion['questionType04Composer']() # questionType04Composer()
     console.log($scope.c)
 ]

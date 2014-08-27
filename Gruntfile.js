@@ -18,6 +18,8 @@ module.exports = function(grunt) {
                     sourceJs + 'objectActivitySummary.js', 
                     sourceJs + 'objectSettings.js', 
 
+                    sourceJs + 'kristaData.js', 
+                    sourceJs + 'kristaUtil.js', 
                     sourceJs + 'kristaQuestion01.js', 
 
                     sourceJs + 'activityManager.js', 
