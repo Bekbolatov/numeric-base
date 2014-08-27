@@ -19,7 +19,8 @@ angular.module('AppOne')
                     [ [ ['boy', 'boys'], [ 'girl', 'girls'] ], ['kid', 'children'] ]
                     [ [ ['boy', 'boys'], [ 'girl', 'girls'] ], ['kid', 'children'] ]
                     [ [ ['adult', 'adults'], [ 'kid', 'kids'] ], ['person', 'people'] ]
-                    [ [ ['firefighter', 'firefighters'], [ 'paramedic', 'paramedics'] ], ['firefighter or paramedic', 'firefighters and paramedics together'] ]
+                    [ [ ['man', 'men'], [ 'woman', 'women'] ], ['person', 'people'] ]
+                    [ [ ['firefighter', 'firefighters'], [ 'police man', 'police men'] ], ['firefighter or police man', 'firefighters and police men together'] ]
                 ]
                 bird: [
                     [ [ ['red bird', 'red birds'], [ 'blue bird', 'blue birds'] ], ['bird', 'birds'] ]

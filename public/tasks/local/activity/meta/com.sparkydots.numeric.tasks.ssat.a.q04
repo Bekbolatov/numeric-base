@@ -1,8 +1,9 @@
 {
     "name": "Ratio problems",
-    "shortDescription": "Practice SSAT-style ratio problems.",
-    "description": "This practice set provides questions similar to SSAT Math section",
+    "shortDescription": "Practice SSAT Math section - ratio problems.",
+    "description": "This practice set provides questions in the style of Ratio problems in the SSAT Math section",
     "authorName": "Sparky Dots",
     "authorEmail": "info@sparkydots.com",
     "authorDate": "8/27/2014"
 }
+

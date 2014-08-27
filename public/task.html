@@ -43,7 +43,7 @@
 
             <div class="face front">
 
-                <div class="content">
+                <div class="content content-scrollable">
 
                     <div class="btn btn-link pull-left">
                         <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
@@ -58,11 +58,16 @@
 
                         <!--   problem statement -->
                         <div ng-show="currentActivity.inputTypeNumeric" class="numeric numeric-problem">
-                            <span ng-bind-html="activityDriver.questionStatementAsHTML"></span>{{ activityDriver.answer | questionMark }}
+                            <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                            <span ng-show="!currentActivity.answerOnNextLine">{{ activityDriver.answer | questionMark }}</span>
+
+                            <div class="answerBox" ng-show="currentActivity.answerOnNextLine">{{ activityDriver.answer | underscore }}</div>
+
                         </div>
                         <div ng-show="currentActivity.inputTypeMultipleChoice" class="multiple-choice-problem">
                             <span ng-bind-html="activityDriver.questionStatementAsHTML"></span>
                         </div>
+
 
                         <!--  feedback result displayed here -->
                         <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
@@ -200,8 +205,33 @@
                                 </div>
                             </div>
 
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+
 
                         </div>
+
+
+
+
+
+                        <div>
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+                        </div>
+
+
+
 
                     </div>
 
@@ -247,6 +277,19 @@
                 </div>
             </div>
             <!--  closing flipcard face back -->
+
+        <div>
+            <br>
+            &nbsp;
+            <br>
+            &nbsp;
+            <br>
+            &nbsp;
+            <br>
+        </div>
+
+
+
 
         </div>
 

@@ -7,6 +7,13 @@ angular.module('filters', [])
         else
             input
 
+.filter 'underscore', ->
+    (input) ->
+        if input == undefined || input == ''
+            '_'
+        else
+            input
+
 .filter 'textOrLoading', ->
     (input) ->
         if input == undefined

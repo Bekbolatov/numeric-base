@@ -17,11 +17,28 @@ angular.module('AppOne')
             if @question.answerType == 'numeric'
                 @inputTypeNumeric = true
                 @inputTypeMultipleChoice = false
-                @questionStatement = @questionStatement_ + ' = '
+                if @question.answerOnNextLine
+                    @questionStatement = @questionStatement_
+                else
+                    @questionStatement = @questionStatement_ + ' = '
             if @question.answerType == 'multiple'
                 @inputTypeNumeric = false
                 @inputTypeMultipleChoice = true
                 @questionStatement = @questionStatement_
+
+            if @question.answerOnNextLine
+                @answerOnNextLine = true
+            else
+                @answerOnNextLine = false
+
+            if @question.sizingClassCode
+                if @question.sizingClassCode = 5
+                    @sizingClass = 'sizeMakeSmaller'
+                else
+                    @sizingClass = 'sizeKeepSame'
+            else
+                @sizingClass = 'sizeKeepSame'
+
 
             @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
             @questionStatementChoices = @question.choices
