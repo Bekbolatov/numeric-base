@@ -46,7 +46,7 @@ angular.module('AppOne')
     p_birds = [ [ ['red bird', 'red birds'], [ 'blue bird', 'blue birds'] ], ['bird', 'birds'] ]
 
     g_jazzClass = [ ['class', 'jazz dance class'], 'in the' ]
-    g_tree = [ ['tree', 'tall'], 'sitting on the' ]
+    g_tree = [ ['tree', 'tall'], 'on the', 'sitting' ]
 
 
     d = {
@@ -116,6 +116,16 @@ angular.module('AppOne')
                 data.location[1] + ' ' + data.location[0][1] + ' ' + data.location[0][0]
             else
                 c.inSet()
+        c.actingInSet = ->
+            if data.location[2]
+                data.location[2] + ' ' + c.inSet()
+            else
+                c.inSet()
+        c.actingInPinkSet = ->
+            if data.location[2]
+                data.location[2] + ' ' + c.inPinkSet()
+            else
+                c.inPinkSet()
         # there are 5 blue birds ...
         c.thereAre = (i) ->
             output = 'there '
@@ -132,13 +142,29 @@ angular.module('AppOne')
             else
                 output += 'are ' + total + ' ' + c.items()
             output
-        # there are 5 blue birds in the box
-        c.ratioIsInPinkSet = () -> 'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' ' + c.inPinkSet()
+        c.ratioIs = (there) ->
+            if there == undefined
+                'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' is ' + c.ratio()
+            else
+                'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' ' + there + ' is ' + c.ratio()
+
+        # STATEMENTS: there are 5 blue birds in the box
+        c.ratioIsInSet = () -> c.ratioIs(c.inSet())
+        c.ratioIsActingInSet = () -> c.ratioIs(c.actingInSet())
+        c.ratioIsInPinkSet = () -> c.ratioIs(c.inPinkSet())
+        c.ratioIsActingInPinkSet = () -> c.ratioIs(c.actingInPinkSet())
+
         c.thereAreInSet = (i) -> c.thereAre(i) + ' ' + c.inSet()
+        c.thereAreInPinkSet = (i) -> c.thereAre(i) + ' ' + c.inPinkSet()
+
         c.thereAreTotalInSet = () -> c.thereAreTotal(i) + ' ' + c.inSet()
-        # how many red birds are there in the box?
+        c.thereAreTotalInPinkSet = () -> c.thereAreTotal(i) + ' ' + c.inPinkSet()
+
+        # QUESTIONS: how many red birds are there in the box?
         c.howManyInSet = (i) -> 'how many ' + c.elements(i) + ' are there ' + c.inSet()
+        c.howManyActingInSet = (i) -> 'how many ' + c.elements(i) + ' are there ' + c.actingInSet()
         c.howManyTotalInSet = -> 'how many ' + c.items() + ' are there ' + c.inSet()
+        c.howManyTotalActingInSet = -> 'how many ' + c.items() + ' are there ' + c.actingInSet()
 
         # ... If/./However/What if/Assume/Imagine ..., ...? (simple combinations of strings)
         c.AifBthenwhatC = (A, B, C, v) ->
@@ -146,6 +172,11 @@ angular.module('AppOne')
                 output = A + '. ' + v + ' ' + B + ', ' + C + '?'
             else
                 output = A + '. ' + B + '. ' + C + '?'
+            c.prettify(output)
+        c.AwhatCifB = (A, B, C, v) ->
+            if v == undefined
+                v = 'if'
+            output = A + '. ' + C + ' ' + v + ' ' + B + '?'
             c.prettify(output)
         c.ifBthenwhatC = (B, C, v) ->
             if v != undefined
