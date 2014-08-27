@@ -43,6 +43,12 @@ angular.module('AppOne')
     if itemId == undefined || itemId == '' || itemId == 'test'
         return $location.path('/')
 
+    backButton = $routeParams.backButton
+    if backButton != undefined && backButton != '' && backButton != 'test'
+        $scope.backButton = '#/tasksList'
+    else
+        $scope.backButton = '#/history/continue'
+
     ActivitySummary.getSummaryById(itemId)
     .then(
         (data) ->

@@ -32,6 +32,10 @@ angular.module('AppOne')
         templateUrl: 'assets/historyItem.html'
         controller: 'HistoryItemCtrl'
     })
+    .when('/historyItem/:itemId/:backButton', {
+        templateUrl: 'assets/historyItem.html'
+        controller: 'HistoryItemCtrl'
+    })
     # Activity Marketplace
     .when('/tasksMarketplace', {
         templateUrl: 'assets/tasksMarketplace.html'

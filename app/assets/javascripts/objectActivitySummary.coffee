@@ -9,7 +9,9 @@ angular.module('AppOne')
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
             @_extra = "Just the first line of defense."
-            @failoverBuffer = {}
+            @failoverBuffer = {} # stores only the most recent
+            if typeof LocalFileSystem == 'undefined'
+                @_writeAllSummaries({items: []})
 
         __baseFormat: ->
             {
@@ -99,7 +101,7 @@ angular.module('AppOne')
                 @_addToAllSummaries(activitySummaryInfo)
                 @_write({})
                 @newFirst = 0
-                deferred.resolve('test')
+                deferred.resolve(buffer.endTime)
                 return deferred.promise
 
             filename = document.numeric.path.result + buffer.endTime

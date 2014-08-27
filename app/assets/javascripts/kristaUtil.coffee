@@ -35,6 +35,13 @@ angular.module('AppOne')
                         pair.push([names.male[n2], 'he', 'him', 'his'])
             pair
 
+        shuffleListInPlace: (a) ->
+            for i in [a.length-1..1]
+                j = Math.floor Math.random() * (i + 1)
+                [a[i], a[j]] = [a[j], a[i]]
+            a
+
+
         prettify: (text) ->
             afterSpaced = '.,;-!?'
             sentenceStop = '.!?'

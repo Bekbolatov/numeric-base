@@ -12,9 +12,18 @@
             },
         "com.sparkydots.numeric.tasks.ssat.a.q04" :
             {
-                "name": "Ratio problems",
+                "name": "SSAT Math: Ratio problems",
                 "shortDescription": "Practice SSAT Math section - ratio problems.",
                 "description": "This practice set provides questions in the style of Ratio problems in the SSAT Math section",
+                "authorName": "Sparky Dots",
+                "authorEmail": "info@sparkydots.com",
+                "authorDate": "8/27/2014"
+            },
+        "com.sparkydots.numeric.tasks.ssat.a.q05" :
+            {
+                "name": "SSAT Math: Closest value problems",
+                "shortDescription": "Practice SSAT Math section - closest value problems.",
+                "description": "This practice set provides questions in the style of Closest Value problems in the SSAT Math section",
                 "authorName": "Sparky Dots",
                 "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/27/2014"

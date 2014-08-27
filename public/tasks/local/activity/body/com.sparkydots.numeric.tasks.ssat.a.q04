@@ -7,6 +7,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.a.q04'] =
             statement: q2[0],
             checkAnswer: function(answer) { return answer == q2[1] },
             answerType: 'numeric',
+
             sizingClassCode: 5,
             answerOnNextLine: true
         }

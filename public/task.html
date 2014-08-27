@@ -65,7 +65,7 @@
 
                         </div>
                         <div ng-show="currentActivity.inputTypeMultipleChoice" class="multiple-choice-problem">
-                            <span ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                            <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
                         </div>
 
 

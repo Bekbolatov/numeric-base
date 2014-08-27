@@ -5,6 +5,7 @@ angular.module('AppOne')
         random: (a, b) -> KristaUtil.random(a, b)
         randomFromList: (list) -> KristaUtil.randomFromList(list)
         randomPairFromList: (list) -> KristaUtil.randomPairFromList(list)
+        shuffleListInPlace: (list) -> KristaUtil.shuffleListInPlace(list)
 
         generateDataForQuestionType04: () =>
             subject = @randomFromList(['person', 'animal', 'bird', 'zoo', 'forest', 'thing', 'thing' ])
@@ -172,6 +173,23 @@ angular.module('AppOne')
             c.generateQuestion()
 
 
+
+
+        questionType05Composer: () ->
+            targetNumber = @random(1, 90)
+            starter = 0
+            inc = []
+            for i in [1 .. 5]
+                starter += @randomFromList([0.01, 0.02, 0.03, 0.04, 0.05, 0.06])
+                inc.push(starter)
+            possibleAnswers = ( (targetNumber + inci * @randomFromList([-1, 1])).toFixed(2) for inci in inc )
+
+            closest = possibleAnswers.splice(0,1)
+            @shuffleListInPlace(possibleAnswers)
+            index = @random(0,5)
+            tail = possibleAnswers.splice(index, 10)
+            answers = possibleAnswers.concat(closest).concat(tail)
+            ['Which of the following is closest in value to ' + targetNumber + '?', answers, index]
 
     console.log('KristaQuestion factory')
     k = new KristaQuestion()

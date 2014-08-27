@@ -1,5 +1,5 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href="#/history/continue" ng-show="!submitOptions"></a>
+    <a class="icon icon-left-nav pull-left" href="{{ backButton }}" ng-show="!submitOptions"></a>
     <h2 class="title" ng-class="{colorWhite: repeatOptions || submitOptions}">Task Summary</h2>
 
     <button class="btn btn-primary pull-right" ng-show="!submitOptions" ng-click="submitOptions = !submitOptions">
