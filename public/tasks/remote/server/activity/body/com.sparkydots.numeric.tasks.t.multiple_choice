@@ -12,7 +12,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] 
         },
         p20_repeat: {
                 name: 'repeat',
-                description: 'Allow questions repeat??',
+                description: 'Allow questions repeat?',
                 type: 'discrete',
                 levels: [ 'yes', 'no'],
                 selectedValue: 'yes'

@@ -3,6 +3,7 @@ document.numeric = {
 
     key: {
         settings: 'numericSettings',
+        connections: 'numericConnections',
         deviceId: 'numericDeviceId',
         activitiesMeta: 'numericActivitiesMeta',
         bookmarkedActivities: 'numericBookmarkedActivities',
@@ -22,10 +23,16 @@ document.numeric = {
         list: 'activity/meta/list', // Marketplace: list of public activities
         meta: 'activity/meta/',
         body: 'activity/body/',
-        result: 'result/' // Store activity summaries
+        result: 'result/', // Store activity summaries
+        connections: 'connections'
     },
 
     defaultActivitiesList: [
         'com.sparkydots.numeric.tasks.t.basic_math'
+    ],
+
+    defaultTeachersList: [
+        {id: 0, name: 'Mr. Aleman', newItems: 1},
+        {id: 2, name: '鬼塚 英吉', newItems: 3}
     ]
 }

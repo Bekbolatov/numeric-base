@@ -1,21 +1,38 @@
 angular.module('AppOne')
 
-.controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', ($scope, $rootScope, $routeParams) ->
-    $scope.teachers = [
-        {id: 0, name: 'Mr. Aleman (Kumon)', newItems: 1}
-        {id: 1, name: 'Ms. Frizzle', newItems: 0}
-        {id: 2, name: '鬼塚 英吉', newItems: 3}
-        {id: 3, name: 'J. Escalante', newItems: 2}
-        ]
+.controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', 'Connections', ($scope, $rootScope, $routeParams, Connections ) ->
+    $scope.teachers = Connections.getAll()
     $scope.noTeachers = false
+
 ]
 
-.controller 'AddTeacherCtrl', ['$scope', ($scope ) ->
+.controller 'AddTeacherCtrl', ['$scope', '$location', 'Connections', ($scope, $location, Connections ) ->
+
+    $scope.teacherId = ''
     $scope.scan = () ->
         cordova.plugins.barcodeScanner.scan(
-            (result) -> $scope.teacherId = result.text
-            (error) -> $scope.error = error
+            (result) ->
+                $scope.teacherId = result.text
+                console.log('scanned: ' + result.text)
+            (error) ->
+                $scope.error = error
+                console.log('scanned-error: ' + error)
         )
+
+    validateId = (id) -> id.length == 32
+    validateName = (name) -> name.length > 1 && name.length < 30
+
+    $scope.addTeacher = () =>
+        console.log('adding')
+        if validateId($scope.teacherId) && validateName($scope.teacherName)
+            console.log('passed')
+            Connections.add({
+                    id: $scope.teacherId
+                    name: $scope.teacherName
+                    newItems: 0
+                })
+            $location.path('/connect')
+
 ]
 
 .controller 'TeachersCtrl', ['$scope', 'DeviceId', ($scope, DeviceId ) ->

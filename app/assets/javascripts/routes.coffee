@@ -67,6 +67,10 @@ angular.module('AppOne')
         templateUrl: 'assets/test.html'
         controller: 'TestCtrl'
     })
+    .when('/sampleQuestion', {
+        templateUrl: 'assets/sampleQuestion.html'
+        controller: 'SampleQuestionCtrl'
+    })
 
     .otherwise({
         redirectTo: '/'
