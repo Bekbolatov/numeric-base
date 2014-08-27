@@ -4,13 +4,14 @@
         <title>aNGular</title>
         <link rel="stylesheet" href='@routes.Assets.at("bower_components/ratchet/dist/css/ratchet.min.css")'>
         <link rel="stylesheet" href='@routes.Assets.at("stylesheets/numeric.css")'>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")'>
     </head>
     <body>
+        <div style="position: absolute; left: 10px; bottom: 20px;"><i>Note: Web version doesn't save activity history beyond the current session. Tested in Chrome.</i></div>
 
-
-
-        <div ng-include="'/assets/base.html'"></div>
-
+        <div class="app-frame">
+            <div ng-include="'/assets/base.html'"></div>
+        </div>
 
         <script src='@routes.Assets.at("tasks/local/_init.js")' type="text/javascript"></script>
         <script src='@routes.Assets.at("bower_components/ratchet/dist/js/ratchet.min.js")' type="text/javascript"></script>

@@ -6,7 +6,7 @@ angular.module('AppOne')
         randomFromList: (list) -> KristaUtil.randomFromList(list)
         randomPairFromList: (list) -> KristaUtil.randomPairFromList(list)
 
-        randomForQuestionType04: () =>
+        generateDataForQuestionType04: () =>
             subject = @randomFromList(['person', 'animal', 'bird', 'zoo', 'forest', 'thing', 'thing' ])
             item = @randomFromList(KristaData.data.item[subject])
             location = @randomFromList(KristaData.data.location[subject])
@@ -20,6 +20,7 @@ angular.module('AppOne')
             if ( ( r1 % 3 ) == 0) && ( ( r2 % 3 ) == 0 )
                 r1 = r1 / 3
                 r2 = r2 / 3
+
             m = @random(2,6)
             dr = {
                 location: location
@@ -30,7 +31,7 @@ angular.module('AppOne')
             dr
 
         questionType04Composer: () =>
-            data = @randomForQuestionType04()
+            data = @generateDataForQuestionType04()
             c = {}
             c.ratio = -> data.ratio.join(':')
             c.ratioFor = (i) -> data.ratio[i]
@@ -116,7 +117,7 @@ angular.module('AppOne')
             c.howManyInSet = (i, acting, pink) -> c.howMany(i) + ' ' + c.inSet(acting, pink)
             c.howManyTotalInSet = (acting, pink) -> c.howManyTotal() + ' ' + c.inSet(acting, pink)
 
-            c.generate = =>
+            c.generateQuestion = =>
                 s = @randomFromList(['AifBthenwhatC', 'AandBwhatC', 'whatCifAandB', 'AwhatCifB'])
                 v = @randomFromList(['if', ''])
                 ratioSecond = @randomFromList([false, true])
@@ -168,7 +169,7 @@ angular.module('AppOne')
                     question = func(p1, p2, p3, v)
                 [ question  , answer]
 
-            c.generate()
+            c.generateQuestion()
 
 
 
