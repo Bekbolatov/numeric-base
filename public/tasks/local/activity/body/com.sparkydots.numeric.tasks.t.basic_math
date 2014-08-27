@@ -33,13 +33,13 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 
         if (_isOp('addition')) {
             if (_isLevel('easy')) {
-                min = 5;
-                max = 50;
+                min = 3;
+                max = 20;
             } else if (_isLevel('medium')) {
-                min = 21;
+                min = 15;
                 max = 99;
             } else {
-                min = 111;
+                min = 25;
                 max = 999;
             }
             var partA = _randomInt(min, max);
@@ -48,13 +48,13 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
             correctAnswer = partA + partB;
         } else if (_isOp('subtraction')) {
             if (_isLevel('easy')) {
-                min = 5;
-                max = 50;
+                min = 3;
+                max = 20;
             } else if (_isLevel('medium')) {
-                min = 21;
-                max = 99;
+                min = 11;
+                max = 50;
             } else {
-                min = 111;
+                min = 35;
                 max = 999;
             }
             var partA = _randomInt(min, max);
@@ -64,12 +64,12 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         } else if (_isOp('multiplication')) {
             if (_isLevel('easy')) {
                 min = 2;
-                max = 20;
+                max = 15;
             } else if (_isLevel('medium')) {
-                min = 5;
-                max = 50;
+                min = 3;
+                max = 40;
             } else {
-                min = 11;
+                min = 3;
                 max = 99;
             }
             var partA = _randomInt(min, max);
@@ -79,12 +79,12 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         } else if (_isOp('division')) {
             if (_isLevel('easy')) {
                 min = 2;
-                max = 20;
+                max = 12;
             } else if (_isLevel('medium')) {
-                min = 5;
-                max = 50;
+                min = 3;
+                max = 35;
             } else {
-                min = 11;
+                min = 3;
                 max = 99;
             }
             var partA = _randomInt(min, max);
@@ -94,12 +94,12 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         } else if (_isOp('square root')) {
             if (_isLevel('easy')) {
                 min = 2;
-                max = 20;
+                max = 15;
             } else if (_isLevel('medium')) {
                 min = 5;
-                max = 50;
+                max = 25;
             } else {
-                min = 11;
+                min = 9;
                 max = 99;
             }
             var partA = _randomInt(min, max);

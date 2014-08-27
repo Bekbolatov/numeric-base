@@ -2,6 +2,7 @@ module.exports = function(grunt) {
     var sourceMain = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/';
     var sourceJs = sourceMain + 'javascripts/';
     var appJsSources = [
+
                     sourceJs + 'filters.js', 
                     sourceJs + 'appOne.js', 
 
@@ -16,6 +17,8 @@ module.exports = function(grunt) {
                     sourceJs + 'objectMarketplace.js', 
                     sourceJs + 'objectActivitySummary.js', 
                     sourceJs + 'objectSettings.js', 
+
+                    sourceJs + 'kristaQuestion01.js', 
 
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'activityDriver.js',
