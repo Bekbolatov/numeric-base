@@ -1,0 +1,59 @@
+angular.module('Krista')
+
+.factory "M02", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+    class M02
+        u: KristaUtil
+        toCssFraction: (a, b) ->
+            output = '<span class="fraction">'
+            output += '<span class="fraction-top">' + a + '</span>'
+            output += '<span class="fraction-bottom">' + b + '</span>'
+            output += '</span>'
+
+        increaseRandomly: (a, b) ->
+            method = @u.randomFromList([ 0, 1, 2, 3 ])
+            if method == 0          # a inc, b inc
+                k = @u.random(1,2)
+                if a < b
+                    [a + k, b + k]
+                else
+                    [a + k, b]
+            else if method == 1     # a inc, b unch
+                [a + @u.random(1,2), b]
+            else if method == 2     # a unch, b dec
+                if b > 2
+                    [a, Math.max(2, b - @u.random(1,2))]
+                else
+                    [a + 1, b + 1]  # b may be small, good to increase a bit
+            else                    # a dec, b dec*k
+                k = Math.ceil( (b + 1) / a )
+                if b >= k + 2
+                    [a - 1, b - k]
+                else
+                    [a + 1, b + 1]  # b may be small, good to increase a bit
+        generate: ->
+
+            m = @u.random(1, 6)
+            if m > 3
+                n = m + @u.random(5, 9)
+            else
+                n = m + @u.random(1, 6)
+            closest = [ [m, n] ]
+
+            inc = []
+            for i in [1 .. 4]
+                [m, n] = @increaseRandomly(m, n)
+                inc.push([m, n])
+
+            possibleAnswers = inc
+            @u.shuffleListInPlace(possibleAnswers)
+            index = @u.random(0,5)
+            tail = possibleAnswers.splice(index, 10)
+            answers = possibleAnswers.concat(closest).concat(tail)
+
+            answers =  (@toCssFraction(answer[0], answer[1]) for answer in answers)
+
+
+            [  ['What is the smallest fraction?', answers ],    index ]
+
+    new M02()
+]

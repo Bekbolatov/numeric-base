@@ -1,18 +1,15 @@
-angular.module('AppOne')
+angular.module('Krista')
 
-.factory "KristaQuestion", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
-    class KristaQuestion
-        random: (a, b) -> KristaUtil.random(a, b)
-        randomFromList: (list) -> KristaUtil.randomFromList(list)
-        randomPairFromList: (list) -> KristaUtil.randomPairFromList(list)
-        shuffleListInPlace: (list) -> KristaUtil.shuffleListInPlace(list)
+.factory "M04", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+    class M04
+        u: KristaUtil
 
         generateDataForQuestionType04: () =>
-            subject = @randomFromList(['person', 'animal', 'bird', 'zoo', 'forest', 'thing', 'thing' ])
-            item = @randomFromList(KristaData.data.item[subject])
-            location = @randomFromList(KristaData.data.location[subject])
+            subject = @u.randomFromList(['person', 'bird', 'zoo', 'forest', 'animal', 'barn', 'thing', 'thing' ])
+            item = @u.randomFromList(KristaData.data.item[subject])
+            location = @u.randomFromList(KristaData.data.location[subject])
 
-            r = @randomPairFromList([1,2,3,4,5,6,7])
+            r = @u.randomPairFromList([1,2,3,4,5,6,7])
             r1 = r[0]
             r2 = r[1]
             if ( ( r1 % 2 ) == 0) && ( ( r2 % 2 ) == 0 )
@@ -22,7 +19,7 @@ angular.module('AppOne')
                 r1 = r1 / 3
                 r2 = r2 / 3
 
-            m = @random(2,6)
+            m = @u.random(2,6)
             dr = {
                 location: location
                 elements: item
@@ -31,7 +28,7 @@ angular.module('AppOne')
             }
             dr
 
-        questionType04Composer: () =>
+        generate: () =>
             data = @generateDataForQuestionType04()
             c = {}
             c.ratio = -> data.ratio.join(':')
@@ -46,8 +43,16 @@ angular.module('AppOne')
             c.element = (i) -> data.elements[0][i][0]
             c.elements = (i) -> data.elements[0][i][1]
             # bird/birds
-            c.item = -> data.elements[1][0]
-            c.items = -> data.elements[1][1]
+            c.item = ->
+                if data.elements.length > 1 && data.elements[1]
+                    data.elements[1][0]
+                else
+                    data.elements[0][0][0] + ' or ' + data.elements[0][1][0]
+            c.items = ->
+                if data.elements.length > 1 && data.elements[1]
+                    data.elements[1][1]
+                else
+                    data.elements[0][0][1] + ' and ' + data.elements[0][1][1] + ' together'
             # ... (sitting) (on the) (tall) (tree)
             c.inSet = (acting, pink) ->
                 output = ''
@@ -94,7 +99,7 @@ angular.module('AppOne')
                 else
                     'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' ' + there + ' is ' + c.ratio()
             c.ratioIs = (there) =>
-                if @random(0, 2) > 0
+                if @u.random(0, 2) > 0
                     if there == undefined || there == ''
                         'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' is ' + c.ratio()
                     else
@@ -119,79 +124,56 @@ angular.module('AppOne')
             c.howManyTotalInSet = (acting, pink) -> c.howManyTotal() + ' ' + c.inSet(acting, pink)
 
             c.generateQuestion = =>
-                s = @randomFromList(['AifBthenwhatC', 'AandBwhatC', 'whatCifAandB', 'AwhatCifB'])
-                v = @randomFromList(['if', ''])
-                ratioSecond = @randomFromList([false, true])
-                knownUnknown = @randomPairFromList([0, 1, 2])
+                ratioSecond = @u.randomFromList([false, true])
+                knownUnknown = @u.randomPairFromList([0, 1, 2])
                 if knownUnknown[0] != 2
                     if ratioSecond
                         p2 = c.thereAreInSet(knownUnknown[0], true, true)
-                        if @random(0, 2) > 0
+                        if @u.random(0, 2) > 0
                             p1 = c.ratioIs()
                         else
                             p1 = c.ratioIsInSet()
                     else
                         p1 = c.ratioIsInSet(true, true)
-                        if @random(0, 2) > 0
+                        if @u.random(0, 2) > 0
                             p2 = c.thereAre(knownUnknown[0])
                         else
                             p2 = c.thereAreInSet(knownUnknown[0], false, false)
                 else
                     if ratioSecond
                         p2 = c.thereAreTotalInSet(true, true)
-                        if @random(0, 2) > 0
+                        if @u.random(0, 2) > 0
                             p1 = c.ratioIs()
                         else
                             p1 = c.ratioIsInSet()
                     else
                         p1 = c.ratioIsInSet(true, true)
-                        if @random(0, 2) > 0
+                        if @u.random(0, 2) > 0
                             p2 = c.thereAreTotal()
                         else
                             p2 = c.thereAreTotalInSet(false, false)
 
                 if knownUnknown[1] == 2
                     answer = c.numberTotal()
-                    if @random(0, 2) > 0
+                    if @u.random(0, 2) > 0
                         p3 = c.howManyTotal()
                     else
                         p3 = c.howManyTotalInSet(false, false)
                 else
                     answer = c.number(knownUnknown[1])
-                    if @random(0, 2) > 0
+                    if @u.random(0, 2) > 0
                         p3 = c.howMany(knownUnknown[1])
                     else
                         p3 = c.howManyInSet(knownUnknown[1], false, false)
 
-                func = KristaUtil[ s ]
+                func = @u.combine3
                 if ratioSecond
-                    question = func(p2, p1, p3, v)
+                    question = func(p2, p1, p3)
                 else
-                    question = func(p1, p2, p3, v)
-                [ question  , answer]
+                    question = func(p1, p2, p3)
+                [ [question], answer]
 
             c.generateQuestion()
 
-
-
-
-        questionType05Composer: () ->
-            targetNumber = @random(1, 90)
-            starter = 0
-            inc = []
-            for i in [1 .. 5]
-                starter += @randomFromList([0.01, 0.02, 0.03, 0.04, 0.05, 0.06])
-                inc.push(starter)
-            possibleAnswers = ( (targetNumber + inci * @randomFromList([-1, 1])).toFixed(2) for inci in inc )
-
-            closest = possibleAnswers.splice(0,1)
-            @shuffleListInPlace(possibleAnswers)
-            index = @random(0,5)
-            tail = possibleAnswers.splice(index, 10)
-            answers = possibleAnswers.concat(closest).concat(tail)
-            ['Which of the following is closest in value to ' + targetNumber + '?', answers, index]
-
-    console.log('KristaQuestion factory')
-    k = new KristaQuestion()
-    document.numeric.modules.KristaQuestion = k
+    new M04()
 ]

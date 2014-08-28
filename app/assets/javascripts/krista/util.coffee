@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('Krista')
 
 .factory "KristaUtil", [ 'KristaData', (KristaData) ->
     class KristaUtil
@@ -92,6 +92,17 @@ angular.module('AppOne')
             else
                 output = B + '. ' + C + '?'
             @prettify(output)
+
+        combine3: (A, B, C, v) =>
+            #s = @randomFromList(['AifBthenwhatC', 'AandBwhatC', 'whatCifAandB', 'AwhatCifB'])
+            s = @randomFromList(['AifBthenwhatC', 'AandBwhatC', 'AwhatCifB'])
+            v = @randomFromList(['if', ''])
+            @[s](A, B, C, v)
+        combine2: (B, C, v) =>
+            s = @randomFromList(['ifBthenwhatC'])
+            v = @randomFromList(['if', ''])
+            @[s](B, C, v)
+
 
     console.log('KristaUtil factory')
     new KristaUtil()

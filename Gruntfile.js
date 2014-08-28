@@ -1,6 +1,9 @@
 module.exports = function(grunt) {
     var sourceMain = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/';
     var sourceJs = sourceMain + 'javascripts/';
+
+
+    // Main app
     var appJsSources = [
 
                     sourceJs + 'filters.js', 
@@ -18,10 +21,6 @@ module.exports = function(grunt) {
                     sourceJs + 'objectActivitySummary.js', 
                     sourceJs + 'objectSettings.js', 
 
-                    sourceJs + 'kristaData.js', 
-                    sourceJs + 'kristaUtil.js', 
-                    sourceJs + 'kristaQuestion01.js', 
-
                     sourceJs + 'activityManager.js', 
                     sourceJs + 'activityDriver.js',
 
@@ -35,7 +34,54 @@ module.exports = function(grunt) {
 
                     sourceJs + 'routes.js' 
                     ];
+
+
+    //  Krista Questions only
+    var kristaJs = sourceJs + 'krista/';
+    var kristaQuestionsJs = kristaJs + 'questions/';
+    var kristaSources = [
+                    kristaJs + 'module.js',
+                    kristaJs + 'data.js',
+                    kristaJs + 'util.js',
+
+                    kristaQuestionsJs + 'm00.js',
+                    kristaQuestionsJs + 'm01.js',
+                    kristaQuestionsJs + 'm02.js',
+                    kristaQuestionsJs + 'm03.js',
+                    kristaQuestionsJs + 'm04.js',
+                    kristaQuestionsJs + 'm05.js',
+                    kristaQuestionsJs + 'm06.js',
+                    kristaQuestionsJs + 'm07.js',
+                    kristaQuestionsJs + 'm08.js',
+                    kristaQuestionsJs + 'm09.js',
+                    kristaQuestionsJs + 'm10.js',
+                    kristaQuestionsJs + 'm11.js',
+                    kristaQuestionsJs + 'm12.js',
+                    kristaQuestionsJs + 'm13.js',
+                    kristaQuestionsJs + 'm14.js',
+                    kristaQuestionsJs + 'm15.js',
+                    kristaQuestionsJs + 'm16.js',
+                    kristaQuestionsJs + 'm17.js',
+                    kristaQuestionsJs + 'm18.js',
+                    kristaQuestionsJs + 'm19.js',
+                    kristaQuestionsJs + 'm20.js',
+                    kristaQuestionsJs + 'm21.js',
+                    kristaQuestionsJs + 'm22.js',
+                    kristaQuestionsJs + 'm23.js',
+                    kristaQuestionsJs + 'm24.js',
+                    kristaQuestionsJs + 'm25.js',
+                    kristaQuestionsJs + 'm26.js',
+                    kristaQuestionsJs + 'm27.js',
+                    kristaQuestionsJs + 'm28.js',
+                    kristaQuestionsJs + 'm29.js',
+                    kristaQuestionsJs + 'm30.js',
+
+                    ];
+    // decide whether to include Krista files here:
+    appJsSources = kristaSources.concat(appJsSources);
+
     var appJsSourcesCordova = appJsSources.concat([sourceJs + 'bootstrapApp.js']);
+
     grunt.initConfig({
         concat: {
             appJs: {
