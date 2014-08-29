@@ -119,6 +119,7 @@ module.exports = function(grunt) {
         ])
     grunt.registerTask('default', ['numeric'])
 
+    //cp target/web/public/main/javascripts/oneApp.min.js    public/javascripts/oneApp.comp.min.js
 };
 
 
