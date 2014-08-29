@@ -70,6 +70,16 @@ angular.module('Krista')
             answers = otherPossibleAnswers.concat([correct]).concat(tail)
             [answers, index]
 
+        digitToWord: (d) ->
+            words = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine' ]
+            words[d]
+        numberBelow20ToWord: (num) ->
+            below20 = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+            below20[num]
+        tensToWord: (c) ->
+            tens = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+            tens[c]
+
         gcd: (a, b) ->
             if a < 0
                 a = -a
