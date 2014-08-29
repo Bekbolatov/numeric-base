@@ -134,7 +134,7 @@ angular.module('Krista')
                 else
                     skipBlank = false
                 output += append
-            output = output.trim().replace(' .', '.')
+            output = output.trim().replace(' .', '.').replace(' ?', '?')
             output
         AifBthenwhatC: (A, B, C, v) =>
             if v != undefined && v != ''
