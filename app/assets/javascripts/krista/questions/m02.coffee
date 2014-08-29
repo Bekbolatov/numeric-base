@@ -3,11 +3,6 @@ angular.module('Krista')
 .factory "M02", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
     class M02
         u: KristaUtil
-        toCssFraction: (a, b) ->
-            output = '<span class="fraction">'
-            output += '<span class="fraction-top">' + a + '</span>'
-            output += '<span class="fraction-bottom">' + b + '</span>'
-            output += '</span>'
 
         increaseRandomly: (a, b) ->
             method = @u.randomFromList([ 0, 1, 2, 3 ])
@@ -30,27 +25,23 @@ angular.module('Krista')
                     [a - 1, b - k]
                 else
                     [a + 1, b + 1]  # b may be small, good to increase a bit
-        generate: ->
 
+        generate: ->
             m = @u.random(1, 6)
             if m > 3
                 n = m + @u.random(5, 9)
             else
                 n = m + @u.random(1, 6)
-            closest = [ [m, n] ]
+            correct = [m, n]
 
             inc = []
             for i in [1 .. 4]
                 [m, n] = @increaseRandomly(m, n)
                 inc.push([m, n])
 
-            possibleAnswers = inc
-            @u.shuffleListInPlace(possibleAnswers)
-            index = @u.random(0,5)
-            tail = possibleAnswers.splice(index, 10)
-            answers = possibleAnswers.concat(closest).concat(tail)
+            [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            answers =  (@toCssFraction(answer[0], answer[1]) for answer in answers)
+            answers =  (@u.toCssFraction(answer[0], answer[1]) for answer in answers)
 
 
             [  ['What is the smallest fraction?', answers ],    index ]

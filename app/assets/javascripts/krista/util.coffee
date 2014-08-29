@@ -3,6 +3,7 @@ angular.module('Krista')
 .factory "KristaUtil", [ 'KristaData', (KristaData) ->
     class KristaUtil
         random: (a, b) -> a + ( Math.random() * (b-a) ) | 0 # ..., a-1, [a, a+1, ..., b-1], b, b+1, ...
+        randomAB: -> (@random(0,2) > 0)
         randomFromList: (list) -> list[@random(0, list.length)]
         randomPairFromList: (list) ->
             n = list.length
@@ -35,11 +36,67 @@ angular.module('Krista')
                         pair.push([names.male[n2], 'he', 'him', 'his'])
             pair
 
+        randomNonRepeating: (list, n) ->
+            if !list || list.length < 1
+                return []
+            if n > list.length
+                n = list.length
+            else if n < 1
+                n = 1
+            remaining = list
+            rn = list.length
+            grow = []
+            while n > 0
+                remove = @random(0, rn)
+                grow = grow.concat(remaining.splice(remove, 1))
+                n = n - 1
+                rn = rn - 1
+            grow
+
+        randomDigits: (n) -> @randomNonRepeating([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9], n)
+
+        randomVariableLetter: -> @randomFromList('abcdefghkmnpqrstuvwyzABCDEFGHKLMNPQRSTUVWYZ')
         shuffleListInPlace: (a) ->
             for i in [a.length-1..1]
                 j = Math.floor Math.random() * (i + 1)
                 [a[i], a[j]] = [a[j], a[i]]
             a
+
+        # 4 wrong and 1 right given (total of 5 answers)
+        shuffleAnswers4: (otherPossibleAnswers, correct) ->
+            @shuffleListInPlace(otherPossibleAnswers)
+            index = @random(0,5)
+            tail = otherPossibleAnswers.splice(index, 10)
+            answers = otherPossibleAnswers.concat([correct]).concat(tail)
+            [answers, index]
+
+        gcd: (a, b) ->
+            if a < 0
+                a = -a
+            if b < 0
+                b = -b
+            if a > b
+                [a, b] = [b, a]
+            if a == 0
+                b
+            if b == 0
+                a
+
+            c = b - Math.floor(b/a) * a
+            if c <= 0
+                a
+            else
+                @gcd(c, a)
+
+        reduce: (a, b) ->
+            c = @gcd(a, b)
+            [a/c, b/c]
+
+        toCssFraction: (a, b) ->
+            output = '<span class="fraction">'
+            output += '<span class="fraction-top">' + a + '</span>'
+            output += '<span class="fraction-bottom">' + b + '</span>'
+            output += '</span>'
 
 
         prettify: (text) ->
