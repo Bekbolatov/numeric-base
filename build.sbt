@@ -1,20 +1,29 @@
+import Grunt._
+import play.PlayImport.PlayKeys.playRunHooks
 
-name := """play-scala-intro"""
+name := """Numeric StarPractice"""
 
 version := "1.0-SNAPSHOT"
+
+scalaVersion := "2.10.3"  //"2.11.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
-pipelineStages := Seq(uglify)
-
-includeFilter in uglify := GlobFilter("javascripts/*.js")
+playRunHooks <+= baseDirectory.map(base => Grunt(base))  // (base / "app" / "assets"))
 
 
-//scalaVersion := "2.11.1"
+//pipelineStages := Seq(uglify)
+//CoffeeScriptKeys.sourceMap := false
+//includeFilter in uglify := GlobFilter("javascripts/*.js")
+//UglifyKeys.uglifyOps := {
+//  js =>
+//    Seq( (js.sortBy(_._2), "myconcat.min.js"))
+//}
 
-scalaVersion := "2.10.3"  
+
+
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -26,6 +35,7 @@ libraryDependencies ++= Seq(
 
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
+
 
 
 

@@ -102,13 +102,21 @@ module.exports = function(grunt) {
             src: '<%= concat.appJsCordova.dest %>', 
             dest: sourceJs + 'oneAppCordova.min.js'
           }
+        },
+        watch: {
+            scripts: {
+                files: appJsSourcesCordova,
+                tasks: ['numeric'],
+            }
         }
     });
+
 
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('numeric', 
         [
@@ -119,6 +127,7 @@ module.exports = function(grunt) {
         ])
     grunt.registerTask('default', ['numeric'])
 
+    
     //cp target/web/public/main/javascripts/oneApp.min.js    public/javascripts/oneApp.comp.min.js
 };
 
