@@ -37,15 +37,21 @@ angular.module('AppOne')
     $scope.regen = (num) ->
         $scope.showAnswer = false
         qa = KristaQuestions.generate(num)
-        $scope.question = $sce.trustAsHtml(qa[0][0])
+        $scope.question = $sce.trustAsHtml('' + qa[0][0])
 
         if qa[0].length > 1
-            $scope.choices = ($sce.trustAsHtml(choice) for choice in qa[0][1])
-            $scope.answer = $sce.trustAsHtml(qa[0][1][qa[1]])
+            $scope.choices = ($sce.trustAsHtml('' + choice) for choice in qa[0][1])
+            $scope.answer = $sce.trustAsHtml('' + qa[0][1][qa[1]])
         else
             $scope.choices = undefined
             $scope.answer = $sce.trustAsHtml('' + qa[1])
 
+        if qa[2] != undefined
+            $scope.hasQuestionGraphicData = true
+            $scope.questionGraphicData = qa[2][0]
+        else
+            $scope.hasQuestionGraphicData = false
+            $scope.questionGraphicData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D'
     $scope.regen(4)
 
 ]
