@@ -1,0 +1,55 @@
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.a.q00'] =
+{
+
+    parameters: {
+        p10_serveOrder: {
+                name: 'nextproblem',
+                description: 'What will the next problem be?',
+                type: 'discrete',
+                levels: ['same', 'random'],
+                selectedValue: 'random'
+        },
+        p20_fixedProblemNumber: {
+                name: 'problemnumber',
+                description: 'If same, which problem number?',
+                type: 'discrete',
+                levels: [ 1,2,3,4,5,6,7,8,9,10, 11,12,13,14,15,16,17,18,19,20, 21,22,23,24,25,26,27,28,29,30 ],
+                selectedValue: '4'
+        }
+    },
+
+    createNextQuestion: function() {
+        var self = this;
+
+        var getOrder = function() { return self.parameters.p10_serveOrder.selectedValue }
+        var getProblemNumber = function() { return self.parameters.p20_fixedProblemNumber.selectedValue }
+
+        var KristaQuestions = document.numeric.modules.KristaQuestions;
+        var num = getProblemNumber();
+        if (getOrder() == 'random') {
+            num = Math.random()*30 | 0
+        }
+
+        var qa = KristaQuestions.generate(num)
+
+        qq = {
+            statement: qa[0][0],
+            checkAnswer: function(answer) { return answer == qa[1] },
+            getAnswer: function() { return qa[1] },
+            sizingClassCode: 5,
+            answerOnNextLine: true
+        }
+        if (qa[0].length > 1) {
+            qq.answerType = 'multiple'
+            qq.choices = qa[0][1]
+        } else {
+            qq.answerType = 'numeric'
+        }
+
+        return qq
+
+
+
+
+    }
+};

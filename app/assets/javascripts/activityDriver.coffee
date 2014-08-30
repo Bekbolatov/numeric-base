@@ -6,13 +6,13 @@ angular.module('AppOne')
             @name = @currentTask.meta.name
             @parameters = @currentTask.parameters
 
+        lettered: (n) -> ' ' + ("ABCDEFGH")[n] + ') '
         newQuestion: ->
             @question = @currentTask.createNextQuestion()
             if @question == undefined
                 return undefined
 
             @questionStatement_ = @question.statement
-            @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
 
             if @question.answerType == 'numeric'
                 @inputTypeNumeric = true
@@ -21,10 +21,21 @@ angular.module('AppOne')
                     @questionStatement = @questionStatement_
                 else
                     @questionStatement = @questionStatement_ + ' = '
-            if @question.answerType == 'multiple'
+
+                @questionStatementChoices = undefined
+                @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
+
+            else if @question.answerType == 'multiple'
                 @inputTypeNumeric = false
                 @inputTypeMultipleChoice = true
                 @questionStatement = @questionStatement_
+
+                @questionStatementChoices = ($sce.trustAsHtml('' + choice) for choice in @question.choices)
+                for i, choice of @question.choices
+                    @questionStatement_ += @lettered(i) + choice
+                @questionStatementAsHTML_ = $sce.trustAsHtml(@questionStatement_)
+
+            @questionStatementAsHTML = $sce.trustAsHtml('' + @questionStatement)
 
             if @question.answerOnNextLine
                 @answerOnNextLine = true
@@ -40,8 +51,6 @@ angular.module('AppOne')
                 @sizingClass = 'sizeKeepSame'
 
 
-            @questionStatementAsHTML = $sce.trustAsHtml(@questionStatement)
-            @questionStatementChoices = @question.choices
             returnQuestion =
                 questionStatement_ : @questionStatement_
                 questionStatementAsHTML_ : @questionStatementAsHTML_
@@ -58,7 +67,13 @@ angular.module('AppOne')
         answerString: (answer) ->
             answerString = answer
             if @inputTypeMultipleChoice
-                answerString = @questionStatementChoices[answer]
+                answerString = @lettered(answerString) + @questionStatementChoices[answerString]
+            answerString
+
+        answerStringActual: () ->
+            answerString = @question.getAnswer()
+            if @inputTypeMultipleChoice
+                answerString = @lettered(answerString) + @questionStatementChoices[answerString]
             answerString
 
         checkAnswer: (answer) ->
@@ -144,6 +159,9 @@ angular.module('AppOne')
         _checkAnswer: (answer) =>
             @scope.$broadcast('timer-stop')
             answerString = @currentActivity.answerString(answer)
+            answerStringAsHTML = $sce.trustAsHtml('' + answerString)
+            answerStringActual = @currentActivity.answerStringActual()
+            answerStringActualAsHTML = $sce.trustAsHtml('' + answerStringActual)
 
             if @currentActivity.checkAnswer(answer)
                 @_markCorrectResult()
@@ -151,6 +169,9 @@ angular.module('AppOne')
                     statement: @questionStatement_
                     statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
+                    answerAsHTML: answerStringAsHTML
+                    actualAnswer: answerStringActual
+                    actualAnswerAsHTML: answerStringActualAsHTML
                     result: true
             else
                 @_markWrongResult()
@@ -158,6 +179,9 @@ angular.module('AppOne')
                     statement: @questionStatement_
                     statementAsHTML: @questionStatementAsHTML_
                     answer: answerString
+                    answerAsHTML: answerStringAsHTML
+                    actualAnswer: answerStringActual
+                    actualAnswerAsHTML: answerStringActualAsHTML
                     result: false
             ActivitySummary.add(@answeredQuestion)
             $timeout( \

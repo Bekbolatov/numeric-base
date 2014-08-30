@@ -112,7 +112,8 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         return {
             answerType: 'numeric',
             statement: statement,
-            checkAnswer: function(answer) { return answer == correctAnswer }
+            checkAnswer: function(answer) { return answer == correctAnswer },
+            getAnswer: function() { return correctAnswer }
         }
     }
 };

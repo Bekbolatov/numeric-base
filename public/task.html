@@ -131,24 +131,24 @@
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
-                                            {{activityDriver.questionStatementChoices[0]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[0]"></span>
                                         </button>
                                     </td>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
-                                            {{activityDriver.questionStatementChoices[1]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[1]"></span>
                                         </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
-                                            {{activityDriver.questionStatementChoices[2]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[2]"></span>
                                         </button>
                                     </td>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
-                                            {{activityDriver.questionStatementChoices[3]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[3]"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -157,31 +157,31 @@
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
-                                            {{activityDriver.questionStatementChoices[0]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[0]"></span>
                                         </button>
                                     </td>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
-                                            {{activityDriver.questionStatementChoices[1]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[1]"></span>
                                         </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
-                                            {{activityDriver.questionStatementChoices[2]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[2]"></span>
                                         </button>
                                     </td>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
-                                            {{activityDriver.questionStatementChoices[3]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[3]"></span>
                                         </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="numeric-td">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(4)">
-                                            {{activityDriver.questionStatementChoices[4]}}
+                                            <span ng-bind-html="activityDriver.questionStatementChoices[4]"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -198,9 +198,16 @@
                                 <div ng-show="activityDriver.answeredQuestion.statement">
                                     <div>Your answer:
                                                     <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
-                                                        {{activityDriver.answeredQuestion.answer}}
+                                                        <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
                                                         <span ng-show="activityDriver.answeredQuestion.result" class="icon icon-{{activityDriver.answeredQuestion.result && 'check' || 'close' }}"></span>
                                                     </span>
+                                                    <span ng-show="activityDriver.answeredQuestion.result">(correct)</span>
+                                                    <span ng-show="!activityDriver.answeredQuestion.result">(wrong)</span>
+
+                                    </div>
+                                    <div ng-show="!activityDriver.answeredQuestion.result">
+                                        Correct answer:
+                                        <span ng-bind-html="activityDriver.answeredQuestion.actualAnswerAsHTML"></span>
                                     </div>
                                 </div>
                             </div>

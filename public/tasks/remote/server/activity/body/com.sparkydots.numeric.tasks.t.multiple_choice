@@ -43,7 +43,8 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] 
             answerType: 'multiple',
             statement: statement,
             choices: choices,
-            checkAnswer: function(answer) { return answer == correctAnswer }
+            checkAnswer: function(answer) { return answer == correctAnswer },
+            getAnswer: function() { return correctAnswer }
         }
     },
 

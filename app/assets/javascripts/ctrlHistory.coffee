@@ -38,7 +38,7 @@ angular.module('AppOne')
 
 ]
 
-.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', 'ActivitySummary', ($scope, $routeParams, $location, ActivitySummary ) ->
+.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'ActivitySummary', ($scope, $routeParams, $location, $sce, ActivitySummary ) ->
     itemId = $routeParams.itemId
     if itemId == undefined || itemId == '' || itemId == 'test'
         return $location.path('/')
@@ -57,7 +57,8 @@ angular.module('AppOne')
             else
                 $scope.mismatch = false
                 $scope.activityName = data.activityName
-                $scope.responses = data.responses
+                $scope.timestamp = data.endTime
+                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4]]  for response in data.responses)
 
                 $scope.correct = data.runningTotals.correct
                 $scope.wrong = data.runningTotals.wrong

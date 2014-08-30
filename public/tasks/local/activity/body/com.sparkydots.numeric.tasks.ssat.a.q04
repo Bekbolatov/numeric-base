@@ -1,15 +1,23 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.a.q04'] =
 {
     createNextQuestion: function() {
-        var KristaQuestion = document.numeric.modules.KristaQuestion;
-        var q2 = KristaQuestion['questionType04Composer']()
-        return {
-            statement: q2[0],
-            checkAnswer: function(answer) { return answer == q2[1] },
-            answerType: 'numeric',
+        var KristaQuestions = document.numeric.modules.KristaQuestions;
+        var qa = KristaQuestions.generate(4)
 
+        qq = {
+            statement: qa[0][0],
+            checkAnswer: function(answer) { return answer == qa[1] },
+            getAnswer: function() { return qa[1] },
             sizingClassCode: 5,
             answerOnNextLine: true
         }
+        if (qa[0].length > 1) {
+            qq.answerType = 'multiple'
+            qq.choices = qa[0][1]
+        } else {
+            qq.answerType = 'numeric'
+        }
+
+        return qq
     }
 };

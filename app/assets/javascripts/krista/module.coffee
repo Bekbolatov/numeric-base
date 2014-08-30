@@ -16,6 +16,6 @@ angular.module 'Krista', []
                     q.generate()
 
             k = new KristaQuestions()
-            document.numeric.modules.Krista = k
+            document.numeric.modules.KristaQuestions = k
             k
     ]

@@ -27,8 +27,10 @@
                     It appears like the original record of this activity is no longer available.
                 </p>
                 <table ng-show="!mismatch" class="taskSummary">
-                    <tr><td>Completed task:</td><td>{{activityName }}</td></tr>
-                    <tr><td>Total questions:</td><td>{{ total }}</td></tr>
+                    <tr><td>Activity:</td><td>{{activityName }}</td></tr>
+                    <tr><td>Completed:</td><td>{{ timestamp | date:'MMM d, y hh:mm a' }}</td></tr>
+
+                    <tr><td>Questions:</td><td>{{ total }}</td></tr>
                     <tr><td>Correct:</td><td>{{correct}} ({{ 100*correct/total | number:0 }}%)</td></tr>
                     <tr><td>Wrong:</td><td>{{wrong}} ({{ 100*wrong/total | number:0}}%)</td></tr>
                     <tr><td>Total time:</td><td>{{ totalSeconds | secondsToHuman}}</td></tr>
@@ -40,9 +42,14 @@
             <div ng-show="!mismatch" class="content-paragraph">
                 <p>Details:</p>
                 <p ng-repeat="response in responses">
-                    Question: {{ response[0] }}
-                    <br>Answer: {{ response[1] }} ({{ response[2] && 'Correct' || 'Incorrect' }})
-                    <br>Time taken: {{ response[3]  | secsToMillis | secondsToHuman }}
+                    Question: <span ng-bind-html="response[0]"></span>
+                    <br>Answer: <span ng-bind-html="response[1]"></span> ({{ response[3] && 'Correct' || 'Incorrect' }})
+
+                    <span ng-show="!response[3]">
+                        <br>Actual answer: <span ng-bind-html="response[2]"></span>
+                    </span>
+
+                    <br>Time taken: {{ response[4]  | secsToMillis | secondsToHuman }}
                 </p>
             </div>
 

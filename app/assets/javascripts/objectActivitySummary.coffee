@@ -79,7 +79,8 @@ angular.module('AppOne')
                 buffer.runningTotals.correct = buffer.runningTotals.correct + 1
             else
                 buffer.runningTotals.wrong = buffer.runningTotals.wrong + 1
-            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.result, (new Date()) - @lastTimePoint])
+
+            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint])
             @_write(buffer)
             @lastTimePoint = (new Date()).getTime()
 
