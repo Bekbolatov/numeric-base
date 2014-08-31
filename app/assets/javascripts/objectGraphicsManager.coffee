@@ -28,6 +28,7 @@ angular.module('AppOne')
                 '9': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,1, 0,0,0,0,1, 0,0,0,1,0, 0,1,1,0,0 ]]
                 '?': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,0,0, 0,0,1,0,0 ]]
                 '-': [5, 7, [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 ]]
+                '.': [5, 7, [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,0,0, 0,1,1,0,0 ]]
             if offset != undefined
                 @offset = offset
             else
@@ -180,5 +181,7 @@ angular.module('AppOne')
             img.flipImage()
             img.getBase64()
 
-    new GraphicsManager()
+    graphicsManager = new GraphicsManager()
+    document.numeric.modules.Graphics = graphicsManager
+    graphicsManager
 ])
