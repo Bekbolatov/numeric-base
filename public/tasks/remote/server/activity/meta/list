@@ -42,9 +42,9 @@
             },
         "com.sparkydots.numeric.tasks.ssat.a.q00" :
             {
-                "name": "SSAT Math: Pick a problem",
-                "shortDescription": "Practice SSAT Math section - pick a problem.",
-                "description": "In this practice set user can pick which problem from the SSAT Math section to work on.",
+                "name": "SSAT 2014-2015 Elementary: Math",
+                "shortDescription": "Practice SSAT Math section (elementary).",
+                "description": "In this practice set student can work on the SSAT Math section at elementary level.",
                 "authorName": "Sparky Dots",
                 "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/30/2014"

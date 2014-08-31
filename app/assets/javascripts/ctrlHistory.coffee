@@ -49,6 +49,7 @@ angular.module('AppOne')
     else
         $scope.backButton = '#/history/continue'
 
+
     ActivitySummary.getSummaryById(itemId)
     .then(
         (data) ->
@@ -58,7 +59,7 @@ angular.module('AppOne')
                 $scope.mismatch = false
                 $scope.activityName = data.activityName
                 $scope.timestamp = data.endTime
-                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4]]  for response in data.responses)
+                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4], ActivitySummary.expandGraphic(response[5])  ]  for response in data.responses)
 
                 $scope.correct = data.runningTotals.correct
                 $scope.wrong = data.runningTotals.wrong

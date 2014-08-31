@@ -52,10 +52,10 @@ angular.module('AppOne')
 
 
             if @question.graphic != undefined
-                @hasQuestionGraphicData = true
+                @questionHasGraphicData = true
                 @questionGraphicData = @question.graphic
             else
-                @hasQuestionGraphicData = false
+                @questionHasGraphicData = false
                 @questionGraphicData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D'
 
             returnQuestion =
@@ -64,7 +64,6 @@ angular.module('AppOne')
                 questionStatement : @questionStatement
                 questionStatementAsHTML : @questionStatementAsHTML
                 questionStatementChoices : @questionStatementChoices
-                qestionStatementGraphic : @question.graphic
             returnQuestion
 
         questionString: ->
@@ -166,31 +165,23 @@ angular.module('AppOne')
 
         _checkAnswer: (answer) =>
             @scope.$broadcast('timer-stop')
-            answerString = @currentActivity.answerString(answer)
-            answerStringAsHTML = $sce.trustAsHtml('' + answerString)
-            answerStringActual = @currentActivity.answerStringActual()
-            answerStringActualAsHTML = $sce.trustAsHtml('' + answerStringActual)
 
+            @answeredQuestion =
+                statement: @questionStatement_
+                statementAsHTML: @questionStatementAsHTML_
+                answer: @currentActivity.answerString(answer)
+                answerAsHTML: $sce.trustAsHtml('' + @currentActivity.answerString(answer))
+                actualAnswer: @currentActivity.answerStringActual()
+                actualAnswerAsHTML: $sce.trustAsHtml('' + @currentActivity.answerStringActual())
+                questionHasGraphicData: @currentActivity.questionHasGraphicData
+                questionGraphicData: @currentActivity.questionGraphicData
             if @currentActivity.checkAnswer(answer)
                 @_markCorrectResult()
-                @answeredQuestion =
-                    statement: @questionStatement_
-                    statementAsHTML: @questionStatementAsHTML_
-                    answer: answerString
-                    answerAsHTML: answerStringAsHTML
-                    actualAnswer: answerStringActual
-                    actualAnswerAsHTML: answerStringActualAsHTML
-                    result: true
+                @answeredQuestion.result = true
             else
                 @_markWrongResult()
-                @answeredQuestion =
-                    statement: @questionStatement_
-                    statementAsHTML: @questionStatementAsHTML_
-                    answer: answerString
-                    answerAsHTML: answerStringAsHTML
-                    actualAnswer: answerStringActual
-                    actualAnswerAsHTML: answerStringActualAsHTML
-                    result: false
+                @answeredQuestion.result = false
+
             ActivitySummary.add(@answeredQuestion)
             $timeout( \
                 () =>

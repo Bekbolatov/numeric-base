@@ -80,7 +80,10 @@ angular.module('AppOne')
             else
                 buffer.runningTotals.wrong = buffer.runningTotals.wrong + 1
 
-            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint])
+            if answeredQuestion.questionHasGraphicData
+                buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, [answeredQuestion.questionGraphicData] ])
+            else
+                buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, []])
             @_write(buffer)
             @lastTimePoint = (new Date()).getTime()
 
@@ -127,6 +130,10 @@ angular.module('AppOne')
                 (status) -> deferred.reject(status)
             )
             deferred.promise
+        expandGraphic: (item) ->
+            if item.length < 1
+                return [false, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D']
+            [true, item[0]]
 
         setFirstIndex: (newFirst) -> @newFirst = newFirst
         getFirstIndex: -> @newFirst

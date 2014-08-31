@@ -43,6 +43,16 @@
                 <p>Details:</p>
                 <p ng-repeat="response in responses">
                     Question: <span ng-bind-html="response[0]"></span>
+
+
+                    <!--  GRAPHIC -->
+                        <span ng-show="response[5][0]">
+                                <span class="span-question-graphic">
+                                    <img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !response[5][0] }" alt="" ng-src="{{ response[5][1] }}" />
+                                </span>
+                        </span>
+
+
                     <br>Answer: <span ng-bind-html="response[1]"></span> ({{ response[3] && 'Correct' || 'Incorrect' }})
 
                     <span ng-show="!response[3]">

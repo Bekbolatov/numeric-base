@@ -15,9 +15,9 @@ angular.module('Krista')
 
             img = GraphicsManager.newImageWhiteWithOffset(aa, bb, 20 )
 
-            img.drawTriangle(0,0, 0,bb, aa,0, 'b')
+            img.drawTriangle(0,0, 0,bb, aa,0, 'B')
 
-            img.drawRectangle(0,0, 10, 10, 'r')
+            img.drawRectangle(0,0, 10, 10, 'B')
 
             img.placeCharSequence(Math.floor(aa/2) - 4 , -11, '' + a)
             img.placeCharSequence(-10, Math.floor(bb/2), '' + b)

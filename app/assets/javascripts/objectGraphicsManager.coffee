@@ -10,6 +10,7 @@ angular.module('AppOne')
             @data = []
             @colors =
                 'B': String.fromCharCode(0, 0, 0, 0)
+                'D': String.fromCharCode(50, 50, 50, 0)
                 'w': String.fromCharCode(255, 255, 255, 0)
                 'r': String.fromCharCode(255, 0, 0, 0)
                 'g': String.fromCharCode(0, 255, 0, 0)
@@ -26,6 +27,7 @@ angular.module('AppOne')
                 '8': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
                 '9': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,1, 0,0,0,0,1, 0,0,0,1,0, 0,1,1,0,0 ]]
                 '?': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,0,0, 0,0,1,0,0 ]]
+                '-': [5, 7, [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 ]]
             if offset != undefined
                 @offset = offset
             else
@@ -42,7 +44,7 @@ angular.module('AppOne')
                     @data[i] = color
 
         colorOrBlack: (colorLetter) ->
-            if colorLetter == undefined || @colors[colorLetter]
+            if colorLetter == undefined || @colors[colorLetter] == undefined
                 color = @colors['B']
             else @colors[colorLetter]
 
