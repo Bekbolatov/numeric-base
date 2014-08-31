@@ -46,6 +46,10 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.a.q00'] =
             qq.answerType = 'numeric'
         }
 
+        if (qa[2] != undefined) {
+            qq.graphic = qa[2][0]
+        }
+
         return qq
 
 

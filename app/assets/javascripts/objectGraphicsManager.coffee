@@ -3,6 +3,10 @@ angular.module('AppOne')
 .factory("GraphicsManager", [ () ->
     class Image
         constructor: (@width, @height, backgroundColor, offset) ->
+            @width = Math.round(@width)
+            @height = Math.round(@height)
+            offset = Math.round(offset)
+
             @data = []
             @colors =
                 'B': String.fromCharCode(0, 0, 0, 0)
@@ -16,11 +20,12 @@ angular.module('AppOne')
                 '2': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,1,0,0,0, 1,1,1,1,1 ]]
                 '3': [5, 7, [1,1,1,1,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,1,0, 0,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
                 '4': [5, 7, [0,0,0,1,0, 0,0,1,1,0, 0,1,0,1,0, 1,0,0,1,0, 1,1,1,1,1, 0,0,0,1,0, 0,0,0,1,0 ]]
-                '5': [5, 7, []]
-                '6': [5, 7, []]
-                '7': [5, 7, []]
-                '8': [5, 7, []]
-                '9': [5, 7, []]
+                '5': [5, 7, [1,1,1,1,1, 1,0,0,0,0, 1,1,1,1,0, 0,0,0,0,1, 0,0,0,0,1, 0,0,0,0,1, 1,1,1,1,0 ]]
+                '6': [5, 7, [0,0,1,1,0, 0,1,0,0,0, 1,0,0,0,0, 1,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
+                '7': [5, 7, [1,1,1,1,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,1,0,0,0, 0,1,0,0,0, 0,1,0,0,0 ]]
+                '8': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
+                '9': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,1, 0,0,0,0,1, 0,0,0,1,0, 0,1,1,0,0 ]]
+                '?': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,0,0, 0,0,1,0,0 ]]
             if offset != undefined
                 @offset = offset
             else
@@ -73,6 +78,8 @@ angular.module('AppOne')
 
         ############################################################
         placeChar: (x,y,c, colorLetter) ->
+            x = Math.round(x)
+            y = Math.round(y)
             color = @colorOrBlack(colorLetter)
             char = @chars[c]
             if char == undefined
@@ -91,8 +98,8 @@ angular.module('AppOne')
                 @placeChar(x + i*w, y, cc[i], colorLetter)
         ############################################################
         setPoint: (x, y, color) ->
-            x = x + @offset
-            y = y + @offset
+            x = Math.round(x + @offset)
+            y = Math.round(y + @offset)
             @data[y * @width + x] = color
             @
         getPoint: (x, y) -> @data[y * @width + x]
@@ -125,6 +132,10 @@ angular.module('AppOne')
             @drawLine(x2, y2, x3, y3, colorLetter)
         ############################################################
         fillRectangle: (x, y, w, h, colorLetter) ->
+            x = Math.round(x)
+            y = Math.round(y)
+            w = Math.round(w)
+            h = Math.round(h)
             color = @colorOrBlack(colorLetter)
             for ny in [ y .. (y + h - 1) ]
                 for nx in [ x .. (x + w - 1) ]

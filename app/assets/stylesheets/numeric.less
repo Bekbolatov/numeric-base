@@ -168,11 +168,16 @@ input[type=text].inputmodified {
 }
 
 .img-question-graphic {
-    border: 1px solid #222;
-    /* border: 0px; */
+    /* border: 1px solid #222; */
+    border: 0px;
 }
 .img-question-graphic-empty {
     border: 0px;
+}
+
+.span-question-graphic {
+    display: block;
+    text-align: center;
 }
 
 .answerBox {
@@ -317,14 +322,14 @@ body {
     -moz-perspective: 700;
     perspective: 700;
     width: 100%;
-    height: 100%;
+    height: 120%;
     position: absolute;
     z-index: -4;
 }
 
 .flip .flipcard {
   width: 100%;
-  height: 100%;
+  height: 120%;
   -webkit-transform-style: preserve-3d;
   -webkit-transition: 0.9s;
   -moz-transform-style: preserve-3d;
@@ -339,7 +344,7 @@ body {
 
 .flip .flipcard .face {
     width: 100%;
-    height: 100%;
+    height: 120%;
     position: absolute;
     background: white;
     -webkit-backface-visibility: hidden ;
@@ -349,13 +354,13 @@ body {
 
 .flip .flipcard .front {
     width: 100%;
-    height: 100%;
+    height: 120%;
     background: white;
     position: absolute;
 }
 .flip .flipcard .back {
     width: 100%;
-    height: 100%;
+    height: 120%;
     background: #fdfdf7;
     position: absolute;
 

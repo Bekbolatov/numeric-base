@@ -69,6 +69,15 @@
                         </div>
 
 
+                        <span ng-show="currentActivity.hasQuestionGraphicData">
+                            <p>
+                                <span class="span-question-graphic">
+                                    <img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !currentActivity.hasQuestionGraphicData }" id='questionGraphic' alt="" ng-src="{{ currentActivity.questionGraphicData }}">
+                                </span>
+                            </p>
+                        </span>
+
+
                         <!--  feedback result displayed here -->
                         <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
                             {{ activityDriver.result.verbal }}

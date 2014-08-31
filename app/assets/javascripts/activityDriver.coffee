@@ -51,12 +51,20 @@ angular.module('AppOne')
                 @sizingClass = 'sizeKeepSame'
 
 
+            if @question.graphic != undefined
+                @hasQuestionGraphicData = true
+                @questionGraphicData = @question.graphic
+            else
+                @hasQuestionGraphicData = false
+                @questionGraphicData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D'
+
             returnQuestion =
                 questionStatement_ : @questionStatement_
                 questionStatementAsHTML_ : @questionStatementAsHTML_
                 questionStatement : @questionStatement
                 questionStatementAsHTML : @questionStatementAsHTML
                 questionStatementChoices : @questionStatementChoices
+                qestionStatementGraphic : @question.graphic
             returnQuestion
 
         questionString: ->

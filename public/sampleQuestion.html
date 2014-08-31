@@ -17,7 +17,7 @@ SSAT, Quantitative (Math) Section
 <button class="btn" ng-click="regen(6)">6</button>
 <button class="btn btn-primary" ng-click="regen(7)">7</button>
 <button class="btn btn-primary" ng-click="regen(8)">8</button>
-<button class="btn btn-negative" ng-click="regen(9)">9</button>
+<button class="btn btn-primary" ng-click="regen(9)">9</button>
 <button class="btn btn-primary" ng-click="regen(10)">10</button>
 
 <button class="btn btn-primary" ng-click="regen(11)">11</button>
@@ -48,7 +48,13 @@ SSAT, Quantitative (Math) Section
 
 <p>
     <span ng-bind-html="question"</span>
-    <span ng-show="hasQuestionGraphicData"><p><img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !hasQuestionGraphicData }" id='questionGraphic' alt="" ng-src="{{ questionGraphicData }}"></p></span>
+    <span ng-show="hasQuestionGraphicData">
+        <p>
+            <span class="span-question-graphic">
+                <img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !hasQuestionGraphicData }" id='questionGraphic' alt="" ng-src="{{ questionGraphicData }}">
+            </span>
+        </p>
+    </span>
 </p>
 <p>
     <ol type='A' class="ol-mult-choice">

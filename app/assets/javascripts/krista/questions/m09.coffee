@@ -4,14 +4,14 @@ angular.module('Krista')
     class M09
         u: KristaUtil
         generate: ->
-            a = @u.random(3, 10)
-            b = @u.random(3, 10)
+            a = @u.random(3, 9)
+            b = @u.random(4, 10)
             if a %2 == 1 && b % 2 == 1
                 a = a + 1
 
-            K = 15
+            bb = 110
+            K = bb/b
             aa = a * K
-            bb = b * K
 
             img = GraphicsManager.newImageWhiteWithOffset(aa, bb, 20 )
 
@@ -19,11 +19,12 @@ angular.module('Krista')
 
             img.drawRectangle(0,0, 10, 10, 'r')
 
-            img.placeCharSequence(15, 15, '102')
+            img.placeCharSequence(Math.floor(aa/2) - 4 , -11, '' + a)
+            img.placeCharSequence(-10, Math.floor(bb/2), '' + b)
 
             imgdata = img.getBase64()
 
-            [  ['If the area of a triangle is ½ × base × vertical height, what is the area of the triangle?', [0,0,0,a,b] ], 0, [imgdata]]
+            [  ['If the area of a triangle is ½ × base × vertical height, what is the area of the triangle?' ], Math.round(a * b / 2), [imgdata]]
 
     new M09()
 ]
