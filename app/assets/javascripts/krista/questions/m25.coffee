@@ -37,7 +37,17 @@ angular.module('Krista')
 
             imgdata = img.getBase64()
 
-            [  ['The area of the rectangle shown is ' + a*b + ' centimeters squared. The length of one of the sides is ' + a + ' centimeters. What is the length of the other side?' ], b, [imgdata]]
+            correct = a * 3 + b * 2
+            inc = [
+                correct + a
+                correct - a
+                correct - 2 * b
+                correct + @u.random(1, 3)
+            ]
+
+            [answers, index] = @u.shuffleAnswers4(inc, correct)
+
+            [  ['What is the perimeter of the shape shown below?', answers], index, [imgdata]]
 
     new M25()
 ]

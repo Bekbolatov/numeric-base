@@ -14,6 +14,7 @@ angular.module('Krista')
                     'Natalie', 'Leah', 'Sarah', 'Nora', 'Mila', 'Elizabeth', 'Lillian', 'Kylie', 'Audrey', 'Lucy', 'Maya', 'Annabelle', 'Gabriella', 'Elena', 'Victoria', 'Claire', 'Savannah',
                     'Maria', 'Stella', 'Liliana', 'Allison', 'Samantha', 'Alyssa', 'Molly', 'Violet', 'Julia', 'Eva', 'Alice', 'Alexis', 'Kayla', 'Katherine', 'Lauren', 'Jasmine', 'Caroline', 'Vivian', 'Juliana']
             }
+            buyable: ['a magazine', 'a new toy robot', 'a new diary', 'a book', 'a book about birds', 'a movie ticket']
             item: {
                 person: [
                     [ [ ['boy', 'boys'], [ 'girl', 'girls'] ], ['kid', 'children'] ]

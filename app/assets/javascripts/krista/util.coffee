@@ -16,6 +16,19 @@ angular.module('Krista')
                 if n1 != n2
                     pair = [list[n1], list[n2]]
             pair
+        randomBuyableItem: () =>
+            items = KristaData.data.buyable
+            @randomFromList(items)
+        randomName: () =>
+            names = KristaData.data.name
+            l1 = names.male.length
+            l2 = names.female.length
+            n1 = @random(0, l1 + l2)
+            if n1 >= l1
+                name = [names.female[n1-l1], 'she', 'her', 'her']
+            else
+                name = [names.male[n1], 'he', 'him', 'his']
+            name
         randomPairNames: () =>
             names = KristaData.data.name
             l1 = names.male.length
