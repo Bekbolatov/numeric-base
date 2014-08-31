@@ -2,17 +2,45 @@ angular.module('AppOne')
 
 .factory("GraphicsManager", [ () ->
     class Image
-        constructor: (@width, @height, backgroundColor) ->
-            @_setImageHeader()
+        constructor: (@width, @height, backgroundColor, offset) ->
             @data = []
             @colors =
-                'b': String.fromCharCode(0, 0, 0, 0)
+                'B': String.fromCharCode(0, 0, 0, 0)
                 'w': String.fromCharCode(255, 255, 255, 0)
                 'r': String.fromCharCode(255, 0, 0, 0)
                 'g': String.fromCharCode(0, 255, 0, 0)
                 'b': String.fromCharCode(0, 0, 255, 0)
+            @chars =
+                '0': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
+                '1': [5, 7, [0,0,1,0,0, 0,1,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 0,0,1,0,0, 1,1,1,1,1 ]]
+                '2': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,1,0,0,0, 1,1,1,1,1 ]]
+                '3': [5, 7, [1,1,1,1,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,1,0, 0,0,0,0,1, 1,0,0,0,1, 0,1,1,1,0 ]]
+                '4': [5, 7, [0,0,0,1,0, 0,0,1,1,0, 0,1,0,1,0, 1,0,0,1,0, 1,1,1,1,1, 0,0,0,1,0, 0,0,0,1,0 ]]
+                '5': [5, 7, []]
+                '6': [5, 7, []]
+                '7': [5, 7, []]
+                '8': [5, 7, []]
+                '9': [5, 7, []]
+            if offset != undefined
+                @offset = offset
+            else
+                @offset = 0
+            @width = @width + 2 * @offset
+            @height = @height + 2 * @offset
+            @_setImageHeader()
+
             if backgroundColor != undefined
-                @fillRectangle(0, 0, @width, @height, backgroundColor)
+                color = @colors[backgroundColor]
+                if color == undefined
+                    color = @colors['w']
+                for i in [ 0 .. ( @width *  @height - 1) ]
+                    @data[i] = color
+
+        colorOrBlack: (colorLetter) ->
+            if colorLetter == undefined || @colors[colorLetter]
+                color = @colors['B']
+            else @colors[colorLetter]
+
         _getLittleEndianHex: (value) ->
             result = []
             for bytes in [4 .. 1]
@@ -44,27 +72,33 @@ angular.module('AppOne')
             '\x00\x00\x00\x00'       # 0 important colors (means all colors are important)
 
         ############################################################
+        placeChar: (x,y,c, colorLetter) ->
+            color = @colorOrBlack(colorLetter)
+            char = @chars[c]
+            if char == undefined
+                char = @chars['?']
+            i = 0
+            for yy in [ (y + char[1] - 1) .. y ]
+                for xx in [ x .. (x + char[0] - 1) ]
+                    if char[2][i] > 0
+                        @setPoint(xx, yy, color)
+                    i = i + 1
+        placeCharSequence: (x,y,cc, colorLetter) ->
+            if cc == undefined || cc.length < 1
+                return
+            w = 6
+            for i in [ 0 .. (cc.length - 1) ]
+                @placeChar(x + i*w, y, cc[i], colorLetter)
         ############################################################
         setPoint: (x, y, color) ->
+            x = x + @offset
+            y = y + @offset
             @data[y * @width + x] = color
             @
         getPoint: (x, y) -> @data[y * @width + x]
-        fillRectangle: (x, y, w, h, colorLetter) ->
-            if colorLetter == undefined
-                colorLetter = 'b'
-            color = @colors[colorLetter]
-            if color == undefined
-                color = @colors['b']
-            for ny in [ y .. (y + h - 1) ]
-                for nx in [ x .. (x + w - 1) ]
-                    @setPoint(nx, ny, color)
-            @
+        ############################################################
         drawLine: (x1, y1, x2, y2, colorLetter) ->
-            if colorLetter == undefined
-                colorLetter = 'b'
-            color = @colors[colorLetter]
-            if color == undefined
-                color = @colors['b']
+            color = @colorOrBlack(colorLetter)
             if y2 == y1 && x2 == x1
                  @setPoint(x1, y1, color)
                  return @
@@ -80,6 +114,23 @@ angular.module('AppOne')
                     @setPoint(x, fx2y(x), color)
             @
         ############################################################
+        drawRectangle: (x, y, w, h, colorLetter) ->
+            @drawLine(x, y, x + w, y, colorLetter)
+            @drawLine(x, y, x, y + h, colorLetter)
+            @drawLine(x, y + h, x + w, y + h, colorLetter)
+            @drawLine(x + w, y, x + w, y + h, colorLetter)
+        drawTriangle: (x1, y1, x2, y2, x3, y3, colorLetter) ->
+            @drawLine(x1, y1, x2, y2, colorLetter)
+            @drawLine(x1, y1, x3, y3, colorLetter)
+            @drawLine(x2, y2, x3, y3, colorLetter)
+        ############################################################
+        fillRectangle: (x, y, w, h, colorLetter) ->
+            color = @colorOrBlack(colorLetter)
+            for ny in [ y .. (y + h - 1) ]
+                for nx in [ x .. (x + w - 1) ]
+                    @setPoint(nx, ny, color)
+            @
+        ############################################################
         transform: (fxy) ->
             @buffer = []
             for x in [ 0 .. (@width - 1) ]
@@ -89,6 +140,7 @@ angular.module('AppOne')
             @data = @buffer
             @buffer = undefined
             @
+        ############################################################
         flipImage: () => @transform( (x,y) => [x, ( @height - 1 - y ) ] )
         ############################################################
         ############################################################
@@ -105,6 +157,7 @@ angular.module('AppOne')
     class GraphicsManager
         newImage: (width, height, backgroundColor) -> new Image(width, height, backgroundColor)
         newImageWhite: (width, height) -> new Image(width, height, 'w')
+        newImageWhiteWithOffset: (width, height, offset) -> new Image(width, height, 'w', offset)
         test: () ->
             img = @newImage(210, 210)
             img.fillRectangle(0, 0, 210, 210, 'w')
