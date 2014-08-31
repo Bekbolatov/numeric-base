@@ -8,7 +8,10 @@ angular.module('AppOne')
         _key: document.numeric.key.activitiesMeta
         _urls:
             local: -> document.numeric.url.base.local + document.numeric.path.meta
-            remote: -> Settings.get('mainServerAddress') + document.numeric.path.meta + DeviceId.qsWithCb(1000)
+            remote: -> Settings.get('mainServerAddress') + document.numeric.path.meta
+        _uriLocal: (activityId) -> @_urls.local() + activityId
+        _uriRemote: (activityId) -> @_urls.remote() + activityId + DeviceId.qsWithCb(1000)
+
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
@@ -37,7 +40,7 @@ angular.module('AppOne')
             =>
                 deferred = $q.defer()
                 console.log('|- trying ' + url + ' ...')
-                $http.get(url, { cache: false, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
+                $http.get(url , { cache: false, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
                 .then( \
                     (response) =>
                         console.log('| |- found at ' + url)
@@ -60,8 +63,8 @@ angular.module('AppOne')
         get: (key) -> # tries localStorage, then localWWW, then remote server
             console.log('Looking for activity ' + key)
             @_cacheGet(key)
-            .catch(@_httpGet(@_urls.local() + key, key))
-            .catch(@_httpGet(@_urls.remote() + key, key))
+            .catch(@_httpGet( @_uriLocal(key), key))
+            .catch(@_httpGet( @_uriRemote(key), key))
         set: (key, meta) ->
             console.log('Updating Meta Cache for activity ' + key)
             @_add(key, meta)

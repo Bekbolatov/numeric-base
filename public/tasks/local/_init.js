@@ -30,7 +30,7 @@ document.numeric = {
 
     defaultActivitiesList: [
         'com.sparkydots.numeric.tasks.t.basic_math',
-        'com.sparkydots.numeric.tasks.ssat.a.q04'
+        'com.sparkydots.numeric.tasks.ssat.a.q00'
     ],
 
     defaultTeachersList: [

@@ -1,41 +1,20 @@
 {
     "activities": {
 
-        "com.sparkydots.numeric.tasks.t.basic_math" :
-            {
-                "name": "Basic Math",
-                "shortDescription": "Practice adding numbers",
-                "description": "Practice adding numbers",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/1/2014"
-            },
-        "com.sparkydots.numeric.tasks.ssat.a.q04" :
-            {
-                "name": "SSAT Math: Ratio problems",
-                "shortDescription": "Practice SSAT Math section - ratio problems.",
-                "description": "This practice set provides questions in the style of Ratio problems in the SSAT Math section",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/27/2014"
-            },
-        "com.sparkydots.numeric.tasks.ssat.a.q05" :
-            {
-                "name": "SSAT Math: Closest value problems",
-                "shortDescription": "Practice SSAT Math section - closest value problems.",
-                "description": "This practice set provides questions in the style of Closest Value problems in the SSAT Math section",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/27/2014"
-            },
-        "com.sparkydots.numeric.tasks.ssat.a.q00" :
-            {
-                "name": "SSAT 2014-2015 Elementary: Math",
-                "shortDescription": "Practice SSAT Math section (elementary).",
-                "description": "In this practice set student can work on the SSAT Math section at elementary level.",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/30/2014"
-            }
+        "com.sparkydots.numeric.tasks.ssat.a.q00" : {
+            "name": "SSAT 2014-2015 Elementary: Math",
+            "shortDescription": "Practice SSAT Math section (elementary).",
+            "description": "In this practice set student can work on the SSAT Math section at elementary level.",
+            "authorName": "Sparky Dots",
+            "authorEmail": "info@sparkydots.com",
+            "authorDate": "8/30/2014" },
+         "com.sparkydots.numeric.tasks.t.basic_math" : {
+            "name": "Basic Math Practice",
+            "shortDescription": "Practice addition, subtraction, etc",
+            "description": "Practice adding, subtracting, multiplying, dividing numbers",
+            "authorName": "Sparky Dots",
+            "authorEmail": "info@sparkydots.com",
+            "authorDate": "8/1/2014" },
+
     }
 }
