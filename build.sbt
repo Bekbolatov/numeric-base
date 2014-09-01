@@ -11,7 +11,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
-playRunHooks <+= baseDirectory.map(base => Grunt(base))  // (base / "app" / "assets"))
+// need to disable for prod
+//playRunHooks <+= baseDirectory.map(base => Grunt(base))  // (base / "app" / "assets"))
 
 
 //pipelineStages := Seq(uglify)
