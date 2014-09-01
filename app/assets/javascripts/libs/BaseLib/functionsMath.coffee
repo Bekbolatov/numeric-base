@@ -1,4 +1,4 @@
-angular.module 'AppOne'
+angular.module 'BaseLib'
 
 .factory "MathFunctions", [ ->
     class MathFunctions

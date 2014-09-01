@@ -9,6 +9,8 @@ scalaVersion := "2.10.3"  //"2.11.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
+CoffeeScriptKeys.sourceMap := false
+
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
 // need to disable for prod
@@ -16,7 +18,6 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 
 
 //pipelineStages := Seq(uglify)
-//CoffeeScriptKeys.sourceMap := false
 //includeFilter in uglify := GlobFilter("javascripts/*.js")
 //UglifyKeys.uglifyOps := {
 //  js =>

@@ -1,4 +1,4 @@
-angular.module('filters', [])
+angular.module 'BaseLib'
 
 .filter 'questionMark', ->
     (input) ->

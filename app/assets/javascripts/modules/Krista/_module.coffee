@@ -1,4 +1,4 @@
-angular.module 'Krista', []
+angular.module 'Krista', ['BaseLib']
 
 
 .factory "KristaQuestions",
