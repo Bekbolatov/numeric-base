@@ -1,8 +1,10 @@
 angular.module('Krista')
 
-.factory "M28", ['KristaData', 'KristaUtil', 'GraphicsManager', (KristaData, KristaUtil, GraphicsManager ) ->
+.factory "M28", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
     class M28
         u: KristaUtil
+        h: HyperTextManager
+
         generate: ->
             d = @u.random(3, 6)
             dh = d / 2
@@ -65,7 +67,7 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            [  ['Use the number line below to answer the question. The hash marks are evenly spaced. What number is the vertical arrow with question mark pointing to on the number line?', answers], index, [imgdata]]
+            [  ['Use the number line below to answer the question. The hash marks are evenly spaced. What number is the vertical arrow with question mark pointing to on the number line?' + @h.graphic(imgdata), answers], index]
 
     new M28()
 ]

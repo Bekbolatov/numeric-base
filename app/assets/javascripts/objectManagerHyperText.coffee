@@ -15,6 +15,10 @@ angular.module 'AppOne'
                     o += '<td>' + item + '</td>'
                 o += '</tr>'
             o + '</table>'
+        tableWrapped: (rows, headers) ->
+            o = '<span class="problem-generated-table-holder">'
+            o += @table(rows, headers)
+            o + '</span>'
         fraction: (a, b) ->
             o = '<span class="fraction">'
             o += '<span class="fraction-top">' + a + '</span>'

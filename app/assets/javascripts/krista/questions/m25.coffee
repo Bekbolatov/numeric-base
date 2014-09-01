@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M25", ['KristaData', 'KristaUtil', 'GraphicsManager', (KristaData, KristaUtil, GraphicsManager ) ->
+.factory "M25", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
     class M25
         u: KristaUtil
+        h: HyperTextManager
         generate: ->
             an = @u.random(4, 12)
             ah = Math.ceil(an/2)
@@ -47,7 +48,7 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            [  ['What is the perimeter of the shape shown below?', answers], index, [imgdata]]
+            [  ['What is the perimeter of the shape shown below?' + @h.graphic(imgdata), answers], index]
 
     new M25()
 ]

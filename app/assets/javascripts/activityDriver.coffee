@@ -17,10 +17,7 @@ angular.module('AppOne')
             if @question.answerType == 'numeric'
                 @inputTypeNumeric = true
                 @inputTypeMultipleChoice = false
-                if @question.answerOnNextLine
-                    @questionStatement = @questionStatement_
-                else
-                    @questionStatement = @questionStatement_ + ' = '
+                @questionStatement = @questionStatement_
 
                 @questionStatementChoices = undefined
                 @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
@@ -49,14 +46,6 @@ angular.module('AppOne')
                     @sizingClass = 'sizeKeepSame'
             else
                 @sizingClass = 'sizeKeepSame'
-
-
-            if @question.graphic != undefined
-                @questionHasGraphicData = true
-                @questionGraphicData = @question.graphic
-            else
-                @questionHasGraphicData = false
-                @questionGraphicData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D'
 
             returnQuestion =
                 questionStatement_ : @questionStatement_
@@ -103,7 +92,7 @@ angular.module('AppOne')
         clearResult: () ->
             @result =
                 class: 'none'
-                verbal: '&nbsp;'
+                verbal: ''
         resetStats: () ->
             @statsCorrect = 0
             @statsWrong = 0
@@ -173,8 +162,6 @@ angular.module('AppOne')
                 answerAsHTML: $sce.trustAsHtml('' + @currentActivity.answerString(answer))
                 actualAnswer: @currentActivity.answerStringActual()
                 actualAnswerAsHTML: $sce.trustAsHtml('' + @currentActivity.answerStringActual())
-                questionHasGraphicData: @currentActivity.questionHasGraphicData
-                questionGraphicData: @currentActivity.questionGraphicData
             if @currentActivity.checkAnswer(answer)
                 @_markCorrectResult()
                 @answeredQuestion.result = true
@@ -183,10 +170,10 @@ angular.module('AppOne')
                 @answeredQuestion.result = false
 
             ActivitySummary.add(@answeredQuestion)
-            $timeout( \
-                () =>
-                    @result.class = 'none'
-                , 1000)
+#            $timeout( \
+#                () =>
+#                    @result.class = 'none'
+#                , 1000)
 
         # User keypad entries
         pressed: (digit) ->

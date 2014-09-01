@@ -33,12 +33,13 @@ angular.module('Krista')
             else
                 name = [names.male[n1], 'he', 'him', 'his']
             name
-        randomNames: (n) ->
+        randomNames: (n, filter) ->
             o = []
             names = []
+            f = (n) -> ( ( filter == undefined ) || filter(n) )
             for i in [ 1 .. n ]
                 name = @randomName()
-                while o.indexOf(name[0]) > -1
+                while ( (o.indexOf(name[0]) > -1) || ( !f(name[0]) ) )
                     name = @randomName()
                 o.push(name[0])
                 names.push(name)

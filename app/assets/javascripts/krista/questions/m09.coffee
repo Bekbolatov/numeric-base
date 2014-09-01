@@ -1,8 +1,10 @@
 angular.module('Krista')
 
-.factory "M09", ['KristaData', 'KristaUtil', 'GraphicsManager', (KristaData, KristaUtil, GraphicsManager ) ->
+.factory "M09", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
     class M09
         u: KristaUtil
+        h: HyperTextManager
+
         generate: ->
             a = @u.random(3, 9)
             b = @u.random(4, 10)
@@ -24,7 +26,7 @@ angular.module('Krista')
 
             imgdata = img.getBase64()
 
-            [  ['If the area of a triangle is ½ × base × vertical height, what is the area of the triangle?' ], Math.round(a * b / 2), [imgdata]]
+            [  ['If the area of a triangle is ½ × base × vertical height, what is the area of the triangle?' + @h.graphic(imgdata) ], Math.round(a * b / 2) ]
 
     new M09()
 ]

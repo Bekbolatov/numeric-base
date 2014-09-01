@@ -1,11 +1,4 @@
 <header class="bar bar-nav">
-    <!-- Maybe hide back button, so student can focus on this activity
-    <a ng-show="!isFlipped" href="#/tasksList">
-        <button class="btn btn-link btn-nav pull-left">
-            <span class="icon icon-left-nav"></span>
-        </button>
-    </a>
-    -->
 
     <a href="#/tasksList" class="icon icon-left-nav pull-left" ng-show="!showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
 
@@ -59,42 +52,21 @@
 
                     <div class="content-inner">
 
-
-                        <!--   problem statement -->
-                        <div ng-show="currentActivity.inputTypeNumeric" class="numeric numeric-problem">
-                            <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
-                            <span ng-show="!currentActivity.answerOnNextLine">{{ activityDriver.answer | questionMark }}</span>
+                        <!--   PROBLEM STATEMENT (TODO: combine into one type?) -->
+                        <div class="problem-statement-box-holder set-max-width center-inline-child">
+                            <div class="problem-statement-box">
+                                <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                            </div>
                         </div>
-
-                        <div ng-show="currentActivity.inputTypeMultipleChoice" class="multiple-choice-problem">
-                            <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
-                        </div>
-
-                        <!--  GRAPHIC -->
-                        <span ng-show="currentActivity.questionHasGraphicData">
-                            <p>
-                                <span class="span-question-graphic">
-                                    <img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !currentActivity.questionHasGraphicData }" id='questionGraphic' alt="" ng-src="{{ currentActivity.questionGraphicData }}">
-                                </span>
-                            </p>
-                        </span>
 
                         <!-- ANSWER BOX -->
-                        <div ng-show="currentActivity.inputTypeNumeric" class="numeric numeric-problem">
-                            <div class="answerBox" ng-show="currentActivity.answerOnNextLine">{{ activityDriver.answer | underscore }}</div>
+                        <div class="set-background-grellow set-max-width center-inline-child" ng-show="currentActivity.inputTypeNumeric">
+                            <div class="answerBox">{{ activityDriver.answer | underscore }}</div>
                         </div>
 
-
-
-
-                        <!--  feedback result displayed here -->
-                        <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
-                            {{ activityDriver.result.verbal }}
-                        </div>
-
-
-                        <!--  input is done here -->
-                        <div ng-show="currentActivity.inputTypeNumeric" class="numeric numeric-keypad">
+                        <!--  ANSWER INPUT  (user inputs his/her answer here) -->
+                        <!-- input: numeric -->
+                        <div ng-show="currentActivity.inputTypeNumeric" class="numeric">
                             <table class="numeric">
                                 <tr>
                                     <td class="numeric-td">
@@ -144,7 +116,9 @@
                             </table>
                         </div>
 
-                        <div ng-show="currentActivity.inputTypeMultipleChoice" class="numeric numeric-keypad">
+                        <!-- input: multiple choice -->
+                        <div ng-show="currentActivity.inputTypeMultipleChoice" class="numeric">
+                            <!-- input: multiple choice: 4 choices -->
                             <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 4">
                                 <tr>
                                     <td class="numeric-td">
@@ -171,6 +145,7 @@
                                     </td>
                                 </tr>
                             </table>
+                            <!-- input: multiple choice: 5 choices -->
                             <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 5">
                                 <tr>
                                     <td class="numeric-td">
@@ -207,55 +182,27 @@
                         </div>
 
 
-                        <div>
-                            &nbsp;
-                        </div>
-                        <div class="numeric-completed">
-                            <div ng-show="activityDriver.answeredQuestion.statement">
-                                <div>Previous question: <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></div>
-                                <div ng-show="activityDriver.answeredQuestion.statement">
-
-
-
-                                    <!--  GRAPHIC -->
-                        <div ng-show="activityDriver.answeredQuestion.questionHasGraphicData">
-                                <span class="span-question-graphic">
-                                    <img class="img-question-graphic" ng-class="{ 'img-question-graphic-empty': !activityDriver.answeredQuestion.questionHasGraphicData }" alt="" ng-src="{{ activityDriver.answeredQuestion.questionGraphicData }}" />
-                                </span>
-                        </div>
-
-
-
-
-                                    <div>Your answer:
-                                                    <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
-                                                        <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
-                                                        <span ng-show="activityDriver.answeredQuestion.result" class="icon icon-{{activityDriver.answeredQuestion.result && 'check' || 'close' }}"></span>
-                                                    </span>
-                                                    <span ng-show="activityDriver.answeredQuestion.result">(correct)</span>
-                                                    <span ng-show="!activityDriver.answeredQuestion.result">(wrong)</span>
-
-                                    </div>
-                                    <div ng-show="!activityDriver.answeredQuestion.result">
-                                        Correct answer:
-                                        <span ng-bind-html="activityDriver.answeredQuestion.actualAnswerAsHTML"></span>
-                                    </div>
-                                </div>
+                        <!-- PREV QUESTION/ANSWER SUMMARY -->
+                        <div ng-show="activityDriver.answeredQuestion.statement" class="numeric-completed">
+                            <!--  FEEDBACK (last question correct or wrong) -->
+                            <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
+                                {{ activityDriver.result.verbal }}
                             </div>
 
-                            <br>
-                            &nbsp;
-                            <br>
-                            &nbsp;
-                            <br>
-                            &nbsp;
-                            <br>
+                            <div>Previous question: <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></div>
+                            <div>Your answer:
+                                <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
+                                    <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
+                                    <span ng-show="activityDriver.answeredQuestion.result" class="icon icon-{{activityDriver.answeredQuestion.result && 'check' || 'close' }}"></span>
+                                </span>
 
-
+                                <span ng-show="activityDriver.answeredQuestion.result">(correct)</span>
+                                <span ng-show="!activityDriver.answeredQuestion.result">(wrong)</span>
+                            </div>
+                            <div ng-show="!activityDriver.answeredQuestion.result">
+                                Correct answer: <span ng-bind-html="activityDriver.answeredQuestion.actualAnswerAsHTML"></span>
+                            </div>
                         </div>
-
-
-
 
 
                         <div>

@@ -29,12 +29,12 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            table = @h.table(
+            table = @h.tableWrapped(
                 ( [ pick[0], convertPrice(pick[1]) ] for pick in picked)
                 [ @t.capitalize(type),  @t.capitalize(price) ]
             )
 
-            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <span class="problem-generated-problem-holder">' + table + '</span' , answers ], index]
+            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? ' + table , answers ], index]
 
     new M15()
 ]

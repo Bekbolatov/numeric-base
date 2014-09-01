@@ -142,13 +142,36 @@ input[type=text].inputmodified {
     .optionBlock
 }
 
-.numeric {
-    margin: 0 auto;
+.problem-statement-box-holder {
+}
+
+.set-mx-width {
     width: 100%;
+}
+.center-inline-child{
+    text-align: center;
+}
+.problem-statement-box {
+    display: inline-block;
+
+    border-style: single;
+    border-width: 1px;
+
+    padding-top: 20px;
+    padding-bottom:15px;
+
+    margin-left: 15px;
+    margin-right: 15px;
+
+    font-size: 200%;
+    line-height: 100%;
+
+    text-align: justify;
+
 }
 
 
-.numeric-problem {
+.numeric-problemkk {
     text-align: center;
     border-style: single;
     border-width: 1px;
@@ -157,34 +180,42 @@ input[type=text].inputmodified {
     font-size: 200%;
 }
 
+.multiple-choice-problemkk {
+    text-align: center;
+    border-style: single;
+    border-width: 1px;
+    padding-top: 20px;
+    padding-bottom:15px;
+    font-size: 200%;
+
+    line-height: 100%;
+}
+
 .sizeMakeSmaller {
     font-size: 60%;
-    word-wrap: break-word;
-    margin-left: 15px;
-    margin-right: 15px;
 }
 
 .sizeKeepSame {
 }
 
+
+
+
 .img-question-graphic {
-    border: 1px solid #eee;
+    border: 1px solid #fff;
 }
 .img-question-graphic-empty {
     border: 0px;
 }
-
 .span-question-graphic {
     display: block;
     text-align: center;
 }
 
 
-
 table.problem-generated-table {
     display: inline-block;
 }
-
 .problem-generated-table th {
     border: 1px solid #ddd;
     text-decoration: underline;
@@ -194,29 +225,27 @@ table.problem-generated-table {
     border: 1px solid #ddd;
     padding: 1px 15px;
 }
-
-
-
-.problem-generated-problem-holder {
+.problem-generated-table-holder {
     display: block;
     text-align: center;
 }
+
+.set-background-grellow {
+    background-color: #fff;  /* #4CC713; */
+}
 .answerBox {
+    display: inline-block;
     padding: 15px;
     margin-top: 15px;
-    margin-left: 25%;
-    margin-right: 25%;
+    margin-bottom: 10px;
+    width: 50%;
     border: 1px solid black;
 }
 
-.multiple-choice-problem {
-    text-align: center;
-    border-style: single;
-    border-width: 1px;
-    padding-top: 20px;
-    padding-bottom:15px;
-    font-size: 200%;
-    line-height: 100%;
+
+.numeric {
+    margin: 0 auto;
+    width: 100%;
 }
 
 .numeric-result {
@@ -285,10 +314,11 @@ button:focus {
 }
 
 .numeric-completed {
-    background-color: white;
+    background-color: #eef;
+    font-style: italic;
     text-align: left;
-    padding-left: 20px;
-    padding-top: 7px;
+    padding: 7px 10px 30px 10px;
+    margin-top: 15px;
 }
 .numeric-completed-correct {
     color: green;

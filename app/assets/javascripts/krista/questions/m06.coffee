@@ -3,6 +3,7 @@ angular.module('Krista')
 .factory "M06", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
     class M06
         u: KristaUtil
+        h: HyperTextManager
         generate: ->
             _activity = 'the scores that 5 students earned on a quiz'
             _scores = 'scores'
@@ -11,7 +12,7 @@ angular.module('Krista')
             as = []
             for i in [1 .. 5]
                 as.push @u.random(mina, maxa + 1)
-            names =  ( name[0] for name in @u.randomNames(5) )
+            names =  ( name[0] for name in @u.randomNames(5, (n) -> (n.length < 9) ) )
 
             pickedIndices = @u.randomNonRepeating([0 .. 4], 2)
 
@@ -49,8 +50,7 @@ angular.module('Krista')
 
             imgdata = img.getBase64()
 
-#            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' , answers], index, [imgdata]]
-            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '??-' + HyperTextManager.graphic(imgdata) , answers], index, [imgdata]]
+            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' + @h.graphic(imgdata) , answers], index]
 
     new M06()
 ]
