@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
     var sourceMain = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/';
     var sourceJs = sourceMain + 'javascripts/';
-
+    var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
     // Main app
     var appJsSources = [
@@ -104,6 +104,16 @@ module.exports = function(grunt) {
             dest: sourceJs + 'oneAppCordova.min.js'
           }
         },
+        copy: {
+          appJs: {
+            src: '<%= uglify.appJs.dest %>', 
+            dest: distDest + 'oneApp.dist.min.js'
+          },
+          appJsCordova: {
+            src: '<%= uglify.appJsCordova.dest %>', 
+            dest: distDest + 'oneAppCordova.dist.min.js'
+          }
+        },
         watch: {
             scripts: {
                 files: appJsSourcesCordova,
@@ -124,7 +134,9 @@ module.exports = function(grunt) {
             'concat:appJs',
             'uglify:appJs', 
             'concat:appJsCordova',
-            'uglify:appJsCordova'
+            'uglify:appJsCordova',
+            'copy:appJs', 
+            'copy:appJsCordova',
         ])
     grunt.registerTask('default', ['numeric'])
 

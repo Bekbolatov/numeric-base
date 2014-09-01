@@ -8,6 +8,7 @@
             "authorName": "Sparky Dots",
             "authorEmail": "info@sparkydots.com",
             "authorDate": "8/30/2014" },
+
          "com.sparkydots.numeric.tasks.t.basic_math" : {
             "name": "Basic Math Practice",
             "shortDescription": "Practice addition, subtraction, etc",
@@ -37,7 +38,7 @@
             "authorName": "Sparky Dots",
             "authorEmail": "info@sparkydots.com",
             "authorDate": "8/1/2014",
-            "version": 3 },
+            "version": 3 }
 
    }
 }
