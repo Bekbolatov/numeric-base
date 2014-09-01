@@ -1,9 +1,10 @@
 angular.module('Krista')
 
-.factory "M15", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M15", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
     class M15
         u: KristaUtil
         d: KristaData
+        h: HyperTextManager
         generate: ->
             items = @u.randomFromList(@d.data.itemsWithPrices)
 
@@ -27,7 +28,7 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            table = @u.toTable(
+            table = @h.table(
                 ( [ pick[0], convertPrice(pick[1]) ] for pick in picked)
                 [ @u.capitalize(type),  @u.capitalize(price) ]
             )

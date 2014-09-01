@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M02", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M02", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
     class M02
         u: KristaUtil
+        h: HyperTextManager
 
         increaseRandomly: (a, b) ->
             method = @u.randomFromList([ 0, 1, 2, 3 ])
@@ -41,7 +42,7 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            answers =  (@u.toCssFraction(answer[0], answer[1]) for answer in answers)
+            answers =  (@h.fraction(answer[0], answer[1]) for answer in answers)
 
 
             [  ['What is the smallest fraction?', answers ],    index ]

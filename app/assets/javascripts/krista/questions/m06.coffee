@@ -1,6 +1,6 @@
 angular.module('Krista')
 
-.factory "M06", ['KristaData', 'KristaUtil', 'GraphicsManager', (KristaData, KristaUtil, GraphicsManager ) ->
+.factory "M06", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
     class M06
         u: KristaUtil
         generate: ->
@@ -49,7 +49,8 @@ angular.module('Krista')
 
             imgdata = img.getBase64()
 
-            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' , answers], index, [imgdata]]
+#            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' , answers], index, [imgdata]]
+            [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '??-' + HyperTextManager.graphic(imgdata) , answers], index, [imgdata]]
 
     new M06()
 ]

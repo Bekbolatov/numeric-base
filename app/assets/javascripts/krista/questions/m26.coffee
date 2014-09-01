@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M26", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M26", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
     class M26
         u: KristaUtil
+        h: HyperTextManager
         generate: ->
             n = @u.random(3, 8)
             a = @u.random(1, 6)
@@ -49,9 +50,9 @@ angular.module('Krista')
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
             answers = ( ( [answer[0]] ).concat( @u.reduce(answer[1], answer[2]) ) for answer in answers)
-            answers =  ( ('' + answer[0] + @u.toCssFraction(answer[1], answer[2])) for answer in answers)
+            answers =  ( ('' + answer[0] + @h.fraction(answer[1], answer[2])) for answer in answers)
 
-            [  ['What is ' + @u.toCssFraction(n*b+a, b) + ' expressed as a mixed number?', answers], index]
+            [  ['What is ' + @h.fraction(n*b+a, b) + ' expressed as a mixed number?', answers], index]
 
     new M26()
 ]

@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M23", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M23", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
     class M23
         u: KristaUtil
+        h: HyperTextManager
         generate: ->     # a/n   and b/m
             [a, b] = @u.randomPairFromList([1, 2, 3, 5])
             if a > b
@@ -30,9 +31,9 @@ angular.module('Krista')
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
             #answers = ( ( @u.reduce(answer[0], answer[1]) ) for answer in answers)
-            answers =  ( ('' + @u.toCssFraction(answer[0], answer[1])) for answer in answers)
+            answers =  ( ('' + @h.fraction(answer[0], answer[1])) for answer in answers)
 
-            [  ['What is ' + @u.toCssFraction( a, m) + ' + ' + @u.toCssFraction( b, n) + '?', answers], index]
+            [  ['What is ' + @h.fraction( a, m) + ' + ' + @h.fraction( b, n) + '?', answers], index]
 
     new M23()
 ]

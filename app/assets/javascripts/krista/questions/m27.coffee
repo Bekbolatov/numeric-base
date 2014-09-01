@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M27", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M27", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
     class M27
         u: KristaUtil
+        h: HyperTextManager
         generate: ->
 
             pies = 'pies'
@@ -34,7 +35,7 @@ angular.module('Krista')
                     smallest = offset
                     index = i
 
-            answers =  ( ('' + @u.toCssFraction(answer[0], answer[1])) for answer in answers)
+            answers =  ( ('' + @h.fraction(answer[0], answer[1])) for answer in answers)
 
             [  ['' + p + ' ' + pies + ' will be divided evenly among ' + f + ' ' + friends + '. Of the below, which expression gives the best estimate of the total number of ' + pies + ' each ' + person + ' will receive?', answers], index]
 

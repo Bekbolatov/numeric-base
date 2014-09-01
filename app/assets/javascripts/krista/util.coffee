@@ -128,28 +128,6 @@ angular.module('Krista')
                 return ''
             a[0].toUpperCase() + a.slice(1,1000)
 
-        toTable: (rows, headers) ->
-            o = '<table class="problem-generated-table">'
-            if headers != undefined
-                o += '<tr>'
-                for header in headers
-                    o += '<th>' + header + '</th>'
-                o += '</tr>'
-            for row in rows
-                o += '<tr>'
-                for item in row
-                    o += '<td>' + item + '</td>'
-                o += '</tr>'
-            o += '</table>'
-            o
-
-        toCssFraction: (a, b) ->
-            output = '<span class="fraction">'
-            output += '<span class="fraction-top">' + a + '</span>'
-            output += '<span class="fraction-bottom">' + b + '</span>'
-            output += '</span>'
-
-
         prettify: (text) ->
             afterSpaced = '.,;-!?'
             sentenceStop = '.!?'
