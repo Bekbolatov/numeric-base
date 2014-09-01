@@ -45,7 +45,7 @@ angular.module('Krista')
             for i in [0 .. 4]
                 img.fillRectangleCoords(  i*xtick + boxPadding,0   ,  (i + 1)*xtick - boxPadding,Ky * as[i]  , boxColor) # boxes
                 img.placeCharSequence((i + 0.5)*xtick - 6,Ky * as[i] + 4, '' + as[i])
-                img.placeCharSequenceCentered((i + 0.5)*xtick, -6, '' + '123456789')
+                img.placeCharSequenceCentered((i + 0.5)*xtick, -6, '' + names[i].toUpperCase())
 
             imgdata = img.getBase64()
 
