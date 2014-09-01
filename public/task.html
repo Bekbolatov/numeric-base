@@ -9,15 +9,19 @@
 
     <a href="#/tasksList" class="icon icon-left-nav pull-left" ng-show="!showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
 
-    <button class="btn btn-primary pull-left" ng-show="!showFinish && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)" ng-click="showFinish = !showFinish">
+    <button class="btn btn-primary pull-left" ng-show="!showFinish && !showFinishing && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)" ng-click="showFinish = !showFinish">
         Finish
     </button>
 
-    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="showFinish">
+    <button class="btn btn-negative pull-right" ng-click="showFinishing = true; finishActivity()" ng-show="showFinish && !showFinishing">
         Finish Activity?
     </button>
 
-    <button class="btn btn-primary pull-left"  ng-show="showFinish" ng-click="showFinish = !showFinish">
+    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="showFinishing">
+        Finishing...
+    </button>
+
+    <button class="btn btn-primary pull-left"  ng-show="showFinish && !showFinishing" ng-click="showFinish = !showFinish">
         Cancel
     </button>
 
