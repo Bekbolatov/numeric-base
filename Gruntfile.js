@@ -13,8 +13,13 @@ module.exports = function(grunt) {
                     sourceJs + 'objectFileDownload.js', 
                     sourceJs + 'objectFS.js', 
                     sourceJs + 'objectQRSignature.js', 
-                    sourceJs + 'objectGraphicsManager.js', 
-                    sourceJs + 'objectHyperTextManager.js', 
+
+                    sourceJs + 'objectManagerGraphics.js', 
+                    sourceJs + 'objectManagerHyperText.js', 
+                    sourceJs + 'objectFunctionsRandom.js', 
+                    sourceJs + 'objectFunctionsMath.js', 
+                    sourceJs + 'objectFunctionsText.js', 
+
                     sourceJs + 'objectConnections.js', 
                     sourceJs + 'objectActivityMeta.js', 
                     sourceJs + 'objectActivityBody.js', 

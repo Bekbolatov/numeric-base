@@ -1,10 +1,11 @@
 angular.module('Krista')
 
-.factory "M15", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
+.factory "M15", ['KristaData', 'KristaUtil', 'HyperTextManager','TextFunctions', (KristaData, KristaUtil, HyperTextManager, TextFunctions ) ->
     class M15
         u: KristaUtil
         d: KristaData
         h: HyperTextManager
+        t: TextFunctions
         generate: ->
             items = @u.randomFromList(@d.data.itemsWithPrices)
 
@@ -30,7 +31,7 @@ angular.module('Krista')
 
             table = @h.table(
                 ( [ pick[0], convertPrice(pick[1]) ] for pick in picked)
-                [ @u.capitalize(type),  @u.capitalize(price) ]
+                [ @t.capitalize(type),  @t.capitalize(price) ]
             )
 
             [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <span class="problem-generated-problem-holder">' + table + '</span' , answers ], index]

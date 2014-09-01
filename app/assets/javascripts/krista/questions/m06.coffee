@@ -11,7 +11,7 @@ angular.module('Krista')
             as = []
             for i in [1 .. 5]
                 as.push @u.random(mina, maxa + 1)
-            names = @u.randomNames(5)
+            names =  ( name[0] for name in @u.randomNames(5) )
 
             pickedIndices = @u.randomNonRepeating([0 .. 4], 2)
 

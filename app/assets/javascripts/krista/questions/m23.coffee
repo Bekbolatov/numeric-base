@@ -1,9 +1,11 @@
 angular.module('Krista')
 
-.factory "M23", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
+.factory "M23", ['KristaData', 'KristaUtil', 'HyperTextManager', 'MathFunctions', (KristaData, KristaUtil, HyperTextManager, MathFunctions ) ->
     class M23
         u: KristaUtil
         h: HyperTextManager
+        m: MathFunctions
+        
         generate: ->     # a/n   and b/m
             [a, b] = @u.randomPairFromList([1, 2, 3, 5])
             if a > b
@@ -14,23 +16,23 @@ angular.module('Krista')
             while n/b == m/a || n > 9
                 n = @u.random(b + 1, 3*b + 1)
 
-            [a, m] = @u.reduce(a, m)
-            [b, n] = @u.reduce(b, n)
+            [a, m] = @m.reduce(a, m)
+            [b, n] = @m.reduce(b, n)
 
             K = a*n + b*m
             M = m*n
 
-            correct = @u.reduce(K, M)
+            correct = @m.reduce(K, M)
 
             inc = []
-            inc.push(@u.reduce( a + b, m + n))
-            inc.push(@u.reduce( a + b, m * n))
-            inc.push(@u.reduce( a + n , m * n))
-            inc.push(@u.reduce( a*n + b*m, m + n))
+            inc.push(@m.reduce( a + b, m + n))
+            inc.push(@m.reduce( a + b, m * n))
+            inc.push(@m.reduce( a + n , m * n))
+            inc.push(@m.reduce( a*n + b*m, m + n))
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            #answers = ( ( @u.reduce(answer[0], answer[1]) ) for answer in answers)
+            #answers = ( ( @m.reduce(answer[0], answer[1]) ) for answer in answers)
             answers =  ( ('' + @h.fraction(answer[0], answer[1])) for answer in answers)
 
             [  ['What is ' + @h.fraction( a, m) + ' + ' + @h.fraction( b, n) + '?', answers], index]

@@ -1,15 +1,17 @@
 angular.module('Krista')
 
-.factory "M26", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
+.factory "M26", ['KristaData', 'KristaUtil', 'HyperTextManager', 'MathFunctions', (KristaData, KristaUtil, HyperTextManager, MathFunctions ) ->
     class M26
         u: KristaUtil
         h: HyperTextManager
+        m: MathFunctions
+
         generate: ->
             n = @u.random(3, 8)
             a = @u.random(1, 6)
             b = a + @u.random(2, 5)  # 1/3 1/5   5/7 5/9
 
-            [a, b] = @u.reduce(a, b)
+            [a, b] = @m.reduce(a, b)
 
             correct = [n, a, b]
 
@@ -49,7 +51,7 @@ angular.module('Krista')
 
             [answers, index] = @u.shuffleAnswers4(inc, correct)
 
-            answers = ( ( [answer[0]] ).concat( @u.reduce(answer[1], answer[2]) ) for answer in answers)
+            answers = ( ( [answer[0]] ).concat( @m.reduce(answer[1], answer[2]) ) for answer in answers)
             answers =  ( ('' + answer[0] + @h.fraction(answer[1], answer[2])) for answer in answers)
 
             [  ['What is ' + @h.fraction(n*b+a, b) + ' expressed as a mixed number?', answers], index]

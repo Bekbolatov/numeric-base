@@ -23,7 +23,7 @@ angular.module('Krista')
                 diff2e = luis + diff2
                 diff2w = 'more'
 
-            names = @u.randomPairNames()
+            names = @u.randomNames(2)
 
             [  ['' + names[0][0] + ' has $' + diff1 + ' dollars ' + diff1w + ' than $' + diff1e + '. How much money does ' + names[1][0] + ' have if ' + names[1][1] + ' has $' + diff2 + ' ' + diff2w + ' than ' + names[0][0] ], diff2e]
 

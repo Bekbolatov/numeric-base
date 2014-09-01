@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M04", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M04", ['KristaData', 'KristaUtil', 'TextFunctions', (KristaData, KristaUtil, TextFunctions ) ->
     class M04
         u: KristaUtil
+        t: TextFunctions
 
         generateDataForQuestionType04: () =>
             subject = @u.randomFromList(['person', 'bird', 'zoo', 'forest', 'animal', 'barn', 'thing', 'thing' ])
@@ -166,7 +167,7 @@ angular.module('Krista')
                     else
                         p3 = c.howManyInSet(knownUnknown[1], false, false)
 
-                func = @u.combine3
+                func = @t.combine3
                 if ratioSecond
                     question = func(p2, p1, p3)
                 else

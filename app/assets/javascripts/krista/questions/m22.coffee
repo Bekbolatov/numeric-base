@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M22", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M22", ['KristaData', 'KristaUtil', 'TextFunctions', (KristaData, KristaUtil, TextFunctions ) ->
     class M22
         u: KristaUtil
+        t: TextFunctions
         generate: ->
             a = @u.random(1, 9)
             b = 0
@@ -15,9 +16,9 @@ angular.module('Krista')
 
             p = '' + a + ',' + b + c + d
 
-            pstring = '' + @u.digitToWord(a) + ' thousand'
+            pstring = '' + @t.digitToWord(a) + ' thousand'
             if zeroC
-                pstring += ' ' + @u.digitToWord(b) + ' hundred and ' + @u.digitToWord(d)
+                pstring += ' ' + @t.digitToWord(b) + ' hundred and ' + @t.digitToWord(d)
                 o = [
                     '' + a + ',' + b + d + '0'
                     '' + a + ',' + b + b + d
@@ -25,10 +26,7 @@ angular.module('Krista')
                     '' + a + '0,' + b + '0' + d
                 ]
             else
-                if c < 2
-                    pstring += ' ' + @u.numberBelow20ToWord(c*10 + d)
-                else
-                    pstring += ' ' + @u.tensToWord(c) + ' ' + @u.digitToWord(d)
+                pstring += ' ' + @t.twoDigitToWords(c, d)
 
                 o = [
                     '' + a + ',' + c + '0' + d
