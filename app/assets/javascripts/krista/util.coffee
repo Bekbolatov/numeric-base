@@ -29,6 +29,14 @@ angular.module('Krista')
             else
                 name = [names.male[n1], 'he', 'him', 'his']
             name
+        randomNames: (n) ->
+            o = []
+            for i in [ 1 .. n ]
+                name = @randomName()
+                while o.indexOf(name[0]) > -1
+                    name = @randomName()
+                o.push(name[0])
+            o
         randomPairNames: () =>
             names = KristaData.data.name
             l1 = names.male.length

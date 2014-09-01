@@ -11,6 +11,8 @@ angular.module('AppOne')
             @colors =
                 'B': String.fromCharCode(0, 0, 0, 0)
                 'D': String.fromCharCode(50, 50, 50, 0)
+                'G': String.fromCharCode(150, 150, 150, 0)
+                'L': String.fromCharCode(210, 210, 210, 0)
                 'w': String.fromCharCode(255, 255, 255, 0)
                 'r': String.fromCharCode(255, 0, 0, 0)
                 'g': String.fromCharCode(0, 255, 0, 0)
@@ -29,6 +31,58 @@ angular.module('AppOne')
                 '?': [5, 7, [0,1,1,1,0, 1,0,0,0,1, 0,0,0,0,1, 0,0,0,1,0, 0,0,1,0,0, 0,0,0,0,0, 0,0,1,0,0 ]]
                 '-': [5, 7, [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,1,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 ]]
                 '.': [5, 7, [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,1,1,0,0, 0,1,1,0,0 ]]
+                'A': [5, 7, [ ]]
+                'B': [5, 7, [ ]]
+                'C': [5, 7, [ ]]
+                'D': [5, 7, [ ]]
+                'E': [5, 7, [ ]]
+                'F': [5, 7, [ ]]
+                'G': [5, 7, [ ]]
+                'H': [5, 7, [ ]]
+                'I': [5, 7, [ ]]
+                'J': [5, 7, [ ]]
+                'K': [5, 7, [ ]]
+                'L': [5, 7, [ ]]
+                'M': [5, 7, [ ]]
+                'N': [5, 7, [ ]]
+                'O': [5, 7, [ ]]
+                'P': [5, 7, [ ]]
+                'Q': [5, 7, [ ]]
+                'R': [5, 7, [ ]]
+                'S': [5, 7, [ ]]
+                'T': [5, 7, [ ]]
+                'U': [5, 7, [ ]]
+                'V': [5, 7, [ ]]
+                'W': [5, 7, [ ]]
+                'X': [5, 7, [ ]]
+                'Y': [5, 7, [ ]]
+                'Z': [5, 7, [ ]]
+                'a': [5, 7, [ ]]
+                'b': [5, 7, [ ]]
+                'c': [5, 7, [ ]]
+                'd': [5, 7, [ ]]
+                'e': [5, 7, [ ]]
+                'f': [5, 7, [ ]]
+                'g': [5, 7, [ ]]
+                'h': [5, 7, [ ]]
+                'i': [5, 7, [ ]]
+                'j': [5, 7, [ ]]
+                'k': [5, 7, [ ]]
+                'l': [5, 7, [ ]]
+                'm': [5, 7, [ ]]
+                'n': [5, 7, [ ]]
+                'o': [5, 7, [ ]]
+                'p': [5, 7, [ ]]
+                'q': [5, 7, [ ]]
+                'r': [5, 7, [ ]]
+                's': [5, 7, [ ]]
+                't': [5, 7, [ ]]
+                'u': [5, 7, [ ]]
+                'v': [5, 7, [ ]]
+                'w': [5, 7, [ ]]
+                'x': [5, 7, [ ]]
+                'y': [5, 7, [ ]]
+                'z': [5, 7, [ ]]
             if offset != undefined
                 @offset = offset
             else
@@ -99,6 +153,10 @@ angular.module('AppOne')
             w = 6
             for i in [ 0 .. (cc.length - 1) ]
                 @placeChar(x + i*w, y, cc[i], colorLetter)
+        placeCharSequenceCentered: (x,y,cc, colorLetter) ->
+            if cc == undefined || cc.length < 1
+                return
+            @placeCharSequence(x - 3*cc.length, y - 4, cc, colorLetter )
         ############################################################
         setPoint: (x, y, color) ->
             x = Math.round(x + @offset)
@@ -144,6 +202,7 @@ angular.module('AppOne')
                 for nx in [ x .. (x + w - 1) ]
                     @setPoint(nx, ny, color)
             @
+        fillRectangleCoords: (x1, y1, x2, y2, colorLetter) -> @fillRectangle(x1, y1, x2 - x1, y2 - y1, colorLetter )
         ############################################################
         transform: (fxy) ->
             @buffer = []
