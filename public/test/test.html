@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .active {
+                background-color:red;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div ng-app="TestApp">
+            <div ng-controller="TestCtrl">
+                <input type="text" ng-model="inputData">
+                <button ng-click="clicked('A')">A</button>
+                <button ng-click="clicked('B')">B</button>
+                <button ng-click="oper('B')">B = A</button>
+                <button ng-click="clicked('Z')">Z = ... ; Y = btoa(Z); </button>
+                <br>
+                <button ng-click="oper('0xF0000000')">A = 0xF0000000</button>
+                <button ng-click="oper('0x0F000000')">A = 0x0F000000</button>
+                <button ng-click="oper('0xFF000000')">A = 0xFF000000</button>
+                <button ng-click="oper('0x1000100F')">A = 0x1000100F</button>
+                <button ng-click="oper('0xFF0F00')">A = 0xFF0F00</button>
+                <button ng-click="oper('0xFF00')">A = 0xFF00</button>
+                <button ng-click="oper('0xF0')">A = 0xF0</button>
+                <button ng-click="oper('0xFF')">A = 0xFF</button>
+                <button ng-click="oper('0x0F')">A = 0x0F</button>
+                <br>
+                <button ng-click="oper('<<')">A = A &lt;&lt; 1</button>
+                <button ng-click="oper('>>')">A = A &gt;&gt; 1</button>
+                <button ng-click="oper('>>>')">A = A &gt;&gt;&gt; 1</button>
+                <br>
+                <button ng-click="oper('~')">C = ~A</button>
+                <button ng-click="oper('&')">C = A & B</button>
+                <button ng-click="oper('|')">C = A | B</button>
+                <button ng-click="oper('^')">C = A ^ B</button>
+
+                <hr>
+                <span ng-class="{active : current == 'A' }">A: {{ bA }} -> {{ A }} </span><br>
+                <span ng-class="{active : current == 'B' }">B: {{ bB }} -> {{ B }} </span>
+                <hr>
+                <span ng-class="{active : current == 'C' }">C: {{ bC }} -> {{ C }} </span>
+                <hr>
+                <!-- <span ng-class="{active : current == 'A' }">Z: {{ zz }} -> {{ Z }} (latin1) </span><br>
+                <span ng-class="{active : current == 'A' }">Y: {{ zz }} -> {{ Y }} (base-64) </span><br> -->
+                <hr>
+                <input type="text" ng-model="inputData1">
+                <input type="text" ng-model="inputData2">
+                <input type="text" ng-model="inputData3">
+                <input type="text" ng-model="inputData4">
+                <br>
+                <button ng-click="opera('in')">D = "1 2"</button>
+                <button ng-click="opera('inn')">D = 4x</button><br>
+                <span ng-class="{active : current == 'A' }">inputData: {{ D }}<br>
+                    <span ng-bind-html="dd"></span>
+                </span><br>
+
+                <div ng-bind-html="htmldata"></div>
+                <hr>
+                <div><img src="{{ imgdata }}"></div>
+            </div>
+        </div>
+
+    </body>
+
+    <script src='../bower_components/angular/angular.min.js' type="text/javascript"></script>
+    <script src='png.js' type="text/javascript"></script>
+</html>

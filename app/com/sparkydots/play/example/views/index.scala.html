@@ -16,6 +16,7 @@
     <body>
 
 
+
     <div class="box">
         <ul id="clients"></ul>
     </div>
@@ -27,7 +28,14 @@
     </form>
 
     <div id="box">BOX</div>
+
+
+    <div ng-app="TestApp">
+        {{ test }}
+        <div ng-bind-html="htmldata"></div>
+    </div>
     </body>
 
     <script src='@routes.Assets.at("javascripts/post.js")' type="text/javascript"></script>
+    <script src='@routes.Assets.at("javascripts/test/png.js")' type="text/javascript"></script>
 </html>

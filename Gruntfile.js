@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+    var sourceCoffee = '/Users/renatb/projects/90_scratch/numeric-base/app/assets/javascripts/';
     var sourceJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/javascripts/';
     var oneAppFile = 'oneApp.concat';
     var oneAppCordovaFile = 'oneAppCordova.concat';
@@ -12,7 +13,19 @@ module.exports = function(grunt) {
                     ];
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/AppOneCordova/**' ] );
 
+    var testSources = [
+                    sourceCoffee + 'libs/ImagePng/*.coffee',
+                    sourceCoffee + 'apps/TestApp/*.coffee'
+                    ];
+
     grunt.initConfig({
+        coffee: {
+            test: {
+                files: {
+                    '/Users/renatb/projects/90_scratch/numeric-base/public/test/png.js' : testSources
+                }
+            }
+        },
         concat: {
             appJs: {
                 src: appJsSources,
@@ -55,6 +68,7 @@ module.exports = function(grunt) {
 
 
 
+    grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -68,7 +82,9 @@ module.exports = function(grunt) {
             'uglify:appJsCordova',
             'copy:appJs', 
             'copy:appJsCordova',
-        ])
+        ]);
+        
+    grunt.registerTask('test', [ 'coffee:test']);
     grunt.registerTask('default', ['numeric'])
 
     
