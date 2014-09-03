@@ -1,9 +1,8 @@
 angular.module 'ImagePng', []
 
 # http://en.wikipedia.org/wiki/Portable_Network_Graphics
-# doesn't do indexed-color
 .factory 'GenerateImagePng', [ () ->
-    class Chunker # Cyclic Redundancy Check (http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html)
+    class Chunker # generate chunks with cyclic redundancy check
         constructor: (functions)->
             @_initTable()
         _initTable: ->
@@ -15,10 +14,7 @@ angular.module 'ImagePng', []
                         c = ( 0xedb88320 ^ (c >>> 1) )
                     else
                         c = ( c >>> 1 )
-
                 @table[n] = c
-            @table
-
         _update_crc: (c, buf) ->
             for n in [0 ... buf.length]
                 b = buf.charCodeAt(n)
@@ -50,24 +46,56 @@ angular.module 'ImagePng', []
         IDAT: (compressedData) -> @_createChunk('IDAT', compressedData)
         IEND: -> @_createChunk('IEND', '')
 
-    class Data # assuming @inputData is of the form RGBA:[ String.fromCharCode(R,G,B,A/0), ... ] or Gray:[ String.fromCharCode(Gray,0,0,A/0), ... ]
-        constructor: (@bitDepth, @colorType, @lineFilter, @compression, @inputData, @width, @height) ->
+    class Palette
+        constructor: (@bitDepth) ->
+            @sizeMaxValue = Math.pow(2, @bitDepth) - 1
+            @size = 0
+            @entries = {}
+            @colors = []
+        color: (y) ->
+            value = 0
+            entry = @entries[y]
+            if entry != undefined
+                value = entry
+            else if @size < @sizeMaxValue
+                value = @size
+                @entries[y] = value
+                @colors.push(y)
+                @size += 1
+            value
+        getData: ->
+            s = ''
+            for color in @colors
+                s += String.fromCharCode(color >>> 24)
+                s += String.fromCharCode((color << 8) >>> 24)
+                s += String.fromCharCode((color << 16) >>> 24)
+            s
+    class Data # assuming @inputData is of the form RGBA: [ int word(R,G,B,A/0), ] , previously [ String.fromCharCode(R,G,B,A/0), ... ] or Gray:[ String.fromCharCode(Gray,0,0,A/0), ... ]
+        constructor: (@bitDepth, @colorType, @inputData, @width, @height) ->
             @chunker = new Chunker()
-            if @colorType == 0 || @colorType == 2
-                @channels = @colorType + 1
-            else
-                @channels = @colorType - 2
+            COLORTYPE =
+                0:
+                    channels: 1
+                2:
+                    channels: 3
+                3:
+                    channels: 1
+                4:
+                    channels: 2
+                6:
+                    channels: 4
+            @channels = COLORTYPE[@colorType].channels
+            if @colorType == 3
+                @palette = new Palette(@bitDepth)
             @colorDepth = @bitDepth * @channels
-            @LINE_FILTER = String.fromCharCode(lineFilter)
             if @bitDepth == 1
-                @BITDEPTH = 0x00000001
+                @BITDEPTHMASK = 0x00000001
             else if @bitDepth == 2
-                @BITDEPTH = 0x00000003
+                @BITDEPTHMASK = 0x00000003
             else if @bitDepth == 4
-                @BITDEPTH = 0x0000000F
+                @BITDEPTHMASK = 0x0000000F
             else
-                @BITDEPTH = 0x000000FF
-
+                @BITDEPTHMASK = 0x000000FF
 
         _getPixelChannel: (pixel, channel) ->
             CHANNEL =
@@ -87,66 +115,110 @@ angular.module 'ImagePng', []
                     mask: 0xFF000000
                     shift: 24
             f = CHANNEL[channel]
-            ( ( pixel & f.mask ) >>> f.shift )
+            sample = ( ( pixel & f.mask ) >>> f.shift ) & @BITDEPTHMASK
+            sample
 
         _getPixelData: (pixel) ->
-            converted = 0
+            converted = 0x00000000
             bits = 0
             if @colorType == 2 || @colorType == 6
-                converted = ( ( converted << @BITDEPTH ) | ( @_getPixelChannel(pixel, 'RED') & @BITDEPTH ) )
-                converted = ( ( converted << @BITDEPTH ) | ( @_getPixelChannel(pixel, 'GREEN') & @BITDEPTH ) )
-                converted = ( ( converted << @BITDEPTH ) | ( @_getPixelChannel(pixel, 'BLUE') & @BITDEPTH ) )
+                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'RED')
+                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'GREEN')
+                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'BLUE')
                 bits += ( 3 * @bitDepth )
-            else # @colorType == 0 || @colorType == 4 and fallback for other - use grayscale
-                converted = ( ( converted << @BITDEPTH ) | ( @_getPixelChannel(pixel, 'GRAY') & @BITDEPTH ) )
+            else if @colorType == 3
+                converted = ( converted << @bitDepth ) | @palette.color(pixel)
                 bits += @bitDepth
+            else
+                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'GRAY')
+                bits += @bitDepth
+
             if @colorType == 4 || @colorType == 6
-                converted = ( ( converted << @BITDEPTH ) | ( @_getPixelChannel(pixel, 'ALPHA') & @BITDEPTH ) )
+                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'ALPHA')
                 bits += @bitDepth
+            #console.log('' + converted + ', ' + bits)
             [converted, bits]
 
+        _fillBytePushLeft: (byte, index, word, bits) ->
+            w = word
+            []
         _convertToByteArray: () ->
             @data = ''
-            fillByte = 0
-            fillByteFilled = 0
-            for i in [0 ... @inputData.length]
-                [newPixel, bits] = @_getPixelData(@inputData[i])
-                if fillByteFilled + bits >= 8
-                    remBits = fillByteFilled + bits - 8
-                    takeData = (newPixel >>> remBits )
-                    @data += String.fromCharCode( fillByte | takeData )
-                    fillByte = (newPixel << (8 - remBits)) & 0xFF
-                    fillByteFilled = remBits
-                else
-                    takeData = newPixel << (8 - fillByteFilled - bits)
-                    fillByte = fillByte | takeData
-                    fillByteFilled = fillByteFilled + bits
-            if fillByteFilled > 0
-                @data += String.fromCharCode( fillByte ) # ( fillByte << (8 - fillByteFilled)
-            @byteArrayLineWidth = Math.ceil( @width * @colorDepth / 4)
+            for y in [0 ... @height]
+                fillByte = 0x00
+                fillByteFilled = 0
+                for x in [0 ... @width]
+                    [newPixel, bits] = @_getPixelData(@inputData[y * @width + x])
+                    while fillByteFilled + bits >= 8
+                        takeBits = 8 - fillByteFilled
+                        bottomChop = bits - takeBits #32 - takeBits
+                        takeData = (newPixel >>> bottomChop )
+                        newByte = (fillByte | takeData) & 0xFF
+                        if newByte > 255
+                            console.log('OUT:' + x + ',' + y + ': ' + newByte)
+                        @data += String.fromCharCode( newByte )
+                        fillByte = 0x00
+                        fillByteFilled = 0
+                        bitsNow = bits - takeBits
+                        bitsNowLeftSide = 32 - bitsNow
+                        newPixel = ( ( newPixel << bitsNowLeftSide )  >>>  bitsNowLeftSide )
+                        bits = bitsNow
+                    if bits > 0
+                        fillByte = 0xFF & (fillByte | (newPixel << (8 - fillByteFilled - bits) ) ) #(32 - bits))
+                        fillByteFilled = fillByteFilled + bits
+                if fillByteFilled > 0
+                    @data += String.fromCharCode( fillByte ) # ( fillByte << (8 - fillByteFilled)
+            @byteArrayLineWidth = Math.ceil( @width * @colorDepth / 8)
 
-            console.log(@data.length)
-        _filter: () ->
-            filteredData = ''
-            console.log(@data)
-            console.log(@width)
-            if @lineFilter == 0 # raw
-                for y in [ 0 ... @height ]
-                    filteredData += @LINE_FILTER
-                    filteredData += @data.substr(y * @byteArrayLineWidth, @byteArrayLineWidth)
-#                    for x in [ 0 ... @width ]
-#                        filteredData += @data[ y * @width + x]
-#                        console.log('' + y + '/' + x)
-#                        console.log(filteredData)
+        _filterSubAndUp: () -> _filterSubAndUp()
+
+        _filterSubAndUp: () ->
+            LINE_FILTER_SUB = String.fromCharCode(1)
+            LINE_FILTER_UP = String.fromCharCode(2)
+            if @colorDepth < 8
+                step = 1
+            else
+                step = @colorDepth / 8
+            filteredData = LINE_FILTER_SUB + @data.substr( 0, step)
+            for x in [ step ... @byteArrayLineWidth  ] by step
+                for i in [ 0 ... step ]
+                    index = x + i
+                    cur = @data.charCodeAt(index)
+                    prev = @data.charCodeAt(index - step)
+                    filteredData += String.fromCharCode( ( cur - prev ) & 0xFF)
+            for y in [ 1 ... @height ]
+                filteredData += LINE_FILTER_UP
+                for x in [ 0 ... @byteArrayLineWidth  ] by step
+                    for i in [ 0 ... step ]
+                        index = y * @byteArrayLineWidth + x + i
+                        cur = @data.charCodeAt(index)
+                        prev = @data.charCodeAt(index - @byteArrayLineWidth)
+                        filteredData += String.fromCharCode( ( cur - prev ) & 0xFF)
             filteredData
-        # http://en.wikipedia.org/wiki/DEFLATE
+
+        _filterZero: () ->
+            LINE_FILTER = String.fromCharCode(0)
+            filteredData = ''
+            for y in [ 0 ... @height ]
+                filteredData += LINE_FILTER + @data.substr(y * @byteArrayLineWidth, @byteArrayLineWidth)
+            filteredData
+
+
         _adler32: (data) ->
             MOD_ADLER = 65521
+            FLUSH = 5550 # maybe 5551 is okay: 255*(1+2+...+n) + (n+1)*(MOD_ADLER-1) <= 2^32-1
             a = 1
             b = 0
+            n = 0
             for i in [0 ... data.length]
-                a = (a + data.charCodeAt(i)) % MOD_ADLER
-                b = (b + a) % MOD_ADLER
+                a += data.charCodeAt(i)
+                b += a
+                if (n += 1) > FLUSH
+                    a = a % MOD_ADLER
+                    b = b % MOD_ADLER
+                    n = 0
+            a = a % MOD_ADLER
+            b = b % MOD_ADLER
             (b << 16) | a
         _byte: (dword, num) ->
             if num == 0
@@ -159,9 +231,9 @@ angular.module 'ImagePng', []
                 (dword & 0x000000FF)
 
         _word: (r) -> String.fromCharCode(@_byte(r, 0), @_byte(r, 1), @_byte(r, 2), @_byte(r, 3))
-        _reverseEndianBottom16: (r) -> String.fromCharCode(@_byte(r, 3), @_byte(r, 2))
-        _deflate: (data) ->
-            DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x01)
+        _littleEndianShort: (r) -> String.fromCharCode(@_byte(r, 3), @_byte(r, 2))
+        _deflate: (data) -> # http://www.faqs.org/rfcs/rfc1950.html
+            DATA_COMPRESSION_METHOD = String.fromCharCode(0x08, 0x1D) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
             MAX_STORE_LENGTH = 65535
             storeBuffer = ''
             for i in [0 ... data.length] by MAX_STORE_LENGTH
@@ -171,30 +243,106 @@ angular.module 'ImagePng', []
                 else
                     remaining = MAX_STORE_LENGTH
                     blockType = String.fromCharCode(0x00)
-                storeBuffer += blockType + @_reverseEndianBottom16(remaining) + @_reverseEndianBottom16(~remaining)
+                storeBuffer += blockType + @_littleEndianShort(remaining) + @_littleEndianShort(~remaining)
                 storeBuffer += data.substring(i, i + remaining)
             DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
 
+        _deflateNoCompression: (data) -> # http://www.faqs.org/rfcs/rfc1950.html
+            DATA_COMPRESSION_METHOD = String.fromCharCode(0x08, 0x1D) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
+            MAX_STORE_LENGTH = 65535
+            storeBuffer = ''
+            for i in [0 ... data.length] by MAX_STORE_LENGTH
+                remaining = data.length - i
+                if remaining <= MAX_STORE_LENGTH
+                    blockType = String.fromCharCode(0x01)
+                else
+                    remaining = MAX_STORE_LENGTH
+                    blockType = String.fromCharCode(0x00)
+                storeBuffer += blockType + @_littleEndianShort(remaining) + @_littleEndianShort(~remaining)
+                storeBuffer += data.substring(i, i + remaining)
+            DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
+
+        hexStringOfByte: (b) ->
+            d1 = ( b & 0x000000F0 )  >>> 4
+            d2 = b & 0x0000000F
+            t = (d) ->
+                if d < 10
+                    '' + d
+                else if d == 10
+                    'A'
+                else if d == 11
+                    'B'
+                else if d == 12
+                    'C'
+                else if d == 13
+                    'D'
+                else if d == 14
+                    'E'
+                else
+                    'F'
+            t(d1) + t(d2) + ' '
+
+        hex: (ins, maybeName, hf) ->
+            if hf
+                header = hf[0]
+                footer = hf[1]
+            s = ''
+            for i in [ 0 ... ins.length ]
+                s += @hexStringOfByte(ins.charCodeAt(i))
+                if hf && i == header - 1
+                    s += '[ '
+                if hf && i == ins.length - footer - 1
+                    s += '] '
+            s
+        printHex: (ins, maybeName, hf) ->
+            s = @hex(ins, maybeName, hf)
+            s = '[' + maybeName + ', ' + ins.length + '] '  + s
+            console.log(s)
+
+        printHexOfListOfStrings:  (list, label) ->
+            s = ''
+            for w in list
+                s += @hexOfString(w)
+            console.log('[' + label + '] ' + s)
+
+        printHexOfListOfInts:  (list, label) ->
+            s = ''
+            for w in list
+                s += @hexOfInt(w)
+            console.log('[' + label + '] ' + s)
+
+        hexOfInt: (word) ->
+            @hexStringOfByte(word >>> 24) + ' ' + @hexStringOfByte( (word << 8) >>> 24) + ' ' + @hexStringOfByte( (word << 16) >>> 24) + ' ' + @hexStringOfByte( (word << 24) >>> 24) + ' '
+
+        hexOfString: (string, label) ->
+            s = ''
+            for i in [ 0 ... string.length ]
+                word = string.charCodeAt(i)
+                s += @hexOfInt(word)
+            s
         imageData: () ->
             @_convertToByteArray()
             filteredData = @_filter()
-            console.log(filteredData)
             compressedData = @_deflate(filteredData)
-            console.log(compressedData)
 
             SIGNATURE = @chunker.SIGNATURE()
             IHDR = @chunker.IHDR(@width, @height, @bitDepth, @colorType)
+            if @colorType == 3
+                PLTE = @chunker.PLTE(@palette.getData())
+            else
+                PLTE = ''
             IDAT = @chunker.IDAT(compressedData)
             IEND = @chunker.IEND()
-            SIGNATURE + IHDR + IDAT + IEND
-#    for each line, its own type
-#    Type byte	Filter name	Predicted value
-#    0	None	Zero (so that the raw byte value passes through unaltered)
-#    1	Sub	Byte A (to the left)
-#    2	Up	Byte B (above)
-#    3	Average	Mean of bytes A and B, rounded down
-#    4	Paeth	A, B, or C, whichever is closest to p = A + B − C
 
+            if @printData
+                @printHexOfListOfInts(@inputData, 'inputData')
+                @printHex(@data, 'byteData')
+                @printHex(filteredData, 'filteredData')
+                if @colorType == 3
+                    @printHex(@palette.getData(), 'palette')
+                @printHex(compressedData, 'compresedData', [2, 4])
+                @printHex(IDAT, 'IDAT')
+            SIGNATURE + IHDR + PLTE + IDAT + IEND
 
 
     # PNG uses a 2-stage compression process:
@@ -204,28 +352,5 @@ angular.module 'ImagePng', []
         constructor: ->
             @Chunker = Chunker
             @Data = Data
-#
-#        createPng: (width, height, rgba) ->
-#            DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x01)
-#            LINE_FILTER = String.fromCharCode(0)  # 0:none, 1: left, 2:above, 3: floored avg of left and above, 4: A,B, or C, closest to (A+B-C)
-#            chunker = new Chunker(@f)
-#
-#            filteredData = ''
-#            for y in [ 0 ... rgba.length ] by (width * 4)
-#                filteredData += LINE_FILTER
-#                if (Array.isArray(rgba))
-#                    for x in [ 0 ... (width * 4) ]
-#                        filteredData += String.fromCharCode(rgba[y + x] & 0xff) # r,g,b,a, r,g,b,a,... must be array of integers with lower 8 bits repr...
-#                else
-#                    filteredData += rgba.substr(y, width * 4)
-#
-#            compressedData = DATA_COMPRESSION_METHOD + @f.deflate(filteredData) + @f.fullWord(@f.adler32(filteredData))
-#
-#            SIGNATURE = chunker.SIGNATURE()
-#            IHDR = chunker.IHDR(width, height)
-#            IDAT = chunker.IDAT(compressedData)
-#            IEND = chunker.IEND()
-#            SIGNATURE + IHDR + IDAT + IEND
-
     new Encoder()
 ]

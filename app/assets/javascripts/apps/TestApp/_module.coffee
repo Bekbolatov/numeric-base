@@ -106,6 +106,11 @@ angular.module 'TestApp', ['ImagePng']
     $scope.inputData2 = "1 1 1 1 1 1"
     $scope.inputData3 = "1 1 1 1 1 1"
     $scope.inputData4 = "1 1 1 1 1 1"
+    $scope.bitDepth = 8
+    $scope.width = 2
+    $scope.height = 3
+    $scope.color = 0
+
     $scope.opera = (o) ->
         if o == 'in'
             r = $scope.inputData.split(' ')
@@ -122,16 +127,59 @@ angular.module 'TestApp', ['ImagePng']
                 w[i] = r1[i] << 24 | r2[i] << 16 | r3[i] << 8  | r4[i]
             $scope.D = w
 
-            ddi = []
-            for y in [ 0 .. 128 ]
-                for x in [ 0 .. 128 ]
-                    ddi[y * 128 + x] = ( 255 << 24 )
+#            ddi = []
+#            for y in [ 0 .. 128 ]
+#                for x in [ 0 .. 128 ]
+#                    ddi[y * 128 + x] = ( 255 << 24 )
 
-            $scope.DD = new p.Data(8, 0, 0, 0, ddi, 128, 128)
-            $scope.DD._convertToByteArray()
-            window.DD = $scope.DD
-            $scope.Z = $scope.DD.data
-            $scope.imgdata = 'data:image/png;base64,' + btoa($scope.DD.imageData())
+
+
+ #               color type: 6=truecolor with alpha; 3 (indexed color); 2 (truecolor); 0,4 (Grayscale, and with alpha)
+
+            ddi = []
+            [thiswidth, thisheight] = [$scope.width, $scope.height]
+
+
+
+            bell = (x,y) ->
+                r = ( 1.0 * Math.sqrt(Math.pow( (y - thisheight/2), 2) +  Math.pow( (x - thiswidth/2), 2)) ) / thisheight
+                M = Math.pow(2,$scope.bitDepth ) - 1
+
+                v = Math.min 0.999, (Math.max 0,  1 - Math.exp(- 100*r * r))
+
+                V = Math.round(M*v)
+
+                (V << 24) | (V << 16) | (V << 8) | M
+
+            f = (x,y) ->
+                r = ( 1.0 * Math.sqrt(Math.pow( (y - thisheight/2), 2) +  Math.pow( (x - thiswidth/2), 2)) ) / thisheight
+                M = Math.pow(2,$scope.bitDepth ) - 1
+                #############
+
+                #  distant star
+#                r = Math.max(0.02, r)
+#                v = Math.max 0,  (1.0 / r    + 1)
+                # dark spot
+#                r = Math.max(0.02, r)
+#                v = Math.max 0,  ( 1 - (100.0 / (r * r)) )
+                # bell
+                v = Math.min 0.999, (Math.max 0,  1 - Math.exp(- 100*r * r))
+
+                #v in [0, 1)
+                V = Math.round(M*v)
+                (V << 24) | (V << 16) | (V << 8) | M
+                (V << 16)*(x / thiswidth) | (V << 8) |  M
+                (V << 24) | M
+
+
+            for y in [ 0 ... thisheight ]
+                for x in [ 0 ... thiswidth ]
+                    ddi[y * thiswidth + x] = bell x, y
+
+            DD = new p.Data(Number($scope.bitDepth), Number($scope.color), ddi, thiswidth, thisheight)
+            DD.printData = false
+            window.DD = DD
+            $scope.imgdata = 'data:image/png;base64,' + btoa(DD.imageData())
 
 #            $scope.htmldata = $sce.trustAsHtml(data)
         updateD()

@@ -60,8 +60,8 @@ module.exports = function(grunt) {
         },
         watch: {
             scripts: {
-                files: appJsSourcesCordova,
-                tasks: ['numeric'],
+                files: testSources,
+                tasks: ['test'],
             }
         }
     });

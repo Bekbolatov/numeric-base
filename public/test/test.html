@@ -5,6 +5,9 @@
             .active {
                 background-color:red;
             }
+            .btn-primary {
+                border: 2px solid red;
+            }
         </style>
     </head>
     <body>
@@ -58,6 +61,21 @@
 
                 <div ng-bind-html="htmldata"></div>
                 <hr>
+                <input type="text" ng-model="width"><input type="text" ng-model="height">
+                <br> Bit depth:
+                <button class="btn" ng-class="{'btn-primary': bitDepth == 1}" ng-click="bitDepth = 1; opera('inn')">1</button>
+                <button class="btn" ng-class="{'btn-primary': bitDepth == 2}" ng-click="bitDepth = 2; opera('inn')">2</button>
+                <button class="btn" ng-class="{'btn-primary': bitDepth == 4}" ng-click="bitDepth = 4; opera('inn')">4</button>
+                <button class="btn" ng-class="{'btn-primary': bitDepth == 8}" ng-click="bitDepth = 8; opera('inn')">8</button>
+                <br>
+                <button class="btn" ng-class="{'btn-primary': color == 0}" ng-click="color = 0; opera('inn')">grayscale</button>
+                <button class="btn" ng-class="{'btn-primary': color == 4}" ng-click="color = 4; opera('inn')">grayscale with alpha</button>
+                <button class="btn" ng-class="{'btn-primary': color == 3}" ng-click="color = 3; opera('inn')">indexed</button>
+                <button class="btn" ng-class="{'btn-primary': color == 2}" ng-click="color = 2; opera('inn')">truecolor</button>
+                <button class="btn" ng-class="{'btn-primary': color == 6}" ng-click="color = 6; opera('inn')">truecolor with alpha</button>
+
+                <br>
+
                 <div><img src="{{ imgdata }}"></div>
             </div>
         </div>
@@ -66,4 +84,5 @@
 
     <script src='../bower_components/angular/angular.min.js' type="text/javascript"></script>
     <script src='png.js' type="text/javascript"></script>
+    <script src='Pnglet.js' type="text/javascript"></script>
 </html>
