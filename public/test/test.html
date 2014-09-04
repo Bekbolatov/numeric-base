@@ -65,8 +65,19 @@
                 <button class="btn" ng-class="{'btn-primary': imgSize == 0}" ng-click="imgSize = 0; opera('inn')">2x3</button>
                 <button class="btn" ng-class="{'btn-primary': imgSize == 1}" ng-click="imgSize = 1; opera('inn')">30x30</button>
                 <button class="btn" ng-class="{'btn-primary': imgSize == 2}" ng-click="imgSize = 2; opera('inn')">100x101</button>
-                <button class="btn" ng-class="{'btn-primary': imgSize == 4}" ng-click="imgSize = 3; opera('inn')">230x230</button>
-                <input type="checkbox" {{ !printLogs || 'checked' }} ng-click="printLogs = false; opera('inn')">print logs
+                <button class="btn" ng-class="{'btn-primary': imgSize == 3}" ng-click="imgSize = 3; opera('inn')">230x230</button>
+                | Logs:
+                <button class="btn" ng-class="{'btn-primary': printLogs}" ng-click="printLogs = true;">print</button>
+                <button class="btn" ng-class="{'btn-primary': !printLogs}" ng-click="printLogs = false;">none</button>
+                <br>
+                Filter:
+                <button class="btn" ng-class="{'btn-primary': filterMethod == 1}" ng-click="filterMethod = 1;  opera('inn')">diff</button>
+                <button class="btn" ng-class="{'btn-primary': filterMethod == 0}" ng-click="filterMethod = 0;  opera('inn')">no filter</button>
+                | Compress:
+                <button class="btn" ng-class="{'btn-primary': compress == 9}" ng-click="compress = 9;  opera('inn')">hi</button>
+                <button class="btn" ng-class="{'btn-primary': compress == 6}" ng-click="compress = 6;  opera('inn')">med</button>
+                <button class="btn" ng-class="{'btn-primary': compress == 3}" ng-click="compress = 3;  opera('inn')">low</button>
+                <button class="btn" ng-class="{'btn-primary': compress == 0}" ng-click="compress = 0;  opera('inn')">raw</button>
                 <hr>
                 Bit depth:
                 <button class="btn" ng-class="{'btn-primary': bitDepth == 1}" ng-click="bitDepth = 1; opera('inn')">1</button>
@@ -81,6 +92,7 @@
                 <button class="btn" ng-class="{'btn-primary': color == 6}" ng-click="color = 6; opera('inn')">truecolor with alpha</button>
 
                 <br>
+                <div>{{ imgdatasize }}</div>
                 <div><img src="{{ imgdata }}"></div>
             </div>
         </div>

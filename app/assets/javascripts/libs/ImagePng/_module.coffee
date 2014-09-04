@@ -57,7 +57,7 @@ angular.module 'ImagePng', []
             entry = @entries[y]
             if entry != undefined
                 value = entry
-            else if @size < @sizeMaxValue
+            else if @size <= @sizeMaxValue
                 value = @size
                 @entries[y] = value
                 @colors.push(y)
@@ -70,10 +70,16 @@ angular.module 'ImagePng', []
                 s += String.fromCharCode((color << 8) >>> 24)
                 s += String.fromCharCode((color << 16) >>> 24)
             s
-    class Data # assuming @inputData is of the form RGBA: [ int word(R,G,B,A/0), ] , previously [ String.fromCharCode(R,G,B,A/0), ... ] or Gray:[ String.fromCharCode(Gray,0,0,A/0), ... ]
-        constructor: (@bitDepth, @colorType, @inputData, @width, @height) ->
+
+    # Supported bitdepth:
+    #  grayscale, indexed: 1, 2, 4, 8
+    #  truecolor: 8
+    #  attach alpha: 8
+    class Data # assuming @inputData is of the form of int array of RGBA: [ int word(R,G,B,A/0), ], previously [ String.fromCharCode(R,G,B,A/0), ... ] or Gray:[ String.fromCharCode(Gray,0,0,A/0), ... ]
+        constructor: (@bitDepth, @colorType, @filterMethod, @compressionLevel, @inputData, @width, @height) ->
             @h = new Hex()
             @chunker = new Chunker()
+            @printData = false
             COLORTYPE =
                 0:
                     channels: 1
@@ -116,29 +122,28 @@ angular.module 'ImagePng', []
                     mask: 0xFF000000
                     shift: 24
             f = CHANNEL[channel]
-            sample = ( ( pixel & f.mask ) >>> f.shift ) & @BITDEPTHMASK
-            sample = sample  >>>  (8 - @bitDepth)
+            sample = ( ( pixel & f.mask ) >>> f.shift ) # & @BITDEPTHMASK
             sample
 
         _getPixelData: (pixel) ->
             converted = 0x00000000
             bits = 0
+            downSampleShift = 8 - @bitDepth
             if @colorType == 2 || @colorType == 6
-                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'RED')
-                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'GREEN')
-                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'BLUE')
+                converted = ( converted << @bitDepth ) | ( @_getPixelChannel(pixel, 'RED') >>> downSampleShift )
+                converted = ( converted << @bitDepth ) | ( @_getPixelChannel(pixel, 'GREEN') >>> downSampleShift )
+                converted = ( converted << @bitDepth ) | ( @_getPixelChannel(pixel, 'BLUE') >>> downSampleShift )
                 bits += ( 3 * @bitDepth )
             else if @colorType == 3
                 converted = ( converted << @bitDepth ) | @palette.color(pixel)
                 bits += @bitDepth
             else
-                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'GRAY')
+                converted = ( converted << @bitDepth ) | ( @_getPixelChannel(pixel, 'GRAY') >>> downSampleShift )
                 bits += @bitDepth
 
             if @colorType == 4 || @colorType == 6
-                converted = ( converted << @bitDepth ) | @_getPixelChannel(pixel, 'ALPHA')
+                converted = ( converted << @bitDepth ) | ( @_getPixelChannel(pixel, 'ALPHA') >>> downSampleShift )
                 bits += @bitDepth
-            #console.log('' + converted + ', ' + bits)
             [converted, bits]
 
         _fillBytePushLeft: (byte, index, word, bits) ->
@@ -172,9 +177,14 @@ angular.module 'ImagePng', []
                     @data += String.fromCharCode( fillByte ) # ( fillByte << (8 - fillByteFilled)
             @byteArrayLineWidth = Math.ceil( @width * @colorDepth / 8)
 
-        _filter: () -> @_filterSubAndUp()
+        _filter: () ->
+            if @filterMethod > 0
+                @_filterSubAndUp()
+            else
+                @_filterZero()
 
         _filterSubAndUp: () ->
+            console.log('filter')
             LINE_FILTER_SUB = String.fromCharCode(1)
             LINE_FILTER_UP = String.fromCharCode(2)
             if @colorDepth < 8
@@ -233,19 +243,17 @@ angular.module 'ImagePng', []
 
         _word: (r) -> String.fromCharCode(@_byte(r, 0), @_byte(r, 1), @_byte(r, 2), @_byte(r, 3))
         _littleEndianShort: (r) -> String.fromCharCode(@_byte(r, 3), @_byte(r, 2))
-        _deflate: (data) -> # http://www.faqs.org/rfcs/rfc1950.html
-            DATA_COMPRESSION_METHOD = String.fromCharCode(0x08, 0x1D) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
-            MAX_STORE_LENGTH = 65535
-            storeBuffer = ''
-            for i in [0 ... data.length] by MAX_STORE_LENGTH
-                remaining = data.length - i
-                if remaining <= MAX_STORE_LENGTH
-                    blockType = String.fromCharCode(0x01)
-                else
-                    remaining = MAX_STORE_LENGTH
-                    blockType = String.fromCharCode(0x00)
-                storeBuffer += blockType + @_littleEndianShort(remaining) + @_littleEndianShort(~remaining)
-                storeBuffer += data.substring(i, i + remaining)
+
+        _deflate: (data) ->
+            if @compressionLevel > 0
+                @_deflateCompression(data, @compressionLevel)
+            else
+                @_deflateNoCompression(data)
+
+        _deflateCompression: (data, level) -> # http://www.faqs.org/rfcs/rfc1950.html
+            console.log('compression')
+            DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x9c) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
+            storeBuffer = RawDeflate.deflate(data, level) # default 6, max 9
             DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
 
         _deflateNoCompression: (data) -> # http://www.faqs.org/rfcs/rfc1950.html
@@ -285,6 +293,10 @@ angular.module 'ImagePng', []
                     @h.printHex(@palette.getData(), 'palette')
                 @h.printHex(compressedData, 'compresedData', [2, 4])
                 @h.printHex(IDAT, 'IDAT')
+
+            if @colorType == 3
+                @h.printHex(@palette.getData(), 'palette')
+
             SIGNATURE + IHDR + PLTE + IDAT + IEND
 
 
@@ -357,5 +369,32 @@ angular.module 'ImagePng', []
             @Chunker = Chunker
             @Data = Data
             @hex = new Hex()
+
+            @COMPRESSION_LEVEL = 6
+            @FILTER_METHOD = 0
+            @BIT_DEPTH = 2
+            @COLOR_GRAY = 0
+            @COLOR_INDEXED = 3
+            @COLOR_RGB = 2
+
+            @COLOR = @COLOR_INDEXED
+
+
+        getPngB64Data: (stringData, width, height, compressionLevel) -> # stringData is a array of String.fromCharCode( R, G, B, A)
+            if compressionLevel == undefined
+                compressionLevel = @COMPRESSION_LEVEL
+            intData = []
+            for y in [ 0 ... height ]
+                for x in [ 0 ... width ]
+                    s = stringData[ (height - y - 1) * width + x ]
+                    r = s.charCodeAt(0)
+                    g = s.charCodeAt(1)
+                    b = s.charCodeAt(2)
+                    a = s.charCodeAt(3)
+                    intData[ width * y + x ] = (r << 24) | (g << 16) | (b << 8) | a
+
+            image = new Data(@BIT_DEPTH, @COLOR_INDEXED, @FILTER_METHOD, compressionLevel, intData, width, height)
+            image.printData = false
+            'data:image/png;base64,' + btoa(image.imageData())
     new Encoder()
 ]

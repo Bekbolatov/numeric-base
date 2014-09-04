@@ -129,15 +129,18 @@
 
       })();
       Data = (function() {
-        function Data(bitDepth, colorType, inputData, width, height) {
+        function Data(bitDepth, colorType, filterMethod, compressionLevel, inputData, width, height) {
           var COLORTYPE;
           this.bitDepth = bitDepth;
           this.colorType = colorType;
+          this.filterMethod = filterMethod;
+          this.compressionLevel = compressionLevel;
           this.inputData = inputData;
           this.width = width;
           this.height = height;
           this.h = new Hex();
           this.chunker = new Chunker();
+          this.printData = false;
           COLORTYPE = {
             0: {
               channels: 1
@@ -196,29 +199,29 @@
             }
           };
           f = CHANNEL[channel];
-          sample = ((pixel & f.mask) >>> f.shift) & this.BITDEPTHMASK;
-          sample = sample >>> (8 - this.bitDepth);
+          sample = (pixel & f.mask) >>> f.shift;
           return sample;
         };
 
         Data.prototype._getPixelData = function(pixel) {
-          var bits, converted;
+          var bits, converted, downSampleShift;
           converted = 0x00000000;
           bits = 0;
+          downSampleShift = 8 - this.bitDepth;
           if (this.colorType === 2 || this.colorType === 6) {
-            converted = (converted << this.bitDepth) | this._getPixelChannel(pixel, 'RED');
-            converted = (converted << this.bitDepth) | this._getPixelChannel(pixel, 'GREEN');
-            converted = (converted << this.bitDepth) | this._getPixelChannel(pixel, 'BLUE');
+            converted = (converted << this.bitDepth) | (this._getPixelChannel(pixel, 'RED') >>> downSampleShift);
+            converted = (converted << this.bitDepth) | (this._getPixelChannel(pixel, 'GREEN') >>> downSampleShift);
+            converted = (converted << this.bitDepth) | (this._getPixelChannel(pixel, 'BLUE') >>> downSampleShift);
             bits += 3 * this.bitDepth;
           } else if (this.colorType === 3) {
             converted = (converted << this.bitDepth) | this.palette.color(pixel);
             bits += this.bitDepth;
           } else {
-            converted = (converted << this.bitDepth) | this._getPixelChannel(pixel, 'GRAY');
+            converted = (converted << this.bitDepth) | (this._getPixelChannel(pixel, 'GRAY') >>> downSampleShift);
             bits += this.bitDepth;
           }
           if (this.colorType === 4 || this.colorType === 6) {
-            converted = (converted << this.bitDepth) | this._getPixelChannel(pixel, 'ALPHA');
+            converted = (converted << this.bitDepth) | (this._getPixelChannel(pixel, 'ALPHA') >>> downSampleShift);
             bits += this.bitDepth;
           }
           return [converted, bits];
@@ -267,11 +270,16 @@
         };
 
         Data.prototype._filter = function() {
-          return this._filterSubAndUp();
+          if (this.filterMethod > 0) {
+            return this._filterSubAndUp();
+          } else {
+            return this._filterZero();
+          }
         };
 
         Data.prototype._filterSubAndUp = function() {
           var LINE_FILTER_SUB, LINE_FILTER_UP, cur, filteredData, i, index, prev, step, x, y, _i, _j, _k, _l, _m, _ref, _ref1, _ref2;
+          console.log('filter');
           LINE_FILTER_SUB = String.fromCharCode(1);
           LINE_FILTER_UP = String.fromCharCode(2);
           if (this.colorDepth < 8) {
@@ -354,21 +362,18 @@
         };
 
         Data.prototype._deflate = function(data) {
-          var DATA_COMPRESSION_METHOD, MAX_STORE_LENGTH, blockType, i, remaining, storeBuffer, _i, _ref;
-          DATA_COMPRESSION_METHOD = String.fromCharCode(0x08, 0x1D);
-          MAX_STORE_LENGTH = 65535;
-          storeBuffer = '';
-          for (i = _i = 0, _ref = data.length; MAX_STORE_LENGTH > 0 ? _i < _ref : _i > _ref; i = _i += MAX_STORE_LENGTH) {
-            remaining = data.length - i;
-            if (remaining <= MAX_STORE_LENGTH) {
-              blockType = String.fromCharCode(0x01);
-            } else {
-              remaining = MAX_STORE_LENGTH;
-              blockType = String.fromCharCode(0x00);
-            }
-            storeBuffer += blockType + this._littleEndianShort(remaining) + this._littleEndianShort(~remaining);
-            storeBuffer += data.substring(i, i + remaining);
+          if (this.compressionLevel > 0) {
+            return this._deflateCompression(data, this.compressionLevel);
+          } else {
+            return this._deflateNoCompression(data);
           }
+        };
+
+        Data.prototype._deflateCompression = function(data, level) {
+          var DATA_COMPRESSION_METHOD, storeBuffer;
+          console.log('compression');
+          DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x9c);
+          storeBuffer = RawDeflate.deflate(data, level);
           return DATA_COMPRESSION_METHOD + storeBuffer + this._word(this._adler32(data));
         };
 
@@ -516,7 +521,29 @@
           this.Chunker = Chunker;
           this.Data = Data;
           this.hex = new Hex();
+          this.COMPRESSION_LEVEL = 6;
+          this.FILTER_METHOD = 0;
+          this.BIT_DEPTH = 2;
+          this.COLOR_GRAY = 0;
+          this.COLOR_INDEXED = 3;
+          this.COLOR_RGB = 2;
+          this.COLOR = this.COLOR_INDEXED;
         }
+
+        Encoder.prototype.getPngB64Data = function(stringData, width, height) {
+          var a, b, g, i, image, intData, ni, r, _i, _ref;
+          intData = [];
+          ni = 0;
+          for (i = _i = 0, _ref = data.length; _i < _ref; i = _i += 4) {
+            r = stringData.charCodeAt(i);
+            g = stringData.charCodeAt(i + 1);
+            b = stringData.charCodeAt(i + 2);
+            a = stringData.charCodeAt(i + 3);
+            intData[ni] = (r << 24) | (r << 16) | (r << 8) | a;
+          }
+          image = new Data(this.BIT_DEPTH, this.COLOR_INDEXED, this.FILTER_METHOD, this.COMPRESSION_LEVEL, intData, width, height);
+          return 'data:image/png;base64,' + btoa(image.imageData());
+        };
 
         return Encoder;
 
@@ -662,6 +689,8 @@
       $scope.imgSize = 0;
       $scope.color = 0;
       $scope.printLogs = false;
+      $scope.compress = false;
+      $scope.filterMethod = 0;
       return $scope.opera = function(o) {
         var DD, bell, ddi, f, i, n, r, r1, r2, r3, r4, s, thisheight, thiswidth, w, x, y, _i, _j, _k, _ref, _ref1;
         if (o === 'in') {
@@ -748,6 +777,9 @@
             $scope.width = 2;
             $scope.height = 3;
           }
+          if ($scope.imgSize > 0) {
+            $scope.printLogs = false;
+          }
           ddi = [];
           _ref1 = [$scope.width, $scope.height], thiswidth = _ref1[0], thisheight = _ref1[1];
           bell = function(x, y) {
@@ -773,14 +805,12 @@
               ddi[y * thiswidth + x] = bell(x, y);
             }
           }
-          DD = new p.Data(Number($scope.bitDepth), Number($scope.color), ddi, thiswidth, thisheight);
+          DD = new p.Data(Number($scope.bitDepth), Number($scope.color), $scope.filterMethod, $scope.compress, ddi, thiswidth, thisheight);
           DD.printData = $scope.printLogs;
           window.DD = DD;
           $scope.imgdata = 'data:image/png;base64,' + btoa(DD.imageData());
-          $scope.D = RawDeflate.deflate("as", 6);
-          $scope.dhex = $sce.trustAsHtml(DD.h.hex($scope.D));
+          $scope.imgdatasize = ((0.75 * $scope.imgdata.length) / 1024).toFixed(3);
         }
-        updateD();
         return updateBin();
       };
     }

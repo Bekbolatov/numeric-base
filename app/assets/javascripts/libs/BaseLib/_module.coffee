@@ -1,1 +1,1 @@
-angular.module 'BaseLib', []
+angular.module 'BaseLib', ['ImagePng']

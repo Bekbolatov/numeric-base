@@ -1,6 +1,6 @@
 angular.module('BaseLib')
 
-.factory("GraphicsManager", [ () ->
+.factory("GraphicsManager", [ 'GenerateImagePng', (GenerateImagePng ) ->
     class Image
         constructor: (@width, @height, backgroundColor, offset) ->
             @width = Math.round(@width)
@@ -219,13 +219,17 @@ angular.module('BaseLib')
         ############################################################
 
         getBase64: () ->
+            @getBase64Png()
+
+        getBase64Png: () -> GenerateImagePng.getPngB64Data(@data, @width, @height)
+
+        getBase64Bmp: () ->
             outputData = @header + @data.join('')
             if window.btoa
                 encodedData = window.btoa(outputData)
             else
                 encodedData = $.base64.encode(outputData)
             'data:image/bmp;base64,' + encodedData
-
 
     class GraphicsManager
         newImage: (width, height, backgroundColor) -> new Image(width, height, backgroundColor)

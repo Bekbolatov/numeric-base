@@ -119,6 +119,8 @@ angular.module 'TestApp', ['ImagePng']
     $scope.imgSize = 0
     $scope.color = 0
     $scope.printLogs = false
+    $scope.compress = false
+    $scope.filterMethod = 0
 
     $scope.opera = (o) ->
         if o == 'in'
@@ -153,6 +155,8 @@ angular.module 'TestApp', ['ImagePng']
                 $scope.width = 2
                 $scope.height = 3
 
+            if $scope.imgSize > 0
+                $scope.printLogs = false
 
 
 #            ddi = []
@@ -204,19 +208,15 @@ angular.module 'TestApp', ['ImagePng']
                 for x in [ 0 ... thiswidth ]
                     ddi[y * thiswidth + x] = bell x, y
 
-
-
-
-            DD = new p.Data(Number($scope.bitDepth), Number($scope.color), ddi, thiswidth, thisheight)
+            DD = new p.Data(Number($scope.bitDepth), Number($scope.color), $scope.filterMethod, $scope.compress, ddi, thiswidth, thisheight)
             DD.printData = $scope.printLogs
             window.DD = DD
+
             $scope.imgdata = 'data:image/png;base64,' + btoa(DD.imageData())
-
-            $scope.D = RawDeflate.deflate("as", 6)
-            $scope.dhex = $sce.trustAsHtml(DD.h.hex($scope.D))
-
-#            $scope.htmldata = $sce.trustAsHtml(data)
-        updateD()
+            $scope.imgdatasize = ((0.75 * $scope.imgdata.length) / 1024).toFixed(3)
+            #$scope.D = RawDeflate.deflate("as", 6)
+            #$scope.dhex = $sce.trustAsHtml(DD.h.hex($scope.D))
+#        updateD()
         updateBin()
 
 ]
