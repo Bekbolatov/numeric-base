@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
     var appJsSources = [
                     sourceJs + 'libs/BaseLib/**',
-                    sourceJs + 'libs/ImagePng/**',
+                    sourceJs + 'libs/image/ImagePng/**',
                     sourceJs + 'apps/AppOne/**',
                     sourceJs + 'modules/Krista/**',   // decide whether to include a module here
                     sourceJs + 'qrcode.js',
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/AppOneCordova/**' ] );
 
     var testSources = [
-                    sourceCoffee + 'libs/ImagePng/*.coffee',
+                    sourceCoffee + 'libs/image/ImagePng/*.coffee',
                     sourceCoffee + 'apps/TestApp/*.coffee'
                     ];
 

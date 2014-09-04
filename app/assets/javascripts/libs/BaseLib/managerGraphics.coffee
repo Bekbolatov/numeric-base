@@ -89,7 +89,6 @@ angular.module('BaseLib')
                 @offset = 0
             @width = @width + 2 * @offset
             @height = @height + 2 * @offset
-            @_setImageHeader()
 
             if backgroundColor != undefined
                 color = @colors[backgroundColor]
@@ -102,36 +101,6 @@ angular.module('BaseLib')
             if colorLetter == undefined || @colors[colorLetter] == undefined
                 color = @colors['B']
             else @colors[colorLetter]
-
-        _getLittleEndianHex: (value) ->
-            result = []
-            for bytes in [4 .. 1]
-                result.push(String.fromCharCode(value & 255))
-                value >>= 8
-            result.join('')
-
-        _setImageHeader: () ->
-            numFileBytes = @_getLittleEndianHex(@width * @height)
-            w = @_getLittleEndianHex(@width)
-            h = @_getLittleEndianHex(@height)
-
-            @header = '' +
-            'BM' +                    # Signature
-            numFileBytes +            # size of the file (bytes)*
-            '\x00\x00' +              # reserved
-            '\x00\x00' +              # reserved
-            '\x36\x00\x00\x00' +      # offset of where BMP data lives (54 bytes)
-            '\x28\x00\x00\x00' +      # number of remaining bytes in header from here (40 bytes)
-            w +                       # the width of the bitmap in pixels*
-            h +                       # the height of the bitmap in pixels*
-            '\x01\x00' +              # the number of color planes (1)
-            '\x20\x00' +              # 32 bits / pixel
-            '\x00\x00\x00\x00' +      # No compression (0)
-            '\x00\x00\x00\x00' +      # size of the BMP data (bytes)*
-            '\x13\x0B\x00\x00' +      # 2835 pixels/meter - horizontal resolution
-            '\x13\x0B\x00\x00' +      # 2835 pixels/meter - the vertical resolution
-            '\x00\x00\x00\x00' +      # Number of colors in the palette (keep 0 for 32-bit)
-            '\x00\x00\x00\x00'       # 0 important colors (means all colors are important)
 
         ############################################################
         placeChar: (x,y,c, colorLetter) ->
@@ -220,16 +189,8 @@ angular.module('BaseLib')
 
         getBase64: () ->
             @getBase64Png()
-
-        getBase64Png: () -> GenerateImagePng.getPngB64Data(@data, @width, @height)
-
-        getBase64Bmp: () ->
-            outputData = @header + @data.join('')
-            if window.btoa
-                encodedData = window.btoa(outputData)
-            else
-                encodedData = $.base64.encode(outputData)
-            'data:image/bmp;base64,' + encodedData
+        getBase64Png: () -> GenerateImagePng.encode(@data, @width, @height) #0 grayscale, 1 filter, 6 compression zlib med
+        #getBase64Bmp: () -> GenerateImageBmp.encode(@data, @width, @height)
 
     class GraphicsManager
         newImage: (width, height, backgroundColor) -> new Image(width, height, backgroundColor)

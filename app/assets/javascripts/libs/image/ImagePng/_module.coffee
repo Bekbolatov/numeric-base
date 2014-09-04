@@ -1,8 +1,7 @@
 angular.module 'ImagePng', []
 
-# http://en.wikipedia.org/wiki/Portable_Network_Graphics
 .factory 'GenerateImagePng', [ () ->
-    class Chunker # generate chunks with cyclic redundancy check
+    class Chunker # generate chunks with attached cyclic redundancy check
         constructor: (functions)->
             @_initTable()
         _initTable: ->
@@ -299,7 +298,6 @@ angular.module 'ImagePng', []
 
             SIGNATURE + IHDR + PLTE + IDAT + IEND
 
-
     class Hex
         hexStringOfByte: (b) ->
             d1 = ( b & 0x000000F0 )  >>> 4
@@ -360,29 +358,30 @@ angular.module 'ImagePng', []
                 s += @hexOfInt(word)
             s
 
-
-    # PNG uses a 2-stage compression process:
-    #  1. pre-compression: filtering (prediction)
-    #  2. compression: DEFLATE
     class Encoder
         constructor: ->
             @Chunker = Chunker
             @Data = Data
             @hex = new Hex()
 
-            @COMPRESSION_LEVEL = 6
-            @FILTER_METHOD = 0
-            @BIT_DEPTH = 2
-            @COLOR_GRAY = 0
+            @COLOR_GRAYSCALE = 0
             @COLOR_INDEXED = 3
             @COLOR_RGB = 2
 
             @COLOR = @COLOR_INDEXED
+            @COMPRESSION_LEVEL = 6
+            @FILTER_METHOD = 0
+            @BIT_DEPTH = 2
 
 
-        getPngB64Data: (stringData, width, height, compressionLevel) -> # stringData is a array of String.fromCharCode( R, G, B, A)
+
+        encode: (stringData, width, height, colorStyle, filterMethod, compressionLevel) -> # stringData is a array of String.fromCharCode( R, G, B, A)
             if compressionLevel == undefined
                 compressionLevel = @COMPRESSION_LEVEL
+            if filterMethod == undefined
+                filterMethod = @FILTER_METHOD
+            if colorStyle == undefined
+                colorStyle = @COLOR_GRAYSCALE
             intData = []
             for y in [ 0 ... height ]
                 for x in [ 0 ... width ]
@@ -393,7 +392,7 @@ angular.module 'ImagePng', []
                     a = s.charCodeAt(3)
                     intData[ width * y + x ] = (r << 24) | (g << 16) | (b << 8) | a
 
-            image = new Data(@BIT_DEPTH, @COLOR_INDEXED, @FILTER_METHOD, compressionLevel, intData, width, height)
+            image = new Data(@BIT_DEPTH, @COLOR_INDEXED, filterMethod, compressionLevel, intData, width, height)
             image.printData = false
             'data:image/png;base64,' + btoa(image.imageData())
     new Encoder()
