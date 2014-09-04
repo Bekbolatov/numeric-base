@@ -1,7 +1,7 @@
 (function() {
   angular.module('ImagePng', []).factory('GenerateImagePng', [
     function() {
-      var Chunker, Data, Encoder, Hex, Palette;
+      var Chunker, Data, Encoder, Palette;
       Chunker = (function() {
         function Chunker(functions) {
           this._initTable();
@@ -136,7 +136,6 @@
           this.inputData = inputData;
           this.width = width;
           this.height = height;
-          this.h = new Hex();
           this.chunker = new Chunker();
           COLORTYPE = {
             0: {
@@ -391,40 +390,7 @@
           return DATA_COMPRESSION_METHOD + storeBuffer + this._word(this._adler32(data));
         };
 
-        Data.prototype.imageData = function() {
-          var IDAT, IEND, IHDR, PLTE, SIGNATURE, compressedData, filteredData;
-          this._convertToByteArray();
-          filteredData = this._filter();
-          compressedData = this._deflate(filteredData);
-          SIGNATURE = this.chunker.SIGNATURE();
-          IHDR = this.chunker.IHDR(this.width, this.height, this.bitDepth, this.colorType);
-          if (this.colorType === 3) {
-            PLTE = this.chunker.PLTE(this.palette.getData());
-          } else {
-            PLTE = '';
-          }
-          IDAT = this.chunker.IDAT(compressedData);
-          IEND = this.chunker.IEND();
-          if (this.printData) {
-            this.h.printHexOfListOfInts(this.inputData, 'inputData');
-            this.h.printHex(this.data, 'byteData');
-            this.h.printHex(filteredData, 'filteredData');
-            if (this.colorType === 3) {
-              this.h.printHex(this.palette.getData(), 'palette');
-            }
-            this.h.printHex(compressedData, 'compresedData', [2, 4]);
-            this.h.printHex(IDAT, 'IDAT');
-          }
-          return SIGNATURE + IHDR + PLTE + IDAT + IEND;
-        };
-
-        return Data;
-
-      })();
-      Hex = (function() {
-        function Hex() {}
-
-        Hex.prototype.hexStringOfByte = function(b) {
+        Data.prototype.hexStringOfByte = function(b) {
           var d1, d2, t;
           d1 = (b & 0x000000F0) >>> 4;
           d2 = b & 0x0000000F;
@@ -448,7 +414,7 @@
           return t(d1) + t(d2) + ' ';
         };
 
-        Hex.prototype.hex = function(ins, maybeName, hf) {
+        Data.prototype.hex = function(ins, maybeName, hf) {
           var footer, header, i, s, _i, _ref;
           if (hf) {
             header = hf[0];
@@ -467,14 +433,14 @@
           return s;
         };
 
-        Hex.prototype.printHex = function(ins, maybeName, hf) {
+        Data.prototype.printHex = function(ins, maybeName, hf) {
           var s;
           s = this.hex(ins, maybeName, hf);
           s = '[' + maybeName + ', ' + ins.length + '] ' + s;
           return console.log(s);
         };
 
-        Hex.prototype.printHexOfListOfStrings = function(list, label) {
+        Data.prototype.printHexOfListOfStrings = function(list, label) {
           var s, w, _i, _len;
           s = '';
           for (_i = 0, _len = list.length; _i < _len; _i++) {
@@ -484,7 +450,7 @@
           return console.log('[' + label + '] ' + s);
         };
 
-        Hex.prototype.printHexOfListOfInts = function(list, label) {
+        Data.prototype.printHexOfListOfInts = function(list, label) {
           var s, w, _i, _len;
           s = '';
           for (_i = 0, _len = list.length; _i < _len; _i++) {
@@ -494,11 +460,11 @@
           return console.log('[' + label + '] ' + s);
         };
 
-        Hex.prototype.hexOfInt = function(word) {
+        Data.prototype.hexOfInt = function(word) {
           return this.hexStringOfByte(word >>> 24) + ' ' + this.hexStringOfByte((word << 8) >>> 24) + ' ' + this.hexStringOfByte((word << 16) >>> 24) + ' ' + this.hexStringOfByte((word << 24) >>> 24) + ' ';
         };
 
-        Hex.prototype.hexOfString = function(string, label) {
+        Data.prototype.hexOfString = function(string, label) {
           var i, s, word, _i, _ref;
           s = '';
           for (i = _i = 0, _ref = string.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
@@ -508,14 +474,40 @@
           return s;
         };
 
-        return Hex;
+        Data.prototype.imageData = function() {
+          var IDAT, IEND, IHDR, PLTE, SIGNATURE, compressedData, filteredData;
+          this._convertToByteArray();
+          filteredData = this._filter();
+          compressedData = this._deflate(filteredData);
+          SIGNATURE = this.chunker.SIGNATURE();
+          IHDR = this.chunker.IHDR(this.width, this.height, this.bitDepth, this.colorType);
+          if (this.colorType === 3) {
+            PLTE = this.chunker.PLTE(this.palette.getData());
+          } else {
+            PLTE = '';
+          }
+          IDAT = this.chunker.IDAT(compressedData);
+          IEND = this.chunker.IEND();
+          if (this.printData) {
+            this.printHexOfListOfInts(this.inputData, 'inputData');
+            this.printHex(this.data, 'byteData');
+            this.printHex(filteredData, 'filteredData');
+            if (this.colorType === 3) {
+              this.printHex(this.palette.getData(), 'palette');
+            }
+            this.printHex(compressedData, 'compresedData', [2, 4]);
+            this.printHex(IDAT, 'IDAT');
+          }
+          return SIGNATURE + IHDR + PLTE + IDAT + IEND;
+        };
+
+        return Data;
 
       })();
       Encoder = (function() {
         function Encoder() {
           this.Chunker = Chunker;
           this.Data = Data;
-          this.hex = new Hex();
         }
 
         return Encoder;
@@ -530,7 +522,7 @@
 (function() {
   angular.module('TestApp', ['ImagePng']).controller('TestCtrl', [
     '$scope', '$sce', 'GenerateImagePng', function($scope, $sce, GenerateImagePng) {
-      var p, showBinary, showBit, showByte, showIntArrayBin, showStringBin, stringBinary, updateBin, updateD;
+      var p, showBinary, showBit, showByte, showIntArrayBin, stringBinary, updateBin, updateD;
       showBit = function(integer, i) {
         return (integer >>> i) & 0x01;
       };
@@ -640,18 +632,11 @@
         }
         return o;
       };
-      showStringBin = function(str) {
-        var i, o, _i, _ref;
-        o = '';
-        for (i = _i = 0, _ref = str.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          o += showBinary(str.charCodeAt(i)) + ' ';
-        }
-        return o;
-      };
       updateD = function() {
-        return $scope.dd = $sce.trustAsHtml(showStringBin($scope.D));
+        return $scope.dd = $sce.trustAsHtml(showIntArrayBin($scope.D));
       };
       $scope.D = [0, 1, 255, 256];
+      updateD();
       $scope.inputData1 = "1 1 1 1 1 1";
       $scope.inputData2 = "1 1 1 1 1 1";
       $scope.inputData3 = "1 1 1 1 1 1";
@@ -732,6 +717,7 @@
             s += String.fromCharCode(r1[i], r2[i], r3[i], r4[i]);
             w[i] = r1[i] << 24 | r2[i] << 16 | r3[i] << 8 | r4[i];
           }
+          $scope.D = w;
           if ($scope.imgSize === 0) {
             $scope.width = 2;
             $scope.height = 3;
@@ -777,8 +763,7 @@
           DD.printData = $scope.printLogs;
           window.DD = DD;
           $scope.imgdata = 'data:image/png;base64,' + btoa(DD.imageData());
-          $scope.D = RawDeflate.deflate("as", 6);
-          $scope.dhex = $sce.trustAsHtml(DD.h.hex($scope.D));
+          $scope.Z = RawDeflate.deflate("as", 6);
         }
         updateD();
         return updateBin();

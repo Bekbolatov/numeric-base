@@ -72,6 +72,7 @@ angular.module 'ImagePng', []
             s
     class Data # assuming @inputData is of the form RGBA: [ int word(R,G,B,A/0), ] , previously [ String.fromCharCode(R,G,B,A/0), ... ] or Gray:[ String.fromCharCode(Gray,0,0,A/0), ... ]
         constructor: (@bitDepth, @colorType, @inputData, @width, @height) ->
+            @h = new Hex()
             @chunker = new Chunker()
             COLORTYPE =
                 0:
@@ -116,6 +117,7 @@ angular.module 'ImagePng', []
                     shift: 24
             f = CHANNEL[channel]
             sample = ( ( pixel & f.mask ) >>> f.shift ) & @BITDEPTHMASK
+            sample = sample  >>>  (8 - @bitDepth)
             sample
 
         _getPixelData: (pixel) ->
@@ -170,7 +172,7 @@ angular.module 'ImagePng', []
                     @data += String.fromCharCode( fillByte ) # ( fillByte << (8 - fillByteFilled)
             @byteArrayLineWidth = Math.ceil( @width * @colorDepth / 8)
 
-        _filterSubAndUp: () -> _filterSubAndUp()
+        _filter: () -> @_filterSubAndUp()
 
         _filterSubAndUp: () ->
             LINE_FILTER_SUB = String.fromCharCode(1)
@@ -202,7 +204,6 @@ angular.module 'ImagePng', []
             for y in [ 0 ... @height ]
                 filteredData += LINE_FILTER + @data.substr(y * @byteArrayLineWidth, @byteArrayLineWidth)
             filteredData
-
 
         _adler32: (data) ->
             MOD_ADLER = 65521
@@ -262,6 +263,32 @@ angular.module 'ImagePng', []
                 storeBuffer += data.substring(i, i + remaining)
             DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
 
+        imageData: () ->
+            @_convertToByteArray()
+            filteredData = @_filter()
+            compressedData = @_deflate(filteredData)
+
+            SIGNATURE = @chunker.SIGNATURE()
+            IHDR = @chunker.IHDR(@width, @height, @bitDepth, @colorType)
+            if @colorType == 3
+                PLTE = @chunker.PLTE(@palette.getData())
+            else
+                PLTE = ''
+            IDAT = @chunker.IDAT(compressedData)
+            IEND = @chunker.IEND()
+
+            if @printData
+                @h.printHexOfListOfInts(@inputData, 'inputData')
+                @h.printHex(@data, 'byteData')
+                @h.printHex(filteredData, 'filteredData')
+                if @colorType == 3
+                    @h.printHex(@palette.getData(), 'palette')
+                @h.printHex(compressedData, 'compresedData', [2, 4])
+                @h.printHex(IDAT, 'IDAT')
+            SIGNATURE + IHDR + PLTE + IDAT + IEND
+
+
+    class Hex
         hexStringOfByte: (b) ->
             d1 = ( b & 0x000000F0 )  >>> 4
             d2 = b & 0x0000000F
@@ -320,29 +347,6 @@ angular.module 'ImagePng', []
                 word = string.charCodeAt(i)
                 s += @hexOfInt(word)
             s
-        imageData: () ->
-            @_convertToByteArray()
-            filteredData = @_filter()
-            compressedData = @_deflate(filteredData)
-
-            SIGNATURE = @chunker.SIGNATURE()
-            IHDR = @chunker.IHDR(@width, @height, @bitDepth, @colorType)
-            if @colorType == 3
-                PLTE = @chunker.PLTE(@palette.getData())
-            else
-                PLTE = ''
-            IDAT = @chunker.IDAT(compressedData)
-            IEND = @chunker.IEND()
-
-            if @printData
-                @printHexOfListOfInts(@inputData, 'inputData')
-                @printHex(@data, 'byteData')
-                @printHex(filteredData, 'filteredData')
-                if @colorType == 3
-                    @printHex(@palette.getData(), 'palette')
-                @printHex(compressedData, 'compresedData', [2, 4])
-                @printHex(IDAT, 'IDAT')
-            SIGNATURE + IHDR + PLTE + IDAT + IEND
 
 
     # PNG uses a 2-stage compression process:
@@ -352,5 +356,6 @@ angular.module 'ImagePng', []
         constructor: ->
             @Chunker = Chunker
             @Data = Data
+            @hex = new Hex()
     new Encoder()
 ]

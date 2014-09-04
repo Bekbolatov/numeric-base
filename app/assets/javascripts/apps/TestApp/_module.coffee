@@ -97,10 +97,17 @@ angular.module 'TestApp', ['ImagePng']
         for n in ar
             o += showBinary(n) + '<br>'
         o
+
+
+    showStringBin = (str) ->
+        o = ''
+        for i in [0 ... str.length ]
+            o += showBinary(str.charCodeAt(i)) + ' '
+        o
+
     updateD = () ->
-        $scope.dd = $sce.trustAsHtml(showIntArrayBin($scope.D))
+        $scope.dd = $sce.trustAsHtml(showStringBin($scope.D))
     $scope.D = [0,1,255,256]
-    updateD()
 
     $scope.inputData1 = "1 1 1 1 1 1"
     $scope.inputData2 = "1 1 1 1 1 1"
@@ -109,7 +116,9 @@ angular.module 'TestApp', ['ImagePng']
     $scope.bitDepth = 8
     $scope.width = 2
     $scope.height = 3
+    $scope.imgSize = 0
     $scope.color = 0
+    $scope.printLogs = false
 
     $scope.opera = (o) ->
         if o == 'in'
@@ -125,7 +134,26 @@ angular.module 'TestApp', ['ImagePng']
             for i in [0 ... r1.length]
                 s += String.fromCharCode(r1[i], r2[i], r3[i], r4[i])
                 w[i] = r1[i] << 24 | r2[i] << 16 | r3[i] << 8  | r4[i]
-            $scope.D = w
+
+
+
+            if $scope.imgSize == 0
+                $scope.width = 2
+                $scope.height = 3
+            else if $scope.imgSize == 1
+                $scope.width = 30
+                $scope.height = 30
+            else if $scope.imgSize == 2
+                $scope.width = 100
+                $scope.height = 101
+            else if $scope.imgSize == 3
+                $scope.width = 230
+                $scope.height = 230
+            else
+                $scope.width = 2
+                $scope.height = 3
+
+
 
 #            ddi = []
 #            for y in [ 0 .. 128 ]
@@ -143,7 +171,7 @@ angular.module 'TestApp', ['ImagePng']
 
             bell = (x,y) ->
                 r = ( 1.0 * Math.sqrt(Math.pow( (y - thisheight/2), 2) +  Math.pow( (x - thiswidth/2), 2)) ) / thisheight
-                M = Math.pow(2,$scope.bitDepth ) - 1
+                M = 255 #Math.pow(2,$scope.bitDepth ) - 1
 
                 v = Math.min 0.999, (Math.max 0,  1 - Math.exp(- 100*r * r))
 
@@ -153,7 +181,7 @@ angular.module 'TestApp', ['ImagePng']
 
             f = (x,y) ->
                 r = ( 1.0 * Math.sqrt(Math.pow( (y - thisheight/2), 2) +  Math.pow( (x - thiswidth/2), 2)) ) / thisheight
-                M = Math.pow(2,$scope.bitDepth ) - 1
+                M = 255 #Math.pow(2,$scope.bitDepth ) - 1
                 #############
 
                 #  distant star
@@ -176,10 +204,16 @@ angular.module 'TestApp', ['ImagePng']
                 for x in [ 0 ... thiswidth ]
                     ddi[y * thiswidth + x] = bell x, y
 
+
+
+
             DD = new p.Data(Number($scope.bitDepth), Number($scope.color), ddi, thiswidth, thisheight)
-            DD.printData = false
+            DD.printData = $scope.printLogs
             window.DD = DD
             $scope.imgdata = 'data:image/png;base64,' + btoa(DD.imageData())
+
+            $scope.D = RawDeflate.deflate("as", 6)
+            $scope.dhex = $sce.trustAsHtml(DD.h.hex($scope.D))
 
 #            $scope.htmldata = $sce.trustAsHtml(data)
         updateD()
