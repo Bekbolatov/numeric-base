@@ -1,4 +1,4 @@
-angular.module 'ImagePng', []
+angular.module 'ImageLib'
 
 .factory 'GenerateImageBmp', [ () ->
     class Encoder

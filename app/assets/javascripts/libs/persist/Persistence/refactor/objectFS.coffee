@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ModulePersistence')
 
 .factory("FS", ['$q', 'md5', ($q, md5) ->
     class FS

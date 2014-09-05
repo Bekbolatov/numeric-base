@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ModulePersistence')
 
 .factory("FileDownload", ['$q', 'DeviceId', ($q, DeviceId ) ->
     class FileDownload

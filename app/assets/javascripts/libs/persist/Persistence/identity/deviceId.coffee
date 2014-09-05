@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module 'ModulePersistence'
 
 .factory "DeviceId", ['md5', (md5) ->
     class DeviceId
@@ -36,7 +36,6 @@ angular.module('AppOne')
             cb = "&cb=" + Math.round( (new Date()) / ms )
             @qsAnd() + cb
 
-    console.log('CALL TO FACTORY: DeviceId')
     new DeviceId()
 ]
 

@@ -1,1 +1,1 @@
-angular.module 'ModulePersistence', []
+angular.module 'ModulePersistence', ['ImageLib']

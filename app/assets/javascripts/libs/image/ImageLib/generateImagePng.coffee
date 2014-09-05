@@ -1,4 +1,4 @@
-angular.module 'ImagePng', []
+angular.module 'ImageLib'
 
 # PNG uses zlib, which uses Deflate, Deflate uses Huffman coding. Deflate algorithm in js is used from rawdeflate.js - written by Masanao Izumo (1999) - thank you
 .factory 'GenerateImagePng', [() ->

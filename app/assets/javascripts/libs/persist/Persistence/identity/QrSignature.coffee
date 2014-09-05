@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ModulePersistence')
 
 .factory("QRSignature", [ () ->
     class QRSignature
@@ -44,7 +44,5 @@ angular.module('AppOne')
             imgElement.src = canvas.toDataURL("image/png")
             imgElement
 
-
-    console.log('CALL TO FACTORY: QRSignature')
     new QRSignature()
 ])
