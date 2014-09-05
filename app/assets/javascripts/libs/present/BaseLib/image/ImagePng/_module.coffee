@@ -1,7 +1,8 @@
 angular.module 'ImagePng', []
 
-.factory 'GenerateImagePng', [ () ->
-    class Chunker # generate chunks with attached cyclic redundancy check
+# PNG uses zlib, which uses Deflate, Deflate uses Huffman coding. Deflate algorithm in js is used from rawdeflate.js - written by Masanao Izumo (1999) - thank you
+.factory 'GenerateImagePng', [() ->
+    class Chunker # generate chunks with cyclic redundancy check
         constructor: (functions)->
             @_initTable()
         _initTable: ->
@@ -78,6 +79,7 @@ angular.module 'ImagePng', []
         constructor: (@bitDepth, @colorType, @filterMethod, @compressionLevel, @inputData, @width, @height) ->
             @h = new Hex()
             @chunker = new Chunker()
+            @deflate = new Deflate()
             @printData = false
             COLORTYPE =
                 0:
@@ -252,7 +254,7 @@ angular.module 'ImagePng', []
         _deflateCompression: (data, level) -> # http://www.faqs.org/rfcs/rfc1950.html
             console.log('compression')
             DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x9c) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
-            storeBuffer = RawDeflate.deflate(data, level) # default 6, max 9
+            storeBuffer = @deflate.encode(data, level) # default 6, max 9
             DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
 
         _deflateNoCompression: (data) -> # http://www.faqs.org/rfcs/rfc1950.html
@@ -297,6 +299,10 @@ angular.module 'ImagePng', []
                 @h.printHex(@palette.getData(), 'palette')
 
             SIGNATURE + IHDR + PLTE + IDAT + IEND
+
+    class Deflate
+        encode: (data, level) -> # stick 3rd party deflate algorithm in here
+            RawDeflate.deflate(data, level)
 
     class Hex
         hexStringOfByte: (b) ->
@@ -372,7 +378,6 @@ angular.module 'ImagePng', []
             @COMPRESSION_LEVEL = 6
             @FILTER_METHOD = 0
             @BIT_DEPTH = 2
-
 
 
         encode: (stringData, width, height, colorStyle, filterMethod, compressionLevel) -> # stringData is a array of String.fromCharCode( R, G, B, A)

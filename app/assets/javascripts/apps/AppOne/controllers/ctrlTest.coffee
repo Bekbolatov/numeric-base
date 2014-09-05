@@ -32,9 +32,17 @@ angular.module('AppOne')
 
     ]
 
-.controller 'SampleQuestionCtrl', [ '$scope', '$sce', 'KristaQuestions', ($scope, $sce, KristaQuestions ) ->
+.controller 'SampleQuestionCtrl', [ '$scope', '$sce', 'PersistenceManager', 'KristaQuestions', ($scope, $sce, PersistenceManager, KristaQuestions ) ->
 
+    window.pers = PersistenceManager
     $scope.regen = (num) ->
+        PersistenceManager.save('testik', {s:1, b:'as', c: { h: 'yello'}})
+        .then ->
+             PersistenceManager.read('testik')
+             .then (obj) ->
+                $scope.testik = obj
+
+
         $scope.showAnswer = false
         qa = KristaQuestions.generate(num)
 

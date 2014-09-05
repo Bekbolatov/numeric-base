@@ -6,17 +6,19 @@ module.exports = function(grunt) {
     var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
     var appJsSources = [
-                    sourceJs + 'libs/BaseLib/**',
-                    sourceJs + 'libs/image/ImagePng/**',
-                    sourceJs + 'apps/AppOne/**',
-                    sourceJs + 'modules/Krista/**',   // decide whether to include a module here
                     sourceJs + 'qrcode.js',
-                    sourceJs + 'rawdeflate.js'
+                    sourceJs + 'rawdeflate.js',
+
+                    sourceJs + 'libs/present/BaseLib/**',
+                    sourceJs + 'libs/persist/Persistence/**',
+
+                    sourceJs + 'apps/AppOne/**',
+                    sourceJs + 'modules/Krista/**'   // decide whether to include a module here
                     ];
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/AppOneCordova/**' ] );
 
     var testSources = [
-                    sourceCoffee + 'libs/image/ImagePng/*.coffee',
+                    sourceCoffee + 'libs/present/BaseLib/image/ImagePng/*.coffee',
                     sourceCoffee + 'apps/TestApp/*.coffee'
                     ];
 
