@@ -8,6 +8,7 @@ angular.module('ModulePersistence')
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
             @_getDirEntry(document.numeric.url.base.fs, {create:true})
             .then( => @getDirEntry(document.numeric.path.result, {create:true}))
+            .then( => @getDirEntry(document.numeric.path.persistence, {create:true}))
 
         _errorHandler: (dfd) ->
             (e) ->
@@ -29,9 +30,16 @@ angular.module('ModulePersistence')
 
         _requestQuota: ->
             deferred = $q.defer()
-            webkitStorageInfo.requestQuota(  #navigator.webkitPersistentStorage.requestQuota(
-                webkitStorageInfo.PERSISTENT
-                @quota*1024*1024
+            navigator.webkitPersistentStorage.requestQuota(  #navigator.webkitPersistentStorage.requestQuota( # webkitStorageInfo
+#                window.PERSISTENT #webkitStorageInfo.PERSISTENT
+#                @quota*1024*1024
+#                (bytes) ->
+#                    console.log('obtained bytes: ' + bytes)
+#                    deferred.resolve(bytes)
+#                (status) ->
+#                    console.log('could not request quota: ' + status)
+#                    deferred.reject(status)
+                window.PERSISTENT #webkitStorageInfo.PERSISTENT
                 (bytes) ->
                     console.log('obtained bytes: ' + bytes)
                     deferred.resolve(bytes)
@@ -60,7 +68,9 @@ angular.module('ModulePersistence')
                    window.requestFileSystem(
                     window.PERSISTENT
                     bytes
-                    (fs) => deferred.resolve(fs)
+                    (fs) =>
+                        @fileSystem = fs
+                        deferred.resolve(fs)
                     @_errorHandler(deferred))
                 )
             deferred.promise

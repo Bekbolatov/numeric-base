@@ -36,11 +36,15 @@ angular.module('AppOne')
 
     window.pers = PersistenceManager
     $scope.regen = (num) ->
-        PersistenceManager.save('testik', {s:1, b:'as', c: { h: 'yello'}})
+        PersistenceManager.save('testikl', {s:1, b:'as', c: { h: 'yello'}})
+
         .then ->
-             PersistenceManager.read('testik')
+             PersistenceManager.read('testikl')
              .then (obj) ->
                 $scope.testik = obj
+        .catch (t) -> console.log(t)
+
+
 
 
         $scope.showAnswer = false

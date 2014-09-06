@@ -25,6 +25,7 @@ document.numeric = {
         meta: 'activity/meta/',
         body: 'activity/body/',
         result: 'result/', // Store activity summaries
+        persistence: 'persistence/', // Store activity summaries
         connections: 'connections'
     },
 

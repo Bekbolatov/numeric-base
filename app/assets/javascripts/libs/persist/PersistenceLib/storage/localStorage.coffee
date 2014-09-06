@@ -1,9 +1,5 @@
 angular.module 'ModulePersistence'
 
-# LocalStorage
-# Also known as web storage, simple storage, or by its alternate session storage interface.
-# this API provides synchronous key/value pair storage, and is available in underlying WebView implementations.
-# Refer to the W3C spec for details: http://www.w3.org/TR/webstorage/
 .factory 'LocalStorageManager', ['$q',($q) ->
 
     class DefaultRawLocalStorage
@@ -13,33 +9,29 @@ angular.module 'ModulePersistence'
         clear: -> window.localStorage.clear()
 
     class ModuleLocalStorage
-        constructor: (@rawStore) -> # e.g. @rawStore = new ModuleRawLocalStorage(new DefaultLocalStorage())
-            @deserialize = JSON.parse
-            @serialize = JSON.stringify
+        constructor: (@rawStore) ->
         clear: -> @rawStore.clear()
-        read: (key)->
+
+        readText: (key) ->
             deferred = $q.defer()
             if @rawStore.isAvailable()
                 try
-                    val = @rawStore.getItem(key)
-                    if val == null || val == undefined
-                        deferred.reject([0]) # reject [0]: everything worked ok, but value is undefined - will be useful to know when undefined and also show as rejected
+                    textData = @rawStore.getItem(key)
+                    if textData == null || textData == undefined
+                        deferred.reject([0])
                     else
-                        console.log('s:' + val)
-                        console.log(obj)
-                        obj = @deserialize(val)
-                        deferred.resolve(obj)
+                        deferred.resolve(textData)
                 catch t
                     deferred.reject([1, t])
             else
-                deferred.reject([-1]) # reject [-1]: service is not available on this system
+                deferred.reject([-1])
             deferred.promise
-        save: (key, obj) ->
+
+        saveText: (key, textData) ->
             deferred = $q.defer()
             if @rawStore.isAvailable()
                 try
-                    val = @serialize(obj)
-                    @rawStore.setItem(key, val)
+                    @rawStore.setItem(key, textData)
                     deferred.resolve(0)
                 catch t
                     deferred.reject([1, t])
