@@ -117,7 +117,7 @@ angular.module('AppOne')
             ActivitySummary.init(@currentTask.id, @currentTask.meta.name)
             @currentActivity
 
-        tryFinishActivity : ->
+        tryFinishActivity: ->
             deferred = $q.defer()
             ActivitySummary.finish()
             .then(

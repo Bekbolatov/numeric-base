@@ -127,7 +127,7 @@ angular.module 'ImageLib'
 
     class GraphicsManager
         constructor: () ->
-            @imageData = new ImageData()
+            @imageData = ImageData
         newImage: (width, height, backgroundColor) -> new Image(@imageData, width, height, backgroundColor)
         newImageWhite: (width, height) -> new Image(@imageData, width, height, 'w')
         newImageWhiteWithOffset: (width, height, offset) -> new Image(@imageData, width, height, 'w', offset)

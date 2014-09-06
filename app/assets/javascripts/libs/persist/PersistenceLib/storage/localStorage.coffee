@@ -22,9 +22,11 @@ angular.module 'ModulePersistence'
             if @rawStore.isAvailable()
                 try
                     val = @rawStore.getItem(key)
-                    if val == undefined
+                    if val == null || val == undefined
                         deferred.reject([0]) # reject [0]: everything worked ok, but value is undefined - will be useful to know when undefined and also show as rejected
                     else
+                        console.log('s:' + val)
+                        console.log(obj)
                         obj = @deserialize(val)
                         deferred.resolve(obj)
                 catch t

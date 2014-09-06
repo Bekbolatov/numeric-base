@@ -9,9 +9,9 @@ angular.module('AppOne')
             if !@_readAllSummaries()
                 @_writeAllSummaries({items: []})
             @_extra = "Just the first line of defense."
-            @failoverBuffer = {} # stores only the most recent
-            if typeof LocalFileSystem == 'undefined'
-                @_writeAllSummaries({items: []})
+#            @failoverBuffer = {} # stores only the most recent
+#            if typeof LocalFileSystem == 'undefined'
+#                @_writeAllSummaries({items: []})
 
         __baseFormat: ->
             {
@@ -53,9 +53,9 @@ angular.module('AppOne')
             deferred = $q.defer()
             summary = @getFromAllSummaries(timestamp)
 
-            if summary.hash == 'test'
-                deferred.resolve(@failoverBuffer[timestamp])
-                return deferred.promise
+#            if summary.hash == 'test'
+#                deferred.resolve(@failoverBuffer[timestamp])
+#                return deferred.promise
 
             filename = document.numeric.path.result + timestamp
             FS.readDataFromFile(filename, summary.hash)
@@ -92,21 +92,21 @@ angular.module('AppOne')
             buffer = @_read()
             buffer.endTime = @lastTimePoint
 
-            if typeof LocalFileSystem == 'undefined'
-                activitySummaryInfo = {
-                    activityName: buffer.activityName
-                    timestamp: buffer.endTime
-                    totalTime: buffer.endTime - buffer.startTime
-                    numberCorrect: buffer.runningTotals.correct
-                    numberWrong: buffer.runningTotals.wrong
-                    hash: 'test'
-                }
-                @failoverBuffer[buffer.endTime] = buffer
-                @_addToAllSummaries(activitySummaryInfo)
-                @_write({})
-                @newFirst = 0
-                deferred.resolve(buffer.endTime)
-                return deferred.promise
+#            if typeof LocalFileSystem == 'undefined'
+#                activitySummaryInfo = {
+#                    activityName: buffer.activityName
+#                    timestamp: buffer.endTime
+#                    totalTime: buffer.endTime - buffer.startTime
+#                    numberCorrect: buffer.runningTotals.correct
+#                    numberWrong: buffer.runningTotals.wrong
+#                    hash: 'test'
+#                }
+#                @failoverBuffer[buffer.endTime] = buffer
+#                @_addToAllSummaries(activitySummaryInfo)
+#                @_write({})
+#                @newFirst = 0
+#                deferred.resolve(buffer.endTime)
+#                return deferred.promise
 
             filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)

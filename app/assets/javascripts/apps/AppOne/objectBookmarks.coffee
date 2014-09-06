@@ -1,36 +1,32 @@
 angular.module('AppOne')
 
-# holds Meta info for bookmarked activities - aka "installed activities"
-# if no such are available in localStorage[document.numeric.keys.bookmarkedActivities],
-# then bootstraps with document.numeric.defaultActivitiesList
-# depends on ActivityMeta
-.factory("Bookmarks", ['ActivityMeta', (ActivityMeta ) ->
+# In memory cache with Write-through to persistence service of bookmarked (aka "installed") activities Meta information
+# If no such was persisted then bootstraps with list in document.numeric.defaultActivitiesList
+# Persistence is layered 1. localStorage[document.numeric.keys.bookmarkedActivities], 2. FileSystem, 3. Server
+# Depends on ActivityMeta
+.factory("Bookmarks", ['$q', 'PersistenceManager', 'ActivityMeta', ($q, PersistenceManager, ActivityMeta ) ->
     class Bookmarks
         bookmarks: {} # allows dirty-checking, writes-through to localStorage
         get: (activityId) -> @bookmarks[activityId]
 
         _key: document.numeric.key.bookmarkedActivities
-        _read: -> JSON.parse(window.localStorage.getItem(@_key))
-        _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
+        _read: -> PersistenceManager.read(@_key)
+        _write: (table) -> PersistenceManager.save(@_key, table)
+        _clear: -> PersistenceManager.save(@_key, {})
 
-        _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
-        _add: (activityId, metaData) ->
-            table = @_read()
-            table[activityId] = metaData
-            @_write(table)
-
-        _remove: (activityId) ->
-            table = @_read()
-            if table[activityId]
-                delete table[activityId]
+        _add: (activityId, metaData) =>
+            @_read()
+            .then (table) =>
+                table[activityId] = metaData
                 @_write(table)
+        _remove: (activityId) =>
+            @_read()
+            .then (table) =>
+                if table[activityId]
+                    delete table[activityId]
+                    @_write(table)
 
-        clear: () ->
-            for id, meta of @bookmarks
-                delete @bookmarks[id]
-            @_clear()
-
-        add: (activityId, meta) =>
+        addHalfSync: (activityId) =>
             ActivityMeta.get(activityId)
             .then(
                 (data) =>
@@ -38,23 +34,61 @@ angular.module('AppOne')
                     @_add(activityId, data)
                 (status) -> console.log(status)
             )
-
-        remove: (activityId) ->
+        removeHalfSync: (activityId) ->
             if @bookmarks[activityId]
                 delete @bookmarks[activityId]
             @_remove(activityId)
+        clearHalfSync: () ->
+            for id, meta of @bookmarks
+                delete @bookmarks[id]
+            @_clear()
 
+        add: (activityId) =>
+            deferred = $q.defer()
+            ActivityMeta.get(activityId)
+            .then (data) =>
+                    @bookmarks[activityId] = data
+                    @_add(activityId, data)
+                    .then () =>
+                        deferred.resolve()
+            .catch (t) =>
+                console.log(t)
+                deferred.reject(t)
+            deferred.promise
+        remove: (activityId) ->
+            deferred = $q.defer()
+            if @bookmarks[activityId]
+                delete @bookmarks[activityId]
+            @_remove(activityId)
+            .then () =>
+                deferred.resolve(0)
+            .catch (t) =>
+                deferred.reject(t)
+            deferred.promise
+        clear: () ->
+            deferred = $q.defer()
+            for id, meta of @bookmarks
+                delete @bookmarks[id]
+            @_clear()
+            .then () =>
+                deferred.resolve(0)
+            .catch (t) =>
+                deferred.reject(t)
+            deferred.promise
 
         constructor: ->
-            if !@_read() # bootstrap with default given in _init.js (if nothing was stored before)
-                @_clear()
-                for activityId in document.numeric.defaultActivitiesList
-                    @add(activityId)
-            else # load previously saved
-                previous = @_read()
+            @_read()
+            .then (previous) => # load previously saved
+                console.log(previous)
                 for id, meta of previous
                     @bookmarks[id] = meta
+            .catch (t) =>
+                @_clear() # bootstrap with default given in _init.js (if nothing was stored before)
+                .then (t) =>
+                    adds = []
+                    for activityId in document.numeric.defaultActivitiesList
+                        adds.push(@add(activityId))
+                    $q.all(adds)
 
-    console.log('CALL TO FACTORY: Bookmarks')
     new Bookmarks()
 ])

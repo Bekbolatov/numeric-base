@@ -80,3 +80,7 @@ angular.module 'ImageLib'
                     'x': [5, 7, [ ]]
                     'y': [5, 7, [ ]]
                     'z': [5, 7, [ ]]
+
+
+    new ImageData()
+]

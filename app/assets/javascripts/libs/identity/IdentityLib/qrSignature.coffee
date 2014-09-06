@@ -1,6 +1,6 @@
-angular.module('ModulePersistence')
+angular.module 'ModuleIdentity'
 
-.factory("QRSignature", [ () ->
+.factory 'QRSignature', [ () ->
     class QRSignature
         encode: (input, dotsize) ->
 
@@ -21,7 +21,6 @@ angular.module('ModulePersistence')
                 errorMSG = document.createTextNode("QR Code generation failed: " + err)
                 errorChild.appendChild(errorMSG)
                 return errorChild
-
 
             qrsize = qr.getModuleCount()
             canvas.setAttribute('height', (qrsize * dotsize) + padding)
@@ -45,4 +44,5 @@ angular.module('ModulePersistence')
             imgElement
 
     new QRSignature()
-])
+
+]

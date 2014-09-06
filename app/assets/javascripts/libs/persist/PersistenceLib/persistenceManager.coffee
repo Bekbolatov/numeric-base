@@ -27,7 +27,7 @@ angular.module 'ModulePersistence'
             .then (obj)->
                 console.log('read from ' + key)
                 console.log(obj)
-                deferred.resolve(0)
+                deferred.resolve(obj)
             .catch (t) ->
                 console.log('did not read')
                 console.log(t)

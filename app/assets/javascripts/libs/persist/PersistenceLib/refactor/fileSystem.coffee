@@ -3,6 +3,7 @@ angular.module('ModulePersistence')
 .factory("FS", ['$q', 'md5', ($q, md5) ->
     class FS
         constructor: ->
+            @quota = 10
             @salt = 'only the first line of defence'
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
             @_getDirEntry(document.numeric.url.base.fs, {create:true})
@@ -20,42 +21,48 @@ angular.module('ModulePersistence')
                 console.log('ERROR: ' + msg)
                 dfd.reject(msg)
 
+        _inCordova: -> ( typeof LocalFileSystem != 'undefined' )
         _printEntries: (entries) ->
             console.log('entries:')
             for entry in entries
                 console.log(entry.name)
 
-#        chromeRequestQuota: ->
-#            deferred = $q.defer()
-#            navigator.webkitPersistentStorage.requestQuota(
-#                1024*1024
-#                (bytes) ->
-#                    console.log('obtained bytes: ' + bytes)
-#                    deferred.resolve(bytes)
-#                (status) ->
-#                    console.log('could not request quota: ' + status)
-#                    deferred.reject(status)
-#            )
-#            deferred.promise
+        _requestQuota: ->
+            deferred = $q.defer()
+            webkitStorageInfo.requestQuota(  #navigator.webkitPersistentStorage.requestQuota(
+                webkitStorageInfo.PERSISTENT
+                @quota*1024*1024
+                (bytes) ->
+                    console.log('obtained bytes: ' + bytes)
+                    deferred.resolve(bytes)
+                (status) ->
+                    console.log('could not request quota: ' + status)
+                    deferred.reject(status)
+            )
+            deferred.promise
 
         getFileSystem: =>
             deferred = $q.defer()
-            if (typeof LocalFileSystem != 'undefined')
+            if @fileSystem != undefined
+                deferred.resolve(@fileSystem)
+            else if @_inCordova()
                window.requestFileSystem(
                 LocalFileSystem.PERSISTENT
                 0
-                (fs) => deferred.resolve(fs)
+                (fs) =>
+                    @fileSystem = fs
+                    deferred.resolve(fs)
                 @_errorHandler(deferred))
             else
-                console.log('LocalFileSystem is undefined')
-#                @chromeRequestQuota()
-#                .then( (bytes) =>
-#                   window.requestFileSystem(
-#                    window.PERSISTENT
-#                    1024*1024
-#                    (fs) => deferred.resolve(fs)
-#                    @_errorHandler(deferred))
-#                )
+                console.log('running in a browser')
+                @_requestQuota()
+                .then( (bytes) =>
+                   window.requestFileSystem(
+                    window.PERSISTENT
+                    bytes
+                    (fs) => deferred.resolve(fs)
+                    @_errorHandler(deferred))
+                )
             deferred.promise
 
         # get Files and Dirs from here
@@ -132,15 +139,29 @@ angular.module('ModulePersistence')
             deferred.promise
 
         # write/read strings to/from file
+        prepareText: (textData) ->
+            if textData == undefined
+                textData = ''
+            if @_inCordova()
+                textData
+            else
+                new Blob([textData], {type: 'text/plain'})
+
         writeToFile: (fileName, textData) ->
             deferred = $q.defer()
             @getFileWriter(fileName)
             .then(
-                (fileWriter) ->
+                (fileWriter) =>
                     console.log('obtained filewriter for: ' + fileName)
+                    preparedText = @prepareText(textData)
                     fileWriter.seek(0)
-                    fileWriter.write(textData)
-                    deferred.resolve('wrote to file: ' + fileName)
+                    window.fwfw = fileWriter
+                    fileWriter.onwriteend = () ->
+                        console.log('finished writing')
+                        deferred.resolve()
+                    fileWriter.onerror = (e) ->
+                        deferred.reject([1, e])
+                    fileWriter.write(preparedText)
             )
             deferred.promise
 
@@ -153,6 +174,7 @@ angular.module('ModulePersistence')
             )
             deferred.promise
 
+        #######################################
 
         writeDataToFile: (fileName, buffer, getHash) =>
             deferred = $q.defer()
@@ -162,7 +184,6 @@ angular.module('ModulePersistence')
                 =>
                     if getHash
                         deferred.resolve(md5.createHash(dataAsString + @salt))
-                        console.log("h:" + md5.createHash(dataAsString + @salt))
                     else
                         deferred.resolve('ok')
             )
@@ -174,12 +195,7 @@ angular.module('ModulePersistence')
             .then(
                 (data) =>
                     if checkHash && checkHash != md5.createHash(data + @salt)
-                        console.log(checkHash)
-                        console.log(data)
-                        console.log(@salt)
-                        console.log(md5.createHash(data + @salt))
                         deferred.resolve('mismatch')
-                        console.log("H:" + md5.createHash(data + @salt))
                     else
                         deferred.resolve(JSON.parse(data))
             )
@@ -198,6 +214,5 @@ angular.module('ModulePersistence')
             )
             deferred.promise
 
-    console.log('CALL TO FACTORY: FS')
     new FS()
 ])

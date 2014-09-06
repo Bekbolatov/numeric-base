@@ -1,6 +1,6 @@
-angular.module 'ModulePersistence'
+angular.module 'ModuleIdentity'
 
-.factory "DeviceId", ['md5', (md5) ->
+.factory 'DeviceId', ['md5', (md5) ->
     class DeviceId
         _chars : 'z123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZAB'
         _randomChar: () -> @_chars[Math.random()*64 | 0]
