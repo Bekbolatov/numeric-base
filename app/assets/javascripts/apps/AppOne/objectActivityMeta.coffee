@@ -12,6 +12,7 @@ angular.module('AppOne')
         _uriLocal: (activityId) -> @_urls.local() + activityId
         _uriRemote: (activityId) -> @_urls.remote() + activityId + DeviceId.qsWithCb(1000)
 
+
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))

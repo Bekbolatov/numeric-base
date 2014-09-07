@@ -3,97 +3,101 @@ angular.module 'ModulePersistence'
 # [-1] - not available
 # [0] - empty value, no value stored at key
 # [1, t] - some error propagated
-.factory 'PersistenceManager', ['$q', 'SerializationMethods', 'LocalStorageManager', 'FileStorageManager', ( $q, SerializationMethods, LocalStorageManager, FileStorageManager ) ->
-    class KeyedObjectPersister
-        constructor: (@persistenceManager, @key) ->
-        read: -> @persistenceManager.read(@key)
-        save: (table) -> @persistenceManager.save(@key, table)
-        clear: -> @persistenceManager.save(@key, {})
-
-    class KeyedDictionaryWriteThruCache
-        constructor: (@persistenceManager, @objkey) ->
-            @persister = new KeyedObjectPersister(@persistenceManager, @objkey)
-            @cache = {}
-        _add: (key, val) =>
+.factory 'PersistenceManager', ['$q', 'SerializationMethods', 'LocalStorageManager', 'FileStorageManager', 'ServerStorageManager', ( $q, SerializationMethods, LocalStorageManager, FileStorageManager, ServerStorageManager ) ->
+    class Persister
+        constructor: (@persistenceManager, @store, @key) ->
+        read: -> @persistenceManager.readObject(@store, @key)
+        save: (table) -> @persistenceManager.saveObject(@store, @key, table)
+        clear: -> @persistenceManager.saveObject(@store, @key, {})
+    class DictionaryPersister
+        constructor: (@persistenceManager, @store, @objkey) ->
+            @persister = new Persister(@persistenceManager, @store, @objkey)
+        init: () ->
+            deferred = $q.defer()
+            @persister.read()
+            .then (val) -> deferred.resolve(val)
+            .catch (t) =>
+                @persister.clear()
+                .then ->
+                    deferred.reject(t)
+            deferred.promise
+        get: (key) =>
+            deferred = $q.defer()
+            @persister.read()
+            .then (table) => deferred.resolve(table[key])
+            .catch (t) => deferred.reject(t)
+            deferred.promise
+        set: (key, val) =>
+            deferred = $q.defer()
             @persister.read()
             .then (table) =>
                 table[key] = val
                 @persister.save(table)
-        _remove: (key) =>
+                .then (result) -> deferred.resolve(result)
+                .catch (result) -> deferred.reject(result)
+            .catch (result) -> deferred.reject(result)
+            deferred.promise
+        remove: (key) =>
             @persister.read()
             .then (table) =>
                 if table[key]
                     delete table[key]
                     @persister.save(table)
-        _clear: -> @persister.clear()
+        clear: -> @persister.clear()
 
-        initCacheFromPersisted: ->
+    class DictionaryCacheWriteThruToPersister
+        constructor: (@persistenceManager, @store, @objkey) ->
+            @cache = {}
+            @persister = new DictionaryPersister(@persistenceManager, @store, @objkey)
+        init: ->
             deferred = $q.defer()
-            @persister.read()
+            @persister.init()
             .then (saved) =>
                 for key, val of saved
                     @cache[key] = val
-                deferred.resolve(0)
-            .catch (t) =>
-                @_clear()
-                deferred.reject(0)
+                deferred.resolve(saved)
+            .catch (t) -> deferred.reject(t)
             deferred.promise
 
         get: (key) -> @cache[key]
-        add: (key, val) ->
+        set: (key, val) ->
             @cache[key] = val
-            @_add(key, val)
+            @persister.set(key, val)
         remove: (key) ->
             if @cache[key]
                 delete @cache[key]
-            @_remove(key)
+            @persister.remove(key)
         clear: () ->
             for key, val of @cache
                 delete @cache[key]
-            @_clear()
+            @persister.clear()
 
     class PersistenceManager
         constructor: () ->
             @localStore = LocalStorageManager
             @fileStore = FileStorageManager
+            @serverStore = ServerStorageManager
 
         serialize: (object) -> SerializationMethods.serialize(object)
         deserialize: (textData) -> SerializationMethods.deserialize(textData)
 
-        #### level 0 ##################
-        saveText: (key, textData) ->
-            deferred = $q.defer()
-            @localStore.saveText(key, textData)
-            .then -> deferred.resolve(0)
-            .catch (t) ->
-                deferred.reject(t)
-            deferred.promise
+        saveText: (store, key, textData) -> store.saveText(key, textData)
+        readText: (store, key) -> store.readText(key)
 
-        readText: (key) ->
-            deferred = $q.defer()
-            @localStore.readText(key)
-            .then (textData)-> deferred.resolve(textData)
-            .catch (t) ->
-                deferred.reject(t)
-            deferred.promise
-
-        #### level 1 ##################
-        saveObject: (key, object) ->
+        saveObject: (store, key, object) ->
             deferred = $q.defer()
             try
                 textData = @serialize(object)
             catch t
                 deferred.reject([1, t])
                 return deferred.promise
-            @saveText(key, textData)
-            .then -> deferred.resolve(0)
-            .catch (t) ->
-                deferred.reject(t)
+            @saveText(store, key, textData)
+            .then (result) -> deferred.resolve(result)
+            .catch (t) -> deferred.reject(t)
             deferred.promise
-
-        readObject: (key) ->
+        readObject: (store, key) ->
             deferred = $q.defer()
-            @readText(key)
+            @readText(store, key)
             .then (textData) =>
                 try
                     obj = @deserialize(textData)
@@ -102,18 +106,15 @@ angular.module 'ModulePersistence'
                     deferred.reject([1, t])
                     return deferred.promise
                 deferred.resolve(obj)
-            .catch (t) ->
-                deferred.reject(t)
+            .catch (t) -> deferred.reject(t)
             deferred.promise
 
         ####  Alias save/read - defaults to 'object' argument ####
-        save: (key, object) -> @saveObject(key, object)
-        read: (key) -> @readObject(key)
-        #### level 2  ##################
-        keyedObjectPersister: (key) ->
-            new KeyedObjectPersister(@, key)
-        writeThruCache: (key) ->
-            new KeyedDictionaryWriteThruCache(@, key)
+        save: (key, object) -> @saveObject(@localStore, key, object)
+        read: (key) -> @readObject(@localStore, key)
+        #### level 4  ##################
+        localStorePersister: (key) -> new Persister(@, @localStore, key)
+        cacheWithwriteThruToLocalStorePersister: (key) -> new DictionaryCacheWriteThruToPersister(@, @localStore, key)
 
     new PersistenceManager()
 ]

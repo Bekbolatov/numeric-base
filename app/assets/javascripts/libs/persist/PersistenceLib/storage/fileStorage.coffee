@@ -4,6 +4,7 @@ angular.module 'ModulePersistence'
     class ModulePersistenceFileStorage
         constructor: () ->
             @filesystem = FS
+
         readText: (key) ->
             deferred = $q.defer()
             @filesystem.readFromFile(key)

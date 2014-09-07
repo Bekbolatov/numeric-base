@@ -5,7 +5,7 @@ angular.module('AppOne')
 .factory("Bookmarks", ['$q', 'PersistenceManager', 'ActivityMeta', ($q, PersistenceManager, ActivityMeta ) ->
     class Bookmarks
         get: (activityId) -> @writeThruCache.get(activityId)
-        add: (activityId, meta) -> @writeThruCache.add(activityId, meta)
+        add: (activityId, meta) -> @writeThruCache.set(activityId, meta)
         remove: (activityId) -> @writeThruCache.remove(activityId)
         clear: () -> @writeThruCache.clear()
         # promise find meta and initialize cache and persistence
@@ -24,9 +24,9 @@ angular.module('AppOne')
                 deferred.promise
 
         constructor: ->
-            @writeThruCache = PersistenceManager.writeThruCache(document.numeric.key.bookmarkedActivities)
+            @writeThruCache = PersistenceManager.cacheWithwriteThruToLocalStorePersister(document.numeric.key.bookmarkedActivities)
             @bookmarks = @writeThruCache.cache
-            @writeThruCache.initCacheFromPersisted()
+            @writeThruCache.init()
             .catch (t) => # bootstrap with default given in _init.js (if nothing was stored before)
                 adds = []
                 for activityId in document.numeric.defaultActivitiesList

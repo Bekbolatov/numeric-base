@@ -32,7 +32,7 @@ angular.module 'ModulePersistence'
             if @rawStore.isAvailable()
                 try
                     @rawStore.setItem(key, textData)
-                    deferred.resolve(0)
+                    deferred.resolve(textData)
                 catch t
                     deferred.reject([1, t])
             else
