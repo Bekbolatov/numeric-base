@@ -1,6 +1,6 @@
 angular.module 'ModuleCommunication'
 
-.factory 'ServerHttp', ['$q', '$http', 'DeviceId', 'MessageDispatcher', ( $q, $http, DeviceId, MessageDispatcher ) ->
+.factory 'ServerHttp', ['$q', '$http', 'FileDownload', 'DeviceId', 'MessageDispatcher', ( $q, $http, FileDownload, DeviceId, MessageDispatcher ) ->
     class ServerHttp
         constructor: () ->
         get: (url, options) ->
@@ -19,6 +19,17 @@ angular.module 'ModuleCommunication'
                 deferred.resolve(response)
             .catch (e) => deferred.reject(e)
             deferred.promise
-
+        download: (url, dst) ->
+            if url.indexOf('?') > -1
+                url = url + DeviceId.qsAndWithCb(1000)
+            else
+                url = url + DeviceId.qsWithCb(1000)
+            FileDownload.download(
+                url
+                dst
+                ->
+                ->
+                false
+                { headers: { "Authorization": '' + DeviceId.deviceSecretId } })
     new ServerHttp()
 ]

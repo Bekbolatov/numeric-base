@@ -118,7 +118,7 @@ object StarPractice extends Controller {
 
   def hello(did: String) = WithCors("GET") {
     Action { request =>
-      logAndCheck("list", did, request)
+      logAndCheck("hello", did, request)
       Ok("{}")
     }
   }
