@@ -1,10 +1,10 @@
 angular.module('AppOne')
 
-.factory("Connections", ['$q', '$http', 'Settings', 'DeviceId' , ($q, $http, Settings, DeviceId ) ->
+.factory("Connections", ['$q', 'ServerHttp', 'Settings', 'DeviceId' , ($q, ServerHttp, Settings, DeviceId ) ->
     class Connections
         _key: document.numeric.key.connections
         _urls:
-            remote: -> Settings.get('mainServerAddress') + document.numeric.path.connections + DeviceId.qsWithCb(1000)
+            remote: -> Settings.get('mainServerAddress') + document.numeric.path.connections
         _read: -> JSON.parse(window.localStorage.getItem(@_key))
         _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
         _clear: -> window.localStorage.setItem(@_key, JSON.stringify({}))
@@ -32,7 +32,7 @@ angular.module('AppOne')
                 url = @_urls.remote()
                 deferred = $q.defer()
                 console.log('|- trying ' + url + ' ...')
-                $http.get(url, { cache: false, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
+                ServerHttp.get(url)
                 .then( \
                     (response) =>
                         console.log('| |- found at ' + url)

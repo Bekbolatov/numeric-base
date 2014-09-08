@@ -1,7 +1,5 @@
 angular.module('AppOne')
 
-# depends only on $q, ActivityMeta, FileDownload
-# Most common uses:
 # ActivityBody.all()/.get('com.sparkydots.groupa.activitya') - gives all registered activities or one specific activity by id
 # loadActivity('com.sparkydots.groupa.activitya') - obtains activity, local cache, or remote server and loads JS in a new script tag in the head - makes available for .get(...)
 # unloadActivity('com.sparkydots.groupa.activitya')
