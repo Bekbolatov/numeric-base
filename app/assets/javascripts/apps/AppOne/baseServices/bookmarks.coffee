@@ -29,11 +29,9 @@ angular.module('AppOne')
                 adds = []
                 for activityId in document.numeric.defaultActivitiesList
                     adds.push @_findMetaAndAdd(activityId)
-                zero = $q.defer()
-                zero.resolve(0)
                 adds.reduce(
                     (processed, another) => processed.then (count) => another(count)
-                    zero.promise
+                    $q.when(0)
                 )
                 .then (count) -> console.log('loaded ' + count + ' scripts on bootstrap.')
 
