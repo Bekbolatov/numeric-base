@@ -11,7 +11,7 @@ import play.api.http.HeaderNames._
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 8/4/14 9:22 PM
  */
-object Angular extends Controller {
+object StarPractice extends Controller {
 
   case class WithCors(httpVerbs: String*)(action: EssentialAction) extends EssentialAction with Results {
     def apply(request: RequestHeader) = {
@@ -37,10 +37,52 @@ object Angular extends Controller {
     }
   }
 
-  def index = WithCors("GET", "POST") {
+  def activityBody(id: String) = WithCors("GET") {
     Action { request =>
-        Ok(views.html.angular())
+      try {
+        val file = new java.io.File("public/tasks/remote/server/activity/body/" + id)
+        Ok.sendFile(
+          content = file
+        )
+      } catch {
+        case e: Exception => Ok("nothing")
+      }
     }
+  }
+
+  def activityMeta(id: String) = WithCors("GET") {
+    Action { request =>
+      try {
+        val file = new java.io.File("public/tasks/remote/server/activity/meta/" + id)
+        Ok.sendFile(
+          content = file
+        )
+      } catch {
+        case e: Exception => Ok("nothing")
+      }
+    }
+  }
+
+  def activityList() = WithCors("GET") {
+    Action { request =>
+      try {
+        val file = new java.io.File("public/tasks/remote/server/activity/meta/list")
+        Ok.sendFile(
+          content = file
+        )
+      } catch {
+        case e: Exception => Ok("{}")
+      }
+    }
+  }
+
+  def hello() = WithCors("GET") {
+    Action { request =>
+      Ok("{}")
+    }
+  }
+  def index = Action {
+      Ok(views.html.angular())
   }
 
 }

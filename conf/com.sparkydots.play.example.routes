@@ -1,7 +1,6 @@
 GET     /                   com.sparkydots.play.example.controllers.Application.index
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
-GET     /starpractice/web                  com.sparkydots.play.example.controllers.Angular.index
 
 
 GET     /content                com.sparkydots.play.example.controllers.Application.getContentDirectly(address: Option[String])
@@ -12,3 +11,12 @@ GET     /second                 com.sparkydots.play.example.controllers.SecondAp
 
 POST    /addClient          com.sparkydots.play.example.controllers.Application.addClient()
 GET     /clients            com.sparkydots.play.example.controllers.Application.getClients
+
+
+
+
+GET     /starpractice/web                  com.sparkydots.play.example.controllers.StarPractice.index
+GET     /starpractice/data/activity/body/:id  com.sparkydots.play.example.controllers.StarPractice.activityBody(id: String)
+GET     /starpractice/data/activity/meta/:id  com.sparkydots.play.example.controllers.StarPractice.activityMeta(id: String)
+GET     /starpractice/data/activity/meta/list  com.sparkydots.play.example.controllers.StarPractice.activityList()
+GET     /starpractice/data/hello  com.sparkydots.play.example.controllers.StarPractice.hello()
