@@ -54,7 +54,7 @@ object StarPractice extends Controller {
     Action { request =>
       try {
         val fileContent = getFileContent("public/tasks/remote/server/activity/body/" + id)
-        SimpleResult(
+        Result(
           header = ResponseHeader(200),
           body = fileContent
         )
@@ -68,7 +68,7 @@ object StarPractice extends Controller {
     Action { request =>
       try {
         val fileContent = getFileContent("public/tasks/remote/server/activity/meta/" + id)
-        SimpleResult(
+        Result(
           header = ResponseHeader(200),
           body = fileContent
         )
@@ -87,7 +87,7 @@ object StarPractice extends Controller {
         val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
         starLogger.info(s"calling did: ${did} with auth: ${authorization}")
         val fileContent = getFileContent("public/tasks/remote/server/activity/meta/list")
-        SimpleResult(
+        Result(
           header = ResponseHeader(200),
           body = fileContent
         )
