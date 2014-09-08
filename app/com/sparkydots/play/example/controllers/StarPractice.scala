@@ -46,13 +46,14 @@ object StarPractice extends Controller {
   def getFileContent(pathName: String) = {
     val file = new File(pathName)
     val fileContent: Enumerator[Array[Byte]] = Enumerator.fromFile(file)
-    starLogger.info(s"in file: ${pathName}")
     fileContent
   }
 
   def activityBody(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
+        val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
+        starLogger.info(s"body:${id} - did:${did} auth:${authorization}")
         val fileContent = getFileContent("public/tasks/remote/server/activity/body/" + id)
         Result(
           header = ResponseHeader(200),
@@ -67,6 +68,8 @@ object StarPractice extends Controller {
   def activityMeta(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
+        val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
+        starLogger.info(s"meta:${id} - did:${did} auth:${authorization}")
         val fileContent = getFileContent("public/tasks/remote/server/activity/meta/" + id)
         Result(
           header = ResponseHeader(200),
@@ -80,12 +83,9 @@ object StarPractice extends Controller {
 
   def activityList(did: String) = WithCors("GET") {
     Action { request =>
-      starLogger.info("ass")
       try {
-        starLogger.info("as")
-        Logger.info("hello")
         val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
-        starLogger.info(s"calling did: ${did} with auth: ${authorization}")
+        starLogger.info(s"list - did:${did} auth:${authorization}")
         val fileContent = getFileContent("public/tasks/remote/server/activity/meta/list")
         Result(
           header = ResponseHeader(200),
@@ -99,7 +99,8 @@ object StarPractice extends Controller {
 
   def hello(did: String) = WithCors("GET") {
     Action { request =>
-      starLogger.info("hello2")
+      val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
+      starLogger.info(s"hello - did:${did} auth:${authorization}")
       Ok("{}")
     }
   }
