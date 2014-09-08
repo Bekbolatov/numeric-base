@@ -5,7 +5,10 @@ angular.module 'ModuleCommunication'
         constructor: () ->
         get: (url, options) ->
             deferred = $q.defer()
-            url = url + DeviceId.qsWithCb(1000)
+            if url.indexOf('?') > -1
+                url = url + DeviceId.qsAndWithCb(1000)
+            else
+                url = url + DeviceId.qsWithCb(1000)
             #options mix-in/override
             $http.get(url , { cache: false, timeout: 7000, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
             .then (response) =>
