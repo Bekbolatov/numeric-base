@@ -1,1 +1,1 @@
-angular.module('ModuleIdentity', [])
+angular.module 'ModuleIdentity', []

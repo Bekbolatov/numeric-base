@@ -1,7 +1,10 @@
 angular.module('AppOne')
 
 # app settings
-.controller 'SettingsCtrl', ['$scope', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, Settings, ActivityMeta, ActivityBody, Bookmarks ) ->
+.controller 'SettingsCtrl', ['$scope', '$location', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, $location, Settings, ActivityMeta, ActivityBody, Bookmarks ) ->
+
+    if !Settings.ready
+        $location.path('/')
 
     $scope.getAttr = (attr) -> Settings.get(attr)
     $scope.setAttr = (attr, newVal) -> Settings.set(attr, newVal)
@@ -9,7 +12,7 @@ angular.module('AppOne')
 
     $scope.defaultMainServerAddress = Settings.getDefault('mainServerAddress')
     $scope.mainServerAddress = Settings.get('mainServerAddress')
-    $scope.newMainServerAddress = $scope.mainServerAddress
+    $scope.newMainServerAddress = Settings.get('mainServerAddress')
 
     $scope.mainServerAddress_set = () ->
         newVal = $scope.newMainServerAddress.trim().replace('http://', 'https://')
@@ -23,7 +26,7 @@ angular.module('AppOne')
     $scope.mainServerAddress_reset = () ->
         Settings.unset('mainServerAddress')
         $scope.mainServerAddress = Settings.get('mainServerAddress')
-        $scope.newMainServerAddress = $scope.mainServerAddress
+        $scope.newMainServerAddress = Settings.get('mainServerAddress')
 
 
 

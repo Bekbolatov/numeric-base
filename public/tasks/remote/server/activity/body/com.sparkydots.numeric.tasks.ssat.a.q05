@@ -7,8 +7,7 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.a.q05'] =
         qq = {
             statement: qa[0][0],
             checkAnswer: function(answer) { return answer == qa[1] },
-            getAnswer: function() { return qa[1] },
-            sizingClassCode: 5
+            getAnswer: function() { return qa[1] }
         }
         if (qa[0].length > 1) {
             qq.answerType = 'multiple'

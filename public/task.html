@@ -40,7 +40,7 @@
 
             <div class="face front">
 
-                <div class="content content-scrollable">
+                <div class="content" ng-class="'content-scrollable'">
 
                     <div class="btn btn-link pull-left">
                         <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
@@ -54,8 +54,10 @@
 
                         <!--   PROBLEM STATEMENT (TODO: combine into one type?) -->
                         <div class="problem-statement-box-holder set-max-width center-inline-child">
-                            <div class="problem-statement-box">
-                                <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                            <div class="problem-statement-box-holder set-max-width center-inline-child">
+                                <div class="problem-statement-box">
+                                    <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                                </div>
                             </div>
                         </div>
 
@@ -118,63 +120,36 @@
 
                         <!-- input: multiple choice -->
                         <div ng-show="currentActivity.inputTypeMultipleChoice" class="numeric">
-                            <!-- input: multiple choice: 4 choices -->
-                            <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 4">
+                            <table class="numeric">
                                 <tr>
-                                    <td class="numeric-td">
+                                    <td class="numeric-td-choice" width="{{ Math.round( 100 / currentActivity.questionStatementChoices_.length) }}%">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[0]"></span>
+                                            <span>A</span>
                                         </button>
                                     </td>
-                                    <td class="numeric-td">
+                                    <td class="numeric-td-choice">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[1]"></span>
+                                            <span>B</span>
                                         </button>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric-td">
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 3">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[2]"></span>
+                                            <span>C</span>
                                         </button>
                                     </td>
-                                    <td class="numeric-td">
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 4">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[3]"></span>
+                                            <span>D</span>
                                         </button>
                                     </td>
-                                </tr>
-                            </table>
-                            <!-- input: multiple choice: 5 choices -->
-                            <table class="numeric" ng-show="activityDriver.questionStatementChoices.length == 5">
-                                <tr>
-                                    <td class="numeric-td">
-                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[0]"></span>
-                                        </button>
-                                    </td>
-                                    <td class="numeric-td">
-                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[1]"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric-td">
-                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[2]"></span>
-                                        </button>
-                                    </td>
-                                    <td class="numeric-td">
-                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[3]"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric-td">
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 5">
                                         <button class="numeric-digit" ng-click="activityDriver.pressedChoice(4)">
-                                            <span ng-bind-html="activityDriver.questionStatementChoices[4]"></span>
+                                            <span>E</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 6">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(5)">
+                                            <span>F</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -183,7 +158,7 @@
 
 
                         <!-- PREV QUESTION/ANSWER SUMMARY -->
-                        <div ng-show="activityDriver.answeredQuestion.statement" class="numeric-completed">
+                        <div ng-show="activityDriver.answeredQuestion.statementAsHTML" class="numeric-completed">
                             <!--  FEEDBACK (last question correct or wrong) -->
                             <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
                                 {{ activityDriver.result.verbal }}

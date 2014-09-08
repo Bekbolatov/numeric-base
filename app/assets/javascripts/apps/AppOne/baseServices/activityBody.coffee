@@ -131,6 +131,5 @@ angular.module('AppOne')
                 )
             deferred.promise
 
-    console.log('CALL TO FACTORY: ActivityBody')
     new ActivityBody()
 ])

@@ -1,7 +1,5 @@
 angular.module('AppOne')
-# In memory cache with Write-through to persistence service of bookmarked (aka "installed") activities Meta information
-# If no such was persisted then bootstraps with list in document.numeric.defaultActivitiesList
-# Persistence is layered 1. localStorage[document.numeric.keys.bookmarkedActivities], 2. FileSystem, 3. Server
+
 .factory("Bookmarks", ['$q', 'PersistenceManager', 'ActivityMeta', ($q, PersistenceManager, ActivityMeta ) ->
     class Bookmarks
         get: (activityId) -> @writeThruCache.get(activityId)

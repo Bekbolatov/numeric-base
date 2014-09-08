@@ -34,7 +34,7 @@ angular.module('Krista')
                 [ @t.capitalize(type),  @t.capitalize(price) ]
             )
 
-            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? ' + table , answers ], index]
+            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <p>' + table + '</p>' , answers ], index]
 
     new M15()
 ]

@@ -1,6 +1,9 @@
 angular.module('AppOne')
 
-.controller 'TasksMarketplaceCtrl', ['$scope', 'Marketplace', 'ActivityManager', ($scope, Marketplace, ActivityManager ) ->
+.controller 'TasksMarketplaceCtrl', ['$scope', '$location', 'Settings', 'Marketplace', 'ActivityManager', ($scope, $location, Settings, Marketplace, ActivityManager ) ->
+    if !Settings.ready
+        $location.path('/')
+
     # tabs (ui)
     if Object.keys(ActivityManager.getInstalledActivitiesMeta()).length < 1
         $scope.currentTab = 'available'

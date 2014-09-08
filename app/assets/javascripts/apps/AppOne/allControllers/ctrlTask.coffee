@@ -1,7 +1,10 @@
 angular.module('AppOne')
 
 # Task Controller
-.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'ActivityDriver', 'ActivityManager', ($scope, $routeParams, $location, ActivityDriver, ActivityManager ) ->
+.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'ActivityDriver', 'ActivityManager', ($scope, $routeParams, $location, Settings, ActivityDriver, ActivityManager ) ->
+    if !Settings.ready
+        $location.path('/')
+
     taskId = $routeParams.taskId
     if taskId == undefined || taskId == ''
         return $location.path('/')

@@ -9,7 +9,8 @@ document.numeric = {
         activitiesMeta: 'numericActivitiesMeta',
         bookmarkedActivities: 'numericBookmarkedActivities',
         currentActivitySummary: 'numericCurrentActivitySummary',
-        storedActivitySummaries: 'numericStoredActivitySummaries'
+        storedActivitySummaries: 'numericStoredActivitySummaries',
+        messages: 'numericMessages'
     },
     url: {
         base: {
@@ -33,6 +34,16 @@ document.numeric = {
         'com.sparkydots.numeric.tasks.t.basic_math',
         'com.sparkydots.numeric.tasks.ssat.a.q00'
     ],
+
+    defaultSettings: {
+        appVersion: 1,
+        historyPageSize: 10,
+        historyServerSync: false,
+        mainServerAddress: 'https://www.vicinitalk.com/plainmedia/numeric/server/',
+        linkSubmitShow: false,
+        linkConnectShow: false,
+        linkSettingsShow: false
+    },
 
     defaultTeachersList: [
         {id: 0, name: 'Mr. Aleman', newItems: 1},

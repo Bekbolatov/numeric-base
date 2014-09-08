@@ -9,9 +9,12 @@ module.exports = function(grunt) {
                     sourceJs + 'qrcode.js',
                     sourceJs + 'rawdeflate.js',
 
+                    sourceJs + 'libs/settings/SettingsLib/**',
                     sourceJs + 'libs/identity/IdentityLib/**',
                     sourceJs + 'libs/image/ImageLib/**',
                     sourceJs + 'libs/present/BaseLib/**',
+                    sourceJs + 'libs/communication/HttpLib/**',
+                    sourceJs + 'libs/communication/MessageLib/**',
                     sourceJs + 'libs/persist/PersistenceLib/**',
 
                     sourceJs + 'apps/AppOne/**',

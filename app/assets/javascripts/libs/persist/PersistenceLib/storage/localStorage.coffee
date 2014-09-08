@@ -39,5 +39,27 @@ angular.module 'ModulePersistence'
                 deferred.reject([-1])
             deferred.promise
 
+        readTextBlocking: (key) ->
+            if @rawStore.isAvailable()
+                try
+                    textData = @rawStore.getItem(key)
+                    if textData == null || textData == undefined
+                        return undefined
+                    else
+                        return textData
+                catch t
+                    return null
+            else
+                return null
+
+        saveTextBlocking: (key, textData) ->
+            if @rawStore.isAvailable()
+                try
+                    @rawStore.setItem(key, textData)
+                    return textData
+                catch t
+                    return null
+            else
+                return null
     new ModuleLocalStorage(new DefaultRawLocalStorage())
 ]

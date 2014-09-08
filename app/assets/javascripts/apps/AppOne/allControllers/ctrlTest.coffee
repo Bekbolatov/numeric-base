@@ -34,6 +34,7 @@ angular.module('AppOne')
 
 .controller 'SampleQuestionCtrl', [ '$scope', '$sce', 'PersistenceManager', 'KristaQuestions', ($scope, $sce, PersistenceManager, KristaQuestions ) ->
 
+    $scope.browserGood = typeof navigator.webkitPersistentStorage != 'undefined'
     window.pers = PersistenceManager
     $scope.regen = (num) ->
         PersistenceManager.save('testikl', {s:1, b:'as', c: { h: 'yello'}})

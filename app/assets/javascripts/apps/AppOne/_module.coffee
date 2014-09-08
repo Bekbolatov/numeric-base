@@ -1,1 +1,1 @@
-angular.module 'AppOne', ['ngRoute', 'ngMd5', 'timer', 'BaseLib', 'ModuleIdentity', 'ModulePersistence', 'Krista']
+angular.module 'AppOne', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'Krista']

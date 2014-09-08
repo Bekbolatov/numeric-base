@@ -1,18 +1,13 @@
 angular.module('AppOne')
 
-# Keep track and add elements to summary for current activity: continually check-point after each answer
-# At Activity Finish, flush to disk
-# Ability to load some past summary from disk, possibly one just saved, to feed ctrlSummary
-.factory("ActivitySummary", ['$q', 'FS', ($q, FS) ->
+.factory("ActivitySummary", ['$q', 'FS', 'PersistenceManager', ($q, FS, PersistenceManager ) ->
     class ActivitySummary
         constructor: ->
-            if !@_readAllSummaries()
-                @_writeAllSummaries({items: []})
+            @currentActivityPersister = PersistenceManager.localStoreBlockingPersister(document.numeric.key.currentActivitySummary)
+            @activitySummariesPersister = PersistenceManager.localStoreBlockingPersister(document.numeric.key.storedActivitySummaries)
+            if !@activitySummariesPersister.read()
+                @activitySummariesPersister.save({items: []})
             @_extra = "Just the first line of defense."
-#            @failoverBuffer = {} # stores only the most recent
-#            if typeof LocalFileSystem == 'undefined'
-#                @_writeAllSummaries({items: []})
-
         __baseFormat: ->
             {
                 activityId: ''
@@ -22,40 +17,27 @@ angular.module('AppOne')
                     wrong: 0
                 responses: []
             }
-        _key: document.numeric.key.currentActivitySummary
-        _read: -> JSON.parse(window.localStorage.getItem(@_key))
-        _write: (table) -> window.localStorage.setItem(@_key, JSON.stringify(table))
-
-        _keyAllSummaries: document.numeric.key.storedActivitySummaries
-        _readAllSummaries: -> JSON.parse(window.localStorage.getItem(@_keyAllSummaries))
-        _writeAllSummaries: (table) -> window.localStorage.setItem(@_keyAllSummaries, JSON.stringify(table))
         _addToAllSummaries: (summaryInfo) ->
-            table = @_readAllSummaries()
+            table = @activitySummariesPersister.read()
             table.items.unshift(summaryInfo)
-            @_writeAllSummaries(table)
+            @activitySummariesPersister.save(table)
         _removeFromAllSummaries: (timestamp) -> # not using right now
-            table = @_readAllSummaries()
+            table = @activitySummariesPersister.read()
             itemToDelete = 0
             newItems = item for item in table.items when item.timestamp != timestamp
-            #also remove the file
-            @_writeAllSummaries(newItems)
-
-        getAllSummaries: -> @_readAllSummaries().items
-        getAllSummariesPage: (start, end) -> @_readAllSummaries().items.slice(start, end)
+            #also remove the file - currently not deleting
+            @activitySummariesPersister.save(table)
+        getAllSummaries: -> @activitySummariesPersister.read().items
+        getAllSummariesPage: (start, end) -> @getAllSummaries().slice(start, end)
         getFromAllSummaries: (timestamp) ->
-            for item in @_readAllSummaries().items
-                console.log(item.timestamp)
+            items = @getAllSummaries()
+            for item in items
                 if parseInt(item.timestamp) == parseInt(timestamp)
                     return item
             return undefined
-
         getSummaryById: (timestamp) ->
             deferred = $q.defer()
             summary = @getFromAllSummaries(timestamp)
-
-#            if summary.hash == 'test'
-#                deferred.resolve(@failoverBuffer[timestamp])
-#                return deferred.promise
 
             filename = document.numeric.path.result + timestamp
             FS.readDataFromFile(filename, summary.hash)
@@ -63,18 +45,15 @@ angular.module('AppOne')
                 (buffer) => deferred.resolve(buffer)
                 (status) => deferred.reject(status))
             deferred.promise
-
-        # read and write is better done in bulk here
         init: (activityId, activityName)->
             buffer = @__baseFormat()
             buffer.activityId = activityId
             buffer.activityName = activityName
             buffer.startTime = (new Date()).getTime()
-            @_write(buffer)
+            @currentActivityPersister.save(buffer)
             @lastTimePoint = (new Date()).getTime()
-
         add: (answeredQuestion) ->
-            buffer = @_read()
+            buffer = @currentActivityPersister.read()
             if answeredQuestion.result
                 buffer.runningTotals.correct = buffer.runningTotals.correct + 1
             else
@@ -84,29 +63,12 @@ angular.module('AppOne')
                 buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, [answeredQuestion.questionGraphicData] ])
             else
                 buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, []])
-            @_write(buffer)
+            @currentActivityPersister.save(buffer)
             @lastTimePoint = (new Date()).getTime()
-
         finish: =>
             deferred = $q.defer()
-            buffer = @_read()
+            buffer = @currentActivityPersister.read()
             buffer.endTime = @lastTimePoint
-
-#            if typeof LocalFileSystem == 'undefined'
-#                activitySummaryInfo = {
-#                    activityName: buffer.activityName
-#                    timestamp: buffer.endTime
-#                    totalTime: buffer.endTime - buffer.startTime
-#                    numberCorrect: buffer.runningTotals.correct
-#                    numberWrong: buffer.runningTotals.wrong
-#                    hash: 'test'
-#                }
-#                @failoverBuffer[buffer.endTime] = buffer
-#                @_addToAllSummaries(activitySummaryInfo)
-#                @_write({})
-#                @newFirst = 0
-#                deferred.resolve(buffer.endTime)
-#                return deferred.promise
 
             filename = document.numeric.path.result + buffer.endTime
             console.log('trying to write to filename: ' + filename)
@@ -122,7 +84,7 @@ angular.module('AppOne')
                         hash: hash
                     }
                     @_addToAllSummaries(activitySummaryInfo)
-                    @_write({})
+                    @currentActivityPersister.save({})
                     @newFirst = 0
                     deferred.resolve(buffer.endTime)
             )
@@ -130,10 +92,6 @@ angular.module('AppOne')
                 (status) -> deferred.reject(status)
             )
             deferred.promise
-        expandGraphic: (item) ->
-            if item.length < 1
-                return [false, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII%3D']
-            [true, item[0]]
 
         setFirstIndex: (newFirst) -> @newFirst = newFirst
         getFirstIndex: -> @newFirst

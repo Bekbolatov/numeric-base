@@ -1,6 +1,10 @@
 angular.module('AppOne')
 
-.controller 'HistoryCtrl', ['$scope', '$routeParams', 'Settings', 'ActivitySummary', ($scope, $routeParams, Settings, ActivitySummary ) ->
+.controller 'HistoryCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'ActivitySummary', ($scope, $routeParams, $location, Settings, ActivitySummary ) ->
+
+    if !Settings.ready
+        $location.path('/')
+
     $scope.activitySummariesInfoAll = ActivitySummary.getAllSummaries()
     $scope.totalItems = $scope.activitySummariesInfoAll.length
     $scope.noHistory = $scope.activitySummariesInfoAll.length < 1
@@ -38,7 +42,12 @@ angular.module('AppOne')
 
 ]
 
-.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'ActivitySummary', ($scope, $routeParams, $location, $sce, ActivitySummary ) ->
+.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'ActivitySummary', ($scope, $routeParams, $location, $sce, Settings, ActivitySummary ) ->
+    if !Settings.ready
+        $location.path('/')
+
+    $scope.linkSubmitShow = Settings.get('linkSubmitShow')
+
     itemId = $routeParams.itemId
     if itemId == undefined || itemId == '' || itemId == 'test'
         return $location.path('/')
@@ -59,7 +68,7 @@ angular.module('AppOne')
                 $scope.mismatch = false
                 $scope.activityName = data.activityName
                 $scope.timestamp = data.endTime
-                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4], ActivitySummary.expandGraphic(response[5])  ]  for response in data.responses)
+                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4] ]  for response in data.responses)
 
                 $scope.correct = data.runningTotals.correct
                 $scope.wrong = data.runningTotals.wrong

@@ -5,39 +5,31 @@ angular.module('AppOne')
         constructor: (@currentTask) ->
             @name = @currentTask.meta.name
             @parameters = @currentTask.parameters
-
         lettered: (n) -> ' ' + ("ABCDEFGH")[n] + ') '
         newQuestion: ->
             @question = @currentTask.createNextQuestion()
             if @question == undefined
                 return undefined
 
-            @questionStatement_ = @question.statement
-
             if @question.answerType == 'numeric'
                 @inputTypeNumeric = true
                 @inputTypeMultipleChoice = false
-                @questionStatement = @questionStatement_
-
                 @questionStatementChoices = undefined
-                @questionStatementAsHTML_ = $sce.trustAsHtml(@question.statement)
-
+                @questionStatementAsHTML_ = @question.statement
+                @questionStatementAsHTML = $sce.trustAsHtml(@question.statement)
             else if @question.answerType == 'multiple'
                 @inputTypeNumeric = false
                 @inputTypeMultipleChoice = true
-                @questionStatement = @questionStatement_
-
-                @questionStatementChoices = ($sce.trustAsHtml('' + choice) for choice in @question.choices)
+                @questionStatementChoices_ = @question.choices
+                questionStatement = @question.statement + '<div class="problem-ol-mult-choice-holder"><ol type="A" class="problem-ol-mult-choice">'
                 for i, choice of @question.choices
-                    @questionStatement_ += @lettered(i) + choice
-                @questionStatementAsHTML_ = $sce.trustAsHtml(@questionStatement_)
+                    questionStatement += '<li>' + choice + '</li>'
+                questionStatement += '</ol></div>'
 
-            @questionStatementAsHTML = $sce.trustAsHtml('' + @questionStatement)
-
-            if @question.answerOnNextLine
-                @answerOnNextLine = true
+                @questionStatementAsHTML_ = questionStatement
+                @questionStatementAsHTML = $sce.trustAsHtml(questionStatement)
             else
-                @answerOnNextLine = false
+                return undefined
 
             if @question.sizingClassCode
                 if @question.sizingClassCode = 5
@@ -48,28 +40,26 @@ angular.module('AppOne')
                 @sizingClass = 'sizeKeepSame'
 
             returnQuestion =
-                questionStatement_ : @questionStatement_
                 questionStatementAsHTML_ : @questionStatementAsHTML_
-                questionStatement : @questionStatement
                 questionStatementAsHTML : @questionStatementAsHTML
-                questionStatementChoices : @questionStatementChoices
+                questionStatementChoices_ : @questionStatementChoices_
             returnQuestion
 
         questionString: ->
             answerString = answer
             if @inputTypeMultipleChoice
-                answerString = @questionStatementChoices[answer]
+                answerString = @questionStatementChoices_[answer]
             answerString
         answerString: (answer) ->
             answerString = answer
             if @inputTypeMultipleChoice
-                answerString = @lettered(answerString) + @questionStatementChoices[answerString]
+                answerString = @lettered(answerString) + @questionStatementChoices_[answerString]
             answerString
 
         answerStringActual: () ->
             answerString = @question.getAnswer()
             if @inputTypeMultipleChoice
-                answerString = @lettered(answerString) + @questionStatementChoices[answerString]
+                answerString = @lettered(answerString) + @questionStatementChoices_[answerString]
             answerString
 
         checkAnswer: (answer) ->
@@ -142,12 +132,7 @@ angular.module('AppOne')
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')
                 return
-
-            @questionStatement_ = @question.questionStatement_
-            @questionStatementAsHTML_ = @question.questionStatementAsHTML_
-            @questionStatement = @question.questionStatement
             @questionStatementAsHTML = @question.questionStatementAsHTML
-            @questionStatementChoices = @question.questionStatementChoices
 
             if !keepClock
                 @scope.$broadcast('timer-start')
@@ -156,8 +141,8 @@ angular.module('AppOne')
             @scope.$broadcast('timer-stop')
 
             @answeredQuestion =
-                statement: @questionStatement_
-                statementAsHTML: @questionStatementAsHTML_
+                statement: @question.questionStatementAsHTML_
+                statementAsHTML: @question.questionStatementAsHTML
                 answer: @currentActivity.answerString(answer)
                 answerAsHTML: $sce.trustAsHtml('' + @currentActivity.answerString(answer))
                 actualAnswer: @currentActivity.answerStringActual()
@@ -177,7 +162,6 @@ angular.module('AppOne')
 
         # User keypad entries
         pressed: (digit) ->
-            @clearResult()
             if (@answer == undefined)
                 @answer = 0
             @answer = @answer * 10 + digit
