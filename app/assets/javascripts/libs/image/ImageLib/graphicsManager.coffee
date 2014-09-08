@@ -2,21 +2,37 @@ angular.module 'ImageLib'
 
 .factory("GraphicsManager", [ 'ImageData', 'GenerateImagePng', 'GenerateImageUsingCanvas', (ImageData, GenerateImagePng, GenerateImageUsingCanvas ) ->
     class Image
-        constructor: (@imageData, @width, @height, backgroundColor, offset) ->
+        constructor: (@imageData, @width, @height, backgroundColor, offsetleft, offsetright, offsettop, offsetbottom) ->
             @width = Math.round(@width)
             @height = Math.round(@height)
-            offset = Math.round(offset)
 
             @colors = @imageData.colors[0]
             @chars = @imageData.chars[0]
 
             @data = []
-            if offset != undefined
-                @offset = offset
+            if offsetleft != undefined && offsetright != undefined && offsettop != undefined && offsetbottom != undefined
+                @offsetleft = Math.round(offsetleft)
+                @offsetright = Math.round(offsetright)
+                @offsettop = Math.round(offsettop)
+                @offsetbottom = Math.round(offsetbottom)
+            else if offsetleft != undefined
+                @offsetleft = Math.round(offsetleft)
+                @offsetright = Math.round(offsetleft)
+                @offsettop = Math.round(offsetleft)
+                @offsetbottom = Math.round(offsetleft)
             else
-                @offset = 0
-            @width = @width + 2 * @offset
-            @height = @height + 2 * @offset
+                @offsetleft = 0
+                @offsetright = 0
+                @offsettop = 0
+                @offsetbottom = 0
+
+#            console.log(@offsetleft)
+#            console.log(@offsetright)
+#            console.log(@offsettop)
+#            console.log(@offsetbottom)
+
+            @width = @width + @offsetleft + @offsetright
+            @height = @height + @offsettop + @offsetbottom
 
             if backgroundColor != undefined
                 color = @colors[backgroundColor]
@@ -56,8 +72,9 @@ angular.module 'ImageLib'
             @placeCharSequence(x - 3*cc.length, y - 4, cc, colorLetter )
         ############################################################
         setPoint: (x, y, color) ->
-            x = Math.round(x + @offset)
-            y = Math.round(y + @offset)
+            x = Math.round(x + @offsetleft)
+            y = Math.round(y + @offsetbottom)
+#            console.log('' + x + ',' + y + ':' + color)
             @data[y * @width + x] = color
             @
         getPoint: (x, y) -> @data[y * @width + x]
@@ -130,7 +147,7 @@ angular.module 'ImageLib'
             @imageData = ImageData
         newImage: (width, height, backgroundColor) -> new Image(@imageData, width, height, backgroundColor)
         newImageWhite: (width, height) -> new Image(@imageData, width, height, 'w')
-        newImageWhiteWithOffset: (width, height, offset) -> new Image(@imageData, width, height, 'w', offset)
+        newImageWhiteWithOffset: (width, height, offsetleft, offsetright, offsettop, offsetbottom) -> new Image(@imageData, width, height, 'w', offsetleft, offsetright, offsettop, offsetbottom)
 
         getColor: (r ,g, b, a) -> String.fromCharCode(r, g, b, a)
 

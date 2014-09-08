@@ -18,7 +18,7 @@
         Cancel
     </button>
 
-    <h2 class="title" ng-class="{colorWhite: showFinish}">{{ currentActivity.name | textOrLoading | truncate }} </h2>
+    <h2 class="title" ng-class="{colorWhite: showFinish}">StarPractice</h2>
 
     <button class="btn btn-link btn-nav pull-right" ng-show="!showFinish" ng-click="isFlipped=!isFlipped">
         <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>
@@ -42,12 +42,20 @@
 
                 <div class="content" ng-class="'content-scrollable'">
 
-                    <div class="btn btn-link pull-left">
-                        <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
-                        <span>{{activityDriver.totalTime | secondsToClock}}</span>
-                    </div>
-                    <div class="btn btn-link pull-right">
-                        <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
+                    <div class="center-inline-child">
+
+                        <div class="btn btn-link pull-left">
+                            <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
+                            <span>{{activityDriver.totalTime | secondsToClock}}</span>
+                        </div>
+
+                        <span class="btn btn-link center-inline-child">
+                            {{ currentActivity.name | textOrLoading | truncate }}
+                        </span>
+
+                        <div class="btn btn-link pull-right">
+                            <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
+                        </div>
                     </div>
 
                     <div class="content-inner">

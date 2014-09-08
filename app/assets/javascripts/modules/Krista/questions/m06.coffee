@@ -27,7 +27,7 @@ angular.module('Krista')
 
             maxScore = 100
             canvas_height = 250
-            canvas_width = 270
+            canvas_width = 250
 
             [xtick, ytick] = [ canvas_width / 5 , canvas_height / 10 ]
             Ky = canvas_height/maxScore
@@ -37,7 +37,7 @@ angular.module('Krista')
             boxColor = 'G'
             boxPadding = 10
 
-            img = GraphicsManager.newImageWhiteWithOffset(canvas_width, canvas_height, 25 )
+            img = GraphicsManager.newImageWhiteWithOffset(canvas_width, canvas_height, 35, 5, 5, 15 )
             for i in [0 .. 10]
                 img.drawLine(  -tickBump,i*ytick   ,  canvas_width,i*ytick   , gridColor) # horizontal
             for i in [0 .. 5]
