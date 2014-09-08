@@ -23,8 +23,9 @@ object StarPractice extends Controller {
 
   def logAndCheck(page: String, did: String, request: RequestHeader) = {
     val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
+    val md5v = md5(authorization)
     val check = md5check(did, authorization)
-    starLogger.info(s"${page} - ${did} - ${check}")
+    starLogger.info(s"${page} - ${did} - ${check} - ${authorization} - ${md5v}")
     check
   }
 
