@@ -31,7 +31,7 @@ angular.module('ModulePersistence')
         _requestQuota: ->
             deferred = $q.defer()
             navigator.webkitPersistentStorage.requestQuota(
-                window.PERSISTENT #webkitStorageInfo.PERSISTENT
+                10*1024*1024
                 (bytes) ->
                     deferred.resolve(bytes)
                 (status) ->
