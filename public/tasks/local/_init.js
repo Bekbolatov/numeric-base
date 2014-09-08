@@ -17,7 +17,7 @@ document.numeric = {
             fs: 'numericdata/',
             cdv: 'cdvfile://localhost/persistent/',
             local: '/assets/tasks/local/',
-            server: 'https://www.vicinitalk.com/plainmedia/numeric/server/'
+            server: 'https://www.sparkydots.com/starpractice/data/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
         }
     },
@@ -39,7 +39,7 @@ document.numeric = {
         appVersion: 1,
         historyPageSize: 10,
         historyServerSync: false,
-        mainServerAddress: 'https://www.vicinitalk.com/plainmedia/numeric/server/',
+        mainServerAddress: 'https://www.sparkydots.com/starpractice/data/',
         linkSubmitShow: false,
         linkConnectShow: false,
         linkSettingsShow: false

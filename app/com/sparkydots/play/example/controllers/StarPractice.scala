@@ -82,7 +82,7 @@ object StarPractice extends Controller {
     }
   }
   def index = Action {
-      Ok(views.html.angular())
+      Ok(views.html.starpractice())
   }
 
 }
