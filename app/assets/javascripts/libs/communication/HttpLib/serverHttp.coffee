@@ -10,7 +10,7 @@ angular.module 'ModuleCommunication'
             else
                 url = url + DeviceId.qsWithCb(1000)
             #options mix-in/override
-            $http.get(url , { cache: false, timeout: 7000, headers: { "Authorization": "Basic " + DeviceId.deviceSecretId } })
+            $http.get(url , { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId } })
             .then (response) =>
                 data = response.data
                 if data != undefined && data.messages != undefined && data.content != undefined
