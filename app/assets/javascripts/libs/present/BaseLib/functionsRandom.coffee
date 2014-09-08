@@ -55,7 +55,7 @@ angular.module 'BaseLib'
 
         _someChars : 'z123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZAB'
         _randomSomeChar: () -> @_someChars[Math.random()*64 | 0]
-        _randomSomeString: (n) ->
+        randomSomeString: (n) ->
             s = ''
             for i in [1..n]
                 s = s + @_randomSomeChar()
