@@ -30,21 +30,11 @@ angular.module('ModulePersistence')
 
         _requestQuota: ->
             deferred = $q.defer()
-            navigator.webkitPersistentStorage.requestQuota(  #navigator.webkitPersistentStorage.requestQuota( # webkitStorageInfo
-#                window.PERSISTENT #webkitStorageInfo.PERSISTENT
-#                @quota*1024*1024
-#                (bytes) ->
-#                    console.log('obtained bytes: ' + bytes)
-#                    deferred.resolve(bytes)
-#                (status) ->
-#                    console.log('could not request quota: ' + status)
-#                    deferred.reject(status)
+            navigator.webkitPersistentStorage.requestQuota(
                 window.PERSISTENT #webkitStorageInfo.PERSISTENT
                 (bytes) ->
-                    console.log('obtained bytes: ' + bytes)
                     deferred.resolve(bytes)
                 (status) ->
-                    console.log('could not request quota: ' + status)
                     deferred.reject(status)
             )
             deferred.promise
