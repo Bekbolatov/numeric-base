@@ -3,76 +3,76 @@ angular.module('AppOne')
 .config(['$routeProvider', ($routeProvider) ->
     $routeProvider
     .when('/', {
-        templateUrl: 'assets/home.html'
+        templateUrl: '/assets/home.html'
         controller: 'HomeCtrl'
     })
     .when('/info', {
-        templateUrl: 'assets/info.html'
+        templateUrl: '/assets/info.html'
         controller: 'InfoCtrl'
     })
     # start a task
     .when('/tasksList', {
-        templateUrl: 'assets/tasksList.html'
+        templateUrl: '/assets/tasksList.html'
         controller: 'TaskListCtrl'
     })
     .when('/task/:taskId', {
-        templateUrl: 'assets/task.html'
+        templateUrl: '/assets/task.html'
         controller: 'TaskCtrl'
     })
     # lookup historical and also lookup last activitySummary
     .when('/history', {
-        templateUrl: 'assets/history.html'
+        templateUrl: '/assets/history.html'
         controller: 'HistoryCtrl'
     })
     .when('/history/:containedItem', {
-        templateUrl: 'assets/history.html'
+        templateUrl: '/assets/history.html'
         controller: 'HistoryCtrl'
     })
     .when('/historyItem/:itemId', {
-        templateUrl: 'assets/historyItem.html'
+        templateUrl: '/assets/historyItem.html'
         controller: 'HistoryItemCtrl'
     })
     .when('/historyItem/:itemId/:backButton', {
-        templateUrl: 'assets/historyItem.html'
+        templateUrl: '/assets/historyItem.html'
         controller: 'HistoryItemCtrl'
     })
     # Activity Marketplace
     .when('/tasksMarketplace', {
-        templateUrl: 'assets/tasksMarketplace.html'
+        templateUrl: '/assets/tasksMarketplace.html'
         controller: 'TasksMarketplaceCtrl'
     })
 
     # Settings
     .when('/settings', {
-        templateUrl: 'assets/settings.html'
+        templateUrl: '/assets/settings.html'
         controller: 'SettingsCtrl'
     })
 
     # Connect
     .when('/connect', {
-        templateUrl: 'assets/connect.html'
+        templateUrl: '/assets/connect.html'
         controller: 'ConnectCtrl'
     })
     .when('/myIdentity', {
-        templateUrl: 'assets/myIdentity.html'
+        templateUrl: '/assets/myIdentity.html'
         controller: 'MyIdentityCtrl'
     })
     .when('/teachers', {
-        templateUrl: 'assets/teachers.html'
+        templateUrl: '/assets/teachers.html'
         controller: 'TeachersCtrl'
     })
     .when('/addTeacher', {
-        templateUrl: 'assets/addTeacher.html'
+        templateUrl: '/assets/addTeacher.html'
         controller: 'AddTeacherCtrl'
     })
 
     # for testing only
     .when('/test', {
-        templateUrl: 'assets/test.html'
+        templateUrl: '/assets/test.html'
         controller: 'TestCtrl'
     })
     .when('/sampleQuestion', {
-        templateUrl: 'assets/sampleQuestion.html'
+        templateUrl: '/assets/sampleQuestion.html'
         controller: 'SampleQuestionCtrl'
     })
 
