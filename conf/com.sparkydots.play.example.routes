@@ -1,7 +1,7 @@
 GET     /                   com.sparkydots.play.example.controllers.Application.index
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
-GET     /nog                   com.sparkydots.play.example.controllers.Angular.index
+GET     /starpractice/web                  com.sparkydots.play.example.controllers.Angular.index
 
 
 GET     /content                com.sparkydots.play.example.controllers.Application.getContentDirectly(address: Option[String])
