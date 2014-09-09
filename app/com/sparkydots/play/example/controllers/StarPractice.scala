@@ -128,8 +128,7 @@ object StarPractice extends Controller {
     }
   }
 
-  def index = Action {
-    starLogger.info(s"P${logSeparator}index")
+  def index() = Action {
     Ok(views.html.starpractice())
   }
 

@@ -1,22 +1,25 @@
-GET     /                   com.sparkydots.play.example.controllers.Application.index
-GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
 
 
 GET     /content                com.sparkydots.play.example.controllers.Application.getContentDirectly(address: Option[String])
 GET     /second                 com.sparkydots.play.example.controllers.SecondApp.index
 
-
-
-
 POST    /addClient          com.sparkydots.play.example.controllers.Application.addClient()
 GET     /clients            com.sparkydots.play.example.controllers.Application.getClients
 
 
 
+# Assets used everywhere
+GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
+# Main SparkyDots website
+GET     /                com.sparkydots.play.example.controllers.Application.index
+
+# StarPractice: Web, Main Window
 GET     /starpractice/web                  com.sparkydots.play.example.controllers.StarPractice.index
+
+# StarPractice: app calls
+GET     /starpractice/data/hello  com.sparkydots.play.example.controllers.StarPractice.hello(did: String)
 GET     /starpractice/data/activity/body/:id  com.sparkydots.play.example.controllers.StarPractice.activityBody(id: String, did: String)
 GET     /starpractice/data/activity/meta/list  com.sparkydots.play.example.controllers.StarPractice.activityList(did: String)
 GET     /starpractice/data/activity/meta/:id  com.sparkydots.play.example.controllers.StarPractice.activityMeta(id: String, did: String)
-GET     /starpractice/data/hello  com.sparkydots.play.example.controllers.StarPractice.hello(did: String)
