@@ -16,12 +16,14 @@ document.numeric = {
         base: {
             fs: 'numericdata/',
             cdv: 'cdvfile://localhost/persistent/',
+            chrome: 'filesystem:SERVERNAME/persistent/',
             local: '/assets/tasks/local/',
             server: 'https://www.sparkydots.com/starpractice/data/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
         }
     },
     path: {
+        activity: 'activity/',
         list: 'activity/meta/list', // Marketplace: list of public activities
         meta: 'activity/meta/',
         body: 'activity/body/',
@@ -49,4 +51,19 @@ document.numeric = {
         {id: 0, name: 'Mr. Aleman', newItems: 1},
         {id: 2, name: '鬼塚 英吉', newItems: 3}
     ]
+}
+
+try {
+    (function(w) {
+        var protocol = location.protocol;
+        var server = location.hostname;
+        var port = location.port;
+        if (port.length > 0) {
+            port = ":" + port;
+        }
+        var servername = protocol + "//" + server + port;
+        w.document.numeric.url.base.chrome = w.document.numeric.url.base.chrome.replace("SERVERNAME", servername);
+    })(this);
+} catch(e) {
+    console.log(e)
 }

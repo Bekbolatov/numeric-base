@@ -1,8 +1,19 @@
 angular.module 'ModuleCommunication'
 
-.factory 'ServerHttp', ['$q', '$http', 'DeviceId', 'MessageDispatcher', ( $q, $http, DeviceId, MessageDispatcher ) ->
+.factory 'ServerHttp', ['$q', '$http', 'DeviceId', 'MessageDispatcher', 'FS', ( $q, $http, DeviceId, MessageDispatcher, FS ) ->
     class ServerHttp
         constructor: () ->
+        _inCordova: () -> typeof LocalFileSystem != 'undefined'
+        _baseCdv: () -> document.numeric.url.base.cdv
+        _baseChrome: () -> document.numeric.url.base.chrome
+        _baseCdvFs: (path) -> @_base() + document.numeric.url.base.fs + path
+        _base: () ->
+            if @_inCordova()
+                document.numeric.url.base.cdv
+            else
+                document.numeric.url.base.chrome
+             uri + document.numeric.url.base.fs
+
         get: (url, options) ->
             deferred = $q.defer()
             if url.indexOf('?') > -1
@@ -19,24 +30,38 @@ angular.module 'ModuleCommunication'
                 deferred.resolve(response)
             .catch (e) => deferred.reject(e)
             deferred.promise
-        download: (url, fileURL) ->
+        download: (url, filePath) ->
             if url.indexOf('?') > -1
                 url = url + DeviceId.qsAndWithCb(1000)
             else
                 url = url + DeviceId.qsWithCb(1000)
-
             deferred = $q.defer()
-            fileTransfer = new FileTransfer();
-            fileTransfer.download(
-                url
-                fileURL
-                (entry) -> deferred.resolve('ok')
-                (error) -> deferred.reject(error.code)
-                false
-                {
-                    headers:
-                        "Authorization": "" + DeviceId.deviceSecretId
-                })
+            if @_inCordova()
+                fileTransfer = new FileTransfer();
+                fileTransfer.download(
+                    url
+                    @_baseCdvFs(filePath)
+                    (entry) -> deferred.resolve('ok')
+                    (error) -> deferred.reject(error.code)
+                    false
+                    {
+                        headers:
+                            "Authorization": "" + DeviceId.deviceSecretId
+                    })
+            else
+                @get(url)
+                .then (response) =>
+                    try
+                        data = response.data
+                        FS.writeToFile(filePath, data)
+                        .then (response) =>
+                            deferred.resolve('ok')
+                        .catch (e) =>
+                            deferred.reject(e)
+                    catch t
+                        deferred.reject(t)
+                .catch (e) =>
+                    deferred.reject(e)
             deferred.promise
         transformUrl: (url) ->
             if url.indexOf('?') > -1

@@ -6,9 +6,15 @@ angular.module('AppOne')
 .factory("ActivityBody", ['$q', 'Settings', 'DeviceId', 'ActivityMeta', 'ServerHttp', 'FS', ($q, Settings, DeviceId, ActivityMeta, ServerHttp, FS ) ->
     class ActivityBody
         _activities: {}
+        _inCordova: () -> typeof LocalFileSystem != 'undefined'
         _scriptId: (activityId) -> 'script_' + activityId
-        _uriFS: (activityId) -> document.numeric.path.body + activityId
-        _uriCdv: (activityId) -> document.numeric.url.base.cdv + document.numeric.url.base.fs + document.numeric.path.body + activityId
+        _pathFS: (activityId) -> document.numeric.path.body + activityId
+        _uriCdv: (activityId) ->
+            if @_inCordova()
+                uri = document.numeric.url.base.cdv
+            else
+                uri = document.numeric.url.base.chrome
+             uri + document.numeric.url.base.fs + @_pathFS(activityId)
         _uriLocal: (activityId) -> document.numeric.url.base.local + document.numeric.path.body + activityId
         _uriRemote: (activityId) -> Settings.get('mainServerAddress') + document.numeric.path.body + activityId
 
@@ -27,11 +33,11 @@ angular.module('AppOne')
             deferred.promise
 
         _downloadActivityBody: (activityId) ->
-            ServerHttp.download(@_uriRemote(activityId), @_uriCdv(activityId))
+            ServerHttp.download(@_uriRemote(activityId), @_pathFS(activityId))
         _deleteDownloadedFile: (activityId) ->
             deferred = $q.defer()
-            if typeof LocalFileSystem != 'undefined'
-                FS.tryDeleteFile(@_uriFS(activityId))
+            if @_inCordova()
+                FS.tryDeleteFile(@_pathFS(activityId))
                 .then(
                     () => deferred.resolve('deleted')
                 )
@@ -87,20 +93,20 @@ angular.module('AppOne')
                 deferred.resolve('already loaded')
                 deferred.promise
             else
-                if typeof LocalFileSystem == 'undefined'
-                    @_loadScript( ServerHttp.transformUrl(@_uriRemote(activityId)), activityId)
-                    .then => @_attachActivityMeta(activityId)
-                else
-                    @_loadScript(@_uriLocal(activityId), activityId)
-                    .catch =>
+#                if !@_inCordova()
+#                    @_loadScript( ServerHttp.transformUrl(@_uriRemote(activityId)), activityId)
+#                    .then => @_attachActivityMeta(activityId)
+#                else
+                @_loadScript(@_uriLocal(activityId), activityId)
+                .catch =>
+                    cb = "?cb=" + Math.round( (new Date()) / 1000 )
+                    @_loadScript(@_uriCdv(activityId) + cb, activityId)
+                .catch =>
+                    @_downloadActivityBody(activityId)
+                    .then =>
                         cb = "?cb=" + Math.round( (new Date()) / 1000 )
                         @_loadScript(@_uriCdv(activityId) + cb, activityId)
-                    .catch =>
-                        @_downloadActivityBody(activityId)
-                        .then =>
-                            cb = "?cb=" + Math.round( (new Date()) / 1000 )
-                            @_loadScript(@_uriCdv(activityId) + cb, activityId)
-                    .then => @_attachActivityMeta(activityId)
+                .then => @_attachActivityMeta(activityId)
 
         loadActivities: (activities) ->
             console.log('loadScripts called with ' + activities)
