@@ -15,6 +15,7 @@ import java.security.MessageDigest
 object StarPractice extends Controller {
 
   val starLogger = Logger("star")
+  val logSeparator = "#"
 
   val digest = MessageDigest.getInstance("MD5")
   def md5(s: String) = digest.digest(s.getBytes).map("%02x".format(_)).mkString
@@ -22,10 +23,13 @@ object StarPractice extends Controller {
     hash != null && !hash.isEmpty() && orig != null && !orig.isEmpty() && md5(orig) == hash
 
   def logAndCheck(page: String, did: String, request: RequestHeader) = {
+
+    val ip = request.remoteAddress
     val authorization = request.headers.get(AUTHORIZATION).getOrElse("*")
     val md5v = md5(authorization)
     val check = md5check(did, authorization)
-    starLogger.info(s"${page} - ${did} - ${check} - ${authorization} - ${md5v}")
+
+    starLogger.info(s"S$logSeparator$ip$logSeparator$did$logSeparator$check$logSeparator$page$logSeparator$authorization$logSeparator$md5v")
     check
   }
 
@@ -66,8 +70,8 @@ object StarPractice extends Controller {
   def activityBody(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck(s"body:${id}", did, request)) {
-          Ok("outside")
+        if (!logAndCheck(s"body$logSeparator${id}", did, request)) {
+          Ok("{}")
         } else {
           val fileContent = getFileContent("public/tasks/remote/server/activity/body/" + id)
           Result(
@@ -76,7 +80,7 @@ object StarPractice extends Controller {
           )
         }
       } catch {
-        case e: Exception => Ok("nothing")
+        case e: Exception => Ok("{}")
       }
     }
   }
@@ -84,8 +88,8 @@ object StarPractice extends Controller {
   def activityMeta(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck(s"meta:${id}", did, request) ) {
-          Ok("outside")
+        if (!logAndCheck(s"meta$logSeparator${id}", did, request) ) {
+          Ok("{}")
         } else {
           val fileContent = getFileContent("public/tasks/remote/server/activity/meta/" + id)
           Result(
@@ -94,7 +98,7 @@ object StarPractice extends Controller {
           )
         }
       } catch {
-        case e: Exception => Ok("nothing")
+        case e: Exception => Ok("{}")
       }
     }
   }
@@ -102,8 +106,8 @@ object StarPractice extends Controller {
   def activityList(did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck("list", did, request)) {
-          Ok("outside")
+        if (!logAndCheck(s"list$logSeparator", did, request)) {
+          Ok("{}")
         } else {
           val fileContent = getFileContent("public/tasks/remote/server/activity/meta/list")
           Result(
@@ -119,13 +123,13 @@ object StarPractice extends Controller {
 
   def hello(did: String) = WithCors("GET") {
     Action { request =>
-      logAndCheck("hello", did, request)
+      logAndCheck(s"hello$logSeparator", did, request)
       Ok("{}")
     }
   }
 
   def index = Action {
-    starLogger.info("index")
+    starLogger.info(s"P${logSeparator}index")
     Ok(views.html.starpractice())
   }
 

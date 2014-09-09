@@ -7,7 +7,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss ZZZZ} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
         </encoder>
     </appender>
 
@@ -18,7 +18,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss ZZZZ} : %message%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss}#%message%n</pattern>
             <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
@@ -30,7 +30,7 @@
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss ZZZZ} %message%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
             <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
