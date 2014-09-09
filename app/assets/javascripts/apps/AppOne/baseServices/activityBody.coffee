@@ -88,7 +88,7 @@ angular.module('AppOne')
                 deferred.promise
             else
                 if typeof LocalFileSystem == 'undefined'
-                    @_loadScript(@_uriRemote(activityId), activityId)
+                    @_loadScript( ServerHttp.transformUrl(@_uriRemote(activityId)), activityId)
                     .then => @_attachActivityMeta(activityId)
                 else
                     @_loadScript(@_uriLocal(activityId), activityId)

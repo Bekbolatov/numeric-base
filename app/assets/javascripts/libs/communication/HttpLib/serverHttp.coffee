@@ -38,6 +38,11 @@ angular.module 'ModuleCommunication'
                         "Authorization": "" + DeviceId.deviceSecretId
                 })
             deferred.promise
+        transformUrl: (url) ->
+            if url.indexOf('?') > -1
+                url = url + DeviceId.qsAndWithCb(1000)
+            else
+                url = url + DeviceId.qsWithCb(1000)
 
     new ServerHttp()
 ]
