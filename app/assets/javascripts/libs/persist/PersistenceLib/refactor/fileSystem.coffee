@@ -6,7 +6,7 @@ angular.module('ModulePersistence')
             @quota = 10
             @salt = 'only the first line of defence'
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem
-            @_getDirEntry(document.numeric.url.base.fs, {create:true})
+            @_getDirEntryRawName(document.numeric.url.base.fs, {create:true})
             .then( => @getDirEntry(document.numeric.path.result, {create:true}))
             .then( => @getDirEntry(document.numeric.path.activity, {create:true}))
             .then( => @getDirEntry(document.numeric.path.body, {create:true}))
@@ -69,7 +69,7 @@ angular.module('ModulePersistence')
             deferred.promise
 
         # get Files and Dirs from here
-        _getDirEntry: (dirName, options) ->
+        _getDirEntryRawName: (dirName, options) ->
             console.log('getting dirEntry: ' + dirName)
             deferred = $q.defer()
             @getFileSystem()
@@ -86,7 +86,7 @@ angular.module('ModulePersistence')
             )
             deferred.promise
 
-        _getFileEntry: (fileName, options) ->
+        __getFileEntryRawName: (fileName, options) ->
             console.log('getting fileEntry: ' + fileName)
             deferred = $q.defer()
             @getFileSystem()
@@ -103,8 +103,8 @@ angular.module('ModulePersistence')
             )
             deferred.promise
 
-        getDirEntry: (dirName, options) -> @_getDirEntry(document.numeric.url.base.fs + dirName, options)
-        getFileEntry: (fileName, options) -> @_getFileEntry(document.numeric.url.base.fs + fileName, options)
+        getDirEntry: (dirName, options) -> @_getDirEntryRawName(document.numeric.url.base.fs + dirName, options)
+        getFileEntry: (fileName, options) -> @__getFileEntryRawName(document.numeric.url.base.fs + fileName, options)
 
         # ls contents
         getContents: (dirName) =>

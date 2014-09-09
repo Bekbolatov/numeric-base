@@ -6,13 +6,12 @@ angular.module 'ModuleCommunication'
         _inCordova: () -> typeof LocalFileSystem != 'undefined'
         _baseCdv: () -> document.numeric.url.base.cdv
         _baseChrome: () -> document.numeric.url.base.chrome
-        _baseCdvFs: (path) -> @_base() + document.numeric.url.base.fs + path
+        _baseCdvFs: (path) -> @_baseCdv() + document.numeric.url.base.fs + path
         _base: () ->
             if @_inCordova()
-                document.numeric.url.base.cdv
+                @_baseCdv()
             else
-                document.numeric.url.base.chrome
-             uri + document.numeric.url.base.fs
+                @_baseChrome()
 
         get: (url, options) ->
             deferred = $q.defer()
