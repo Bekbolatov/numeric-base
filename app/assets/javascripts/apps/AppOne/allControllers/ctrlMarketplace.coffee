@@ -1,8 +1,10 @@
 angular.module('AppOne')
 
-.controller 'TasksMarketplaceCtrl', ['$scope', '$location', 'Settings', 'Marketplace', 'ActivityManager', ($scope, $location, Settings, Marketplace, ActivityManager ) ->
+.controller 'TasksMarketplaceCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'Marketplace', 'ActivityManager', ($scope, $location, Settings, Tracker, Marketplace, ActivityManager ) ->
     if !Settings.ready
-        $location.path('/')
+        return $location.path('/')
+    else
+        Tracker.touch('marketplace')
 
     # tabs (ui)
     if Object.keys(ActivityManager.getInstalledActivitiesMeta()).length < 1

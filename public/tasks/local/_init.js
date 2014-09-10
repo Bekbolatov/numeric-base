@@ -23,6 +23,7 @@ document.numeric = {
         }
     },
     path: {
+        activity: 'touch',
         activity: 'activity/',
         list: 'activity/meta/list', // Marketplace: list of public activities
         meta: 'activity/meta/',

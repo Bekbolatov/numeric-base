@@ -1,1 +1,1 @@
-angular.module 'ModuleCommunication', ['ModuleIdentity', 'ModuleMessage', 'ModulePersistence' ]
+angular.module 'ModuleCommunication', ['ModuleSettings', 'ModuleIdentity', 'ModuleMessage', 'ModulePersistence' ]

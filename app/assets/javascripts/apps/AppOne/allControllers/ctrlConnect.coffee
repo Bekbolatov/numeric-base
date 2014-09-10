@@ -1,12 +1,21 @@
 angular.module('AppOne')
 
-.controller 'ConnectCtrl', ['$scope', '$rootScope', '$routeParams', 'Connections', ($scope, $rootScope, $routeParams, Connections ) ->
+.controller 'ConnectCtrl', ['$scope', '$rootScope', '$location', '$routeParams', 'Settings', 'Tracker', 'Connections', ($scope, $rootScope, $location, $routeParams, Settings, Tracker, Connections ) ->
+    if !Settings.ready
+        return $location.path('/')
+    else
+        Tracker.touch('connect')
+
     $scope.teachers = Connections.getAll()
     $scope.noTeachers = false
 
 ]
 
-.controller 'AddTeacherCtrl', ['$scope', '$location', 'Connections', ($scope, $location, Connections ) ->
+.controller 'AddTeacherCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'Connections', ($scope, $location, Settings, Tracker, Connections ) ->
+    if !Settings.ready
+        return $location.path('/')
+    else
+        Tracker.touch('addteacher')
 
     $scope.teacherId = ''
     $scope.scan = () ->
@@ -35,12 +44,20 @@ angular.module('AppOne')
 
 ]
 
-.controller 'TeachersCtrl', ['$scope', 'DeviceId', ($scope, DeviceId ) ->
+.controller 'TeachersCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'DeviceId', ($scope, $location, Settings, Tracker, DeviceId ) ->
+    if !Settings.ready
+        return $location.path('/')
+    else
+        Tracker.touch('teachers')
     $scope.myId = DeviceId.devicePublicId
 ]
 
 
-.controller 'MyIdentityCtrl', ['$scope', 'DeviceId', 'QRSignature', ($scope, DeviceId, QRSignature ) ->
+.controller 'MyIdentityCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'DeviceId', 'QRSignature', ($scope, $location, Settings, Tracker, DeviceId, QRSignature ) ->
+    if !Settings.ready
+        return $location.path('/')
+    else
+        Tracker.touch('myid')
     $scope.myId = DeviceId.devicePublicId
     $scope.myId_p1 = DeviceId.devicePublicId.substring(0,16)
     $scope.myId_p2 = DeviceId.devicePublicId.substring(16)

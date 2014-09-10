@@ -1,9 +1,11 @@
 angular.module('AppOne')
 
-.controller 'HistoryCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'ActivitySummary', ($scope, $routeParams, $location, Settings, ActivitySummary ) ->
+.controller 'HistoryCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'ActivitySummary', 'Tracker', ($scope, $routeParams, $location, Settings, ActivitySummary, Tracker ) ->
 
     if !Settings.ready
-        $location.path('/')
+        return $location.path('/')
+    else
+        Tracker.touch('history')
 
     $scope.activitySummariesInfoAll = ActivitySummary.getAllSummaries()
     $scope.totalItems = $scope.activitySummariesInfoAll.length
@@ -44,13 +46,15 @@ angular.module('AppOne')
 
 .controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'ActivitySummary', ($scope, $routeParams, $location, $sce, Settings, ActivitySummary ) ->
     if !Settings.ready
-        $location.path('/')
+        return $location.path('/')
 
     $scope.linkSubmitShow = Settings.get('linkSubmitShow')
 
     itemId = $routeParams.itemId
     if itemId == undefined || itemId == '' || itemId == 'test'
         return $location.path('/')
+    else
+        Tracker.touch('historyitem', itemId)
 
     backButton = $routeParams.backButton
     if backButton != undefined && backButton != '' && backButton != 'test'

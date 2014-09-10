@@ -1,6 +1,6 @@
 angular.module 'ModuleCommunication'
 
-.factory 'ServerHttp', ['$q', '$http', 'DeviceId', 'MessageDispatcher', 'FS', ( $q, $http, DeviceId, MessageDispatcher, FS ) ->
+.factory 'ServerHttp', ['$q', '$http', 'Settings', 'DeviceId', 'MessageDispatcher', 'FS', ( $q, $http, Settings, DeviceId, MessageDispatcher, FS ) ->
     class ServerHttp
         constructor: () ->
         _inCordova: () -> typeof LocalFileSystem != 'undefined'
@@ -13,14 +13,30 @@ angular.module 'ModuleCommunication'
             else
                 @_baseChrome()
 
-        get: (url, options) ->
+        touch: (page, id) -> @get(Settings.get('mainServerAddress') + page, {timeout: 2000}, 10)
+
+        get: (url, options, cbtime) ->
             deferred = $q.defer()
+            if cbtime == undefined
+                cbtime = 1000
             if url.indexOf('?') > -1
-                url = url + DeviceId.qsAndWithCb(1000)
+                url = url + DeviceId.qsAndWithCb(cbtime)
             else
-                url = url + DeviceId.qsWithCb(1000)
-            #options mix-in/override
-            $http.get(url , { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId } })
+                url = url + DeviceId.qsWithCb(cbtime)
+
+            if options != undefined
+                if options.cache == undefined
+                    options.cache = false
+                if options.timeout == undefined
+                    options.timeout = 7000
+                if options.headers == undefined
+                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId }
+                else if options.headers.Authorization == undefined
+                    options.headers.Authorization = '' + DeviceId.deviceSecretId
+            else
+                options = { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId } }
+
+            $http.get(url , options)
             .then (response) =>
                 data = response.data
                 if data != undefined && data.messages != undefined && data.content != undefined

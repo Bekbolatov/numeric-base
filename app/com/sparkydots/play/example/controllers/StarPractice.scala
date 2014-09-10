@@ -15,7 +15,12 @@ import java.security.MessageDigest
 object StarPractice extends Controller {
 
   val starLogger = Logger("star")
-  val logSeparator = "#"
+  val logSeparator = "# "
+
+  val allowedChars=(('a' to 'z') ++ ('A' to 'Z') ++ ('0' to '9') ++ List('.', '_')).toSet
+  def validateStringInput(id: String)= {
+    id.length < 100 && id.forall(allowedChars.contains(_))
+  }
 
   val digest = MessageDigest.getInstance("MD5")
   def md5(s: String) = digest.digest(s.getBytes).map("%02x".format(_)).mkString
@@ -29,7 +34,7 @@ object StarPractice extends Controller {
     val md5v = md5(authorization)
     val check = md5check(did, authorization)
 
-    starLogger.info(s"S$logSeparator$ip$logSeparator$did$logSeparator$check$logSeparator$page$logSeparator$authorization$logSeparator$md5v")
+    starLogger.info(s"$ip$logSeparator$did$logSeparator$check$logSeparator$page$logSeparator$authorization$logSeparator$md5v")
     check
   }
 
@@ -70,14 +75,14 @@ object StarPractice extends Controller {
   def activityBody(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck(s"body$logSeparator${id}", did, request)) {
-          Ok("{}")
-        } else {
+        if (validateStringInput(id) && validateStringInput(did) && logAndCheck(s"S${logSeparator}body$logSeparator${id}", did, request)) {
           val fileContent = getFileContent("public/tasks/remote/server/activity/body/" + id)
           Result(
             header = ResponseHeader(200),
             body = fileContent
           )
+        } else {
+          Ok("{}")
         }
       } catch {
         case e: Exception => Ok("{}")
@@ -88,14 +93,14 @@ object StarPractice extends Controller {
   def activityMeta(id: String, did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck(s"meta$logSeparator${id}", did, request) ) {
-          Ok("{}")
-        } else {
+        if (validateStringInput(id) && validateStringInput(did) && logAndCheck(s"S${logSeparator}meta$logSeparator${id}", did, request) ) {
           val fileContent = getFileContent("public/tasks/remote/server/activity/meta/" + id)
           Result(
             header = ResponseHeader(200),
             body = fileContent
           )
+        } else {
+          Ok("{}")
         }
       } catch {
         case e: Exception => Ok("{}")
@@ -106,14 +111,14 @@ object StarPractice extends Controller {
   def activityList(did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (!logAndCheck(s"list$logSeparator", did, request)) {
-          Ok("{}")
-        } else {
+        if (validateStringInput(did) && logAndCheck(s"S${logSeparator}list$logSeparator", did, request)) {
           val fileContent = getFileContent("public/tasks/remote/server/activity/meta/list")
           Result(
             header = ResponseHeader(200),
             body = fileContent
           )
+        } else {
+          Ok("{}")
         }
       } catch {
         case e: Exception => Ok("{}")
@@ -121,9 +126,12 @@ object StarPractice extends Controller {
     }
   }
 
-  def hello(did: String) = WithCors("GET") {
+  def touch(page: String, id: Option[String], did: String) = WithCors("GET") {
     Action { request =>
-      logAndCheck(s"hello$logSeparator", did, request)
+      val idString = id.getOrElse("")
+      if (validateStringInput(page) && (id.isEmpty || validateStringInput(idString)) && validateStringInput(did)) {
+        logAndCheck(s"T${logSeparator}${page}${logSeparator}${idString}", did, request)
+      }
       Ok("{}")
     }
   }

@@ -1,9 +1,9 @@
 angular.module('AppOne')
 
-.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'Settings', 'Bookmarks', 'ActivityManager','ServerHttp', ($scope, $rootScope, $routeParams, Settings, Bookmarks, ActivityManager, ServerHttp ) ->
+.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'Settings', 'Bookmarks', 'ActivityManager','Tracker', ($scope, $rootScope, $routeParams, Settings, Bookmarks, ActivityManager, Tracker ) ->
 
     setScopeVars = () ->
-        ServerHttp.get(Settings.get('mainServerAddress') + 'hello')
+        Tracker.touch('home')
         $scope.settingsLoaded = true
         $scope.linkConnectShow = Settings.get('linkConnectShow')
         $scope.linkSubmitShow = Settings.get('linkSubmitShow')

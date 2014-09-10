@@ -1,10 +1,12 @@
 angular.module('AppOne')
 
 # app settings
-.controller 'SettingsCtrl', ['$scope', '$location', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', ($scope, $location, Settings, ActivityMeta, ActivityBody, Bookmarks ) ->
+.controller 'SettingsCtrl', ['$scope', '$location', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', 'Tracker', ($scope, $location, Settings, ActivityMeta, ActivityBody, Bookmarks, Tracker ) ->
 
     if !Settings.ready
-        $location.path('/')
+        return $location.path('/')
+    else
+        Tracker.touch('settings')
 
     $scope.getAttr = (attr) -> Settings.get(attr)
     $scope.setAttr = (attr, newVal) -> Settings.set(attr, newVal)
