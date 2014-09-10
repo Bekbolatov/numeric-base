@@ -54,8 +54,8 @@ object StarLogger {
 
 
     val f: Future[Unit] = future {
-      //val geoip = s"http://freegeoip.net/json/${ip}"
-      val geoip = s"http://freegeoip.net/json/5.76.227.214"
+      val geoip = s"http://freegeoip.net/json/${ip}"
+      //val geoip = s"http://freegeoip.net/json/5.76.227.214"
       WS.url(geoip).get().map {
         result =>
           if (result.status == 200) {
