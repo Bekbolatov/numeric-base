@@ -52,27 +52,22 @@ object StarLogger {
 
     val ua = userAgentLogString(request)
 
-
-    val f: Future[Unit] = future {
-      val geoip = s"http://freegeoip.net/json/${ip}"
-      //val geoip = s"http://freegeoip.net/json/5.76.227.214"
-      WS.url(geoip).get().map {
-        result =>
-          if (result.status == 200) {
-            val city = result.json \ "city"
-            val region_name = result.json \ "region_name"
-            val country_code = result.json \ "country_code"
-            val geo = s" ${city } ${region_name} ${country_code} "
-            starLogger.info(s"${typ}${logSeparator}$ip${logSeparator}${geo}$logSeparator$did$logSeparator$check$logSeparator${pageName}${logSeparator}${id}$ua${logSeparator}$authorization$logSeparator$md5v")
-          } else {
-            starLogger.info(s"${typ}${logSeparator}$ip${logSeparator}$logSeparator$did$logSeparator$check$logSeparator${pageName}${logSeparator}${id}$ua${logSeparator}$authorization$logSeparator$md5v")
-          }
-      }.recover {
-        case e: Exception =>
+    val geoip = s"http://freegeoip.net/json/${ip}"
+    WS.url(geoip).get().map {
+      result =>
+        if (result.status == 200) {
+          val city = result.json \ "city"
+          val region_name = result.json \ "region_name"
+          val country_code = result.json \ "country_code"
+          val geo = s" ${city} ${region_name} ${country_code} "
+          starLogger.info(s"${typ}${logSeparator}$ip${logSeparator}${geo}$logSeparator$did$logSeparator$check$logSeparator${pageName}${logSeparator}${id}$ua${logSeparator}$authorization$logSeparator$md5v")
+        } else {
           starLogger.info(s"${typ}${logSeparator}$ip${logSeparator}$logSeparator$did$logSeparator$check$logSeparator${pageName}${logSeparator}${id}$ua${logSeparator}$authorization$logSeparator$md5v")
-      }
+        }
+    }.recover {
+      case e: Exception =>
+        starLogger.info(s"${typ}${logSeparator}$ip${logSeparator}$logSeparator$did$logSeparator$check$logSeparator${pageName}${logSeparator}${id}$ua${logSeparator}$authorization$logSeparator$md5v")
     }
-
     check
   }
 

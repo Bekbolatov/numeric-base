@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', 'FS', ($scope, $rootScope, $routeParams, $http, md5, FS ) ->
+.controller 'TestCtrl', ['$scope', '$rootScope', '$routeParams', '$http', 'md5', 'FS', 'Settings', ($scope, $rootScope, $routeParams, $http, md5, FS, Settings ) ->
 
     $scope.showScriptsInHead = () ->
         tags = document.getElementsByTagName('script')
@@ -29,5 +29,8 @@ angular.module('AppOne')
 
     $scope.getFromLocal = (key) -> $scope.localData = window.localStorage.getItem(key)
     $scope.testmd5 = (txt) -> $scope.localData = md5.createHash(txt)
+
+
+    $scope.setServerToLocalHost = () -> Settings.set("mainServerAddress", "http://localhost:9000/starpractice/data/")
 
 ]
