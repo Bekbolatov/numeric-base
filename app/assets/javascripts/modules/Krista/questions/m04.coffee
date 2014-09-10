@@ -1,16 +1,17 @@
 angular.module('Krista')
 
-.factory "M04", ['KristaData', 'KristaUtil', 'TextFunctions', (KristaData, KristaUtil, TextFunctions ) ->
+.factory "M04", ['DataPack', 'RandomFunctions', 'TextFunctions', (DataPack, RandomFunctions, TextFunctions ) ->
     class M04
-        u: KristaUtil
+        d: DataPack
+        r: RandomFunctions
         t: TextFunctions
 
         generateDataForQuestionType04: () =>
-            subject = @u.randomFromList(['person', 'bird', 'zoo', 'forest', 'animal', 'barn', 'thing', 'thing' ])
-            item = @u.randomFromList(KristaData.data.item[subject])
-            location = @u.randomFromList(KristaData.data.location[subject])
+            subject = @r.randomFromList(['person', 'bird', 'zoo', 'forest', 'animal', 'barn', 'thing', 'thing' ])
+            item = @r.randomFromList(@d.data.item[subject])
+            location = @r.randomFromList(@d.data.location[subject])
 
-            r = @u.randomPairFromList([1,2,3,4,5,6,7])
+            r = @r.randomPairFromList([1,2,3,4,5,6,7])
             r1 = r[0]
             r2 = r[1]
             if ( ( r1 % 2 ) == 0) && ( ( r2 % 2 ) == 0 )
@@ -20,7 +21,7 @@ angular.module('Krista')
                 r1 = r1 / 3
                 r2 = r2 / 3
 
-            m = @u.random(2,6)
+            m = @r.random(2,6)
             dr = {
                 location: location
                 elements: item
@@ -100,7 +101,7 @@ angular.module('Krista')
                 else
                     'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' ' + there + ' is ' + c.ratio()
             c.ratioIs = (there) =>
-                if @u.random(0, 2) > 0
+                if @r.random(0, 2) > 0
                     if there == undefined || there == ''
                         'the ratio of ' + c.elements(0) + ' to ' + c.elements(1) + ' is ' + c.ratio()
                     else
@@ -125,44 +126,44 @@ angular.module('Krista')
             c.howManyTotalInSet = (acting, pink) -> c.howManyTotal() + ' ' + c.inSet(acting, pink)
 
             c.generateQuestion = =>
-                ratioSecond = @u.randomFromList([false, true])
-                knownUnknown = @u.randomPairFromList([0, 1, 2])
+                ratioSecond = @r.randomFromList([false, true])
+                knownUnknown = @r.randomPairFromList([0, 1, 2])
                 if knownUnknown[0] != 2
                     if ratioSecond
                         p2 = c.thereAreInSet(knownUnknown[0], true, true)
-                        if @u.random(0, 2) > 0
+                        if @r.random(0, 2) > 0
                             p1 = c.ratioIs()
                         else
                             p1 = c.ratioIsInSet()
                     else
                         p1 = c.ratioIsInSet(true, true)
-                        if @u.random(0, 2) > 0
+                        if @r.random(0, 2) > 0
                             p2 = c.thereAre(knownUnknown[0])
                         else
                             p2 = c.thereAreInSet(knownUnknown[0], false, false)
                 else
                     if ratioSecond
                         p2 = c.thereAreTotalInSet(true, true)
-                        if @u.random(0, 2) > 0
+                        if @r.random(0, 2) > 0
                             p1 = c.ratioIs()
                         else
                             p1 = c.ratioIsInSet()
                     else
                         p1 = c.ratioIsInSet(true, true)
-                        if @u.random(0, 2) > 0
+                        if @r.random(0, 2) > 0
                             p2 = c.thereAreTotal()
                         else
                             p2 = c.thereAreTotalInSet(false, false)
 
                 if knownUnknown[1] == 2
                     answer = c.numberTotal()
-                    if @u.random(0, 2) > 0
+                    if @r.random(0, 2) > 0
                         p3 = c.howManyTotal()
                     else
                         p3 = c.howManyTotalInSet(false, false)
                 else
                     answer = c.number(knownUnknown[1])
-                    if @u.random(0, 2) > 0
+                    if @r.random(0, 2) > 0
                         p3 = c.howMany(knownUnknown[1])
                     else
                         p3 = c.howManyInSet(knownUnknown[1], false, false)

@@ -1,13 +1,13 @@
 angular.module('Krista')
 
-.factory "M07", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M07", ['RandomFunctions', (RandomFunctions ) ->
     class M07
-        u: KristaUtil
+        r: RandomFunctions
         generate: ->
-            a = @u.random(2, 10)
-            b = @u.random(2, 10)
-            q = @u.random(2, 10)
-            Q = @u.randomVariableLetter()
+            a = @r.random(2, 10)
+            b = @r.random(2, 10)
+            q = @r.random(2, 10)
+            Q = @r.randomVariableLetter()
 
             [  ['If ' + q*a + ' ÷ ' + Q + ' = ' + a + ', then ' + b + ' x ' + Q + ' = ?' ], b*q]
 

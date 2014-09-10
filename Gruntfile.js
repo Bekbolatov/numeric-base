@@ -17,6 +17,9 @@ module.exports = function(grunt) {
                     sourceJs + 'libs/communication/MessageLib/**',
                     sourceJs + 'libs/persist/PersistenceLib/**',
 
+                    sourceJs + 'libs/data/DataPack/**',
+                    sourceJs + 'libs/data/DataUtilities/**',
+                    
                     sourceJs + 'apps/AppOne/**',
                     sourceJs + 'modules/Krista/**'   // decide whether to include a module here
                     ];

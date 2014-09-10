@@ -52,6 +52,12 @@ angular.module 'BaseLib'
                 [a[i], a[j]] = [a[j], a[i]]
             a
 
+        shuffleAnswers4: (otherPossibleAnswers, correct) -> # 4 wrong and 1 right given (total of 5 answers)
+            @shuffleListInPlace(otherPossibleAnswers)
+            index = @random(0,5)
+            tail = otherPossibleAnswers.splice(index, 10)
+            answers = otherPossibleAnswers.concat([correct]).concat(tail)
+            [answers, index]
 
         _someChars : 'z123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZAB'
         _randomSomeChar: () -> @_someChars[Math.random()*64 | 0]

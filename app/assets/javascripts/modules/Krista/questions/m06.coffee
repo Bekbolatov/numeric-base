@@ -1,8 +1,9 @@
 angular.module('Krista')
 
-.factory "M06", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
+.factory "M06", ['RandomFunctions', 'DataUtilities', 'GraphicsManager', 'HyperTextManager', (RandomFunctions, DataUtilities, GraphicsManager, HyperTextManager ) ->
     class M06
-        u: KristaUtil
+        u: DataUtilities
+        r: RandomFunctions
         h: HyperTextManager
         generate: ->
             _activity = 'the scores that 5 students earned on a quiz'
@@ -11,19 +12,19 @@ angular.module('Krista')
             [mina, maxa] = [50, 92]
             as = []
             for i in [1 .. 5]
-                as.push @u.random(mina, maxa + 1)
+                as.push @r.random(mina, maxa + 1)
             names =  ( name[0] for name in @u.randomNames(5, (n) -> (n.length < 9) ) )
 
-            pickedIndices = @u.randomNonRepeating([0 .. 4], 2)
+            pickedIndices = @r.randomNonRepeating([0 .. 4], 2)
 
             correct = ( as[pickedIndices[0]] + as[pickedIndices[1]] ) / 2
             inc = [
-                correct + @u.randomFromList([-2.5, 2.5, -5, 5])
-                correct + @u.randomFromList([-7.5, 7.5, -10, 10, -10.5, 10.5])
-                correct + @u.randomFromList([-15.5, 15.5, -15, 15, -20.5, 20.5, -20, 20])
-                correct + @u.randomFromList([-25.5, 25.5, -25, 25, -30.5, 30.5, -30, 30])
+                correct + @r.randomFromList([-2.5, 2.5, -5, 5])
+                correct + @r.randomFromList([-7.5, 7.5, -10, 10, -10.5, 10.5])
+                correct + @r.randomFromList([-15.5, 15.5, -15, 15, -20.5, 20.5, -20, 20])
+                correct + @r.randomFromList([-25.5, 25.5, -25, 25, -30.5, 30.5, -30, 30])
             ]
-            [answers, index] = @u.shuffleAnswers4(inc, correct)
+            [answers, index] = @r.shuffleAnswers4(inc, correct)
 
             maxScore = 100
             canvas_height = 250

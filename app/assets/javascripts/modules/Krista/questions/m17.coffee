@@ -1,8 +1,8 @@
 angular.module('Krista')
 
-.factory "M17", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M17", ['RandomFunctions', (RandomFunctions ) ->
     class M17
-        u: KristaUtil
+        u: RandomFunctions
         generate: ->
             p = @u.randomFromList([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31])
             o = @u.randomNonRepeating([4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50], 4)

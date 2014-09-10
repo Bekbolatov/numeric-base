@@ -1,7 +1,9 @@
-angular.module('Krista')
+angular.module 'ModuleDataPack', []
 
-.factory "KristaData", [ () ->
-    class KristaData
+angular.module 'ModuleDataPack'
+
+.factory 'DataPack', [() ->
+    class DataPack
         data: {
             name: {
                 male: [ 'Jackson', 'Aiden', 'Liam', 'Lucas', 'Noah', 'Jayden', 'Ethan', 'Jacob', 'Jack', 'Logan', 'Benjamin', 'Michael', 'Ryan', 'Alexander', 'Elijah',
@@ -204,6 +206,8 @@ angular.module('Krista')
             }
         }
 
-    console.log('KristaData factory')
-    new KristaData()
+    dataPack = new DataPack()
+    document.numeric.modules.DataPack = dataPack
+
+    dataPack
 ]

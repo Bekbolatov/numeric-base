@@ -16,9 +16,8 @@ angular.module 'BaseLib'
                 o += '</tr>'
             o + '</table>'
         tableWrapped: (rows, headers) ->
-            o = '<span class="problem-generated-table-holder">'
-            o += @table(rows, headers)
-            o + '</span>'
+            table = @table(rows, headers)
+            "<span class='problem-generated-table-holder'>#{table}</span>"
         fraction: (a, b) ->
             o = '<span class="fraction">'
             o += '<span class="fraction-top">' + a + '</span>'

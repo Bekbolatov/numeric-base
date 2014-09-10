@@ -1,8 +1,8 @@
 angular.module('Krista')
 
-.factory "M30", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M30", ['RandomFunctions', (RandomFunctions ) ->
     class M30
-        u: KristaUtil
+        u: RandomFunctions
         generate: ->
             d = @u.randomFromList([-3, -2, -1, 1, 2, 3])
             f = (n) -> Math.round(Math.pow(2, n + 1) + d)

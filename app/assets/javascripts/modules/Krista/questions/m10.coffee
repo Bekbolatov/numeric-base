@@ -1,8 +1,8 @@
 angular.module('Krista')
 
-.factory "M10", ['KristaData', 'KristaUtil', 'HyperTextManager', (KristaData, KristaUtil, HyperTextManager ) ->
+.factory "M10", ['RandomFunctions', 'HyperTextManager', (RandomFunctions, HyperTextManager ) ->
     class M10
-        u: KristaUtil
+        u: RandomFunctions
         h: HyperTextManager
         generate: ->
             digits = @u.randomNonRepeating([1,2,3,4,5,6,7,8,9], 5)

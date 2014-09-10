@@ -1,11 +1,11 @@
 angular.module('Krista')
 
-.factory "M03", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M03", ['RandomFunctions', (RandomFunctions ) ->
     class M03
-        u: KristaUtil
+        r: RandomFunctions
         generate: ->
-            a = @u.random(21, 50)
-            b = @u.random(3, 40)
+            a = @r.random(21, 50)
+            b = @r.random(3, 40)
 
             [  ['' + a + ' + ' + b + ' = ?'], a + b]
 

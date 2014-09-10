@@ -1,8 +1,8 @@
 angular.module('Krista')
 
-.factory "M20", ['KristaData', 'KristaUtil', 'GraphicsManager', 'HyperTextManager', (KristaData, KristaUtil, GraphicsManager, HyperTextManager ) ->
+.factory "M20", ['RandomFunctions', 'GraphicsManager', 'HyperTextManager', (RandomFunctions, GraphicsManager, HyperTextManager ) ->
     class M20
-        u: KristaUtil
+        u: RandomFunctions
         h: HyperTextManager
         generate: ->
             a = @u.random(3, 9)

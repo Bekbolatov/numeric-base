@@ -1,8 +1,8 @@
 angular.module('Krista')
 
-.factory "M24", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M24", ['RandomFunctions', (RandomFunctions ) ->
     class M24
-        u: KristaUtil
+        u: RandomFunctions
         generate: ->
             a = @u.random(2, 10)
             b = @u.random(2, 10)

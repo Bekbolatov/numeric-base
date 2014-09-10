@@ -3,6 +3,9 @@ angular.module 'ModuleCommunication'
 .factory 'Tracker', ['Settings', 'ServerHttp', ( Settings, ServerHttp ) ->
     class Tracker
         touch: (page, id) ->
+            if !Settings.ready
+                return 0
+
             idParam = if id != undefined
                 "&id=" + id
             else

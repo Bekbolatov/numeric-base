@@ -1,9 +1,9 @@
 angular.module('Krista')
 
-.factory "M15", ['KristaData', 'KristaUtil', 'HyperTextManager','TextFunctions', (KristaData, KristaUtil, HyperTextManager, TextFunctions ) ->
+.factory "M15", ['DataPack', 'RandomFunctions', 'HyperTextManager','TextFunctions', (DataPack, RandomFunctions, HyperTextManager, TextFunctions ) ->
     class M15
-        u: KristaUtil
-        d: KristaData
+        u: RandomFunctions
+        d: DataPack
         h: HyperTextManager
         t: TextFunctions
         generate: ->
@@ -34,7 +34,7 @@ angular.module('Krista')
                 [ @t.capitalize(type),  @t.capitalize(price) ]
             )
 
-            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <p>' + table + '</p>' , answers ], index]
+            [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <br>' + table  , answers ], index]
 
     new M15()
 ]

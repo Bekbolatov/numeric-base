@@ -1,11 +1,15 @@
 angular.module('Krista')
 
-.factory "M16", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M16", ['DataPack', 'DataUtilities', 'RandomFunctions', (DataPack, DataUtilities, RandomFunctions ) ->
     class M16
-        u: KristaUtil
+        r: RandomFunctions
+        u: DataUtilities
+        d: DataPack
+        randomBuyableItem: () => @randomFromList(DataPack.data.buyable)
+
         generate: ->
-            diffs = @u.randomNonRepeating( [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], 5)
-            correct = diffs.splice(@u.random(0,5), 1)[0]
+            diffs = @r.randomNonRepeating( [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], 5)
+            correct = diffs.splice(@r.random(0,5), 1)[0]
             toTuple = (s) ->
                 Q = Math.floor(s/4)
                 s = s - Q * 4
@@ -42,19 +46,19 @@ angular.module('Krista')
                     s = output.join(', ')
                 s
 
-            [answers, index] = @u.shuffleAnswers4(diffs, correct)
+            [answers, index] = @r.shuffleAnswers4(diffs, correct)
             answers = (toString(answer) for answer in answers)
 
             sasha = @u.randomName()
-            binder = @u.randomBuyableItem()
-            A = @u.random(200, 800)
+            binder = @r.randomFromList(@d.data.buyable)
+            A = @r.random(200, 800)
             A = Math.round(A/5)*5/100
             B = A + toNumber(correct)
 
             A = A.toFixed(2)
             B = B.toFixed(2)
 
-            mother = @u.randomFromList(['mother', 'father', 'friend', 'classmate'])
+            mother = @r.randomFromList(['mother', 'father', 'friend', 'classmate'])
 
             [  [ '' + sasha[0] + ' wants to buy ' + binder + ' that costs $' + B + '. However, ' + sasha[1] + ' has only $' + A + '. What coins could ' + sasha[0] + '\'s ' + mother + ' give ' + sasha[2] + ' so that ' + sasha[1] + ' would have exactly $' + B + '?', answers   ], index]
 

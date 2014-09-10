@@ -1,22 +1,23 @@
 angular.module('Krista')
 
-.factory "M14", ['KristaData', 'KristaUtil', (KristaData, KristaUtil ) ->
+.factory "M14", ['RandomFunctions', 'DataUtilities', (RandomFunctions, DataUtilities ) ->
     class M14
-        u: KristaUtil
+        u: DataUtilities
+        r: RandomFunctions
         generate: ->
-            luis = @u.random(11, 30)
-            diff1 = @u.random(3, Math.floor( luis / 2 ) )
-            diff2 = @u.random(3, Math.floor( luis / 2 ) )
+            luis = @r.random(11, 30)
+            diff1 = @r.random(3, Math.floor( luis / 2 ) )
+            diff2 = @r.random(3, Math.floor( luis / 2 ) )
             while diff1 == diff2
-                diff2 = @u.random(2, Math.floor( luis / 2 ) )
+                diff2 = @r.random(2, Math.floor( luis / 2 ) )
 
-            if @u.randomAB()
+            if @r.randomAB()
                 diff1e = luis - diff1
                 diff1w = 'more'
             else
                 diff1e = luis + diff1
                 diff1w = 'less'
-            if @u.randomAB()
+            if @r.randomAB()
                 diff2e = luis - diff2
                 diff2w = 'less'
             else
