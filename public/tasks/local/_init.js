@@ -42,8 +42,8 @@ document.numeric = {
         appVersion: 1,
         historyPageSize: 10,
         historyServerSync: false,
-        //mainServerAddress: 'https://www.sparkydots.com/starpractice/data/',
-        mainServerAddress: 'http://localhost:9000/starpractice/data/',
+        mainServerAddress: 'https://www.sparkydots.com/starpractice/data/',
+        //mainServerAddress: 'http://localhost:9000/starpractice/data/',
         linkSubmitShow: false,
         linkConnectShow: false,
         linkSettingsShow: false
