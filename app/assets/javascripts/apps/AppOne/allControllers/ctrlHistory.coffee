@@ -44,7 +44,7 @@ angular.module('AppOne')
 
 ]
 
-.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'ActivitySummary', ($scope, $routeParams, $location, $sce, Settings, ActivitySummary ) ->
+.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'Tracker', 'ActivitySummary', ($scope, $routeParams, $location, $sce, Settings, Tracker, ActivitySummary ) ->
     if !Settings.ready
         return $location.path('/')
 
