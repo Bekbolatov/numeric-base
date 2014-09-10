@@ -1,11 +1,14 @@
 module.exports = function(grunt) {
     var sourceCoffee = '/Users/renatb/projects/90_scratch/numeric-base/app/assets/javascripts/';
+
+    var sourceInitJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/tasks/local/_init.js';
     var sourceJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/javascripts/';
     var oneAppFile = 'oneApp.concat';
     var oneAppCordovaFile = 'oneAppCordova.concat';
     var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
     var appJsSources = [
+                    sourceInitJs,
                     sourceJs + 'qrcode.js',
                     sourceJs + 'rawdeflate.js',
 
