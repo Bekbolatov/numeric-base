@@ -34,15 +34,13 @@ angular.module('AppOne')
 
         _downloadActivityBody: (activityId) ->
             ServerHttp.download(@_uriRemote(activityId), @_pathFS(activityId))
+            
         _deleteDownloadedFile: (activityId) ->
             deferred = $q.defer()
-            if @_inCordova()
-                FS.tryDeleteFile(@_pathFS(activityId))
-                .then(
-                    () => deferred.resolve('deleted')
-                )
-            else
-                deferred.resolve('ok')
+            FS.tryDeleteFile(@_pathFS(activityId))
+            .then(
+                () => deferred.resolve('deleted')
+            )
             deferred.promise
 
         _loadScript: (uri, key) =>
