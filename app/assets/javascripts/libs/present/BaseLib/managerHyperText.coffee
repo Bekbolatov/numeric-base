@@ -29,6 +29,6 @@ angular.module 'BaseLib'
             o + '</span>'
 
     hyperTextManager = new HyperTextManager()
-    document.numeric.modules.HyperText = hyperTextManager
+    document.numeric.modules.HyperTextManager = hyperTextManager
     hyperTextManager
 ]

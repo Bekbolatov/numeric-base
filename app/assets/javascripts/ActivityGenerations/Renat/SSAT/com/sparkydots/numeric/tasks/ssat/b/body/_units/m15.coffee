@@ -32,3 +32,4 @@ class M15
         )
 
         [  [ 'The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <br>' + table  , answers ], index]
+

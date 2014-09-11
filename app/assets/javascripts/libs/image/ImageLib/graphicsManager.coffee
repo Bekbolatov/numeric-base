@@ -161,6 +161,6 @@ angular.module 'ImageLib'
             img.getBase64()
 
     graphicsManager = new GraphicsManager()
-    document.numeric.modules.Graphics = graphicsManager
+    document.numeric.modules.GraphicsManager = graphicsManager
     graphicsManager
 ])

@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                   join: true
                 },
                 files: {
-                    '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/body/com.sparkydots.numeric.tasks.ssat.b.q00' : taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/' + 'body/*',
+                    '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/body/com.sparkydots.numeric.tasks.ssat.b.q00' : taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/' + 'body/**/*.coffee',
                 }
             },
             test: {

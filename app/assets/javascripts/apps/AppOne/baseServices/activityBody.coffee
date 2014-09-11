@@ -34,7 +34,7 @@ angular.module('AppOne')
 
         _downloadActivityBody: (activityId) ->
             ServerHttp.download(@_uriRemote(activityId), @_pathFS(activityId))
-            
+
         _deleteDownloadedFile: (activityId) ->
             deferred = $q.defer()
             FS.tryDeleteFile(@_pathFS(activityId))
