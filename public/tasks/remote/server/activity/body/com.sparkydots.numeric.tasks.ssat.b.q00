@@ -1,0 +1,130 @@
+(function() {
+  var M15;
+
+  M15 = (function() {
+    function M15() {}
+
+    M15.prototype.u = document.numeric.modules.RandomFunctions;
+
+    M15.prototype.d = document.numeric.modules.DataPack;
+
+    M15.prototype.h = document.numeric.modules.HyperTextManager;
+
+    M15.prototype.t = document.numeric.modules.TextFunctions;
+
+    M15.prototype.generate = function() {
+      var answers, convertPrice, correct, i, inc, index, items, pick, picked, pickedIndices, price, prices, table, type, types, _i, _ref, _ref1, _results;
+      items = this.u.randomFromList(this.d.data.itemsWithPrices);
+      types = items[0][0];
+      type = items[0][1];
+      prices = items[0][2];
+      price = items[0][3];
+      convertPrice = function(p) {
+        return items[0][4][0] + p + ' ' + items[0][4][1];
+      };
+      pickedIndices = this.u.randomNonRepeating((function() {
+        _results = [];
+        for (var _i = 0, _ref = items[1].length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this), 4);
+      picked = (function() {
+        var _j, _len, _results1;
+        _results1 = [];
+        for (_j = 0, _len = pickedIndices.length; _j < _len; _j++) {
+          i = pickedIndices[_j];
+          _results1.push(items[1][i]);
+        }
+        return _results1;
+      })();
+      correct = (picked.reduce((function(x, y) {
+        return [1, x[1] + y[1]];
+      })))[1] / 4;
+      inc = [correct + this.u.randomFromList([-1.50, -1.25, 1.25, 1.50]), correct + this.u.randomFromList([-3, -2, 2, 3]), correct + this.u.randomFromList([-4.50, -4, 4, 4.50]), correct + this.u.randomFromList([-10, -9, -8, -7, -6, -5, 5, 6, 7, 8, 9, 10])];
+      _ref1 = this.u.shuffleAnswers4(inc, correct), answers = _ref1[0], index = _ref1[1];
+      table = this.h.tableWrapped((function() {
+        var _j, _len, _results1;
+        _results1 = [];
+        for (_j = 0, _len = picked.length; _j < _len; _j++) {
+          pick = picked[_j];
+          _results1.push([pick[0], convertPrice(pick[1])]);
+        }
+        return _results1;
+      })(), [this.t.capitalize(type), this.t.capitalize(price)]);
+      return [['The table below shows the ' + prices + ' for 4 ' + types + '. What is the average ' + price + '? <br>' + table, answers], index];
+    };
+
+    return M15;
+
+  })();
+
+  document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.b.q00'] = {
+    variables: {
+      previousQuestion: 0
+    },
+    parameters: {
+      p10_serveOrder: {
+        name: 'nextproblem',
+        description: 'Order of questions:',
+        type: 'discrete',
+        levels: ['same', 'random', 'sequential'],
+        selectedValue: 'random'
+      },
+      p20_fixedProblemNumber: {
+        name: 'problemnumber',
+        description: 'Jump to question number:',
+        type: 'discrete',
+        levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+        selectedValue: void 0
+      }
+    },
+    createNextQuestion: function() {
+      var KristaQuestions, getOrder, getProblemNumber, num, previousQuestion, qa, qq, self;
+      self = this;
+      previousQuestion = function() {
+        return self.variables.previousQuestion;
+      };
+      getOrder = function() {
+        return self.parameters.p10_serveOrder.selectedValue;
+      };
+      getProblemNumber = function() {
+        return self.parameters.p20_fixedProblemNumber.selectedValue;
+      };
+      KristaQuestions = document.numeric.modules.KristaQuestions;
+      if (self.parameters.p20_fixedProblemNumber.selectedValue !== void 0) {
+        num = self.parameters.p20_fixedProblemNumber.selectedValue;
+      } else {
+        if (self.parameters.p10_serveOrder.selectedValue === 'random') {
+          num = Math.random() * 30 | 0;
+        } else if (self.parameters.p10_serveOrder.selectedValue === 'sequential') {
+          num = self.variables.previousQuestion + 1;
+          if (num > 30) {
+            return void 0;
+          }
+        } else {
+          num = self.variables.previousQuestion;
+        }
+      }
+      num = 15;
+      self.parameters.p20_fixedProblemNumber.selectedValue = void 0;
+      self.variables.previousQuestion = num;
+      qa = KristaQuestions.generate(num);
+      qq = {
+        statement: qa[0][0],
+        checkAnswer: function(answer) {
+          return answer === qa[1];
+        },
+        getAnswer: function() {
+          return qa[1];
+        }
+      };
+      if (qa[0].length > 1) {
+        qq.answerType = 'multiple';
+        qq.choices = qa[0][1];
+      } else {
+        qq.answerType = 'numeric';
+      }
+      return qq;
+    }
+  };
+
+}).call(this);

@@ -7,6 +7,9 @@ module.exports = function(grunt) {
     var oneAppCordovaFile = 'oneAppCordova.concat';
     var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
+    // Used for task generations
+    var taskgenSources = sourceCoffee + 'ActivityGenerations/';
+
     var appJsSources = [
                     sourceInitJs,
                     sourceJs + 'qrcode.js',
@@ -24,7 +27,7 @@ module.exports = function(grunt) {
                     sourceJs + 'libs/data/DataUtilities/**',
                     
                     sourceJs + 'apps/AppOne/**',
-                    sourceJs + 'modules/Krista/**'   // decide whether to include a module here
+                    sourceJs + 'ActivityGenerations/Krista/**'   // decide whether to include a module here
                     ];
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/AppOneCordova/**' ] );
 
@@ -35,6 +38,14 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         coffee: {
+            taskgen: {
+                options: {
+                  join: true
+                },
+                files: {
+                    '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/body/com.sparkydots.numeric.tasks.ssat.b.q00' : taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/' + 'body/*',
+                }
+            },
             test: {
                 files: {
                     '/Users/renatb/projects/90_scratch/numeric-base/public/test/png.js' : testSources
@@ -64,6 +75,10 @@ module.exports = function(grunt) {
           }
         },
         copy: {
+          taskgen: {
+            src: taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00.meta',
+            dest: '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/meta/com.sparkydots.numeric.tasks.ssat.b.q00'
+          },
           appJs: {
             src: '<%= uglify.appJs.dest %>', 
             dest: distDest + 'oneApp.dist.min.js'
@@ -100,6 +115,7 @@ module.exports = function(grunt) {
         ]);
         
     grunt.registerTask('test', [ 'coffee:test']);
+    grunt.registerTask('taskgen', [ 'coffee:taskgen', 'copy:taskgen']);
     grunt.registerTask('default', ['numeric'])
 
     
