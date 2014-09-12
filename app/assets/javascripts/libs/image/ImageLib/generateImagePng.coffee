@@ -252,7 +252,6 @@ angular.module 'ImageLib'
                 @_deflateNoCompression(data)
 
         _deflateCompression: (data, level) -> # http://www.faqs.org/rfcs/rfc1950.html
-            console.log('compression')
             DATA_COMPRESSION_METHOD = String.fromCharCode(0x78, 0x9c) # CINFO(n-> 2^(n+8) window size), CM(8=deflate) / FLG: 7-6 FLEVEL, 5 FDICT pres?, 4-0 FCHECK (CMF*256 + FLG % 31 = 0)
             storeBuffer = @deflate.encode(data, level) # default 6, max 9
             DATA_COMPRESSION_METHOD + storeBuffer + @_word(@_adler32(data))
@@ -294,9 +293,6 @@ angular.module 'ImageLib'
                     @h.printHex(@palette.getData(), 'palette')
                 @h.printHex(compressedData, 'compresedData', [2, 4])
                 @h.printHex(IDAT, 'IDAT')
-
-            if @colorType == 3
-                @h.printHex(@palette.getData(), 'palette')
 
             SIGNATURE + IHDR + PLTE + IDAT + IEND
 

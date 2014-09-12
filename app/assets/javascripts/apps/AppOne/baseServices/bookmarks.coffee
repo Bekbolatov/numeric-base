@@ -25,6 +25,15 @@ angular.module('AppOne')
             @writeThruCache = PersistenceManager.cacheWithwriteThruToLocalStorePersister(document.numeric.key.bookmarkedActivities)
             @bookmarks = @writeThruCache.cache
             @writeThruCache.init()
+            # Start: temp fix - migrate all older
+            .then (saved) =>
+                @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.a.q00')
+                .then (saved) =>
+                    @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.a.q04')
+                    .then (saved) =>
+                        @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.a.q05')
+            # End: temp fix - migrate all older
+
             .catch (t) => # bootstrap with default given in _init.js (if nothing was stored before)
                 adds = []
                 for activityId in document.numeric.defaultActivitiesList

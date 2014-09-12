@@ -36,7 +36,7 @@ document.numeric = {
 
     defaultActivitiesList: [
         'com.sparkydots.numeric.tasks.t.basic_math',
-        'com.sparkydots.numeric.tasks.ssat.a.q00'
+        'com.sparkydots.numeric.tasks.ssat.b.q00'
     ],
 
     defaultSettings: {

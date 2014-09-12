@@ -5,46 +5,29 @@
     "content":
     {
         "activities": {
-
-            "com.sparkydots.numeric.tasks.ssat.a.q00" : {
-                "name": "SSAT 2014-2015: Math Elementary",
-                "shortDescription": "Practice SSAT Math section (elementary).",
-                "description": "In this practice set student can work on the SSAT Math section at elementary level.",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/30/2014" },
-
-             "com.sparkydots.numeric.tasks.t.basic_math" : {
-                "name": "Basic Math Practice",
+             "com.sparkydots.numeric.tasks.t.basic_math" :
+             {
+                "name": "Arithmetic Practice",
                 "shortDescription": "Practice addition, subtraction, etc",
                 "description": "Practice adding, subtracting, multiplying, dividing numbers",
                 "authorName": "Sparky Dots",
                 "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/1/2014" },
-
-            "com.sparkydots.numeric.tasks.ssat.a.q04" : {
-                "name": "SSAT Math: Ratio problems",
-                "shortDescription": "Practice SSAT Math section - ratio problems.",
-                "description": "This practice set provides questions in the style of Ratio problems in the SSAT Math section",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/27/2014" },
-            "com.sparkydots.numeric.tasks.ssat.a.q05" : {
-                "name": "SSAT Math: Closest value problems",
-                "shortDescription": "Practice SSAT Math section - closest value problems.",
-                "description": "This practice set provides questions in the style of Closest Value problems in the SSAT Math section",
-                "authorName": "Sparky Dots",
-                "authorEmail": "info@sparkydots.com",
-                "authorDate": "8/27/2014" },
-            "com.sparkydots.numeric.tasks.t.multiple_choice" : {
+                "authorDate": "8/1/2014"
+            }
+            ,
+            "com.sparkydots.numeric.tasks.t.multiple_choice" :
+            {
                 "name": "Odd One Out",
                 "shortDescription": "Guess which item doesn't fit in the list with other items.",
                 "description": "Given a list of several items, guess which item doesn't fit in the list with other items.",
                 "authorName": "Sparky Dots",
                 "authorEmail": "info@sparkydots.com",
                 "authorDate": "8/1/2014",
-                "version": 3 },
-            "com.sparkydots.numeric.tasks.ssat.b.q00" :     {
+                "version": 3
+            }
+            ,
+            "com.sparkydots.numeric.tasks.ssat.b.q00" :
+            {
                     "name": "Elementary Math Problems",
                     "shortDescription": "Typical problems in elementary Math tests.",
                     "description": "In this practice set student can work on the the typical Math problems at the elementary level.",
@@ -52,7 +35,7 @@
                     "authorEmail": "info@sparkydots.com",
                     "authorDate": "9/10/2014",
                     "version": 3
-                }
+            }
 
        }
     }
