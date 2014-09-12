@@ -1,0 +1,267 @@
+<header class="bar bar-nav">
+
+    <a href="#/tasksList" class="icon icon-left-nav pull-left" ng-show="!showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
+
+    <button class="btn btn-primary pull-left" ng-show="!showFinish && !showFinishing && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)" ng-click="showFinish = !showFinish">
+        Finish
+    </button>
+
+    <button class="btn btn-negative pull-right" ng-click="showFinishing = true; finishActivity()" ng-show="showFinish && !showFinishing">
+        Finish Activity?
+    </button>
+
+    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="showFinishing">
+        Finishing...
+    </button>
+
+    <button class="btn btn-primary pull-left"  ng-show="showFinish && !showFinishing" ng-click="showFinish = !showFinish">
+        Cancel
+    </button>
+
+    <h2 class="title" ng-class="{colorWhite: showFinish}">StarPractice</h2>
+
+    <button class="btn btn-link btn-nav pull-right" ng-show="!showFinish" ng-click="isFlipped=!isFlipped">
+        <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>
+    </button>
+
+</header>
+
+<div class="content" ng-show="currentActivity.name == undefined">
+    <div class="content-inner">
+        <p>loading...</p>
+    </div>
+</div>
+
+<div class="flip flip-content" ng-show="currentActivity.name != undefined">
+    <div class="blackBackground">
+
+        <div class="flipcard" ng-class="{'flipped':isFlipped}">
+
+
+            <div class="face front">
+
+                <div class="content" ng-class="'content-scrollable'">
+
+                    <div class="center-inline-child">
+
+                        <div class="btn btn-link pull-left">
+                            <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
+                            <span>{{activityDriver.totalTime | secondsToClock}}</span>
+                        </div>
+
+                        <span class="btn btn-link center-inline-child">
+                            {{ currentActivity.name | textOrLoading | truncate }}
+                        </span>
+
+                        <div class="btn btn-link pull-right">
+                            <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
+                        </div>
+                    </div>
+
+                    <div class="content-inner">
+
+                        <!--   PROBLEM STATEMENT (TODO: combine into one type?) -->
+                        <div class="problem-statement-box-holder set-max-width center-inline-child">
+                            <div class="problem-statement-box-holder set-max-width center-inline-child">
+                                <div class="problem-statement-box">
+                                    <span class="{{ currentActivity.sizingClass}}" ng-bind-html="activityDriver.questionStatementAsHTML"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ANSWER BOX -->
+                        <div class="set-background-grellow set-max-width center-inline-child" ng-show="currentActivity.inputTypeNumeric">
+                            <div class="answerBox">{{ activityDriver.answer | underscore }}</div>
+                        </div>
+
+                        <!--  ANSWER INPUT  (user inputs his/her answer here) -->
+                        <!-- input: numeric -->
+                        <div ng-show="currentActivity.inputTypeNumeric" class="numeric">
+                            <table class="numeric">
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(1)">1</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(2)">2</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(3)">3</button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(4)">4</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(5)">5</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(6)">6</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(7)">7</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(8)">8</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(9)">9</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.clear()">Clear</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressed(0)">0</button>
+                                    </td>
+                                    <td class="numeric-td">
+                                        <button class="numeric-digit" ng-click="activityDriver.enter()">Enter</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- input: multiple choice -->
+                        <div ng-show="currentActivity.inputTypeMultipleChoice" class="numeric">
+                            <table class="numeric">
+                                <tr>
+                                    <td class="numeric-td-choice" width="{{ Math.round( 100 / currentActivity.questionStatementChoices_.length) }}%">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(0)">
+                                            <span>A</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(1)">
+                                            <span>B</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 3">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(2)">
+                                            <span>C</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 4">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(3)">
+                                            <span>D</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 5">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(4)">
+                                            <span>E</span>
+                                        </button>
+                                    </td>
+                                    <td class="numeric-td-choice" ng-show="currentActivity.questionStatementChoices_.length >= 6">
+                                        <button class="numeric-digit" ng-click="activityDriver.pressedChoice(5)">
+                                            <span>F</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                        <!-- PREV QUESTION/ANSWER SUMMARY -->
+                        <div ng-show="activityDriver.answeredQuestion.statementAsHTML" class="numeric-completed">
+                            <!--  FEEDBACK (last question correct or wrong) -->
+                            <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
+                                {{ activityDriver.result.verbal }}
+                            </div>
+
+                            <div>Previous question: <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></div>
+                            <div>Your answer:
+                                <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
+                                    <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
+                                    <span ng-show="activityDriver.answeredQuestion.result" class="icon icon-{{activityDriver.answeredQuestion.result && 'check' || 'close' }}"></span>
+                                </span>
+
+                                <span ng-show="activityDriver.answeredQuestion.result">(correct)</span>
+                                <span ng-show="!activityDriver.answeredQuestion.result">(wrong)</span>
+                            </div>
+                            <div ng-show="!activityDriver.answeredQuestion.result">
+                                Correct answer: <span ng-bind-html="activityDriver.answeredQuestion.actualAnswerAsHTML"></span>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+                            &nbsp;
+                            <br>
+                        </div>
+
+
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <!--  closing flipcard face front -->
+            <div class="face back" ng-click="isFlipped=!isFlipped"> <!--  opening flipcard face back -->
+
+                <div class="content">
+
+                    <div class="content-inner">
+
+                        <div ng-show="currentActivity.parameters != undefined">
+
+                            <div class="optionBlockJustified">
+                                <p>
+                                    Configuration options for activity <i>"{{currentActivity.name}}"</i>
+                                </p>
+                            </div>
+
+                            <div ng-repeat="(paramKey, param) in currentActivity.parameters">
+
+                                <div class="optionBlock">
+                                    <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
+                                <span ng-repeat="level in param.levels">
+                                    <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="activityDriver.selectParamValue(paramKey, level)">
+                                        {{ level }}
+                                    </button>
+                                </span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="currentActivity.parameters == undefined">
+                            <div class="optionBlock">
+                                This activity has no configuration options.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--  closing flipcard face back -->
+
+        <div>
+            <br>
+            &nbsp;
+            <br>
+            &nbsp;
+            <br>
+            &nbsp;
+            <br>
+        </div>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+

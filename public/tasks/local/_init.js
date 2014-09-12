@@ -18,7 +18,7 @@ document.numeric = {
             cdv: 'cdvfile://localhost/persistent/',
             chrome: 'filesystem:SERVERNAME/temporary/',
             // chrome: 'filesystem:SERVERNAME/persistent/',
-            local: '/assets/tasks/local/',
+            local: '/assets/tasks/local/', // on cdv translates to 'js/tasks/local/'
             server: 'https://www.sparkydots.com/starpractice/data/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
         }
