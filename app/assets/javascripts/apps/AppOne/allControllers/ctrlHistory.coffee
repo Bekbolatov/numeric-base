@@ -64,29 +64,25 @@ angular.module('AppOne')
 
 
     ActivitySummary.getSummaryById(itemId)
-    .then(
-        (data) ->
-            if data == 'mismatch'
-                $scope.mismatch = true
-            else
-                $scope.mismatch = false
-                $scope.activityName = data.activityName
-                $scope.timestamp = data.endTime
-                $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4] ]  for response in data.responses)
+    .then (data) ->
+        if data == 'mismatch'
+            $scope.mismatch = true
+        else
+            $scope.mismatch = false
+            $scope.activityName = data.activityName
+            $scope.timestamp = data.endTime
+            $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4] ]  for response in data.responses)
 
-                $scope.correct = data.runningTotals.correct
-                $scope.wrong = data.runningTotals.wrong
-                $scope.total = data.runningTotals.correct + data.runningTotals.wrong
-                $scope.totalSeconds = Math.round( (data.endTime - data.startTime) / 1000 )
-                $scope.avgSeconds = Math.round(  ( (data.endTime - data.startTime) / $scope.total ) / 1000 )
-            $scope.ready = true
-    )
-    .catch((status) ->
+            $scope.correct = data.runningTotals.correct
+            $scope.wrong = data.runningTotals.wrong
+            $scope.total = data.runningTotals.correct + data.runningTotals.wrong
+            $scope.totalSeconds = Math.round( (data.endTime - data.startTime) / 1000 )
+            $scope.avgSeconds = Math.round(  ( (data.endTime - data.startTime) / $scope.total ) / 1000 )
+        $scope.ready = true
+    .catch (status) ->
         console.log(status)
         $scope.mismatch = true
         $scope.ready = true
-        $location.path('/')
-    )
 
 
     ]

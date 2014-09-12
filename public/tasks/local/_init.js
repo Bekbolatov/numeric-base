@@ -16,7 +16,8 @@ document.numeric = {
         base: {
             fs: 'numericdata/',
             cdv: 'cdvfile://localhost/persistent/',
-            chrome: 'filesystem:SERVERNAME/persistent/',
+            chrome: 'filesystem:SERVERNAME/temporary/',
+            // chrome: 'filesystem:SERVERNAME/persistent/',
             local: '/assets/tasks/local/',
             server: 'https://www.sparkydots.com/starpractice/data/'
             // server: 'http://console.sparkydots.com:8080/numeric/server/'
@@ -65,6 +66,12 @@ try {
         }
         var servername = protocol + "//" + server + port;
         w.document.numeric.url.base.chrome = w.document.numeric.url.base.chrome.replace("SERVERNAME", servername);
+        w.document.numeric.defaultSettings.mainServerAddress = "https://" + server + port + "/starpractice/data/";
+
+        if (server == 'localhost') {
+            w.document.numeric.url.base.chrome = "filesystem:http://localhost:9000/temporary/";
+            w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/starpractice/data/";
+        }
     })(this);
 } catch(e) {
     console.log(e)

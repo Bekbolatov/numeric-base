@@ -1,7 +1,7 @@
 angular.module('AppOne')
 
 # Task Controller
-.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'Tracker', 'ActivityDriver', 'ActivityManager', ($scope, $routeParams, $location, Settings, Tracker, ActivityDriver, ActivityManager ) ->
+.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'Tracker', 'ActivityDriver', 'ActivityManager', 'StarPracticeApi', ($scope, $routeParams, $location, Settings, Tracker, ActivityDriver, ActivityManager, StarPracticeApi ) ->
     if !Settings.ready
         return $location.path('/')
 
@@ -18,11 +18,12 @@ angular.module('AppOne')
         $scope.currentActivity = ActivityDriver.setActivity(activity, $scope)
         $scope.finishActivity = ->
             ActivityDriver.tryFinishActivity()
-            .then((data) ->
+            .then (data) ->
                 console.log(data)
                 $location.path('/historyItem/' + data + '/tasksList')
-            )
-            .catch((status) -> console.log('could not finish activity: ' + status))
+            .catch (status) ->
+                console.log('could not save activity: ' + status)
+                $location.path('/')
         )
     .catch((status) -> $location.path('/'))
 

@@ -1,10 +1,10 @@
 angular.module('AppOne')
 
-.controller 'TaskListCtrl', ['$scope', '$location', '$sce', 'Settings', 'Tracker', 'MessageDispatcher', 'ActivityManager',  'StarPracticeApi', ($scope, $location, $sce, Settings, Tracker , MessageDispatcher, ActivityManager, StarPracticeApi ) ->
+.controller 'TaskListListCtrl', ['$scope', '$location', '$sce', 'Settings', 'Tracker', 'MessageDispatcher', 'ActivityManager',  'StarPracticeApi', ($scope, $location, $sce, Settings, Tracker , MessageDispatcher, ActivityManager, StarPracticeApi ) ->
     if !Settings.ready
         return $location.path('/')
     else
-        Tracker.touch('taskslist')
+        Tracker.touch('taskslistlist')
 
     msg = MessageDispatcher.getMessageToShow()
     if msg != undefined

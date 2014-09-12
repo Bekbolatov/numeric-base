@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'Settings', 'Bookmarks', 'ActivityManager','Tracker', 'DataPack', ($scope, $rootScope, $routeParams, Settings, Bookmarks, ActivityManager, Tracker, DataPack ) ->
+.controller 'HomeCtrl', ['$scope', '$rootScope', '$routeParams', 'Settings', 'Bookmarks', 'ActivityManager','Tracker', 'StarPracticeApi', ($scope, $rootScope, $routeParams, Settings, Bookmarks, ActivityManager, Tracker, StarPracticeApi ) ->
 
     setScopeVars = () ->
         Tracker.touch('home')

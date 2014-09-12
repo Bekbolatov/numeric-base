@@ -33,13 +33,17 @@ angular.module('ModulePersistence')
 
         _requestQuota: ->
             deferred = $q.defer()
-            navigator.webkitPersistentStorage.requestQuota(
-                10*1024*1024
-                (bytes) ->
-                    deferred.resolve(bytes)
-                (status) ->
-                    deferred.reject(status)
-            )
+#            navigator.webkitPersistentStorage.requestQuota(
+#                10*1024*1024
+#                (bytes) ->
+#                    deferred.resolve(bytes)
+#                (status) ->
+#                    deferred.reject(status)
+#            )
+# using temporary storage for Chrome:
+# 1. no scary message "... wants to permanently store large amount of data..." - scares people
+            deferred.resolve(1)
+
             deferred.promise
 
         getFileSystem: =>
@@ -57,15 +61,16 @@ angular.module('ModulePersistence')
             else
                 console.log('running in a browser')
                 @_requestQuota()
-                .then( (bytes) =>
+                .then (bytes) =>
                    window.requestFileSystem(
-                    window.PERSISTENT
+                    #window.PERSISTENT # switched temporary for Chrome
+                    window.TEMPORARY
                     bytes
                     (fs) =>
                         @fileSystem = fs
                         deferred.resolve(fs)
                     @_errorHandler(deferred))
-                )
+                .catch (status) => deferred.reject(status)
             deferred.promise
 
         # get Files and Dirs from here
@@ -73,34 +78,30 @@ angular.module('ModulePersistence')
             console.log('getting dirEntry: ' + dirName)
             deferred = $q.defer()
             @getFileSystem()
-            .then(
-                (fs) =>
-                    if dirName == '/'
-                        deferred.resolve(fs.root)
-                    else
-                        fs.root.getDirectory(
-                            dirName
-                            options
-                            (dirEntry) -> deferred.resolve(dirEntry)
-                            @_errorHandler(deferred))
-            )
+            .then (fs) =>
+                if dirName == '/'
+                    deferred.resolve(fs.root)
+                else
+                    fs.root.getDirectory(
+                        dirName
+                        options
+                        (dirEntry) -> deferred.resolve(dirEntry)
+                        @_errorHandler(deferred))
+            .catch (status) -> deferred.reject(status)
             deferred.promise
 
         __getFileEntryRawName: (fileName, options) ->
             console.log('getting fileEntry: ' + fileName)
             deferred = $q.defer()
             @getFileSystem()
-            .then(
-                (fs) =>
-                    fs.root.getFile(
-                        fileName
-                        options
-                        (fileEntry) -> deferred.resolve(fileEntry)
-                        @_errorHandler(deferred))
-            )
-            .catch(
-                (status) -> deferred.reject(status)
-            )
+            .then (fs) =>
+                fs.root.getFile(
+                    fileName
+                    options
+                    (fileEntry) -> deferred.resolve(fileEntry)
+                    @_errorHandler(deferred))
+            .catch (status) -> deferred.reject(status)
+
             deferred.promise
 
         getDirEntry: (dirName, options) -> @_getDirEntryRawName(document.numeric.url.base.fs + dirName, options)
@@ -122,23 +123,25 @@ angular.module('ModulePersistence')
         getFileWriter: (fileName) ->
             deferred = $q.defer()
             @getFileEntry(fileName, {create: true, exclusive: false})
-            .then(
-                (fileEntry) => fileEntry.createWriter(
+            .then (fileEntry) =>
+                fileEntry.createWriter(
                     (fileWriter) -> deferred.resolve(fileWriter)
                     @_errorHandler(deferred))
-            )
+            .catch (status) =>
+                deferred.reject(status)
             deferred.promise
         getFileReader: (fileName) ->
             deferred = $q.defer()
             @getFileEntry(fileName, {create: false})
-            .then( (fileEntry) ->
+            .then (fileEntry) ->
                 fileEntry.file(
                     (file) ->
                         reader = new FileReader()
                         reader.onloadend = (evt) -> deferred.resolve(evt.target.result)
                         reader.readAsText(file)
                     (fail) -> deferred.reject(fail))
-            )
+            .catch (status) ->
+                deferred.reject(status)
             deferred.promise
 
         # write/read strings to/from file
@@ -153,28 +156,28 @@ angular.module('ModulePersistence')
         writeToFile: (fileName, textData) ->
             deferred = $q.defer()
             @getFileWriter(fileName)
-            .then(
-                (fileWriter) =>
-                    console.log('obtained filewriter for: ' + fileName)
-                    preparedText = @prepareText(textData)
-                    fileWriter.seek(0)
-                    window.fwfw = fileWriter
-                    fileWriter.onwriteend = () ->
-                        console.log('finished writing')
-                        deferred.resolve()
-                    fileWriter.onerror = (e) ->
-                        deferred.reject([1, e])
-                    fileWriter.write(preparedText)
-            )
+            .then (fileWriter) =>
+                console.log('obtained filewriter for: ' + fileName)
+                preparedText = @prepareText(textData)
+                fileWriter.seek(0)
+                window.fwfw = fileWriter
+                fileWriter.onwriteend = () ->
+                    console.log('finished writing')
+                    deferred.resolve()
+                fileWriter.onerror = (e) ->
+                    deferred.reject([1, e])
+                fileWriter.write(preparedText)
+            .catch (status) =>
+                deferred.reject(status)
             deferred.promise
 
         readFromFile: (fileName) ->
             deferred = $q.defer()
             @getFileReader(fileName)
-            .then(
-                (data) ->
-                    deferred.resolve(data)
-            )
+            .then (data) =>
+                deferred.resolve(data)
+            .catch (status) =>
+                deferred.reject(status)
             deferred.promise
 
         #######################################
@@ -183,25 +186,26 @@ angular.module('ModulePersistence')
             deferred = $q.defer()
             dataAsString = JSON.stringify(buffer)
             @writeToFile(fileName, dataAsString)
-            .then(
-                =>
-                    if getHash
-                        deferred.resolve(md5.createHash(dataAsString + @salt))
-                    else
-                        deferred.resolve('ok')
-            )
+            .then (data) =>
+                if getHash
+                    deferred.resolve(md5.createHash(dataAsString + @salt))
+                else
+                    deferred.resolve('ok')
+            .catch (status) =>
+                deferred.reject(status)
             deferred.promise
 
         readDataFromFile: (fileName, checkHash) =>
             deferred = $q.defer()
             @readFromFile(fileName)
-            .then(
-                (data) =>
+            .then (data) =>
                     if checkHash && checkHash != md5.createHash(data + @salt)
+                        @tryDeleteFile(fileName)
                         deferred.resolve('mismatch')
                     else
                         deferred.resolve(JSON.parse(data))
-            )
+            .catch (status) =>
+                deferred.reject(status)
             deferred.promise
 
         tryDeleteFile: (fileName) =>

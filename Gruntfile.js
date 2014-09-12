@@ -8,26 +8,26 @@ module.exports = function(grunt) {
     var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
     // Used for task generations
-    var taskgenSources = sourceCoffee + 'ActivityGenerations/';
+    var taskgenSources = '/Users/renatb/projects/90_scratch/numeric-base/ActivityGenerations/';
+    var taskgenDest = '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/';
 
     var appJsSources = [
                     sourceInitJs,
                     sourceJs + 'qrcode.js',
                     sourceJs + 'rawdeflate.js',
 
+                    sourceJs + 'libs/image/ImageLib/**',
+                    sourceJs + 'libs/data/DataPack/**',
+                    sourceJs + 'libs/data/DataUtilities/**',
+                    sourceJs + 'libs/present/BaseLib/**',
                     sourceJs + 'libs/settings/SettingsLib/**',
                     sourceJs + 'libs/identity/IdentityLib/**',
-                    sourceJs + 'libs/image/ImageLib/**',
-                    sourceJs + 'libs/present/BaseLib/**',
                     sourceJs + 'libs/communication/HttpLib/**',
                     sourceJs + 'libs/communication/MessageLib/**',
                     sourceJs + 'libs/persist/PersistenceLib/**',
 
-                    sourceJs + 'libs/data/DataPack/**',
-                    sourceJs + 'libs/data/DataUtilities/**',
                     
                     sourceJs + 'apps/AppOne/**',
-                    sourceJs + 'ActivityGenerations/Krista/**'   // decide whether to include a module here
                     ];
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/AppOneCordova/**' ] );
 
@@ -36,15 +36,21 @@ module.exports = function(grunt) {
                     sourceCoffee + 'apps/TestApp/*.coffee'
                     ];
 
+
+    var taskgenCoffeeFiles = {};
+    taskgenCoffeeFiles[taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.b.q00'] = taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00/' + 'body/**/*.coffee';
+
+    var taskgenUglifySrcDest = {};
+    taskgenUglifySrcDest['src'] = taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.b.q00';
+    taskgenUglifySrcDest['dest'] = taskgenDest + 'body/com.sparkydots.numeric.tasks.ssat.b.q00';
+
     grunt.initConfig({
         coffee: {
             taskgen: {
                 options: {
                   join: true
                 },
-                files: {
-                    '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/body/com.sparkydots.numeric.tasks.ssat.b.q00' : taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/' + 'body/**/*.coffee',
-                }
+                files: taskgenCoffeeFiles
             },
             test: {
                 files: {
@@ -72,13 +78,10 @@ module.exports = function(grunt) {
           appJsCordova: {
             src: '<%= concat.appJsCordova.dest %>', 
             dest: sourceJs + 'oneAppCordova.min.js'
-          }
+          },
+          taskgen: taskgenUglifySrcDest 
         },
         copy: {
-          taskgen: {
-            src: taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00.meta',
-            dest: '/Users/renatb/projects/90_scratch/numeric-base/public/tasks/remote/server/activity/meta/com.sparkydots.numeric.tasks.ssat.b.q00'
-          },
           appJs: {
             src: '<%= uglify.appJs.dest %>', 
             dest: distDest + 'oneApp.dist.min.js'
@@ -86,6 +89,10 @@ module.exports = function(grunt) {
           appJsCordova: {
             src: '<%= uglify.appJsCordova.dest %>', 
             dest: distDest + 'oneAppCordova.dist.min.js'
+          },
+          taskgen: {
+            src: taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00/meta/main.meta',
+            dest: taskgenDest + 'meta/com.sparkydots.numeric.tasks.ssat.b.q00'
           }
         },
         watch: {
@@ -115,7 +122,7 @@ module.exports = function(grunt) {
         ]);
         
     grunt.registerTask('test', [ 'coffee:test']);
-    grunt.registerTask('taskgen', [ 'coffee:taskgen', 'copy:taskgen']);
+    grunt.registerTask('taskgen', [ 'coffee:taskgen', 'uglify:taskgen', 'copy:taskgen']);
     grunt.registerTask('default', ['numeric'])
 
     

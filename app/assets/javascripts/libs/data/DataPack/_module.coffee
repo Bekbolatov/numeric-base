@@ -23,7 +23,7 @@ angular.module 'ModuleDataPack'
                     ['types of pets', 'pet', 'prices', 'price', ['$', ''] ]
                     [
                         ['Goldfish', 10]
-                        ['Kitten', 35]
+                    ['Kitten', 35]
                         ['Puppy', 40]
                         ['Ferret', 30]
                         ['Iguana', 70]

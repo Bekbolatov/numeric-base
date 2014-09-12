@@ -21,12 +21,17 @@ angular.module('AppOne')
             table = @activitySummariesPersister.read()
             table.items.unshift(summaryInfo)
             @activitySummariesPersister.save(table)
-        _removeFromAllSummaries: (timestamp) -> # not using right now
+        _removeFromAllSummaries: (timestamp) -> #localstorage persister only
             table = @activitySummariesPersister.read()
-            itemToDelete = 0
-            newItems = item for item in table.items when item.timestamp != timestamp
-            #also remove the file - currently not deleting
+            itemToDelete = undefined
+            for key, val of table.items
+                if Number(val.timestamp) == Number(timestamp)
+                    itemToDelete = key
+            if itemToDelete != undefined
+                table.items.splice(itemToDelete, 1)
             @activitySummariesPersister.save(table)
+
+
         getAllSummaries: -> @activitySummariesPersister.read().items
         getAllSummariesPage: (start, end) -> @getAllSummaries().slice(start, end)
         getFromAllSummaries: (timestamp) ->
@@ -35,16 +40,33 @@ angular.module('AppOne')
                 if parseInt(item.timestamp) == parseInt(timestamp)
                     return item
             return undefined
+
+        removeSummaryById: (timestamp) =>
+            deferred = $q.defer()
+            filename = document.numeric.path.result + timestamp
+            FS.tryDeleteFile(filename)
+            .then (data) =>
+                @_removeFromAllSummaries()
+                @deferred.resolve(data)
+            .catch (status) =>
+                deferred.reject(status)
+            deferred.promise
+
         getSummaryById: (timestamp) ->
             deferred = $q.defer()
             summary = @getFromAllSummaries(timestamp)
 
             filename = document.numeric.path.result + timestamp
             FS.readDataFromFile(filename, summary.hash)
-            .then(
-                (buffer) => deferred.resolve(buffer)
-                (status) => deferred.reject(status))
+            .then (buffer) =>
+                if buffer == 'mismatch'
+                    @_removeFromAllSummaries(timestamp)
+                deferred.resolve(buffer)
+            .catch (status) =>
+                @_removeFromAllSummaries(timestamp)
+                deferred.reject(status)
             deferred.promise
+
         init: (activityId, activityName)->
             buffer = @__baseFormat()
             buffer.activityId = activityId
