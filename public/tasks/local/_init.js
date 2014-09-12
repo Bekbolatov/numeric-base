@@ -46,7 +46,8 @@ document.numeric = {
         mainServerAddress: 'https://www.sparkydots.com/starpractice/data/',
         //mainServerAddress: 'http://localhost:9000/starpractice/data/',
         linkSubmitShow: false,
-        linkConnectShow: false,
+        linkConnectShow: true,
+        linkChannelsShow: false,
         linkSettingsShow: false
     },
 

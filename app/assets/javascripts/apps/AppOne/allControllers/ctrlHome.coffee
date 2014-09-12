@@ -8,6 +8,7 @@ angular.module('AppOne')
         $scope.linkConnectShow = Settings.get('linkConnectShow')
         $scope.linkSubmitShow = Settings.get('linkSubmitShow')
         $scope.linkSettingsShow = Settings.get('linkSettingsShow')
+        $scope.linkChannelsShow = Settings.get('linkChannelsShow')
 
     if Settings.ready
         setScopeVars()

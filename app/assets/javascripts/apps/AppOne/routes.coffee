@@ -11,6 +11,14 @@ angular.module('AppOne')
         controller: 'InfoCtrl'
     })
     # start a task
+    .when('/channelList', {
+        templateUrl: '/assets/templates/channelList.html'
+        controller: 'channelListCtrl'
+    })
+    .when('/channel', {
+        templateUrl: '/assets/templates/channel.html'
+        controller: 'ChannelCtrl'
+    })
     .when('/tasksList', {
         templateUrl: '/assets/templates/tasksList.html'
         controller: 'TaskListCtrl'
