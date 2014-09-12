@@ -32,6 +32,8 @@ angular.module('AppOne')
                     @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.a.q04')
                     .then (saved) =>
                         @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.a.q05')
+                        .then (saved) =>
+                            @writeThruCache.remove('com.sparkydots.numeric.tasks.ssat.b.q00')
             # End: temp fix - migrate all older
 
             .catch (t) => # bootstrap with default given in _init.js (if nothing was stored before)

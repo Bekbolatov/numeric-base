@@ -38,11 +38,11 @@ module.exports = function(grunt) {
 
 
     var taskgenCoffeeFiles = {};
-    taskgenCoffeeFiles[taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.b.q00'] = taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00/' + 'body/**/*.coffee';
+    taskgenCoffeeFiles[taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.c.q00'] = taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/c/q00/' + 'body/**/*.coffee';
 
     var taskgenUglifySrcDest = {};
-    taskgenUglifySrcDest['src'] = taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.b.q00';
-    taskgenUglifySrcDest['dest'] = taskgenDest + 'body/com.sparkydots.numeric.tasks.ssat.b.q00';
+    taskgenUglifySrcDest['src'] = taskgenDest + '_body/com.sparkydots.numeric.tasks.ssat.c.q00';
+    taskgenUglifySrcDest['dest'] = taskgenDest + 'body/com.sparkydots.numeric.tasks.ssat.c.q00';
 
     grunt.initConfig({
         coffee: {
@@ -91,8 +91,8 @@ module.exports = function(grunt) {
             dest: distDest + 'oneAppCordova.dist.min.js'
           },
           taskgen: {
-            src: taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/b/q00/meta/main.meta',
-            dest: taskgenDest + 'meta/com.sparkydots.numeric.tasks.ssat.b.q00'
+            src: taskgenSources + 'Renat/SSAT/com/sparkydots/numeric/tasks/ssat/c/q00/meta/main.meta',
+            dest: taskgenDest + 'meta/com.sparkydots.numeric.tasks.ssat.c.q00'
           }
         },
         watch: {

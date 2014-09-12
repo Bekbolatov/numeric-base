@@ -56,7 +56,7 @@ class ProblemSet
             num = @parameters.p20_fixedProblemNumber.selectedValue
         else
             if @parameters.p10_serveOrder.selectedValue == 'random'
-                num = Math.random()*30 | 0
+                num = 1 + Math.random()*30 | 0
             else if @parameters.p10_serveOrder.selectedValue == 'sequential'
                 num = @previousQuestion + 1
                 if num > 30
@@ -82,4 +82,4 @@ class ProblemSet
 
         qq
 
-document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.b.q00'] = new ProblemSet()
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.c.q00'] = new ProblemSet()
