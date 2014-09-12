@@ -36,9 +36,9 @@ angular.module('AppOne')
                 .then( \
                     (response) =>
                         console.log('| |- found at ' + url)
-                        if response.data != undefined
-                            @_write(response.data)
-                            deferred.resolve(data)
+                        if response.data != undefined && response.data.connections != undefined
+                            @_write(response.data.connections)
+                            deferred.resolve(data.connections)
                         else
                             deferred.reject('no data')
                     (status) =>
@@ -51,7 +51,8 @@ angular.module('AppOne')
         add: (connectionId, connectionInfo) -> @_add(connectionId, connectionInfo)
 
         constructor: ->
-            if !@_read()
+            saved = @_read()
+            if !saved || saved.length > 1000
                 @_httpGet()()
                 # temporarily load fake info
                 .catch(
