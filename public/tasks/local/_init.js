@@ -67,9 +67,8 @@ try {
         }
         var servername = protocol + "//" + server + port;
         w.document.numeric.url.base.chrome = w.document.numeric.url.base.chrome.replace("SERVERNAME", servername);
-        w.document.numeric.defaultSettings.mainServerAddress = "https://" + server + port + "/starpractice/data/";
 
-        if (server == 'localhost') {
+        if (server == 'localhost' && port == 9000) {
             w.document.numeric.url.base.chrome = "filesystem:http://localhost:9000/temporary/";
             w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/starpractice/data/";
         }
