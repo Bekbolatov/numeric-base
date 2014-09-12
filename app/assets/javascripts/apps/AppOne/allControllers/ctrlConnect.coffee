@@ -62,6 +62,7 @@ angular.module('AppOne')
     $scope.myId_p1 = DeviceId.devicePublicId.substring(0,16)
     $scope.myId_p2 = DeviceId.devicePublicId.substring(16)
 
+
     $scope.size = 8
 
     $scope.showCode = () ->
