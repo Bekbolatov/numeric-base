@@ -122,9 +122,12 @@ angular.module('AppOne')
 
         selectParamValue: (key, value) ->
             @currentActivity.parameters[key].selectedValue = value
-            @newQuestion(true) # arg true - keep clock (do not reset for this question)
+            if @currentActivity.parameters[key].jump
+                true
+            else
+                false
 
-        newQuestion: (keepClock) ->
+        newQuestion: (keepClock) -> # arg true - keep clock (do not reset for this question)
             @totalTime = Math.round( (new Date() - @startTime) / 1000 )
             @answer = undefined
             @question = @currentActivity.newQuestion()

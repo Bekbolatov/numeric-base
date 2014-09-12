@@ -1,27 +1,30 @@
 <header class="bar bar-nav">
 
-    <a href="#/tasksList" class="icon icon-left-nav pull-left" ng-show="!showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
+    <a href="#/tasksList" class="icon icon-left-nav pull-left" ng-show="!isFlipped && !showFinish && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
 
-    <button class="btn btn-primary pull-left" ng-show="!showFinish && !showFinishing && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)" ng-click="showFinish = !showFinish">
+    <button class="btn btn-primary pull-left" ng-click="showFinish = !showFinish" ng-show="!isFlipped && !showFinish && !showFinishing && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)">
         Finish
     </button>
 
-    <button class="btn btn-negative pull-right" ng-click="showFinishing = true; finishActivity()" ng-show="showFinish && !showFinishing">
+    <button class="btn btn-negative pull-right" ng-click="showFinishing = true; finishActivity()" ng-show="!isFlipped && showFinish && !showFinishing">
         Finish Activity?
     </button>
 
-    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="showFinishing">
+    <button class="btn btn-negative pull-right" ng-click="finishActivity()" ng-show="!isFlipped && showFinishing">
         Finishing...
     </button>
 
-    <button class="btn btn-primary pull-left"  ng-show="showFinish && !showFinishing" ng-click="showFinish = !showFinish">
+    <button class="btn btn-primary pull-left" ng-click="showFinish = !showFinish" ng-show="!isFlipped && showFinish && !showFinishing">
         Cancel
     </button>
 
+
+    <a href="" class="icon icon-left-nav pull-left" ng-click="isFlipped=!isFlipped" ng-show="isFlipped"></a>
+
     <h2 class="title" ng-class="{colorWhite: showFinish}">StarPractice</h2>
 
-    <button class="btn btn-link btn-nav pull-right" ng-show="!showFinish" ng-click="isFlipped=!isFlipped">
-        <span class="icon icon-{{ isFlipped && 'check' || 'more-vertical' }}"></span>
+    <button class="btn btn-link btn-nav pull-right" ng-click="isFlipped=!isFlipped" ng-show="!showFinish && !isFlipped">
+        <span class="icon icon-more-vertical"></span>
     </button>
 
 </header>
@@ -34,7 +37,7 @@
 
 
 
-<div class="content content-scrollable {{ (isFlipped && 'invisible') || 'visible'}}">
+<div class="content position-absolute {{ (isFlipped && 'invisible') || 'visible'}}">
 
     <div class="center-inline-child">
 
@@ -180,12 +183,12 @@
                 Correct answer: <span ng-bind-html="activityDriver.answeredQuestion.actualAnswerAsHTML"></span>
             </div>
         </div>
-
-
     </div>
 </div>
 
-<!--  closing flipcard face front -->
+
+
+<!--  OPTIONS:BEGIN -->
 <div class="content content-scrollable {{ (isFlipped && 'visible') || 'invisible'}}">
     <div class="content-inner">
         <div ng-show="currentActivity.parameters != undefined">
@@ -198,7 +201,7 @@
                 <div class="optionBlock">
                     <div class="paramName paramDescr">{{ param.description | firstCapital }}</div>
                         <span ng-repeat="level in param.levels">
-                            <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="activityDriver.selectParamValue(paramKey, level)">
+                            <button class="btn btn-param{{ level == param.selectedValue && ' btn-primary' || '' }}" ng-click="selectParamValue(paramKey, level)">
                                 {{ level }}
                             </button>
                         </span>
@@ -212,4 +215,4 @@
         </div>
     </div>
 </div>
-<!--  closing flipcard face back -->
+<!--  OPTIONS:END -->

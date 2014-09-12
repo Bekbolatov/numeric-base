@@ -1,7 +1,7 @@
 angular.module('AppOne')
 
 # Task Controller
-.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'Tracker', 'ActivityDriver', 'ActivityManager', 'StarPracticeApi', ($scope, $routeParams, $location, Settings, Tracker, ActivityDriver, ActivityManager, StarPracticeApi ) ->
+.controller 'TaskCtrl', ['$scope', '$routeParams', '$location', '$timeout', 'Settings', 'Tracker', 'ActivityDriver', 'ActivityManager', 'StarPracticeApi', ($scope, $routeParams, $location, $timeout, Settings, Tracker, ActivityDriver, ActivityManager, StarPracticeApi ) ->
     if !Settings.ready
         return $location.path('/')
 
@@ -12,6 +12,25 @@ angular.module('AppOne')
         Tracker.touch('task', taskId)
 
     $scope.activityDriver = ActivityDriver
+    $scope.isFlipped = false
+    $scope.optionsChanged = false
+
+    $scope.backToActivity = () =>
+        if $scope.optionsChanged && $scope.isFlipped
+            $scope.isFlipped = false
+            $scope.optionsChanged = false
+            ActivityDriver.newQuestion(true)
+
+    $scope.selectParamValue = (paramKey, level) =>
+        $scope.optionsChanged = true
+        jump = ActivityDriver.selectParamValue(paramKey, level)
+        if jump
+            $scope.backToActivity()
+        else
+            $timeout(
+                () =>
+                    $scope.backToActivity()
+                , 2000)
 
     ActivityManager.loadActivity(taskId)
     .then((activity) ->
