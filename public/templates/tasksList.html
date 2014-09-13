@@ -22,7 +22,7 @@
         </li>
 
         <li class="table-view-cell color-practice" ng-repeat="(id, meta) in tableOfAvailableActivities">
-            <a class="navigate-right color-practice" ng-href="#/task/{{ id }}">
+            <a class="navigate-right color-practice" ng-href="#/task/{{ id }}/{{meta.version}}">
                 {{ meta.name }}
                 <p class="color-practice">{{ meta.shortDescription }}</p>
             </a>

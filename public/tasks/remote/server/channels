@@ -1,0 +1,10 @@
+{
+    "messages": [],
+    "content":
+    {
+        "channels": {
+            "1": "test channel 1",
+            "2": "test channel 2"
+        }
+    }
+}

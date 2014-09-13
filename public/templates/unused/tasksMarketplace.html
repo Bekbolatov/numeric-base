@@ -1,0 +1,186 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/tasksList"></a>
+    <h1 class="title">Manage Activities</h1>
+    <a class="icon icon-refresh pull-right" href="#/tasksMarketplace" ng-click="tryGettingPublicAgain()" ng-show="!loadingList"></a>
+</header>
+<header class="bar bar-standard bar-header-secondary">
+    <div class="segmented-control">
+        <span class="control-item" ng-class="{active: currentTab == 'installed' }" ng-click="selectTab('installed') ">
+           Installed
+        </span>
+        <span class="control-item" ng-class="{active: currentTab == 'available' }" ng-click="selectTab('available') ">
+           Available
+        </span>
+    </div>
+</header>
+
+
+
+<div class="content content-bg">
+    <div class="content-inner content-inner-marketplace">
+        <div class="media-body">
+            <div class="content-inner">
+
+
+                <!--  installed -->
+                <div class="control-content" ng-class="{active: currentTab == 'installed' }">
+                    <p ng-show="!somethingInstalled()">
+                        No activities installed.
+                        <br>Install some activities from the "Available" tab.
+                    </p>
+                    <ul class="table-view table-marketplace"  ng-show="somethingInstalled()">
+
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in mapOfAvailableActivities">
+                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                                {{ meta.name }}
+                                    <p>
+
+                                        <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
+                                        <span ng-show="$parent.detailsId == id">
+                                            {{ meta.description }}
+                                            <i>
+                                                <br>&nbsp;
+                                                <br>Creation date: {{ meta.authorDate }}
+                                                <br>Author: {{ meta.authorName }}
+                                                <br>Email: {{ meta.authorEmail }}
+                                            </i>
+                                        </span>
+                                        <div>
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == id" ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation()">
+                                                Cancel
+                                            </button>
+                                            <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.confirmRemoveId == id " ng-click="$parent.confirmRemoveId = undefined; $event.stopPropagation(); uninstallActivity(id)">
+                                                Confirm Remove
+                                            </button>
+
+                                            <button class="btn btn-primary pull-right btn-marketplace" ng-show="!$parent.confirmRemoveId || $parent.confirmRemoveId != id" ng-click="$parent.confirmRemoveId = id; $event.stopPropagation()">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!--  available -->
+                <div class="control-content" ng-class="{active: currentTab == 'available' }">
+
+                    <ul class="table-view table-marketplace">
+
+                        <li class="table-view-cell media activityMarketplace" ng-show="errorStatus">
+                            <div class="media-body">
+                                <p>
+                                    <i>
+                                        Could not get the current list of activities from the server, instead here is a list of locally available activities.
+                                        Try again: <a class="icon icon-refresh" href="#/tasksMarketplace" ng-click="tryGettingPublicAgain()" ng-show="!loadingList"></a>
+                                    </i>
+                                </p>
+                            </div>
+                        </li>
+
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in availableActivitiesMeta">
+                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                                {{ meta.name }}
+                                <p>
+                                    <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
+                                    <span ng-show="$parent.detailsId == id">
+                                        {{ meta.description }}
+                                        <i>
+                                            <br>&nbsp;
+                                            <br>Creation Date: {{ meta.authorDate }}
+                                            <br>Author: {{ meta.authorName }}
+                                            <br>Email: {{ meta.authorEmail }}
+                                        </i>
+                                    </span>
+
+                                    <div>
+
+                                <a href="#/task/{{id}}/{{meta.version}}">
+                                    <button class="btn btn-negative pull-right btn-marketplace">
+                                    Start
+                                </button>
+                                </a>
+
+
+                                        <button class="btn btn-negative btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity == id">
+                                            <i>Installing...</i>
+                                        </button>
+
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id" ng-click="$parent.confirmAddId = undefined; $event.stopPropagation()">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmAddId == id " ng-click="$parent.confirmAddId = undefined; ; $event.stopPropagation(); installNewActivity(id, meta)">
+                                            Confirm Add
+                                        </button>
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && !isInstalled(id) && (!$parent.confirmAddId || $parent.confirmAddId != id)" ng-click="$parent.confirmAddId = id; $event.stopPropagation()">
+                                            Add
+                                        </button>
+
+
+
+
+                                        <button class="btn btn-primary pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmUpdateId == id" ng-click="$parent.confirmUpdateId = undefined; $event.stopPropagation()">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-negative pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && $parent.confirmUpdateId == id " ng-click="$parent.confirmUpdateId = undefined; ; $event.stopPropagation(); updateActivity(id, meta)">
+                                            Confirm Update
+                                        </button>
+                                        <button class="btn btn-primary btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id) && (!$parent.confirmUpdateId || $parent.confirmUpdateId != id) && needsUpdate(id, meta) "  ng-click="$parent.confirmUpdateId = id; $event.stopPropagation()">
+                                            <i>Update</i>
+                                        </button>
+
+                                        <button class="btn btn-outline pull-right btn-marketplace" ng-show="$parent.loadingActivity != id && isInstalled(id) && !needsUpdate(id, meta) ">
+                                            <i>Installed</i>
+                                        </button>
+
+                                    </div>
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+
+                    <div ng-show="loadingList">
+                        <div class="media-body">
+                            <p>
+                                Loading available activities...
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+            <!--  BOTTOM CONTACT INFO -->
+            <div>
+                <p class="content-paragraph">
+                    <i>
+                        If you need a new activity, submit a request with activity description:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
+
+                    </i>
+                </p>
+
+                <p class="content-paragraph">
+                    <i>
+
+                        If you are a developer, you can create and share new activities:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20Submitting%20a%20New%20Activities">info@sparkydots.com</a>
+                    </i>
+                </p>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

@@ -10,44 +10,25 @@ angular.module('AppOne')
         templateUrl: '/assets/templates/info.html'
         controller: 'InfoCtrl'
     })
-    # start a task
     .when('/channelList', {
         templateUrl: '/assets/templates/channelList.html'
-        controller: 'channelListCtrl'
+        controller: 'ChannelListCtrl'
     })
     .when('/channel', {
         templateUrl: '/assets/templates/channel.html'
         controller: 'ChannelCtrl'
     })
-    .when('/tasksList', {
-        templateUrl: '/assets/templates/tasksList.html'
-        controller: 'TaskListCtrl'
-    })
-    .when('/task/:taskId', {
+    .when('/task', {
         templateUrl: '/assets/templates/task.html'
         controller: 'TaskCtrl'
     })
-    # lookup historical and also lookup last activitySummary
     .when('/history', {
         templateUrl: '/assets/templates/history.html'
         controller: 'HistoryCtrl'
     })
-    .when('/history/:containedItem', {
-        templateUrl: '/assets/templates/history.html'
-        controller: 'HistoryCtrl'
-    })
-    .when('/historyItem/:itemId', {
+    .when('/historyItem', {
         templateUrl: '/assets/templates/historyItem.html'
         controller: 'HistoryItemCtrl'
-    })
-    .when('/historyItem/:itemId/:backButton', {
-        templateUrl: '/assets/templates/historyItem.html'
-        controller: 'HistoryItemCtrl'
-    })
-    # Activity Marketplace
-    .when('/tasksMarketplace', {
-        templateUrl: '/assets/templates/tasksMarketplace.html'
-        controller: 'TasksMarketplaceCtrl'
     })
 
     # Settings

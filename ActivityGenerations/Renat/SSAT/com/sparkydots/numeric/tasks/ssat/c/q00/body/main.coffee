@@ -1,6 +1,14 @@
 
 class ProblemSet
-    constructor: () ->
+    meta:
+        name: "Elementary Math Problems"
+        shortDescription: "Typical problems in elementary Math tests."
+        description: "In this practice set student can work on the the typical Math problems at the elementary level."
+        authorName: "Sparky Dots"
+        authorEmail: "info@sparkydots.com"
+        authorDate: "9/10/2014"
+        version: 1
+    constructor: (@id) ->
         @previousQuestion = 0
         @units =
             1: new M01()
@@ -82,4 +90,4 @@ class ProblemSet
 
         qq
 
-document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.c.q00'] = new ProblemSet()
+document.numeric.numericTasks['com.sparkydots.numeric.tasks.ssat.c.q00'] = new ProblemSet('com.sparkydots.numeric.tasks.ssat.c.q00')

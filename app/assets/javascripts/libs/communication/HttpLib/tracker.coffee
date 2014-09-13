@@ -10,7 +10,7 @@ angular.module 'ModuleCommunication'
                 "&id=" + id
             else
                 ""
-            ServerHttp.get(Settings.get('mainServerAddress') + "touch?page=" + page + idParam, {timeout: 2000}, 10)
+            ServerHttp.get(Settings.get('mainServerAddress') + document.numeric.path.touch + "?page=" + page + idParam, {timeout: 2000}, 10)
 
     new Tracker()
 ]

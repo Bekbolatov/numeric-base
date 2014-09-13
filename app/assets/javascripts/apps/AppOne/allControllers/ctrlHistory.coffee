@@ -1,6 +1,6 @@
 angular.module('AppOne')
 
-.controller 'HistoryCtrl', ['$scope', '$routeParams', '$location', 'Settings', 'ActivitySummary', 'Tracker', ($scope, $routeParams, $location, Settings, ActivitySummary, Tracker ) ->
+.controller 'HistoryCtrl', ['$scope', '$location', 'Settings', 'ActivitySummary', 'Tracker', ($scope, $location, Settings, ActivitySummary, Tracker ) ->
 
     if !Settings.ready
         return $location.path('/')
@@ -10,6 +10,7 @@ angular.module('AppOne')
     $scope.activitySummariesInfoAll = ActivitySummary.getAllSummaries()
     $scope.totalItems = $scope.activitySummariesInfoAll.length
     $scope.noHistory = $scope.activitySummariesInfoAll.length < 1
+    $scope.littleHistory = $scope.activitySummariesInfoAll.length < Settings.get('historyPageSize')
     $scope.$watch(
         'activitySummariesInfoAll'
         (newValue, oldValue) ->
@@ -20,7 +21,7 @@ angular.module('AppOne')
     $scope.getPage = (start, end) =>
         $scope.activitySummariesInfo = ActivitySummary.getAllSummariesPage(start, end)
     $scope.refreshList = ->
-        ActivitySummary.setFirstIndex($scope.startIndex)
+        ActivitySummary.newFirst = $scope.startIndex
         $scope.getPage($scope.startIndex, $scope.endIndex)
 
     $scope.pageSize = Settings.get('historyPageSize')
@@ -34,36 +35,28 @@ angular.module('AppOne')
         $scope.endIndex = Math.min($scope.startIndex + $scope.pageSize, $scope.totalItems)
         $scope.refreshList()
 
-    containedItem = $routeParams.containedItem
-    if containedItem != undefined && containedItem == 'continue'
-        $scope.startIndex = ActivitySummary.getFirstIndex()
-    else
-        $scope.startIndex = -1
+    $scope.startIndex = ActivitySummary.newFirst
 
     $scope.turnPage(0)
 
+    $scope.navigateToItem = (timestamp) ->
+        ActivitySummary.setCurrentItem(timestamp, '#/history')
+        $location.path('/historyItem')
+
+
 ]
 
-.controller 'HistoryItemCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'Tracker', 'ActivitySummary', ($scope, $routeParams, $location, $sce, Settings, Tracker, ActivitySummary ) ->
+.controller 'HistoryItemCtrl', ['$scope', '$location', '$sce', 'Settings', 'Tracker', 'ActivitySummary', ($scope, $location, $sce, Settings, Tracker, ActivitySummary ) ->
     if !Settings.ready
         return $location.path('/')
+    else
+        Tracker.touch('historyitem', ActivitySummary.current.id)
 
     $scope.linkSubmitShow = Settings.get('linkSubmitShow')
 
-    itemId = $routeParams.itemId
-    if itemId == undefined || itemId == '' || itemId == 'test'
-        return $location.path('/')
-    else
-        Tracker.touch('historyitem', itemId)
+    $scope.backButton = ActivitySummary.current.back
 
-    backButton = $routeParams.backButton
-    if backButton != undefined && backButton != '' && backButton != 'test'
-        $scope.backButton = '#/tasksList'
-    else
-        $scope.backButton = '#/history/continue'
-
-
-    ActivitySummary.getSummaryById(itemId)
+    ActivitySummary.getSummaryById(ActivitySummary.current.id)
     .then (data) ->
         if data == 'mismatch'
             $scope.mismatch = true

@@ -1,46 +1,106 @@
-<header class="bar bar-nav background-color-practice">
-    <a class="icon icon-left-nav pull-left" href="#/"></a>
-    <h2 class="title">Pick Activity</h2>
-    <a class="icon icon-plus pull-right" href="#/tasksMarketplace"></a>
-    <!-- <a class="pull-right" href="#/history"><button class="btn btn-primary">History</button></a> -->
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/channelList"></a>
+    <h1 class="title">Activities</h1>
+    <a href class="icon icon-refresh pull-right" ng-click="tryGettingAgain()" ng-show="!loadingList"></a>
+    <a href class="pull-right" ng-show="loadingList">loading...</a>
 </header>
 
 <div class="content content-bg">
+    <div class="content-inner content-inner-marketplace">
+        <div class="media-body">
 
-    <div ng-show="showMessage">
-        <div class="app-message">
-            <p ng-bind-html="message"></p>
+            <div class="center-inline-child">
+                <span>Channel: {{channelName}}</span>
+            </div>
+
+
+            <div class="clearfix"></div>
+            <div class="table-view-cell-right" ng-show="!littleHistory">
+            <span class="span-history-pages">
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize)">&#xe82d;</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages">{{ startIndex + 1 }} - {{ endIndex }}</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(pageSize)">&#xe818;</button>
+            </span>
+            </div>
+            <div class="clearfix"></div>
+
+
+
+
+            <div class="content-inner">
+
+                    <ul class="table-view table-marketplace">
+
+                        <li class="table-view-cell media activityMarketplace" ng-show="errorStatus">
+                            <div class="media-body">
+                                <p>
+                                    <i>
+                                        Could not get the current list of activities from the server.
+                                        Try again: <a href class="icon icon-refresh" ng-click="tryGettingAgain()" ng-show="!loadingList"></a>
+                                    </i>
+                                </p>
+                            </div>
+                        </li>
+
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in availableActivities">
+                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                                {{ meta.name }}
+                                <p>
+                                    <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
+                                    <span ng-show="$parent.detailsId == id">
+                                        {{ meta.description }}
+                                        <i>
+                                            <br>&nbsp;
+                                            <br>Creation Date: {{ meta.authorDate }}
+                                            <br>Author: {{ meta.authorName }}
+                                            <br>Email: {{ meta.authorEmail }}
+                                        </i>
+                                    </span>
+
+                                <div>
+
+                                    <a href ng-click="tryStartActivity(id, meta.version); $event.stopPropagation()">
+                                        <button class="btn btn-negative pull-right btn-marketplace">
+                                            Start
+                                        </button>
+                                    </a>
+
+
+                                </div>
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+
+                    <div ng-show="loadingList">
+                        <div class="media-body">
+                            <p>
+                                Loading available activities...
+                            </p>
+                        </div>
+                    </div>
+
+
+
+            </div>
+
+
+            <!--  BOTTOM CONTACT INFO -->
+            <div>
+                <p class="content-paragraph">
+                    <i>
+                        If you need a new activity, submit a request with activity description:
+                        <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
+
+                    </i>
+                </p>
+            </div>
+
+
         </div>
     </div>
-
-    <ul class="table-view table-view-list">
-        <li class="table-view-cell" ng-show="noActivities">
-            <p>
-                It looks like you do not have any activities installed.
-                <br>(use <span class="icon icon-plus"></span> to get new activities)
-            </p>
-        </li>
-
-        <li class="table-view-cell color-practice" ng-repeat="(id, meta) in tableOfAvailableActivities">
-            <a class="navigate-right color-practice" ng-href="#/task/{{ id }}">
-                {{ meta.name }}
-                <p class="color-practice">{{ meta.shortDescription }}</p>
-            </a>
-        </li>
-    </ul>
-
-    <!--
-    <div class="clearfix"></div>
-    <p>
-        <a class="center" ng-href="#/tasksMarketplace">
-            <p class="content-paragraph">
-                <button class="btn btn-primary">
-                    <i>Manage activities ...</i>
-                </button>
-            </p>
-        </a>
-    </p>
-    -->
-
-
 </div>
+

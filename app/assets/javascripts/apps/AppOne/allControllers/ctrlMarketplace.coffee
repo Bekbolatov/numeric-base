@@ -1,16 +1,14 @@
 angular.module('AppOne')
 
-.controller 'TasksMarketplaceCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'Marketplace', 'ActivityManager', ($scope, $location, Settings, Tracker, Marketplace, ActivityManager ) ->
+.controller 'TasksMarketplaceCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'Marketplace', ($scope, $location, Settings, Tracker, Marketplace ) ->
     if !Settings.ready
         return $location.path('/')
     else
         Tracker.touch('marketplace')
 
     # tabs (ui)
-    if Object.keys(ActivityManager.getInstalledActivitiesMeta()).length < 1
-        $scope.currentTab = 'available'
-    else
-        $scope.currentTab = 'installed'
+    $scope.currentTab = 'available'
+
     $scope.selectTab = (tab) ->
         $scope.currentTab = tab
         $scope.confirmRemoveId = undefined
@@ -34,29 +32,7 @@ angular.module('AppOne')
         $scope.detailsId = activityId
 
     # install/uninstall
-    $scope.mapOfAvailableActivities = ActivityManager.getInstalledActivitiesMeta()
-    $scope.somethingInstalled = -> Object.keys(ActivityManager.getInstalledActivitiesMeta()).length > 0
 
-    $scope.isInstalled = (activityId) -> ActivityManager.isInstalled(activityId)
-    $scope.needsUpdate = (activityId, meta) ->
-        if !meta.version
-            return false
-        installedMeta = ActivityManager.getInstalledActivityMeta(activityId)
-        if !installedMeta.version
-            return true
-        meta.version > installedMeta.version
-
-    $scope.uninstallActivity = (activityId) -> ActivityManager.uninstallActivity(activityId)
-    $scope.installNewActivity = (activityId, meta) ->
-        $scope.loadingActivity = activityId
-        ActivityManager.installActivity(activityId, meta)
-        .catch((status) => console.log('error installing: ' + status))
-        .then(-> $scope.loadingActivity = undefined)
-    $scope.updateActivity = (activityId, meta) ->
-        $scope.loadingActivity = activityId
-        ActivityManager.updateActivity(activityId, meta)
-        .catch((status) => console.log('error updating: ' + status))
-        .then(-> $scope.loadingActivity = undefined)
 
 
     # search/listing public activities

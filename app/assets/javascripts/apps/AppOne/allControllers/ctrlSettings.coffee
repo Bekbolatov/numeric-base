@@ -1,7 +1,7 @@
 angular.module('AppOne')
 
 # app settings
-.controller 'SettingsCtrl', ['$scope', '$location', 'Settings', 'ActivityMeta', 'ActivityBody', 'Bookmarks', 'Tracker', ($scope, $location, Settings, ActivityMeta, ActivityBody, Bookmarks, Tracker ) ->
+.controller 'SettingsCtrl', ['$scope', '$location', 'Settings', 'Tracker', ($scope, $location, Settings, Tracker ) ->
 
     if !Settings.ready
         return $location.path('/')

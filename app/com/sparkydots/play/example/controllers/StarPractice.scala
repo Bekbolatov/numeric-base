@@ -14,6 +14,10 @@ import java.security.MessageDigest
 
 import play.api.http.HeaderNames._
 
+
+
+import play.api.db._
+
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 8/4/14 9:22 PM
  */
@@ -130,15 +134,41 @@ object StarPractice extends Controller {
     }
   }
 
-  def activityMeta(id: String, did: String) = WithCors("GET") {
+  def activityList(chid: Int, st: Int, si: Int, did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (validateStringInput(id) && validateStringInput(did) && StarLogger.logAndCheck("S", "meta", id, did, request) ) {
-          val fileContent = getFileContent("public/tasks/remote/server/activity/meta/" + id)
-          Result(
-            header = ResponseHeader(200),
-            body = fileContent
-          )
+        if (validateStringInput(did) && StarLogger.logAndCheck("S","list","", did, request)) {
+
+
+
+
+
+//          val fileContent = getFileContent("public/tasks/remote/server/activity/list")
+//          Result(
+//            header = ResponseHeader(200),
+//            body = fileContent
+//          )
+
+
+          var ssi = si
+          if (si > 100) {
+            ssi = 100
+          }
+          var outString = "{ \"messages\": [],  \"content\":    {      \"activities\": { "
+
+          DB.withConnection { conn =>
+            val stmt = conn.createStatement
+            val rs = stmt.executeQuery(s"SELECT * from activity limit ${st},${ssi}")
+            while (rs.next()) {
+              outString += rs.getString("id")  //need to use some libraries db/obj/json...
+            }
+          }
+
+          Ok(outString)
+
+
+
+
         } else {
           Ok("{}")
         }
@@ -148,11 +178,11 @@ object StarPractice extends Controller {
     }
   }
 
-  def activityList(did: String) = WithCors("GET") {
+  def channelList(did: String) = WithCors("GET") {
     Action { request =>
       try {
-        if (validateStringInput(did) && StarLogger.logAndCheck("S","list","", did, request)) {
-          val fileContent = getFileContent("public/tasks/remote/server/activity/meta/list")
+        if (validateStringInput(did) && StarLogger.logAndCheck("S","channels","", did, request)) {
+          val fileContent = getFileContent("public/tasks/remote/server/channels")
           Result(
             header = ResponseHeader(200),
             body = fileContent

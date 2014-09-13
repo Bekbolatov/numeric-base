@@ -1,5 +1,14 @@
 document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
 {
+    id: 'com.sparkydots.numeric.tasks.t.basic_math',
+    meta : {
+        "name": "Arithmetic Practice",
+        "shortDescription": "Practice addition, subtraction, etc",
+        "description": "Practice adding, subtracting, multiplying, dividing numbers",
+        "authorName": "Sparky Dots",
+        "authorEmail": "info@sparkydots.com",
+        "authorDate": "8/1/2014"
+    },
     parameters: {
         p10_operation: {
                 name: 'operation',

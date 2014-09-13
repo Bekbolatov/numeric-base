@@ -11,6 +11,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 CoffeeScriptKeys.sourceMap := false
 
+CoffeeScriptKeys.bare := true
+
+
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
 // need to disable for prod
@@ -34,6 +37,9 @@ libraryDependencies ++= Seq(
   ws,
   "org.sorm-framework" % "sorm" % "0.3.15"
 )
+
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
+
 
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
