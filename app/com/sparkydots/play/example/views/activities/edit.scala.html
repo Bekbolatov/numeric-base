@@ -1,0 +1,12 @@
+@(id: String, activityForm: Form[com.sparkydots.play.example.models.Activity])
+
+@import helper._
+@import com.sparkydots.play.example.models.Activity
+
+@main("Edit Activity") {
+<h1>Edit Activity</h1>
+@form(com.sparkydots.play.example.controllers.routes.Activities.update(id)) {
+@formFields(activityForm)
+<button type="submit">Update</button>
+}
+}

@@ -1,5 +1,5 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href="#/channelList"></a>
+    <a class="icon icon-left-nav pull-left" href="{{ Channels.current.back }}"></a>
     <h1 class="title">Activities</h1>
     <a href class="icon icon-refresh pull-right" ng-click="tryGettingAgain()" ng-show="!loadingList"></a>
     <a href class="pull-right" ng-show="loadingList">loading...</a>
@@ -9,7 +9,7 @@
     <div class="content-inner content-inner-marketplace">
         <div class="media-body">
 
-            <div class="center-inline-child">
+            <div class="center-inline-child" ng-show="Channels.current.back != '#/'">
                 <span>Channel: {{channelName}}</span>
             </div>
 
@@ -35,23 +35,23 @@
                             <div class="media-body">
                                 <p>
                                     <i>
-                                        Could not get the current list of activities from the server.
+                                        Could not get the current list of activities from the server.<br>
                                         Try again: <a href class="icon icon-refresh" ng-click="tryGettingAgain()" ng-show="!loadingList"></a>
                                     </i>
                                 </p>
                             </div>
                         </li>
 
-                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == id }" ng-repeat="(id, meta) in availableActivities">
-                            <div class="media-body" ng-click="toggleDetailsId(id)">
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == meta.id }" ng-repeat="meta in availableActivities">
+                            <div class="media-body" ng-click="toggleDetailsId(meta.id)">
                                 {{ meta.name }}
                                 <p>
-                                    <span ng-show="$parent.detailsId != id">{{ meta.shortDescription }}</span>
-                                    <span ng-show="$parent.detailsId == id">
+                                    <span ng-show="$parent.detailsId != meta.id">{{ meta.shortDescription }}</span>
+                                    <span ng-show="$parent.detailsId == meta.id">
                                         {{ meta.description }}
                                         <i>
                                             <br>&nbsp;
-                                            <br>Creation Date: {{ meta.authorDate }}
+                                            <br>Creation Date: {{ meta.authorDate | epochToDate }}
                                             <br>Author: {{ meta.authorName }}
                                             <br>Email: {{ meta.authorEmail }}
                                         </i>
@@ -59,7 +59,7 @@
 
                                 <div>
 
-                                    <a href ng-click="tryStartActivity(id, meta.version); $event.stopPropagation()">
+                                    <a href ng-click="tryStartActivity(meta.id, meta.version); $event.stopPropagation()">
                                         <button class="btn btn-negative pull-right btn-marketplace">
                                             Start
                                         </button>
@@ -92,9 +92,8 @@
             <div>
                 <p class="content-paragraph">
                     <i>
-                        If you need a new activity, submit a request with activity description:
+                        If you have an idea for a new activity, please submit a request with activity description:
                         <a href="mailto:info@sparkydots.com?subject=Activity%20Marketplace%20-%20New%20Activity%20Request&body=I%20need%20an%20activity%20that%20tests%20the%20following ...">info@sparkydots.com</a>
-
                     </i>
                 </p>
             </div>

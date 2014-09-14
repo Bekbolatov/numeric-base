@@ -25,3 +25,12 @@ GET     /starpractice/data/activity/body/:id  com.sparkydots.play.example.contro
 
 # StarPractice: app touch calls
 GET     /starpractice/data/touch  com.sparkydots.play.example.controllers.StarPractice.touch(page: String, id: Option[String], did: String)
+
+
+# Activities
+GET 	/starpractice/activities						com.sparkydots.play.example.controllers.Activities.list
+GET		/starpractice/activities/add					com.sparkydots.play.example.controllers.Activities.add
+POST	/starpractice/activities						com.sparkydots.play.example.controllers.Activities.save
+GET		/starpractice/activities/:id/edit				com.sparkydots.play.example.controllers.Activities.edit(id: String)
+POST	/starpractice/activities/:id					com.sparkydots.play.example.controllers.Activities.update(id: String)
+POST	/starpractice/activities/:id/delete			    com.sparkydots.play.example.controllers.Activities.delete(id: String)

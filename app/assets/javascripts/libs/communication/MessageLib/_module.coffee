@@ -7,8 +7,8 @@ angular.module 'ModuleMessage'
             @MAXSEENMSG = 20
             @persister = PersistenceManager.localStoreBlockingDictionaryPersister(document.numeric.key.messages)
             init = @persister.init()
-            if init == null
-                @addNewMessage({id: 1, priority: 5, content: 'Pick an activity that you want to practice'})
+#            if init == null
+#                @addNewMessage({id: 1, priority: 5, content: 'Pick an activity to practice'})
         cmp: (s) ->
             (a, b) ->
                 if a[0] > b[0]

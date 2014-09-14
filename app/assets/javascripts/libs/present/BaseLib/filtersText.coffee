@@ -7,6 +7,17 @@ angular.module 'BaseLib'
         else
             input
 
+.filter 'epochToDate', ->
+    (input) ->
+        if input == undefined
+            ''
+        else
+            try
+                r = (new Date(input)).toUTCString().substr(5,11)
+            catch e
+                r = ''
+            r
+
 .filter 'underscore', ->
     (input) ->
         if input == undefined || input == ''

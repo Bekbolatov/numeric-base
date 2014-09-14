@@ -7,7 +7,8 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.multiple_choice'] 
           "description": "Given a list of several items, guess which item doesn't fit in the list with other items.",
           "authorName": "Sparky Dots",
           "authorEmail": "info@sparkydots.com",
-          "authorDate": "8/1/2014"
+          "authorDate": "8/1/2014",
+          version: 2
           },
     // follow pattern:
     parameters: {

@@ -1,22 +1,22 @@
 package com.sparkydots.play.example.controllers
 
-import play.api.libs.ws.WS
-import play.api.Play.current
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import com.sparkydots.play.example.views
-import play.api.Logger
-import play.api.mvc._
 import java.io.File
-import scala.concurrent._
-import play.api.libs.iteratee.Enumerator
 import java.security.MessageDigest
 
+import com.sparkydots.play.example.converters.JsonFormats._
+import com.sparkydots.play.example.models._
+import com.sparkydots.play.example.views
+import play.api.Logger
+import play.api.Play.current
 import play.api.http.HeaderNames._
+import play.api.libs.iteratee.Enumerator
+import play.api.libs.json.Json
+import play.api.libs.ws.WS
+import play.api.mvc._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
 
-
-import play.api.db._
 
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 8/4/14 9:22 PM
@@ -139,34 +139,15 @@ object StarPractice extends Controller {
       try {
         if (validateStringInput(did) && StarLogger.logAndCheck("S","list","", did, request)) {
 
-
-
-
-
-//          val fileContent = getFileContent("public/tasks/remote/server/activity/list")
-//          Result(
-//            header = ResponseHeader(200),
-//            body = fileContent
-//          )
-
-
           var ssi = si
           if (si > 100) {
             ssi = 100
           }
-          var outString = "{ \"messages\": [],  \"content\":    {      \"activities\": { "
 
-          DB.withConnection { conn =>
-            val stmt = conn.createStatement
-            val rs = stmt.executeQuery(s"SELECT * from activity limit ${st},${ssi}")
-            while (rs.next()) {
-              outString += rs.getString("id")  //need to use some libraries db/obj/json...
-            }
-          }
-
-          Ok(outString)
-
-
+          val activities = Activity.page(st, ssi)
+          val messages: List[Message] = List()
+          val activitiesResponse = ActivityListResponse(messages, activities)
+          Ok(Json.toJson(activitiesResponse))
 
 
         } else {

@@ -10,7 +10,6 @@ angular.module('ModulePersistence')
             .then( => @getDirEntry(document.numeric.path.result, {create:true}))
             .then( => @getDirEntry(document.numeric.path.activity, {create:true}))
             .then( => @getDirEntry(document.numeric.path.body, {create:true}))
-            .then( => @getDirEntry(document.numeric.path.persistence, {create:true}))
 
         _errorHandler: (dfd) ->
             (e) ->

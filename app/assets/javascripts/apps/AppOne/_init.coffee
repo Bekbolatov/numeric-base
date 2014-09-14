@@ -1,13 +1,12 @@
 document.numeric =
+    appVersion: 1
+
     modules: {}
     numericTasks: {}
 
     key:
         settings: 'numericSettings'
-        connections: 'numericConnections'
         deviceId: 'numericDeviceId'
-        activitiesMeta: 'numericActivitiesMeta'
-        bookmarkedActivities: 'numericBookmarkedActivities'
         currentActivitySummary: 'numericCurrentActivitySummary'
         storedActivitySummaries: 'numericStoredActivitySummaries'
         messages: 'numericMessages'
@@ -21,33 +20,14 @@ document.numeric =
         touch: 'touch'
         channels: 'channels'
         list: 'activity/list'
-
-        connections: 'connections'
-
         activity: 'activity/'
         body: 'activity/body/'
         result: 'result/'
-        persistence: 'persistence/'
-
-    defaultActivitiesList: [
-        'com.sparkydots.numeric.tasks.t.basic_math'
-        'com.sparkydots.numeric.tasks.ssat.c.q00'
-        'com.sparkydots.numeric.tasks.t.multiple_choice'
-    ]
 
     defaultSettings:
-        appVersion: 1
-        historyPageSize: 10
+        pageSize: 10
         historyServerSync: false
         mainServerAddress: 'https://www.sparkydots.com/starpractice/data/'
-        linkSubmitShow: false
-        linkConnectShow: false
-        linkSettingsShow: false
-
-    defaultTeachersList: [
-        {id: 0, name: 'Mr. Aleman', newItems: 1}
-        {id: 2, name: '鬼塚 英吉', newItems: 3}
-    ]
 
 try
     ((w) ->

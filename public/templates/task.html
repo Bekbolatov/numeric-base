@@ -10,7 +10,7 @@
 
     <h2 class="title">StarPractice</h2>
 
-    <button class="btn btn-link btn-nav pull-right" ng-click="isFlipped=!isFlipped" ng-show="!showFinish && !isFlipped">
+    <button class="btn btn-link btn-nav pull-right" ng-click="toOptions()" ng-show="!showFinish && !isFlipped">
         <span class="icon icon-more-vertical"></span>
     </button>
 
@@ -24,7 +24,7 @@
 
 
 
-<div class="content position-absolute {{ (isFlipped && 'invisible') || 'visible'}}">
+<div id="problemContainer" class="content position-absolute {{ (isFlipped && 'invisible') || 'visible'}}">
 
     <div class="center-inline-child">
 
@@ -176,7 +176,7 @@
 
 
 <!--  OPTIONS:BEGIN -->
-<div class="content content-scrollable {{ (isFlipped && 'visible') || 'invisible'}}">
+<div id="optionsContainer" class="content content-scrollable {{ (isFlipped && 'visible') || 'invisible'}}">
     <div class="content-inner">
         <div ng-show="currentActivity.parameters != undefined">
             <div class="optionBlockJustified">

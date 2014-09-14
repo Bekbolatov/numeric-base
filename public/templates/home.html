@@ -19,19 +19,20 @@
         </p>
 
         <div class="paramName">
-            <a href="#/channelList"><button class="btn btn-positive btn-block navigate-right">Practice</button></a>
+            <a href ng-click="navigateToTagsOrChannel(0, 'Public')"><button class="btn btn-positive btn-block navigate-right">Practice</button></a>
         </div>
 
-        <div class="paramName">
+        <div class="paramName" ng-show="hasHistory">
             <a href="#/history"><button class="btn btn-primary btn-block navigate-right">History</button></a>
         </div>
 
-        <div class="paramName" ng-show="linkConnectShow">
-            <a href="#/connect"><button class="btn btn-primary btn-block navigate-right">Connect</button></a>
+
+        <div ng-show="showMessage">
+            <div class="app-message">
+                <p ng-bind-html="message"></p>
+            </div>
         </div>
 
-        <div class="paramName" ng-show="linkSettingsShow">
-            <a href="#/settings"><button class="btn btn-primary btn-block navigate-right">Settings</button></a>
-        </div>
+
     </div>
 </div>

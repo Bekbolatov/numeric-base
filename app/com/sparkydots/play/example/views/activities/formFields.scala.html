@@ -1,0 +1,13 @@
+@(activityForm: Form[com.sparkydots.play.example.models.Activity])
+
+@import helper._
+@import com.sparkydots.play.example.models.Activity
+
+@inputText(activityForm("id"), 'size -> 50)
+@inputText(activityForm("name"), 'size -> 50)
+@inputText(activityForm("shortDescription"), 'size -> 100)
+@inputText(activityForm("description"), 'size -> 200)
+@inputText(activityForm("authorName"), 'size -> 50)
+@inputText(activityForm("authorEmail"), 'size -> 50)
+@inputText(activityForm("authorDate"))
+@inputText(activityForm("version"), 'size -> 5)

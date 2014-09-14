@@ -12,17 +12,19 @@ angular.module 'ModuleCommunication'
                 @_baseCdv()
             else
                 @_baseChrome()
-
+        version: -> document.numeric.appVersion
         touch: (page, id) -> @get(Settings.get('mainServerAddress') + page, {timeout: 2000}, 10)
 
         get: (url, options, cbtime) ->
             deferred = $q.defer()
             if cbtime == undefined
                 cbtime = 1000
+
             if url.indexOf('?') > -1
                 url = url + DeviceId.qsAndWithCb(cbtime)
             else
                 url = url + DeviceId.qsWithCb(cbtime)
+            url += "&v=" + @version()
 
             if options != undefined
                 if options.cache == undefined
@@ -51,32 +53,37 @@ angular.module 'ModuleCommunication'
             else
                 url = url + DeviceId.qsWithCb(1000)
             deferred = $q.defer()
-            if @_inCordova()
-                fileTransfer = new FileTransfer();
-                fileTransfer.download(
-                    url
-                    @_baseCdvFs(filePath)
-                    (entry) -> deferred.resolve('ok')
-                    (error) -> deferred.reject(error.code)
-                    false
-                    {
-                        headers:
-                            "Authorization": "" + DeviceId.deviceSecretId
-                    })
-            else
-                @get(url)
-                .then (response) =>
-                    try
-                        data = response.data
-                        FS.writeToFile(filePath, data)
-                        .then (response) =>
-                            deferred.resolve('ok')
-                        .catch (e) =>
-                            deferred.reject(e)
-                    catch t
-                        deferred.reject(t)
-                .catch (e) =>
-                    deferred.reject(e)
+
+            FS.tryDeleteFile(filePath)
+            .then (result) -> console.log('deleted previous version')
+            .catch (status) -> console.log('could not delete previous version')
+            .then (result) =>
+                if @_inCordova()
+                    fileTransfer = new FileTransfer();
+                    fileTransfer.download(
+                        url
+                        @_baseCdvFs(filePath)
+                        (entry) -> deferred.resolve('ok')
+                        (error) -> deferred.reject(error.code)
+                        false
+                        {
+                            headers:
+                                "Authorization": "" + DeviceId.deviceSecretId
+                        })
+                else
+                    @get(url)
+                    .then (response) =>
+                        try
+                            data = response.data
+                            FS.writeToFile(filePath, data)
+                            .then (response) =>
+                                deferred.resolve('ok')
+                            .catch (e) =>
+                                deferred.reject(e)
+                        catch t
+                            deferred.reject(t)
+                    .catch (e) =>
+                        deferred.reject(e)
             deferred.promise
         transformUrl: (url) ->
             if url.indexOf('?') > -1

@@ -18,6 +18,10 @@ angular.module('AppOne')
         templateUrl: '/assets/templates/channel.html'
         controller: 'ChannelCtrl'
     })
+    .when('/tags', {
+        templateUrl: '/assets/templates/tags.html'
+        controller: 'TagsCtrl'
+    })
     .when('/task', {
         templateUrl: '/assets/templates/task.html'
         controller: 'TaskCtrl'

@@ -11,4 +11,4 @@ author_email varchar(50) not null,
 author_date date not null,
 version int not null,
 PRIMARY KEY  (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

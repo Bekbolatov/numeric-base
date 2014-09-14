@@ -11,4 +11,10 @@ object JsonFormats {
   implicit val personFormat = Json.format[Person]
   implicit val clientFormat = Json.format[Client]
 
+
+  implicit val activityFormat = Json.format[Activity]
+  implicit val messageFormat = Json.format[Message]
+  implicit val activityListResponseFormat = Json.format[ActivityListResponse]
+
+
 }
