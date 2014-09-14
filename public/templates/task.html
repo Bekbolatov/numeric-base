@@ -1,11 +1,9 @@
 <header class="bar bar-nav">
 
-    <button class="btn btn-outlined btn-primary pull-left" ng-click="finishActivity()" ng-show="!isOnOptions && !isOnReviewLast"> <!-- && hasAnswers()">-->
+    <h2 class="title">StarPractice</h2>
+    <button class="btn btn-primary pull-right" ng-click="finishActivity()" ng-show="!isOnOptions && !isOnReviewLast">
         Finish
     </button>
-
-    <h2 class="title">StarPractice</h2>
-
 </header>
 
 <div class="content" ng-show="currentActivity.name == undefined">
@@ -49,10 +47,10 @@
         <button class="btn btn-link btn-task-menu pull-left" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
             <span class="icon icon-back"></span>
         </button>
-
-        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
+        <button class="btn btn-link btn-task-menu pull-left" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
             <span class="icon icon-more"></span>
         </button>
+
 
     </div>
 
@@ -177,7 +175,7 @@
 <div id="prevQuestionContainer" class="content position-absolute {{ (  (isOnOptions || !isOnReviewLast) && 'invisible') || 'visible'}}">
     <div class="content-inner">
 
-        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question...</button>
+        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question</button>
         <div class="clearfix"></div>
 
 
@@ -188,8 +186,8 @@
             </div>
             -->
 
-            <div>Previous question: <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></div>
-            <div>Your answer:
+            <div><b><span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></b></div>
+            <div><br>Your answer was:
                 <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
                     <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
                     <span ng-show="activityDriver.answeredQuestion.result" class="icon icon-{{activityDriver.answeredQuestion.result && 'check' || 'close' }}"></span>
@@ -209,7 +207,7 @@
 <!--  OPTIONS:BEGIN -->
 <div id="optionsContainer" class="content content-scrollable {{ (  (isOnOptions) && 'visible') || 'invisible'}}">
     <div class="content-inner">
-        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question...</button>
+        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question</button>
         <div class="clearfix"></div>
 
 

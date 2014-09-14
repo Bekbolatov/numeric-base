@@ -27,7 +27,7 @@ class M27
         smallest = 100
         index = -1
         for i, a of answers
-            offset = Math.abs( a[0] / a[1]  - p / f )
+            offset = Math.abs( (a[0] * 1.0 / a[1])  - (p * 1.0 / f ))
             if offset < smallest
                 smallest = offset
                 index = i

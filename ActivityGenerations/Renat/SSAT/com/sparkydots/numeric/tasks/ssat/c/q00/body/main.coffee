@@ -7,7 +7,7 @@ class ProblemSet
         authorName: "Sparky Dots"
         authorEmail: "info@sparkydots.com"
         authorDate: "9/10/2014"
-        version: 1
+        version: 3
     constructor: (@id) ->
         @previousQuestion = 0
         @units =
@@ -80,7 +80,7 @@ class ProblemSet
 
         qq =
             statement: qa[0][0]
-            checkAnswer: (answer) -> answer == qa[1]
+            checkAnswer: (answer) -> ('' + answer) == ('' + qa[1])
             getAnswer: () -> qa[1]
         if qa[0].length > 1
             qq.answerType = 'multiple'

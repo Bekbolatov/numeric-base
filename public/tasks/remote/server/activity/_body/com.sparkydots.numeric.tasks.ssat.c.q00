@@ -1141,7 +1141,7 @@
       index = -1;
       for (i in answers) {
         a = answers[i];
-        offset = Math.abs(a[0] / a[1] - p / f);
+        offset = Math.abs((a[0] * 1.0 / a[1]) - (p * 1.0 / f));
         if (offset < smallest) {
           smallest = offset;
           index = i;
@@ -1314,7 +1314,7 @@
       authorName: "Sparky Dots",
       authorEmail: "info@sparkydots.com",
       authorDate: "9/10/2014",
-      version: 1
+      version: 3
     };
 
     function ProblemSet(id) {
@@ -1403,7 +1403,7 @@
       qq = {
         statement: qa[0][0],
         checkAnswer: function(answer) {
-          return answer === qa[1];
+          return ('' + answer) === ('' + qa[1]);
         },
         getAnswer: function() {
           return qa[1];
