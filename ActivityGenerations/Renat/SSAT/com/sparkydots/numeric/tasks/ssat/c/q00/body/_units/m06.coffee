@@ -28,6 +28,10 @@ class M06
         maxScore = 100
         canvas_height = 250
         canvas_width = 250
+        offset_left = 35
+        offset_right = 5
+        offset_top = 5
+        offset_bottom = 15
 
         [xtick, ytick] = [ canvas_width / 5 , canvas_height / 10 ]
         Ky = canvas_height/maxScore
@@ -37,7 +41,7 @@ class M06
         boxColor = 'G'
         boxPadding = 10
 
-        img = @g.newImageWhiteWithOffset(canvas_width, canvas_height, 35, 5, 5, 15 )
+        img = @g.newImageWhiteWithOffset(canvas_width, canvas_height, offset_left, offset_right, offset_top, offset_bottom )
         for i in [0 .. 10]
             img.drawLine(  -tickBump,i*ytick   ,  canvas_width,i*ytick   , gridColor) # horizontal
         for i in [0 .. 5]
@@ -49,5 +53,6 @@ class M06
             img.placeCharSequenceCentered((i + 0.5)*xtick, -6, '' + names[i].toUpperCase())
 
         imgdata = img.getBase64()
+        imgtag =  @h.graphic(imgdata, canvas_width + offset_left + offset_right, canvas_height + offset_top + offset_bottom)
 
-        [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' + @h.graphic(imgdata) , answers], index]
+        [  ['The graph shows ' + _activity + '. What is the average of ' + names[pickedIndices[0]] + ' and ' + names[pickedIndices[1]] + '\'s ' + _scores + '?' + imgtag , answers], index]

@@ -23,9 +23,14 @@ angular.module 'BaseLib'
             o += '<span class="fraction-top">' + a + '</span>'
             o += '<span class="fraction-bottom">' + b + '</span>'
             o + '</span>'
-        graphic: (imgdata) ->
+        graphic: (imgdata, width, height) ->
+            if width != undefined && height != undefined
+                dim = ' width="' + width + '" height="' + height + '" '
+            else
+                dim = ''
+
             o = '<span class="span-question-graphic">'
-            o += '<img class="img-question-graphic" alt="img" src="' + imgdata + '">'
+            o += '<img class="img-question-graphic" alt="img" src="' + imgdata + '"' + dim + '>'
             o + '</span>'
 
     hyperTextManager = new HyperTextManager()

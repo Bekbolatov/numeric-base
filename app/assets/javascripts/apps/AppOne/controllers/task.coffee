@@ -26,14 +26,17 @@ angular.module('AppOne')
     # activity options
 
     $scope.toOptions = () =>
-        $scope.isFlipped = true
         $scope.optionsChanged = false
         document.getElementById('optionsContainer').scrollTop = 0
+        document.getElementById('problemContainer').scrollTop = 0
+        $scope.isFlipped = true
 
 
     $scope.isFlipped = false
     $scope.optionsChanged = false
     $scope.backToActivity = () =>
+        console.log(document.getElementById('problemContainer').scrollTop)
+        document.getElementById('problemContainer').scrollTop = 0
         if $scope.optionsChanged && $scope.isFlipped
             $scope.isFlipped = false
             $scope.optionsChanged = false
@@ -44,6 +47,8 @@ angular.module('AppOne')
         jump = ActivityDriver.selectParamValue(paramKey, level)
         if jump
             $scope.backToActivity()
+            console.log(document.getElementById('problemContainer').scrollTop)
+
 
 
     ]
