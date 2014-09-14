@@ -1,18 +1,10 @@
 <header class="bar bar-nav">
 
-    <a href="#/channel" class="icon icon-left-nav pull-left" ng-show="!isFlipped && activityDriver.statsCorrect == 0 && activityDriver.statsWrong == 0"></a>
-
-    <button class="btn btn-primary pull-left" ng-click="finishActivity()" ng-show="!isFlipped && (activityDriver.statsCorrect > 0 || activityDriver.statsWrong > 0)">
+    <button class="btn btn-outlined btn-primary pull-left" ng-click="finishActivity()" ng-show="!isOnOptions && !isOnReviewLast"> <!-- && hasAnswers()">-->
         Finish
     </button>
 
-    <a href class="icon icon-left-nav pull-left" ng-click="isFlipped=!isFlipped" ng-show="isFlipped"></a>
-
     <h2 class="title">StarPractice</h2>
-
-    <button class="btn btn-link btn-nav pull-right" ng-click="toOptions()" ng-show="!showFinish && !isFlipped">
-        <span class="icon icon-more-vertical"></span>
-    </button>
 
 </header>
 
@@ -23,24 +15,53 @@
 </div>
 
 
+<!-- StatusBar:START -->
+<div class="bar bar-standard bar-header-secondary center-inline-child font-smaller">
+    <div class="btn btn-link pull-left btn-task-status">
+        <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
+        <span>{{activityDriver.totalTime | secondsToClock}}</span>
+    </div>
 
-<div id="problemContainer" class="content position-absolute {{ (isFlipped && 'invisible') || 'visible'}}">
-
-    <div class="center-inline-child">
-
-        <div class="btn btn-link pull-left">
-            <span class="colorGreen">{{ activityDriver.statsCorrect }}</span>/<span class="colorRed">{{ activityDriver.statsWrong }}</span>/<span>{{ activityDriver.statsCorrect + activityDriver.statsWrong }}</span>
-            <span>{{activityDriver.totalTime | secondsToClock}}</span>
-        </div>
-
-        <span class="btn btn-link center-inline-child">
+        <span class="btn btn-link center-inline-child btn-task-status">
             {{ currentActivity.name | textOrLoading | truncate }}
         </span>
 
-        <div class="btn btn-link pull-right">
-            <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
-        </div>
+    <div class="btn btn-link pull-right btn-task-status">
+        <timer interval="1000">{{mminutes}}:{{sseconds}}</timer>
     </div>
+</div>
+<!-- StatusBar:START -->
+
+
+
+<div id="problemContainer" class="content position-absolute {{ (  (isOnOptions || isOnReviewLast) && 'invisible') || 'visible'}}">
+
+    <!-- Menu:START -->
+
+    <div class="btn-task-menu-holder">
+
+        <button class="btn btn-link btn-task-menu pull-left" ng-click="menuToggleStar()" title="Toggle Star Question">
+            <span class="icon icon-star{{ (menuToggleStar_has() && '-filled') || '' }}"></span>
+        </button>
+        <button class="btn btn-link btn-task-menu pull-left" ng-click="menuAddNote()" title="Add/edit a Note">
+            <span class="icon icon-compose"></span>
+        </button>
+        <button class="btn btn-link btn-task-menu pull-left" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
+            <span class="icon icon-back"></span>
+        </button>
+
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
+            <span class="icon icon-more"></span>
+        </button>
+
+    </div>
+
+    <div class="clearfix"></div>
+    <!-- Menu:END -->
+
+
+
+
 
     <div class="content-inner">
 
@@ -148,13 +169,24 @@
             </table>
         </div>
 
+    </div>
+</div>
 
-        <!-- PREV QUESTION/ANSWER SUMMARY -->
+
+<!-- PREV_QUESTION_SUMMARY:BEGIN -->
+<div id="prevQuestionContainer" class="content position-absolute {{ (  (isOnOptions || !isOnReviewLast) && 'invisible') || 'visible'}}">
+    <div class="content-inner">
+
+        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question...</button>
+        <div class="clearfix"></div>
+
+
         <div ng-show="activityDriver.answeredQuestion.statementAsHTML" class="numeric-completed">
-            <!--  FEEDBACK (last question correct or wrong) -->
+            <!--
             <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
                 {{ activityDriver.result.verbal }}
             </div>
+            -->
 
             <div>Previous question: <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></div>
             <div>Your answer:
@@ -172,12 +204,15 @@
         </div>
     </div>
 </div>
-
-
+<!-- PREV_QUESTION_SUMMARY:END -->
 
 <!--  OPTIONS:BEGIN -->
-<div id="optionsContainer" class="content content-scrollable {{ (isFlipped && 'visible') || 'invisible'}}">
+<div id="optionsContainer" class="content content-scrollable {{ (  (isOnOptions) && 'visible') || 'invisible'}}">
     <div class="content-inner">
+        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question...</button>
+        <div class="clearfix"></div>
+
+
         <div ng-show="currentActivity.parameters != undefined">
             <div class="optionBlockJustified">
                 <p>

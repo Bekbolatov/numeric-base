@@ -7,7 +7,8 @@ document.numeric.numericTasks['com.sparkydots.numeric.tasks.t.basic_math'] =
         "description": "Practice adding, subtracting, multiplying, dividing numbers",
         "authorName": "Sparky Dots",
         "authorEmail": "info@sparkydots.com",
-        "authorDate": "8/1/2014"
+        "authorDate": "8/1/2014",
+        "version": 1
     },
     parameters: {
         p10_operation: {
