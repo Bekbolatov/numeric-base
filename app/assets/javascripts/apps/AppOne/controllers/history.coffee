@@ -55,6 +55,13 @@ angular.module('AppOne')
     $scope.linkSubmitShow = Settings.get('linkSubmitShow')
 
     $scope.backButton = ActivitySummary.current.back
+    $scope.searchAll = (value, index) -> true
+    $scope.searchStarred = (value, index) -> value[5][0]
+    $scope.searchNoted = (value, index) -> (value[5][1] != false)
+    $scope.searchCorrect = (value, index) -> value[3]
+    $scope.searchWrong = (value, index) -> !value[3]
+    $scope.searchModel = $scope.searchAll
+
 
     ActivitySummary.getSummaryById(ActivitySummary.current.id)
     .then (data) ->
@@ -64,7 +71,8 @@ angular.module('AppOne')
             $scope.mismatch = false
             $scope.activityName = data.activityName
             $scope.timestamp = data.endTime
-            $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4] ]  for response in data.responses)
+            # 0: question, 1: answer, 2: correct answer, 3: result, 4: time, 5: [starred, note]
+            $scope.responses = ([ $sce.trustAsHtml('' + response[0]),  $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4], response[5] ]  for response in data.responses)
 
             $scope.correct = data.runningTotals.correct
             $scope.wrong = data.runningTotals.wrong

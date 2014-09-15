@@ -13,6 +13,7 @@ angular.module('AppOne')
 
     $scope.isOnOptions = false
     $scope.isOnReviewLast = false
+    $scope.isOnNote = false
     $scope.optionsChanged = false
 
     $scope.hasAnswers = () -> ActivityDriver.statsCorrect > 0 || ActivityDriver.statsWrong > 0
@@ -30,12 +31,17 @@ angular.module('AppOne')
             $location.path('/channel')
 
     # Navigation
-    $scope.toPrevQuestion = () =>
+    $scope.toPrevQuestion = (toSave) =>
         document.getElementById('problemContainer').scrollTop = 0
         document.getElementById('optionsContainer').scrollTop = 0
         document.getElementById('prevQuestionContainer').scrollTop = 0
         $scope.isOnReviewLast = true
         $scope.isOnOptions = false
+        $scope.isOnNote = false
+        if toSave != undefined && toSave.note && $scope.noteToAdd != undefined
+            val = $scope.noteToAdd.trim()
+            if val.length > 0
+                ActivityDriver.addNotePrev(val)
     $scope.toOptions = () =>
         document.getElementById('problemContainer').scrollTop = 0
         document.getElementById('optionsContainer').scrollTop = 0
@@ -43,7 +49,29 @@ angular.module('AppOne')
         $scope.optionsChanged = false
         $scope.isOnReviewLast = false
         $scope.isOnOptions = true
-    $scope.backToActivity = () =>
+        $scope.isOnNote = false
+    $scope.toAddNote = (options) =>
+        document.getElementById('problemContainer').scrollTop = 0
+        document.getElementById('optionsContainer').scrollTop = 0
+        document.getElementById('prevQuestionContainer').scrollTop = 0
+        $scope.optionsChanged = false
+        $scope.isOnReviewLast = false
+        $scope.isOnOptions = false
+        $scope.isOnNote = true
+        if options != undefined && options.prev
+            prevNote = ActivityDriver.addedNotePrev()
+            if prevNote != false
+                $scope.noteToAdd = prevNote
+            else
+                $scope.noteToAdd = ''
+            $scope.noteToAddDestinationCurrent = false
+        else
+            if ActivityDriver.addedNote != false
+                $scope.noteToAdd = ActivityDriver.addedNote
+            else
+                $scope.noteToAdd = ''
+            $scope.noteToAddDestinationCurrent = true
+    $scope.backToActivity = (toSave) =>
         document.getElementById('problemContainer').scrollTop = 0
         document.getElementById('optionsContainer').scrollTop = 0
         document.getElementById('prevQuestionContainer').scrollTop = 0
@@ -52,6 +80,11 @@ angular.module('AppOne')
             ActivityDriver.newQuestion(true)
         $scope.isOnOptions = false
         $scope.isOnReviewLast = false
+        $scope.isOnNote = false
+        if toSave != undefined && toSave.note && $scope.noteToAdd != undefined
+            val = $scope.noteToAdd.trim()
+            if val.length > 0
+                ActivityDriver.addNote(val)
     $scope.selectParamValue = (paramKey, level) =>
         $scope.optionsChanged = true
         jump = ActivityDriver.selectParamValue(paramKey, level)
@@ -62,10 +95,18 @@ angular.module('AppOne')
 
     $scope.menuShowOptions = () -> $scope.toOptions()
     $scope.menuShowOptions_has = () -> ActivityDriver.currentActivity.parameters != undefined
-    $scope.menuAddNote = () -> 1
-    $scope.menuAddNote_has = () -> false
-    $scope.menuToggleStar = () -> $scope.testStar = ! $scope.testStar
-    $scope.menuToggleStar_has = () -> $scope.testStar
+    $scope.menuToggleStar = () -> ActivityDriver.toggleStar()
+    $scope.menuToggleStar_has = () -> ActivityDriver.toggledStar
+    $scope.menuToggleStarPrev = () ->
+        if $scope.hasAnswers() && !ActivityDriver.finishing
+            ActivityDriver.toggleStarPrev()
+        else
+            false
+    $scope.menuToggleStarPrev_has = () ->
+        if $scope.hasAnswers() && !ActivityDriver.finishing
+            ActivityDriver.toggledStarPrev()
+        else
+            false
 
 
     ActivityDriver.start($scope)

@@ -102,6 +102,7 @@ angular.module('AppOne')
             @currentActivity
 
         start: (@scope) ->
+            @finishing = false
             @clearResult()
             @resetStats()
             @_clearLastQuestion()
@@ -110,6 +111,7 @@ angular.module('AppOne')
             ActivitySummary.init(@currentTask.id, @currentTask.meta.name)
 
         tryFinishActivity: ->
+            @finishing = true
             deferred = $q.defer()
             ActivitySummary.finish()
             .then (timestamp) -> deferred.resolve(timestamp)
@@ -125,6 +127,27 @@ angular.module('AppOne')
             else
                 false
 
+        # begin: add note, toggle star
+        clearNotesBuffer: () ->
+            @toggledStar = false
+            @addedNote = false
+
+        toggleStar: () ->
+            @toggledStar = !@toggledStar
+        addNote: (note) ->
+            if note == undefined || note.length < 1
+                return 1
+            @addedNote = note.substr(0, 300)
+
+        toggleStarPrev: () -> ActivitySummary.togglePrevStar()
+        toggledStarPrev: () -> ActivitySummary.getPrevStar()
+        addedNotePrev: () -> ActivitySummary.getPrevNote()
+        addNotePrev: (note) ->
+            if note == undefined || note.length < 1
+                return 1
+            ActivitySummary.setPrevNote(note.substr(0, 300))
+        # end: add note, toggle star
+
         newQuestion: (keepClock) -> # arg true - keep clock (do not reset for this question)
             @totalTime = Math.round( (new Date() - @startTime) / 1000 )
             @answer = undefined
@@ -135,7 +158,7 @@ angular.module('AppOne')
                 return
             @questionStatementAsHTML = @question.questionStatementAsHTML
             document.getElementById('problemContainer').scrollTop = 0
-
+            @clearNotesBuffer()
             if !keepClock
                 @scope.$broadcast('timer-start')
 
@@ -155,6 +178,9 @@ angular.module('AppOne')
             else
                 @_markWrongResult()
                 @answeredQuestion.result = false
+
+            @answeredQuestion.addedNote = @addedNote
+            @answeredQuestion.toggledStar = @toggledStar
 
             ActivitySummary.add(@answeredQuestion)
 #            $timeout( \

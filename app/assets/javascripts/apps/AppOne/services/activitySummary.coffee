@@ -88,10 +88,8 @@ angular.module('AppOne')
             else
                 buffer.runningTotals.wrong = buffer.runningTotals.wrong + 1
 
-            if answeredQuestion.questionHasGraphicData
-                buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, [answeredQuestion.questionGraphicData] ])
-            else
-                buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, []])
+            buffer.responses.push([answeredQuestion.statement, answeredQuestion.answer, answeredQuestion.actualAnswer, answeredQuestion.result, (new Date()) - @lastTimePoint, [answeredQuestion.toggledStar, answeredQuestion.addedNote] ])
+
             @currentActivityPersister.save(buffer)
             @lastTimePoint = (new Date()).getTime()
         finish: =>
@@ -117,6 +115,23 @@ angular.module('AppOne')
                 deferred.resolve(buffer.endTime)
             .catch (status) -> deferred.reject(status)
             deferred.promise
+
+        getPrevStar : () ->
+            buffer  = @currentActivityPersister.read().responses.slice(-1)[0][5][0]
+        togglePrevStar : () ->
+            buffer = @currentActivityPersister.read()
+            last = buffer.responses.pop()
+            last[5][0] = !last[5][0]
+            buffer.responses.push(last)
+            @currentActivityPersister.save(buffer)
+        getPrevNote : () -> @currentActivityPersister.read().responses.slice(-1)[0][5][1]
+        setPrevNote : (note) ->
+            buffer = @currentActivityPersister.read()
+            last = buffer.responses.pop()
+            last[5][1] = note
+            buffer.responses.push(last)
+            @currentActivityPersister.save(buffer)
+
 
     new ActivitySummary()
 ])

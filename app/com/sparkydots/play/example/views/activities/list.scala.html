@@ -13,10 +13,14 @@
 <ul class="table-view table-view-list">
     @for(activity <- activities) {
     <li class="table-view-cell">
-        <a class="navigate-right color-practice" href="@com.sparkydots.play.example.controllers.routes.Activities.edit(activity.id)">
-            [@activity.id] @activity.name (@activity.shortDescription, @activity.authorDate)
+        @helper.form(com.sparkydots.play.example.controllers.routes.Activities.delete(activity.id)){<button type="submit" class="btn btn-link icon icon-close"></button>}
+        <a class="navigate-right color-practice div-inline" href="@com.sparkydots.play.example.controllers.routes.Activities.edit(activity.id)">
+            [@activity.id:@activity.version]<br>
+            @activity.name<br>
+            @activity.shortDescription<br>
+            @activity.authorDate<br>
         </a>
-        @helper.form(com.sparkydots.play.example.controllers.routes.Activities.delete(activity.id)){<button type="submit">Delete</button>}</li>
+    </li>
     }
 </ul>
 }
