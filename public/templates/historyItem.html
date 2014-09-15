@@ -50,8 +50,8 @@
                 <div ng-repeat="response in responses | filter : searchModel : strict" >
                     <br>
                     <div class="history-item-list history-item-list-{{ (response[3] && 'correct') || 'wrong'}}">
-                        <div ng-show="response[5][0]"><span class="icon icon-star-filled"></span></div>
-                        <div ng-show="response[5][1] != false"><b>Note: <span>{{ response[5][1] }}</span></b></div>
+                        <div ng-show="response[5] != undefined && response[5][0]"><span class="icon icon-star-filled"></span></div>
+                        <div ng-show="response[5] != undefined && response[5][1] != false"><b>Note: <span>{{ response[5][1] }}</span></b></div>
                         Question: <span ng-bind-html="response[0]"></span>
 
                         <br>Answer: <span ng-bind-html="response[1]"></span> ({{ response[3] && 'Correct' || 'Incorrect' }})

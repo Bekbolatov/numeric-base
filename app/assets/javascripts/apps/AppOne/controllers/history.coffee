@@ -56,8 +56,8 @@ angular.module('AppOne')
 
     $scope.backButton = ActivitySummary.current.back
     $scope.searchAll = (value, index) -> true
-    $scope.searchStarred = (value, index) -> value[5][0]
-    $scope.searchNoted = (value, index) -> (value[5][1] != false)
+    $scope.searchStarred = (value, index) -> value[5] != undefined && value[5][0]
+    $scope.searchNoted = (value, index) -> (value[5] != undefined && value[5][1] != false)
     $scope.searchCorrect = (value, index) -> value[3]
     $scope.searchWrong = (value, index) -> !value[3]
     $scope.searchModel = $scope.searchAll

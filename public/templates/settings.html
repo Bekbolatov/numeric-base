@@ -9,18 +9,21 @@
 
 
         <hr>
-        <h4>History</h4>
-        <p>
-            <b>Sync with server:</b>&nbsp;
-            <button class="btn {{ true == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', true)">yes</button>
-            <button class="btn {{ false == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', false)">no</button>
-        </p>
+        <h4>Listings</h4>
         <p>
             <b>Page size:</b>&nbsp;
             <button class="btn {{ 2 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 2)">2</button>
             <button class="btn {{ 10 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 10)">10</button>
             <button class="btn {{ 20 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 20)">20</button>
             <button class="btn {{ 30 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 30)">30</button>
+        </p>
+
+        <hr>
+        <h4>History</h4>
+        <p>
+            <b>Sync with server:</b>&nbsp;
+            <button class="btn {{ true == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', true)">yes</button>
+            <button class="btn {{ false == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', false)">no</button>
         </p>
 
         <hr>
@@ -37,7 +40,7 @@
 
         <p>
             <div>
-                <a href="#/test">Test Page</a>
+                <a href="#/test" style="color: white;">t</a>
             </div>
         </p>
 

@@ -10,6 +10,7 @@ document.numeric =
         currentActivitySummary: 'numericCurrentActivitySummary'
         storedActivitySummaries: 'numericStoredActivitySummaries'
         messages: 'numericMessages'
+        channelActivities: 'numericChannelActivitiesCache'
     url:
         base:
             fs: 'numericdata/'

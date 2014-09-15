@@ -227,7 +227,7 @@
 <!--  OPTIONS:BEGIN -->
 <div id="optionsContainer" class="content content-scrollable {{ ( isOnOptions && 'visible') || 'invisible'}}">
     <div class="content-inner">
-        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question</button>
+        <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to current question</button>
         <div class="clearfix"></div>
 
 
@@ -261,10 +261,9 @@
 <!--  NOTE:BEGIN -->
 <div id="noteContainer" class="content content-scrollable {{ ( isOnNote && 'visible') || 'invisible'}}">
     <div class="content-inner">
-        <button class="btn btn-primary pull-left" ng-click=" (noteToAddDestinationCurrent && backToActivity({note: true})) || toPrevQuestion({note: true})">&lt; back</button>
         <div class="clearfix"></div>
-        <textarea ng-model="noteToAdd"></textarea>
-
+        <textarea ng-model="noteToAdd" rows="5"></textarea>
+        <button ng-click=" (noteToAddDestinationCurrent && backToActivity({note: true})) || toPrevQuestion({note: true})" class="btn btn-block btn-primary">Save</button>
     </div>
 </div>
 <!--  NOTE:END -->

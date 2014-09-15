@@ -41,7 +41,7 @@
                             </div>
                         </li>
 
-                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == meta.id }" ng-repeat="meta in availableActivities">
+                        <li class="table-view-cell media activityMarketplace" ng-class="{lightGreen : $parent.detailsId == meta.id }" ng-repeat="meta in availableActivities.activities">
                             <div class="media-body" ng-click="toggleDetailsId(meta.id)">
                                 {{ meta.name }}
                                 <p>

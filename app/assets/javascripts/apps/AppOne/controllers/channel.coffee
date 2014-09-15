@@ -17,19 +17,28 @@ angular.module('AppOne')
 
     getActivities = (searchTerm)->
         $scope.loadingList = true
+        $scope.errorStatus = false
+        $scope.availableActivities = Channels.getChannelActivitiesFromCache($scope.startIndex, $scope.pageSize, searchTerm)
+        if $scope.availableActivities.activities != undefined
+            $scope.endIndex = $scope.startIndex + $scope.availableActivities.activities.length
+            $scope.littleHistory = ( $scope.availableActivities.activities.length < Settings.get('pageSize') && $scope.startIndex == 0 )
+        else
+            $scope.endIndex = 0
+            $scope.littleHistory = true
         Channels
         .getChannelActivities($scope.startIndex, $scope.pageSize, searchTerm)
         .then (response) =>
             $scope.errorStatus = undefined
-            $scope.availableActivities = response.data.activities
+            $scope.availableActivities.activities = response.data.activities
 #            if $scope.availableActivities.length < 1 && $scope.startIndex >= Settings.get('pageSize')
 #                $scope.startIndex = $scope.startIndex - Settings.get('pageSize')
 #                return getActivities()
-            $scope.endIndex = $scope.startIndex + $scope.availableActivities.length
-            $scope.littleHistory = ( $scope.availableActivities.length < Settings.get('pageSize') && $scope.startIndex == 0 )
+            $scope.endIndex = $scope.startIndex + $scope.availableActivities.activities.length
+            $scope.littleHistory = ( $scope.availableActivities.activities.length < Settings.get('pageSize') && $scope.startIndex == 0 )
         .catch (status) ->
             console.log('Could not get list of activity metas from server, status: ' + status)
-            $scope.errorStatus = status
+            if $scope.availableActivities.activities == undefined || $scope.availableActivities.activities.length < 1
+                $scope.errorStatus = status
         .then -> $scope.loadingList = false
     $scope.tryGettingAgain = () -> getActivities($scope.searchTerm)
     $scope.searchPublic = () ->
