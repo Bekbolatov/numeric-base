@@ -261,6 +261,9 @@
 <!--  NOTE:BEGIN -->
 <div id="noteContainer" class="content content-scrollable {{ ( isOnNote && 'visible') || 'invisible'}}">
     <div class="content-inner">
+        <div class="optionBlock">
+            Add/edit a note for the question.
+        </div>
         <div class="clearfix"></div>
         <textarea ng-model="noteToAdd" rows="5"></textarea>
         <button ng-click=" (noteToAddDestinationCurrent && backToActivity({note: true})) || toPrevQuestion({note: true})" class="btn btn-block btn-primary">Save</button>
