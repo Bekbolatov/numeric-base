@@ -42,6 +42,9 @@ angular.module('AppOne')
             val = $scope.noteToAdd.trim()
             if val.length > 0
                 ActivityDriver.addNotePrev(val)
+            else
+                ActivityDriver.addNotePrev(false)
+        true
     $scope.toOptions = () =>
         document.getElementById('problemContainer').scrollTop = 0
         document.getElementById('optionsContainer').scrollTop = 0
@@ -81,10 +84,13 @@ angular.module('AppOne')
         $scope.isOnOptions = false
         $scope.isOnReviewLast = false
         $scope.isOnNote = false
-        if toSave != undefined && toSave.note && $scope.noteToAdd != undefined
-            val = $scope.noteToAdd.trim()
-            if val.length > 0
+        if toSave != undefined && toSave.note
+            if $scope.noteToAdd != undefined && (val = $scope.noteToAdd.trim() ).length > 0
                 ActivityDriver.addNote(val)
+            else
+                ActivityDriver.addNote(false)
+        true
+
     $scope.selectParamValue = (paramKey, level) =>
         $scope.optionsChanged = true
         jump = ActivityDriver.selectParamValue(paramKey, level)

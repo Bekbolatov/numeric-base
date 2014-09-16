@@ -135,6 +135,8 @@ angular.module('AppOne')
         toggleStar: () ->
             @toggledStar = !@toggledStar
         addNote: (note) ->
+            if note == false
+                return @addedNote = false
             if note == undefined || note.length < 1
                 return 1
             @addedNote = note.substr(0, 300)
@@ -143,6 +145,8 @@ angular.module('AppOne')
         toggledStarPrev: () -> ActivitySummary.getPrevStar()
         addedNotePrev: () -> ActivitySummary.getPrevNote()
         addNotePrev: (note) ->
+            if note == false
+                return ActivitySummary.setPrevNote(false)
             if note == undefined || note.length < 1
                 return 1
             ActivitySummary.setPrevNote(note.substr(0, 300))
