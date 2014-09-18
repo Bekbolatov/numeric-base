@@ -16,13 +16,17 @@
 
 
 
-        <div style="position: absolute; left: 5px; top: 3px; font-size: 14px;color: #777;"><i>(this presentation works only in Chrome)</i></div>
 
+        <div class="phone-frame">
+            <img src='@routes.Assets.at("images/phone-frame.png")' height="760">
+        </div>
         <div class="app-frame">
             <div ng-include="'/assets/templates/base.html'"></div>
         </div>
 
         <div id="releaseNotes">
+            <div><i>(this presentation works only in Chrome)</i></div>
+
             <h5>Release notes: StarPractice Alpha 0.2</h5>
             <p>Redesign of user interaction flow: now one can start activities immediately, without the need for two separate steps (install and run), reducing time between user load and first activity run.</p>
             <p>Ability to star and add notes to individual questions, both currently viewed and last.</p>

@@ -1,7 +1,7 @@
 <header class="bar bar-nav">
 
     <h2 class="title">StarPractice</h2>
-    <button class="btn btn-primary pull-right" ng-click="finishActivity()" ng-show="!(isOnOptions || isOnReviewLast || isOnNote)">
+    <button class="btn btn-primary pull-right" ng-click="finishActivity()" ng-show="!(state.isOnOptions || state.isOnReviewLast || state.isOnNote)">
         Finish
     </button>
 </header>
@@ -32,23 +32,23 @@
 
 
 
-<div id="problemContainer" class="content position-absolute {{ (  (isOnOptions || isOnReviewLast || isOnNote) && 'invisible') || 'visible'}}">
+<div id="problemContainer" class="content position-absolute {{ (  (state.isOnOptions || state.isOnReviewLast || state.isOnNote) && 'invisible') || 'visible'}}">
 
     <!-- Menu:START -->
 
     <div class="btn-task-menu-holder">
 
-        <button class="btn btn-link btn-task-menu pull-left" ng-click="menuToggleStar()" title="Toggle Star Question">
-            <span class="icon icon-star{{ (menuToggleStar_has() && '-filled') || '' }}"></span>
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
+            <span class="icon icon-more"></span>
         </button>
-        <button class="btn btn-link btn-task-menu pull-left" ng-click="toAddNote()" title="Add/edit a Note">
-            <span class="icon icon-compose"></span>
-        </button>
-        <button class="btn btn-link btn-task-menu pull-left" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
             <span class="icon icon-back"></span>
         </button>
-        <button class="btn btn-link btn-task-menu pull-left" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
-            <span class="icon icon-more"></span>
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="toAddNote()" title="Add/edit a Note">
+            <span class="icon icon-compose"></span>
+        </button>
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuToggleStar()" title="Toggle Star Question">
+            <span class="icon icon-star{{ (menuToggleStar_has() && '-filled') || '' }}"></span>
         </button>
 
 
@@ -172,7 +172,7 @@
 
 
 <!-- PREV_QUESTION_SUMMARY:BEGIN -->
-<div id="prevQuestionContainer" class="content position-absolute {{ ( isOnReviewLast && 'visible') || 'invisible'}}">
+<div id="prevQuestionContainer" class="content position-absolute {{ ( state.isOnReviewLast && 'visible') || 'invisible'}}">
     <div class="content-inner">
 
         <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question</button>
@@ -206,7 +206,12 @@
             </div>
             -->
 
-            <div><b><span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span></b></div>
+            <div>
+                <b>
+                    Previous Question:<br>
+                    <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span>
+                </b>
+            </div>
             <div><br>Your answer was:
                 <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
                     <span ng-bind-html="activityDriver.answeredQuestion.answerAsHTML"></span>
@@ -225,7 +230,7 @@
 <!-- PREV_QUESTION_SUMMARY:END -->
 
 <!--  OPTIONS:BEGIN -->
-<div id="optionsContainer" class="content content-scrollable {{ ( isOnOptions && 'visible') || 'invisible'}}">
+<div id="optionsContainer" class="content content-scrollable {{ ( state.isOnOptions && 'visible') || 'invisible'}}">
     <div class="content-inner">
         <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to current question</button>
         <div class="clearfix"></div>
@@ -259,14 +264,33 @@
 
 
 <!--  NOTE:BEGIN -->
-<div id="noteContainer" class="content content-scrollable {{ ( isOnNote && 'visible') || 'invisible'}}">
+<div id="noteContainer" class="content content-scrollable {{ ( state.isOnNote && 'visible') || 'invisible'}}">
     <div class="content-inner">
         <div class="optionBlock">
-            Add/edit a note for the question.
+            Add/edit a note for the question. It will be stored in the summary of this activity.
         </div>
         <div class="clearfix"></div>
         <textarea ng-model="noteToAdd" rows="5"></textarea>
-        <button ng-click=" (noteToAddDestinationCurrent && backToActivity({note: true})) || toPrevQuestion({note: true})" class="btn btn-block btn-primary">Save</button>
+        <button ng-click=" (state.noteToAddDestinationCurrent && backToActivity({note: true})) || toPrevQuestion({note: true})" class="btn btn-block btn-primary">
+            {{ noteHasChanged() && 'Save' || 'Back' }}
+        </button>
     </div>
 </div>
 <!--  NOTE:END -->
+
+<!--  EXIT:BEGIN -->
+<div id="exitContainer" class="content content-scrollable {{ ( state.isOnExit && 'visible') || 'invisible'}}">
+    <div class="content-inner">
+        <div class="optionBlock">
+            Are you sure you want to exit this activity?
+        </div>
+        <div class="clearfix"></div>
+        <button ng-click="backToActivity()" class="btn btn-block btn-positive">
+            Stay on this activity
+        </button>
+        <button ng-click="finishActivity()" class="btn btn-block btn-negative">
+            Exit activity
+        </button>
+    </div>
+</div>
+<!--  EXIT:END -->

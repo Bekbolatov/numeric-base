@@ -75,17 +75,16 @@ angular.module('AppOne')
 ])
 
 
-.run(['$route', '$location', 'ActivityDriver', ($route, $location, ActivityDriver ) ->
+.run(['$route', '$location', 'TaskCtrlState', ($route, $location, TaskCtrlState ) ->
   $route.reload()
   document.addEventListener(
     "backbutton"
     =>
         currentPath = $location.path()
         if typeof currentPath != 'undefined' && currentPath.substr(0,5) == "/task"
-            return
+            return TaskCtrlState.backButton()
         if typeof currentPath != 'undefined' && currentPath.substr(0,12) == "/historyItem"
             $location.path('/history')
-            return
         $location.path('/')
         $route.reload()
     false
