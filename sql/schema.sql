@@ -12,3 +12,18 @@ author_date date not null,
 version int not null,
 PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+drop table if exists activity_list;
+create table activity_list (
+id int not null,
+name varchar(50) not null,
+PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists activity_list_activity;
+create table activity_list_activity (
+activity_list_id int not null,
+activity_id varchar(50) not null,
+PRIMARY KEY (activity_list_id, activity_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

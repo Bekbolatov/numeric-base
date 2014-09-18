@@ -1,7 +1,7 @@
 angular.module('AppOne')
 
 # Task Controller
-.controller 'TaskCtrl', ['$scope', '$location', 'Settings', 'Tracker', 'ActivityDriver', 'ActivitySummary', 'StarPracticeApi', ($scope, $location, Settings, Tracker, ActivityDriver, ActivitySummary, StarPracticeApi ) ->
+.controller 'TaskCtrl', ['$scope', '$rootScope', '$location', 'Settings', 'Tracker', 'ActivityDriver', 'ActivitySummary', 'StarPracticeApi', ($scope, $rootScope, $location, Settings, Tracker, ActivityDriver, ActivitySummary, StarPracticeApi ) ->
     if !Settings.ready
         return $location.path('/')
     else
@@ -29,6 +29,8 @@ angular.module('AppOne')
                 $location.path('/channel')
         else
             $location.path('/channel')
+
+    $rootScope.$on('end-of-test', $scope.finishActivity)
 
     # Navigation
     $scope.toPrevQuestion = (toSave) =>

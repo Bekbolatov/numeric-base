@@ -1,8 +1,0 @@
-{
-"name": "Odd One Out",
-"shortDescription": "Guess which item doesn't fit in the list with other items.",
-"description": "Given a list of several items, guess which item doesn't fit in the list with other items.",
-"authorName": "Sparky Dots",
-"authorEmail": "info@sparkydots.com",
-"authorDate": "8/1/2014"
-}

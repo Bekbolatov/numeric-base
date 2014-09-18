@@ -1,7 +1,7 @@
 document.numeric.url.base.chrome = 'filesystem:http://localhost:9000/temporary/';
 
-describe("Unit: ActivityBody", function() {
-  var activityBody, $rootScope, $httpBackend, $q;
+describe("Unit: ActivityLoader", function() {
+  var activityLoader, $rootScope, $httpBackend, $q;
   var serverAddress = "https://www.sparkydots.com/public/data/";
 
   beforeEach(module('AppOne'));
@@ -26,35 +26,35 @@ describe("Unit: ActivityBody", function() {
     $provide.value('FS', FS);
   }));
 
-  beforeEach(inject(function (_$q_, _$rootScope_, _$httpBackend_, ActivityBody) {
+  beforeEach(inject(function (_$q_, _$rootScope_, _$httpBackend_, ActivityLoader) {
       $q = _$q_;
       $httpBackend = _$httpBackend_;
       $rootScope = _$rootScope_;
 
-      activityBody = ActivityBody;
+      activityLoader = ActivityLoader;
     }));
 
   it("should properly convert path to body: _pathToBody(id) -> 'activity/body/id' ", function() {
-    var path = activityBody._pathToBody('id')
+    var path = activityLoader._pathToBody('id')
     expect(path).toEqual("activity/body/id");
   });
 
   it("should properly create uri for cache when not in Cordova: _uriCache(id) -> 'filesystem:http://localhost:9000/temporary/numericdata/activity/body/id?cb=...' ", function() {
-    activityBody._inCordova = function() { return false; }
-    var uriCache = activityBody._uriCache('id')
+    activityLoader._inCordova = function() { return false; }
+    var uriCache = activityLoader._uriCache('id')
     var cbi = uriCache.indexOf("cb=");
     expect(uriCache.substr(0, cbi)).toEqual("filesystem:http://localhost:9000/temporary/numericdata/activity/body/id?");
   });
 
   it("should properly create uri for cache when in Cordova: _uriCache(id) -> 'cdvfile://localhost/persistent/numericdata/activity/body/id?cb=...' ", function() {
-    activityBody._inCordova = function() { return true; }
-    var uriCache = activityBody._uriCache('id')
+    activityLoader._inCordova = function() { return true; }
+    var uriCache = activityLoader._uriCache('id')
     var cbi = uriCache.indexOf("cb=");
     expect(uriCache.substr(0, cbi)).toEqual("cdvfile://localhost/persistent/numericdata/activity/body/id?");
   });
 
   it("should properly create uri for remote: _uriRemote(id) -> 'http://SERVER/ROOT/activity/body/id' ", function() {
-    var uriRemote = activityBody._uriRemote('id')
+    var uriRemote = activityLoader._uriRemote('id')
     expect(uriRemote).toEqual(serverAddress + "activity/body/id");
   });
 
@@ -62,7 +62,7 @@ describe("Unit: ActivityBody", function() {
 
   it("should reject at _loadScriptFromCache if _createScriptTagAndLoad rejects ", function(done) {
 
-    activityBody._createScriptTagAndLoad = function (uri, activityId) {
+    activityLoader._createScriptTagAndLoad = function (uri, activityId) {
         var deferred = $q.defer();
         deferred.reject(1);
         return deferred.promise;
@@ -73,7 +73,7 @@ describe("Unit: ActivityBody", function() {
     $httpBackend.whenGET('activity/body/id').respond( {} );
 
     var message = 'as';
-     activityBody._loadScriptFromCache('id')
+     activityLoader._loadScriptFromCache('id')
 
     .then( function (activity){
             expect(activity).not.toBeDefined();

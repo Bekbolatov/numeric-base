@@ -34,3 +34,6 @@ POST	/starpractice/activities						com.sparkydots.play.example.controllers.Activ
 GET		/starpractice/activities/:id/edit				com.sparkydots.play.example.controllers.Activities.edit(id: String)
 POST	/starpractice/activities/:id					com.sparkydots.play.example.controllers.Activities.update(id: String)
 POST	/starpractice/activities/:id/delete			    com.sparkydots.play.example.controllers.Activities.delete(id: String)
+
+POST	/starpractice/activities/:id/channel/:chid/add      com.sparkydots.play.example.controllers.Activities.addToChannel(id: String, chid: Int)
+POST	/starpractice/activities/:id/channel/:chid/remove   com.sparkydots.play.example.controllers.Activities.removeFromChannel(id: String, chid: Int)

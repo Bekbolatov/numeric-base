@@ -120,7 +120,7 @@ object StarPractice extends Controller {
     Action { request =>
       try {
         if (validateStringInput(id) && validateStringInput(did) && StarLogger.logAndCheck("S", "body", id, did, request)) {
-          val fileContent = getFileContent("public/tasks/remote/server/activity/body/" + id)
+          val fileContent = getFileContent("/var/lib/starpractice/activity/body/" + id)
           Result(
             header = ResponseHeader(200),
             body = fileContent
@@ -144,7 +144,7 @@ object StarPractice extends Controller {
             ssi = 100
           }
 
-          val activities = Activity.page(st, ssi)
+          val activities = Activity.pageOfChannel(chid, st, ssi)
           val messages: List[Message] = List()
           val activitiesResponse = ActivityListResponse(messages, activities)
           Ok(Json.toJson(activitiesResponse))

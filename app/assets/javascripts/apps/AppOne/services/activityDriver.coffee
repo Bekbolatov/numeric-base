@@ -155,7 +155,20 @@ angular.module('AppOne')
         newQuestion: (keepClock) -> # arg true - keep clock (do not reset for this question)
             @totalTime = Math.round( (new Date() - @startTime) / 1000 )
             @answer = undefined
-            @question = @currentActivity.newQuestion()
+            try
+                @question = @currentActivity.newQuestion()
+            catch e
+                console.log(e)
+                try
+                    @question = @currentActivity.newQuestion()
+                catch e
+                    console.log(e)
+                    try
+                        @question = @currentActivity.newQuestion()
+                    catch e
+                        console.log(e)
+                        alert('activity exited')
+                        @question = undefined
             if @question == undefined
                 @scope.$broadcast('end-of-test')
                 @scope.$broadcast('timer-stop')

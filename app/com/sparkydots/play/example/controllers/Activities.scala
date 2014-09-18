@@ -44,7 +44,7 @@ object Activities extends Controller {
   }
 
   def list = Action { implicit request =>
-    Ok(views.html.activities.list(Activity.list))
+    Ok(views.html.activities.list(Activity.list, Activity.listForChannel(0)))
   }
 
   def edit(id: String) = Action {
@@ -69,4 +69,16 @@ object Activities extends Controller {
     Activity.delete(id)
     Redirect(routes.Activities.list).flashing("success" -> "Activity successfully deleted!")
   }
+
+
+  def addToChannel(id: String, chid: Int) = Action {
+    Activity.addToChannel(id, chid)
+    Redirect(routes.Activities.list).flashing("success" -> s"Activity ${id} successfully added to channel ${chid}!")
+  }
+
+  def removeFromChannel(id: String, chid: Int) = Action {
+    Activity.removeFromChannel(id, chid)
+    Redirect(routes.Activities.list).flashing("success" -> s"Activity ${id} successfully removed from channel ${chid}!")
+  }
+
 }
