@@ -85,7 +85,8 @@ angular.module('AppOne')
             return TaskCtrlState.backButton()
         if typeof currentPath != 'undefined' && currentPath.substr(0,12) == "/historyItem"
             $location.path('/history')
-        $location.path('/')
+        else
+            $location.path('/')
         $route.reload()
     false
     )
