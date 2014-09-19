@@ -1,0 +1,29 @@
+# Main SparkyDots website
+GET     /                com.sparkydots.website.controllers.SparkyDots.index
+
+# Assets used everywhere
+GET     /assets/*file       controllers.Assets.at(path="/public", file)
+
+# StarPractice: Web, Main Window
+GET     /starpractice/web                  com.sparkydots.starpractice.controllers.StarPractice.index
+
+# StarPractice: app work calls
+GET     /starpractice/data/channels  com.sparkydots.starpractice.controllers.StarPractice.channelList()
+GET     /starpractice/data/activity/list  com.sparkydots.starpractice.controllers.StarPractice.activityList(chid:Int, st: Int, si: Int)
+GET     /starpractice/data/activity/body/:id  com.sparkydots.starpractice.controllers.StarPractice.activityBody(id: String)
+
+# StarPractice: app touch calls
+GET     /starpractice/data/touch/:page/:id  com.sparkydots.starpractice.controllers.StarPractice.touch(page: String, id: String)
+
+
+
+# Activities Management
+GET 	/starpractice/activities						com.sparkydots.starpractice.controllers.Activities.list
+GET		/starpractice/activities/add					com.sparkydots.starpractice.controllers.Activities.add
+POST	/starpractice/activities						com.sparkydots.starpractice.controllers.Activities.save
+GET		/starpractice/activities/:id/edit				com.sparkydots.starpractice.controllers.Activities.edit(id: String)
+POST	/starpractice/activities/:id					com.sparkydots.starpractice.controllers.Activities.update(id: String)
+POST	/starpractice/activities/:id/delete			    com.sparkydots.starpractice.controllers.Activities.delete(id: String)
+
+POST	/starpractice/activities/:id/channel/:chid/add      com.sparkydots.starpractice.controllers.Activities.addToChannel(id: String, chid: Int)
+POST	/starpractice/activities/:id/channel/:chid/remove   com.sparkydots.starpractice.controllers.Activities.removeFromChannel(id: String, chid: Int)

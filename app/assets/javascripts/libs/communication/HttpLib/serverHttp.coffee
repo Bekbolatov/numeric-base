@@ -1,5 +1,4 @@
 angular.module 'ModuleCommunication'
-
 .factory 'ServerHttp', ['$q', '$http', 'Settings', 'DeviceId', 'MessageDispatcher', 'FS', ( $q, $http, Settings, DeviceId, MessageDispatcher, FS ) ->
     class ServerHttp
         constructor: () ->
@@ -13,31 +12,28 @@ angular.module 'ModuleCommunication'
             else
                 @_baseChrome()
         version: -> document.numeric.appVersion
-        touch: (page, id) -> @get(Settings.get('mainServerAddress') + page, {timeout: 2000}, 10)
 
         get: (url, options, cbtime) ->
             deferred = $q.defer()
             if cbtime == undefined
                 cbtime = 1000
+            cb = "cb=" + Math.round( (new Date()) / cbtime )
 
             if url.indexOf('?') > -1
-                url = url + DeviceId.qsAndWithCb(cbtime)
+                url = url + '&' + cb
             else
-                url = url + DeviceId.qsWithCb(cbtime)
-            url += "&v=" + @version()
-
+                url = url + '?' + cb
             if options != undefined
                 if options.cache == undefined
                     options.cache = false
                 if options.timeout == undefined
                     options.timeout = 7000
                 if options.headers == undefined
-                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId }
+                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + @version() }
                 else if options.headers.Authorization == undefined
                     options.headers.Authorization = '' + DeviceId.deviceSecretId
             else
-                options = { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId } }
-
+                options = { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version() } }
             $http.get(url , options)
             .then (response) =>
                 data = response.data
@@ -48,48 +44,22 @@ angular.module 'ModuleCommunication'
             .catch (e) => deferred.reject(e)
             deferred.promise
         download: (url, filePath) ->
-            if url.indexOf('?') > -1
-                url = url + DeviceId.qsAndWithCb(1000)
-            else
-                url = url + DeviceId.qsWithCb(1000)
             deferred = $q.defer()
-
             FS.tryDeleteFile(filePath)
             .then (result) -> console.log('deleted previous version')
             .catch (status) -> console.log('could not delete previous version')
             .then (result) =>
-                if @_inCordova()
-                    fileTransfer = new FileTransfer();
-                    fileTransfer.download(
-                        url
-                        @_baseCdvFs(filePath)
-                        (entry) -> deferred.resolve('ok')
-                        (error) -> deferred.reject(error.code)
-                        false
-                        {
-                            headers:
-                                "Authorization": "" + DeviceId.deviceSecretId
-                        })
-                else
-                    @get(url)
-                    .then (response) =>
-                        try
-                            data = response.data
-                            FS.writeToFile(filePath, data)
-                            .then (response) =>
-                                deferred.resolve('ok')
-                            .catch (e) =>
-                                deferred.reject(e)
-                        catch t
-                            deferred.reject(t)
-                    .catch (e) =>
-                        deferred.reject(e)
+                @get(url)
+                .then (response) ->
+                    try
+                        data = response.data
+                        FS.writeToFile(filePath, data)
+                        .then (response) -> deferred.resolve('ok')
+                        .catch (e) -> deferred.reject(e)
+                    catch t
+                        deferred.reject(t)
+                .catch (e) -> deferred.reject(e)
             deferred.promise
-        transformUrl: (url) ->
-            if url.indexOf('?') > -1
-                url = url + DeviceId.qsAndWithCb(1000)
-            else
-                url = url + DeviceId.qsWithCb(1000)
 
     new ServerHttp()
 ]

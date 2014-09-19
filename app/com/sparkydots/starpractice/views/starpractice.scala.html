@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="AppOne">
+    <head>
+        <title>StarPractice</title>
+        <link rel="icon" href='@routes.Assets.at("images/favicon.ico")' type="image/x-icon" />
+        <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/ratchet/2.0.2/css/ratchet.min.css'>
+        <!--<link rel="stylesheet" href='@routes.Assets.at("bower_components/ratchet/dist/css/ratchet.min.css")'>-->
+
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/numeric.css?v=2.2")'>
+        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")'>
+        <meta property="og:image" content='@routes.Assets.at("images/logo-large.png")' />
+        <meta property="og:title" content="StarPractice" />
+        <meta property="og:description" content="StarPractice helps students, educators and parents by providing easy ways of generating new practice questions and tracking completed work."/>
+    </head>
+    <body>
+
+
+
+
+        <div class="phone-frame">
+            <img src='@routes.Assets.at("images/phone-frame.png")' height="760">
+        </div>
+        <div class="app-frame">
+            <div ng-include="'/assets/templates/base.html'"></div>
+        </div>
+
+        <div id="releaseNotes">
+            <div><i>(this presentation works only in Chrome)</i></div>
+
+            <h5>Release notes: StarPractice Alpha 0.2</h5>
+            <p>Redesign of user interaction flow: now one can start activities immediately, without the need for two separate steps (install and run), reducing time between user load and first activity run.</p>
+            <p>Ability to star and add notes to individual questions, both currently viewed and last.</p>
+            <p>Filters on activity summary view: starred/with note/correct/wrong</p>
+            <p>Preparation for feature "tags" where inividual activities can be tagged and later looked up through a tag.</p>
+            <p>Incremental discovery of features: History link appears only when some activities were finished.</p>
+            <p>Tighter integration with server for activites list lookup - allowing one level of "confirmable" cache for faster presentation, later overwritten with fresher data from server if such exists.</p>
+        </div>
+
+
+
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js' type="text/javascript"></script>
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.min.js' type="text/javascript"></script>
+
+        <!--    <script src='@routes.Assets.at("bower_components/angular/angular.min.js")' type="text/javascript"></script>
+            <script src='@routes.Assets.at("bower_components/angular-route/angular-route.min.js")' type="text/javascript"></script> -->
+
+
+        <script src='@routes.Assets.at("bower_components/angular-timer/dist/angular-timer.min.js")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("bower_components/angular-md5/angular-md5.min.js")' type="text/javascript"></script>
+
+        <script src='@routes.Assets.at("/javascripts/oneApp.dist.min.js?v=2.3")' type="text/javascript"></script>
+        </body>
+    </html>

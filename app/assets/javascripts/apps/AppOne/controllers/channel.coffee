@@ -33,8 +33,12 @@ angular.module('AppOne')
 #            if $scope.availableActivities.length < 1 && $scope.startIndex >= Settings.get('pageSize')
 #                $scope.startIndex = $scope.startIndex - Settings.get('pageSize')
 #                return getActivities()
-            $scope.endIndex = $scope.startIndex + $scope.availableActivities.activities.length
-            $scope.littleHistory = ( $scope.availableActivities.activities.length < Settings.get('pageSize') && $scope.startIndex == 0 )
+            if $scope.availableActivities.activities != undefined
+                $scope.endIndex = $scope.startIndex + $scope.availableActivities.activities.length
+                $scope.littleHistory = ( $scope.availableActivities.activities.length < Settings.get('pageSize') && $scope.startIndex == 0 )
+            else
+                $scope.endIndex = 0
+                $scope.littleHistory = true
         .catch (status) ->
             console.log('Could not get list of activity metas from server, status: ' + status)
             if $scope.availableActivities.activities == undefined || $scope.availableActivities.activities.length < 1

@@ -1,0 +1,18 @@
+@(activityForm: Form[com.sparkydots.starpractice.models.Activity])(implicit flash:Flash)
+
+@import helper._
+@import com.sparkydots.starpractice.models.Activity
+
+@main("Add a new Activity") {
+<h1>Add a new Activity</h1>
+
+
+@flash.get("failure").map { msg =>
+<div class="flash">@msg</div>
+}
+
+@form(com.sparkydots.starpractice.controllers.routes.Activities.save()) {
+@formFields(activityForm)
+<button type="submit">Save</button>
+}
+}

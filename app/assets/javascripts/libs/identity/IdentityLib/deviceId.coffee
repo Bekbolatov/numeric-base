@@ -13,18 +13,6 @@ angular.module 'ModuleIdentity'
                 @devicePublicId = md5.createHash(@deviceSecretId)
                 @persister.save({ private: @deviceSecretId, public: @devicePublicId })
 
-
-        qs: -> '?did=' + @devicePublicId
-        qsAnd: -> '&did=' + @devicePublicId
-
-        qsWithCb: (ms) ->
-            cb = "&cb=" + Math.round( (new Date()) / ms )
-            @qs() + cb
-
-        qsAndWithCb: (ms) ->
-            cb = "&cb=" + Math.round( (new Date()) / ms )
-            @qsAnd() + cb
-
     new DeviceId()
 ]
 

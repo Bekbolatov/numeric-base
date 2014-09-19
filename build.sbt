@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
 
-
+TwirlKeys.templateImports += "com.sparkydots.starpractice.models.Activity"
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 
