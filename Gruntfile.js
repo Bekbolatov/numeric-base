@@ -15,10 +15,11 @@ module.exports = function(grunt) {
                     sourceJs + 'libs/data/DataUtilities/**',
                     sourceJs + 'libs/present/BaseLib/**',
                     sourceJs + 'libs/settings/SettingsLib/**',
+                    sourceJs + 'libs/persist/PersistenceLib/**',
+
                     sourceJs + 'libs/identity/IdentityLib/**',
                     sourceJs + 'libs/communication/HttpLib/**',
                     sourceJs + 'libs/communication/MessageLib/**',
-                    sourceJs + 'libs/persist/PersistenceLib/**',
 
                     
                     sourceJs + 'apps/AppOne/**',
