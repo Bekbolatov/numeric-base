@@ -13,17 +13,41 @@ version int not null,
 PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-drop table if exists activity_list;
-create table activity_list (
+drop table if exists channel;
+create table channel (
 id int not null,
 name varchar(50) not null,
+create_date date not null,
 PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-drop table if exists activity_list_activity;
-create table activity_list_activity (
-activity_list_id int not null,
+-- activities in an channel
+drop table if exists channel_activity;
+create table channel_activity (
+channel_id int not null,
 activity_id varchar(50) not null,
-PRIMARY KEY (activity_list_id, activity_id)
+PRIMARY KEY (channel_id, activity_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists end_user_profile;
+create table end_user_profile (
+id varchar(50) not null,
+name varchar(50) not null,
+create_date date not null,
+PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists end_user_alias;
+create table end_user_alias (
+id varchar(50) not null,
+end_user_profile_id varchar(50) not null,
+PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- channels for end_user.group_id
+drop table if exists end_user_channel;
+create table end_user_channel (
+end_user_profile_id varchar(50) not null,
+channel_id int not null,
+PRIMARY KEY (end_user_profile_id, channel_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

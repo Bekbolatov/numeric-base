@@ -1,7 +1,6 @@
-@(activityForm: Form[com.sparkydots.starpractice.models.Activity])
+@(activityForm: Form[Activity])
 
 @import helper._
-@import com.sparkydots.starpractice.models.Activity
 
 @inputText(activityForm("id"), 'size -> 50)
 @inputText(activityForm("name"), 'size -> 50)

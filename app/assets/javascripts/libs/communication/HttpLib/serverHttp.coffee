@@ -61,5 +61,34 @@ angular.module 'ModuleCommunication'
                 .catch (e) -> deferred.reject(e)
             deferred.promise
 
+
+        delete: (url, options) ->
+            console.log("delete url: " + url)
+            deferred = $q.defer()
+
+            if options != undefined
+                if options.headers == undefined
+                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + @version() }
+                else if options.headers.Authorization == undefined
+                    options.headers.Authorization = '' + DeviceId.deviceSecretId
+            else
+                options = { headers: { "Authorization": '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version() } }
+
+            $http.defaults.headers.common.Authorization = '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version()
+            $http.delete(url)
+
+            .then (response) =>
+                data = response.data
+                if data != undefined && data.messages != undefined && data.content != undefined
+                    MessageDispatcher.addNewMessages(data.messages)
+                    response.data = data.content
+                deferred.resolve(response)
+            .catch (e) => deferred.reject(e)
+            deferred.promise
+
+
+
+
+
     new ServerHttp()
 ]

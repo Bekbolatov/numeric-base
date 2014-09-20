@@ -1,0 +1,14 @@
+@(id: String, endUserProfileForm: Form[EndUserProfile])
+
+@import helper._
+
+@com.sparkydots.starpractice.views.html.admin.main("Edit Profile") {
+<div ng-controller="activityEdit">
+
+    <h1>Edit Profile</h1>
+    @form(com.sparkydots.starpractice.controllers.routes.EndUserProfiles.update(id)) {
+        @formFields(endUserProfileForm)
+        <button type="submit">Update</button>
+    }
+</div>
+}

@@ -8,6 +8,5 @@ import play.api.libs.json.Json
 
 case class ActivityListResponse(messages: List[Message], activities: List[Activity])
 object ActivityListResponse {
-
   implicit val activityListResponseFormat = Json.format[ActivityListResponse]
 }

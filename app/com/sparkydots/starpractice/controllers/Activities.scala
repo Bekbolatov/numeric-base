@@ -1,9 +1,8 @@
 package com.sparkydots.starpractice.controllers
 
-import com.sparkydots.starpractice.controllers.routes
-import com.sparkydots.starpractice.views
 import com.sparkydots.starpractice.forms.ActivityForm
 import com.sparkydots.starpractice.models.Activity
+import com.sparkydots.starpractice.views
 import play.api.mvc._
 
 /**
@@ -13,37 +12,37 @@ object Activities extends Controller {
   val form = ActivityForm
 
   def add = Action { implicit request =>
-    Ok(views.html.activities.add(form))
+    Ok(views.html.admin.activities.add(form))
   }
 
   def save = Action { implicit request =>
     val boundForm = form.bindFromRequest
     boundForm.fold(
-      formWithErrors => BadRequest(views.html.activities.add(formWithErrors)),
+      formWithErrors => BadRequest(views.html.admin.activities.add(formWithErrors)),
       activity => {
         if (Activity.save(activity)) {
           Redirect(routes.Activities.list).flashing("success" -> "Activity successfully created!")
         } else {
-          BadRequest(views.html.activities.add(boundForm)(Flash(Map("failure" -> "Activity was not created because this id is already used (duplicate Id)"))))
+          BadRequest(views.html.admin.activities.add(boundForm)(Flash(Map("failure" -> "Activity was not created because this id is already used (duplicate Id)"))))
         }
       })
   }
 
   def list = Action { implicit request =>
-    Ok(views.html.activities.list(Activity.list, Activity.listForChannel(0)))
+    Ok(views.html.admin.activities.list(Activity.list))
   }
 
   def edit(id: String) = Action {
     Activity.load(id).map { activity =>
       val boundForm = form.fill(activity)
-      Ok(views.html.activities.edit(id, boundForm))
+      Ok(views.html.admin.activities.edit(id, boundForm))
     }.getOrElse(NotFound)
   }
 
   def update(id: String) = Action { implicit request =>
     Activity.load(id).map { activity =>
       form.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.activities.edit(id, formWithErrors)),
+        formWithErrors => BadRequest(views.html.admin.activities.edit(id, formWithErrors)),
         activityWithNewValues => {
           Activity.update(id, activityWithNewValues)
           Redirect(routes.Activities.list).flashing("success" -> "Activity successfully updated!")
@@ -54,17 +53,6 @@ object Activities extends Controller {
   def delete(id: String) = Action {
     Activity.delete(id)
     Redirect(routes.Activities.list).flashing("success" -> "Activity successfully deleted!")
-  }
-
-
-  def addToChannel(id: String, chid: Int) = Action {
-    Activity.addToChannel(id, chid)
-    Redirect(routes.Activities.list).flashing("success" -> s"Activity ${id} successfully added to channel ${chid}!")
-  }
-
-  def removeFromChannel(id: String, chid: Int) = Action {
-    Activity.removeFromChannel(id, chid)
-    Redirect(routes.Activities.list).flashing("success" -> s"Activity ${id} successfully removed from channel ${chid}!")
   }
 
 }

@@ -2,6 +2,7 @@ package com.sparkydots.starpractice.services
 
 import java.security.MessageDigest
 
+import com.sparkydots.starpractice.models.EndUserProfile
 import play.api.Logger
 import play.api.http.HeaderNames._
 import play.api.libs.ws.WS
@@ -12,7 +13,7 @@ import scala.concurrent.ExecutionContext
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/18/14 9:14 PM
  */
-case class Authenticator(action: EssentialAction) extends EssentialAction with Results {
+case class Authenticator(action: EndUserProfile => EssentialAction) extends EssentialAction with Results {
   val starLogger = Logger("star")
   val sep = " # "
 
@@ -20,6 +21,8 @@ case class Authenticator(action: EssentialAction) extends EssentialAction with R
   def md5(s: String) = digest.digest(s.getBytes).map("%02x".format(_)).mkString
   def md5check(hash: String, orig: String) =
     hash != null && !hash.isEmpty() && orig != null && !orig.isEmpty() && md5(orig) == hash
+
+  def emptyEssentialAction(rh: RequestHeader) = Action { request => Ok("{}")}(rh)
 
   def apply(rh: RequestHeader) = {
     implicit val executionContext: ExecutionContext = play.api.libs.concurrent.Execution.defaultContext
@@ -33,14 +36,19 @@ case class Authenticator(action: EssentialAction) extends EssentialAction with R
         val check = md5check(public, secret)
         if (check) {
           starLogger.info(s"$ip$sep$path$sep$public$sep$version$sep$ua")
-          action(rh)
+          val profile = EndUserProfile.getOrCreate(public)
+          if (profile.nonEmpty) {
+            action(profile.get)(rh)
+          } else {
+            emptyEssentialAction(rh)
+          }
         } else {
           starLogger.info(s"$ip${sep}${path}NO:$sep$public$sep$version$sep$ua")
-          Action { request => Ok("{}")}(rh)
+          emptyEssentialAction(rh)
         }
       case _ =>
         starLogger.info(s"$ip$sep${path}NA${sep}NA$sep$ua")
-        Action { request => Ok("{}")}(rh)
+        emptyEssentialAction(rh)
     }
   }
 

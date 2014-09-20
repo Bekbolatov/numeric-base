@@ -10,10 +10,10 @@ import scala.concurrent.Future
 /**
   * @author Renat Bekbolatov (renatb@sparkydots.com) 7/29/14 11:24 PM
   */
-object SparkyDots extends Controller {
+object StarPractice extends Controller {
 
    def index = Action {
-     Ok(views.html.sparkydots.index())
+     Ok(views.html.starpractice.index())
    }
 
  }

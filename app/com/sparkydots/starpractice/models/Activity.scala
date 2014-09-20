@@ -30,10 +30,7 @@ object Activity {
     }
   }
 
-  def list = {
-    page(0, 1000)
-  }
-
+  def list = page(0, 1000)
 
   def page(startIndex: Int, size: Int) = {
     DB.withConnection { implicit connection =>
@@ -111,30 +108,26 @@ object Activity {
 
   def delete(id: String) {
     DB.withConnection { implicit connection =>
-      SQL( """
-          DELETE FROM activity where id = {id} ; DELETE FROM activity_list_activity where activity_id = {id}
-           """).on(
-          'id -> id
-        ).executeUpdate
-//      SQL( """
-//          delete from activity_list_activity where activity_id = {id};
-//           """).on(
-//          'id -> id
-//        ).executeUpdate
+      SQL("delete from channel_activity where activity_id = {id}")
+        .on('id -> id)
+        .executeUpdate
+      SQL("DELETE FROM activity where id = {id}")
+        .on('id -> id)
+        .executeUpdate
     }
   }
 
 
   // Channels (Activity Lists)
-  def listForChannel(channel: Int) = {
-    pageOfChannel(channel, 0, 1000)
-  }
-
+  def listForChannel(channel: Int) = pageOfChannel(channel, 0, 1000)
   def pageOfChannel(channelId: Int, startIndex: Int, size: Int) = {
     DB.withConnection { implicit connection =>
       SQL(
         """
-        select a.* from activity a left join activity_list_activity ala on (ala.activity_id = a.id and ala.activity_list_id = {channelId}) where ala.activity_id is not null limit {startIndex},{size}
+        select a.* from activity a
+        left join channel_activity ala on (ala.activity_id = a.id and ala.channel_id = {channelId})
+        where ala.activity_id is not null
+        limit {startIndex},{size}
         """
       )
         .on('startIndex -> startIndex, 'size -> size, 'channelId -> channelId)
@@ -144,23 +137,17 @@ object Activity {
 
   def addToChannel(id: String, chid: Int) {
     DB.withConnection { implicit connection =>
-      SQL( """
-          REPLACE INTO activity_list_activity (activity_id, activity_list_id) values ({id}, {chid})
-           """).on(
-          'id -> id,
-          'chid -> chid
-        ).executeUpdate
+      SQL("REPLACE INTO channel_activity (activity_id, channel_id) values ({id}, {chid})")
+        .on('id -> id, 'chid -> chid)
+        .executeUpdate
     }
   }
 
   def removeFromChannel(id: String, chid: Int) {
     DB.withConnection { implicit connection =>
-      SQL( """
-          DELETE FROM activity_list_activity where activity_id = {id} and activity_list_id = {chid}
-           """).on(
-          'id -> id,
-          'chid -> chid
-        ).executeUpdate
+      SQL("DELETE FROM channel_activity where activity_id = {id} and channel_id = {chid}")
+        .on('id -> id, 'chid -> chid)
+        .executeUpdate
     }
   }
 

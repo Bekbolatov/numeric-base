@@ -1,0 +1,7 @@
+@(channelForm: Form[Channel])
+
+@import helper._
+
+@inputText(channelForm("id"), 'size -> 50)
+@inputText(channelForm("name"), 'size -> 50)
+@inputText(channelForm("createDate"))

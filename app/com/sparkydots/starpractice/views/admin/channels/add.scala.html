@@ -1,0 +1,21 @@
+@(channelForm: Form[Channel])(implicit flash:Flash)
+
+@import helper._
+
+@com.sparkydots.starpractice.views.html.admin.main("Add a new Channel") {
+<div ng-controller="channelAdd">
+
+    <h1>Add a new Channel</h1>
+
+
+    @flash.get("failure").map { msg =>
+        <div class="flash">@msg</div>
+    }
+
+    @form(com.sparkydots.starpractice.controllers.routes.Channels.save()) {
+        @formFields(channelForm)
+        <button type="submit">Save</button>
+    }
+
+</div>
+}
