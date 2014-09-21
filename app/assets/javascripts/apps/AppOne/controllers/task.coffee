@@ -53,6 +53,7 @@ angular.module('AppOne')
         $scope.state.isOnReviewLast = false
         $scope.state.isOnOptions = true
         $scope.state.isOnNote = false
+
     $scope.toExitWindow = () =>
         $scope.state.optionsChanged = false
         $scope.state.isOnReviewLast = false

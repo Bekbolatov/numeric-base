@@ -1,8 +1,10 @@
 <header class="bar bar-nav">
-
+    <button class="btn btn-outlined btn-primary pull-left">
+        {{ activityDriver.statsCorrect + activityDriver.statsWrong}}
+    </button>
     <h2 class="title">StarPractice</h2>
-    <button class="btn btn-primary pull-right" ng-click="finishActivity()" ng-show="!(state.isOnOptions || state.isOnReviewLast || state.isOnNote)">
-        Finish
+    <button class="btn btn-primary pull-right" ng-click="toExitWindow()" ng-show="!(state.isOnOptions || state.isOnReviewLast || state.isOnNote)">
+        Exit
     </button>
 </header>
 
@@ -38,11 +40,12 @@
 
     <div class="btn-task-menu-holder">
 
-        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
-            <span class="icon icon-more"></span>
-        </button>
-        <button class="btn btn-link btn-task-menu pull-right" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
+        <button class="btn btn-link btn-task-menu pull-left" ng-click="toPrevQuestion()" ng-show="hasAnswers()" title="Review last question">
             <span class="icon icon-back"></span>
+        </button>
+
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
+            <span class="icon icon-more-vertical"></span>
         </button>
         <button class="btn btn-link btn-task-menu pull-right" ng-click="toAddNote()" title="Add/edit a Note">
             <span class="icon icon-compose"></span>
@@ -173,32 +176,25 @@
 
 <!-- PREV_QUESTION_SUMMARY:BEGIN -->
 <div id="prevQuestionContainer" class="content position-absolute {{ ( state.isOnReviewLast && 'visible') || 'invisible'}}">
-    <div class="content-inner">
 
+    <!-- PrevQuestionMenu:START -->
+    <div class="btn-task-menu-holder">
         <button class="btn btn-primary pull-left" ng-click="backToActivity()">&lt; back to question</button>
-        <div class="clearfix"></div>
 
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuShowOptions()" ng-show="menuShowOptions_has()" title="Activity options">
+            <span class="icon icon-more-vertical"></span>
+        </button>
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="toAddNote({prev: true})" title="Add/edit a Note">
+            <span class="icon icon-compose"></span>
+        </button>
+        <button class="btn btn-link btn-task-menu pull-right" ng-click="menuToggleStarPrev()" title="Toggle Star Question">
+            <span class="icon icon-star{{ (menuToggleStarPrev_has() && '-filled') || '' }}"></span>
+        </button>
+    </div>
+    <div class="clearfix"></div>
+    <!-- PrevQuestionMenu:END -->
 
-        <!-- PrevQuestionMenu:START -->
-
-        <div class="btn-task-menu-holder">
-
-            <button class="btn btn-link btn-task-menu pull-right" ng-click="toAddNote({prev: true})" title="Add/edit a Note">
-                <span class="icon icon-compose"></span>
-            </button>
-            <button class="btn btn-link btn-task-menu pull-right" ng-click="menuToggleStarPrev()" title="Toggle Star Question">
-                <span class="icon icon-star{{ (menuToggleStarPrev_has() && '-filled') || '' }}"></span>
-            </button>
-
-        </div>
-
-        <div class="clearfix"></div>
-        <!-- PrevQuestionMenu:END -->
-
-
-
-
-
+    <div class="content-inner">
         <div ng-show="activityDriver.answeredQuestion.statementAsHTML" class="numeric-completed">
             <!--
             <div id="verbalFeedback" class="fade numeric numeric-result numeric-result-{{activityDriver.result.class}}">
@@ -207,10 +203,8 @@
             -->
 
             <div>
-                <b>
-                    Previous Question:<br>
-                    <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span>
-                </b>
+                <b>Last Question</b><br>
+                <span ng-bind-html="activityDriver.answeredQuestion.statementAsHTML"></span>
             </div>
             <div><br>Your answer was:
                 <span class="numeric-completed-{{activityDriver.answeredQuestion.result && 'correct' || 'incorrect' }}">
