@@ -1,10 +1,7 @@
-package com.sparkydots.starpractice.controllers
+package com.sparkydots.starpractice.controllers.admin
 
-import com.sparkydots.starpractice.controllers.Activities._
-import com.sparkydots.starpractice.controllers.Channels._
-import com.sparkydots.starpractice.controllers.Channels.form
-import com.sparkydots.starpractice.forms.EndUserProfileForm
-import com.sparkydots.starpractice.models.{Channel, Activity, EndUserProfile}
+import com.sparkydots.starpractice.forms.admin.EndUserProfileForm
+import com.sparkydots.starpractice.models.EndUserProfile
 import com.sparkydots.starpractice.views
 import play.api.mvc._
 

@@ -2,11 +2,10 @@ module.exports = function(grunt) {
     var appName = 'earnIt';
     var appLoc = 'EarnIt';
 
-    var sourceCoffee = '/Users/renatb/projects/90_scratch/numeric-base/app/assets/javascripts/';
-
-    var sourceJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/javascripts/';
     var appConcat = appName + '.concat';
     var appCordovaConcat = appName + 'Cordova.concat';
+
+    var sourceJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/javascripts/';
     var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
 
     var appJsSources = [

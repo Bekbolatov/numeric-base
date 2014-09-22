@@ -1,5 +1,6 @@
-package com.sparkydots.starpractice.models
+package com.sparkydots.starpractice.models.responses
 
+import com.sparkydots.starpractice.models.{Activity, Message}
 import play.api.libs.json.Json
 
 /**

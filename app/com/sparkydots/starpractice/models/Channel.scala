@@ -74,6 +74,22 @@ object Channel {
     }
   }
 
+  // Channels (Activity Lists)
+  def listForEndUser(id: String) = pageForEndUser(id, 0, 1000)
+  def pageForEndUser(id: String, startIndex: Int, size: Int) = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+        select c.* from channel c, end_user_channel euc
+        where c.id = euc.channel_id and euc.end_user_profile_id = {id}
+        limit {startIndex},{size}
+        """
+      )
+        .on('startIndex -> startIndex, 'size -> size, 'id -> id)
+        .as(parser *)
+    }
+  }
+
 
 }
 

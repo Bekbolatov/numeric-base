@@ -1,4 +1,4 @@
-package com.sparkydots.starpractice.forms
+package com.sparkydots.starpractice.forms.admin
 
 import com.sparkydots.starpractice.models.Activity
 import play.api.data.Forms._

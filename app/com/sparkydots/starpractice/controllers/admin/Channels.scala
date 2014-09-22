@@ -1,7 +1,6 @@
-package com.sparkydots.starpractice.controllers
+package com.sparkydots.starpractice.controllers.admin
 
-import com.sparkydots.starpractice.controllers.Activities._
-import com.sparkydots.starpractice.forms.ChannelForm
+import com.sparkydots.starpractice.forms.admin.ChannelForm
 import com.sparkydots.starpractice.models.{Activity, Channel}
 import com.sparkydots.starpractice.views
 import play.api.mvc._

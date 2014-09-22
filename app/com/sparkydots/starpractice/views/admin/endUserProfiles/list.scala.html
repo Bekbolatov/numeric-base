@@ -10,7 +10,7 @@
             <ul class="table-view table-view-list">
                 @for(profile <- profiles) {
                     <li class="table-view-cell">
-                        <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.routes.EndUserProfiles.edit(profile.id)">
+                        <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.admin.routes.EndUserProfiles.edit(profile.id)">
                             [@profile.id]<br>
                             @profile.name<br>
                             @profile.createDate<br>

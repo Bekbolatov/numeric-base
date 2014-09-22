@@ -1,6 +1,6 @@
-package com.sparkydots.starpractice.forms
+package com.sparkydots.starpractice.forms.admin
 
-import com.sparkydots.starpractice.models.{EndUserProfile, Channel}
+import com.sparkydots.starpractice.models.EndUserProfile
 import play.api.data.Forms._
 import play.api.data._
 

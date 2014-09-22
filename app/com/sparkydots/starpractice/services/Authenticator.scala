@@ -32,10 +32,10 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
     val authorization = rh.headers.get(AUTHORIZATION).getOrElse("")
 
     authorization.split(":") match {
-      case Array(secret, public, version) =>
+      case Array(secret, public, appName, version) =>
         val check = md5check(public, secret)
         if (check) {
-          starLogger.info(s"$ip$sep$path$sep$public$sep$version$sep$ua")
+          starLogger.info(s"$ip$sep$path$sep$public$sep$appName$sep$version$sep$ua")
           val profile = EndUserProfile.getOrCreate(public)
           if (profile.nonEmpty) {
             action(profile.get)(rh)
@@ -43,11 +43,11 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
             emptyEssentialAction(rh)
           }
         } else {
-          starLogger.info(s"$ip${sep}${path}NO:$sep$public$sep$version$sep$ua")
+          starLogger.info(s"$ip${sep}${path}${sep}NO:$public$sep$appName$sep$version$sep$ua")
           emptyEssentialAction(rh)
         }
       case _ =>
-        starLogger.info(s"$ip$sep${path}NA${sep}NA$sep$ua")
+        starLogger.info(s"$ip$sep${path}${sep}NA${sep}NA${sep}NA$sep$ua")
         emptyEssentialAction(rh)
     }
   }

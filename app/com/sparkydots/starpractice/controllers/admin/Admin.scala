@@ -1,6 +1,5 @@
-package com.sparkydots.starpractice.controllers
+package com.sparkydots.starpractice.controllers.admin
 
-import com.sparkydots.starpractice.services.Authenticator
 import com.sparkydots.starpractice.views
 import play.api.mvc._
 

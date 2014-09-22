@@ -1,6 +1,6 @@
-package com.sparkydots.starpractice.controllers
+package com.sparkydots.starpractice.controllers.admin
 
-import com.sparkydots.starpractice.forms.ActivityForm
+import com.sparkydots.starpractice.forms.admin.ActivityForm
 import com.sparkydots.starpractice.models.Activity
 import com.sparkydots.starpractice.views
 import play.api.mvc._

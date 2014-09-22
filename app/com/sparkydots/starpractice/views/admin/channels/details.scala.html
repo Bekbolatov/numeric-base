@@ -11,7 +11,7 @@
 
     <div ng-show="showEditName">
         Channel:
-        @form(com.sparkydots.starpractice.controllers.routes.Channels.update(channel.id)) {
+        @form(com.sparkydots.starpractice.controllers.admin.routes.Channels.update(channel.id)) {
         @helper.inputText(channelForm("name"), 'size -> 50)
         <button type="submit">Update</button> <a href class="icon icon-close" ng-click="toggleEditName()"></a>
 
@@ -28,13 +28,13 @@
             <ul class="table-view table-view-list">
                 @for(activity <- activities) {
                 <li class="table-view-cell">
-                    <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.routes.Activities.edit(activity.id)">
+                    <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.admin.routes.Activities.edit(activity.id)">
                         [@activity.id:@activity.version]<br>
                         @activity.name<br>
                         @activity.shortDescription<br>
                         @activity.authorDate<br>
                     </a>
-                    @helper.form(com.sparkydots.starpractice.controllers.routes.Channels.addToChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">Add to Channel @channel.name (@channel.id)</button>}
+                    @helper.form(com.sparkydots.starpractice.controllers.admin.routes.Channels.addToChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">Add to Channel @channel.name (@channel.id)</button>}
                 </li>
                 }
             </ul>
@@ -51,13 +51,13 @@
             <ul class="table-view table-view-list">
                 @for(activity <- activitiesInChannel) {
                 <li class="table-view-cell">
-                    <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.routes.Activities.edit(activity.id)">
+                    <a class="navigate-right color-practice div-inline" href="@com.sparkydots.starpractice.controllers.admin.routes.Activities.edit(activity.id)">
                         [@activity.id:@activity.version]<br>
                         @activity.name<br>
                         @activity.shortDescription<br>
                         @activity.authorDate<br>
                     </a>
-                    @helper.form(com.sparkydots.starpractice.controllers.routes.Channels.removeFromChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">&lt;&lt; Remove From Channel @channel.name (@channel.id)</button>}
+                    @helper.form(com.sparkydots.starpractice.controllers.admin.routes.Channels.removeFromChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">&lt;&lt; Remove From Channel @channel.name (@channel.id)</button>}
                 </li>
                 }
             </ul>

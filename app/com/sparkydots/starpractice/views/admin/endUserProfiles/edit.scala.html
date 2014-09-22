@@ -6,7 +6,7 @@
 <div ng-controller="endUserProfileEdit">
 
     <h1>Edit Profile</h1>
-    @form(com.sparkydots.starpractice.controllers.routes.EndUserProfiles.update(id)) {
+    @form(com.sparkydots.starpractice.controllers.admin.routes.EndUserProfiles.update(id)) {
         @formFields(endUserProfileForm)
         <button type="submit">Update</button>
     }
