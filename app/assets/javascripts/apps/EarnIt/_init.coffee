@@ -28,6 +28,7 @@ document.numeric =
 
     defaultSettings:
         defaultChannel: 1
+        title: 'EarnIt'
         pageSize: 10
         historyServerSync: false
         mainServerAddress: 'https://www.sparkydots.com/activityServer/data/'

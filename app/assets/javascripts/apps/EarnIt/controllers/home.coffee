@@ -24,6 +24,7 @@ angular.module('EarnIt')
                 Channels.navigateToChannel(id, name, '#/')
 
         $scope.hasHistory = ActivitySummary.hasHistory()
+        $scope.title = Settings.get('title')
 
     if Settings.ready
         setScopeVars()

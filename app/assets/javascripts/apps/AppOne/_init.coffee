@@ -28,6 +28,7 @@ document.numeric =
 
     defaultSettings:
         defaultChannel: 0
+        title: 'StarPractice'
         pageSize: 10
         historyServerSync: false
         mainServerAddress: 'https://www.sparkydots.com/activityServer/data/'

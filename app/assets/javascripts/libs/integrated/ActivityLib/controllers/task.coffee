@@ -7,7 +7,7 @@ angular.module('ActivityLib')
     else
         Tracker.touch('task', ActivityDriver.currentActivity.id)
 
-
+    $scope.title = Settings.get('title')
     $scope.activityDriver = ActivityDriver
     $scope.currentActivity = ActivityDriver.currentActivity
 

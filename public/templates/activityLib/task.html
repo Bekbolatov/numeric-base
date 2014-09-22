@@ -2,7 +2,7 @@
     <button class="btn btn-outlined btn-primary pull-left">
         {{ activityDriver.statsCorrect + activityDriver.statsWrong}}
     </button>
-    <h2 class="title">StarPractice</h2>
+    <h2 class="title">{{ title }}</h2>
     <button class="btn btn-primary pull-right" ng-click="toExitWindow()" ng-show="!(state.isOnOptions || state.isOnReviewLast || state.isOnNote)">
         Exit
     </button>
