@@ -1,0 +1,38 @@
+@(channels: Iterable[Channel])(implicit flash:Flash)
+
+@com.sparkydots.activityServer.views.html.admin.main("All channels") {
+<div ng-controller="channelList">
+
+    @flash.get("success").map { msg =>
+        <div class="flash">@msg</div>
+    }
+
+
+    <a href="@com.sparkydots.activityServer.controllers.admin.routes.Channels.add">Add a new channel</a>
+
+    <div>
+        <div class="allChannelsHolder">
+            <h3>All channels</h3>
+
+            @if(channels.isEmpty) {
+                <p>No channels found</p>
+            } else {
+                <ul class="table-view table-view-list">
+                    @for(channel <- channels) {
+                        <li class="table-view-cell">
+                            @helper.form(com.sparkydots.activityServer.controllers.admin.routes.Channels.delete(channel.id)){<button type="submit" class="btn btn-link icon icon-close"></button>}
+                            <a class="navigate-right color-practice div-inline" href="@com.sparkydots.activityServer.controllers.admin.routes.Channels.edit(channel.id)">
+                                [@channel.id]<br>
+                                @channel.name<br>
+                                @channel.createDate<br>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+
+    </div>
+</div>
+}

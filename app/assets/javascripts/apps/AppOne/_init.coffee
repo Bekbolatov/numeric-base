@@ -17,7 +17,7 @@ document.numeric =
             fs: 'numericdata/'
             cdv: 'cdvfile://localhost/persistent/'
             chrome: 'filesystem:SERVERNAME/temporary/'
-            server: 'https://www.sparkydots.com/starpractice/data/'
+            server: 'https://www.sparkydots.com/activityServer/data/'
     path:
         touch: 'touch'
         channels: 'channels'
@@ -29,7 +29,7 @@ document.numeric =
     defaultSettings:
         pageSize: 10
         historyServerSync: false
-        mainServerAddress: 'https://www.sparkydots.com/starpractice/data/'
+        mainServerAddress: 'https://www.sparkydots.com/activityServer/data/'
 
 try
     ((w) ->
@@ -43,7 +43,7 @@ try
 
         if  server == 'localhost' && port == ':9000'
             w.document.numeric.url.base.chrome = "filesystem:http://localhost:9000/temporary/"
-            w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/starpractice/data/"
+            w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/activityServer/data/"
     )(this)
 catch e
     console.log(e)

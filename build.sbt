@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
 
-TwirlKeys.templateImports += "com.sparkydots.starpractice.models._"
+TwirlKeys.templateImports += "com.sparkydots.activityServer.models._"
 
 TwirlKeys.templateImports += "com.sparkydots.common.controllers.routes"
 

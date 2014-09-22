@@ -6,11 +6,11 @@ module.exports = function(grunt) {
     var appCordovaConcat = appName + 'Cordova.concat';
 
     var sourceJs = '/Users/renatb/projects/90_scratch/numeric-base/target/web/public/main/javascripts/';
-    var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/';
+    var distDest = '/Users/renatb/projects/90_scratch/numeric-base/public/javascripts/dists/';
 
     var appJsSources = [
-                    sourceJs + 'qrcode.js',
-                    sourceJs + 'rawdeflate.js',
+                    sourceJs + 'rawlibs/qrcode.js',
+                    sourceJs + 'rawlibs/rawdeflate.js',
 
                     sourceJs + 'libs/image/ImageLib/**',
                     sourceJs + 'libs/data/DataPack/**',

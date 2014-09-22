@@ -1,52 +1,47 @@
 GET     /assets/*file                                       com.sparkydots.common.controllers.Assets.at(path="/public", file)
-# Main SparkyDots website
+
+# Web Pages
 GET     /                                                   com.sparkydots.website.controllers.SparkyDots.index
 GET     /starpractice/web                                   com.sparkydots.website.controllers.StarPractice.index
-GET     /earnit/web                                         com.sparkydots.website.controllers.EarnIt.index
+GET     /earnit/demo                                         com.sparkydots.website.controllers.EarnIt.index
 
 
+# ActivityServer: Content
+GET     /activityServer/data/touch/:page/:id                  com.sparkydots.activityServer.controllers.content.TouchController.touch(page: String, id: String)
+GET     /activityServer/data/channels                         com.sparkydots.activityServer.controllers.content.ChannelController.channelList(id: String, st: Int, si: Int)
+GET     /activityServer/data/activity/list                    com.sparkydots.activityServer.controllers.content.ChannelController.channel(chid:Int, st: Int, si: Int)
+GET     /activityServer/data/activity/body/:id                com.sparkydots.activityServer.controllers.content.ActivityBodyController.activityBody(id: String)
 
 
-# StarPractice: Web, Main Window
-GET     /starpractice/data/touch/:page/:id                  com.sparkydots.starpractice.controllers.content.TouchController.touch(page: String, id: String)
-GET     /starpractice/data/channels                         com.sparkydots.starpractice.controllers.content.ChannelController.channelList(id: String, st: Int, si: Int)
-GET     /starpractice/data/activity/list                    com.sparkydots.starpractice.controllers.content.ChannelController.channel(chid:Int, st: Int, si: Int)
-GET     /starpractice/data/activity/body/:id                com.sparkydots.starpractice.controllers.content.ActivityBodyController.activityBody(id: String)
+# ActivityServer: Management
+GET 	/activityServer/admin						                com.sparkydots.activityServer.controllers.admin.Admin.index
 
+# activities
+GET 	/activityServer/admin/activity						    com.sparkydots.activityServer.controllers.admin.Activities.list
+GET		/activityServer/admin/activity/add					    com.sparkydots.activityServer.controllers.admin.Activities.add
+GET		/activityServer/admin/activity/:id				        com.sparkydots.activityServer.controllers.admin.Activities.edit(id: String)
 
-# Management
-GET 	/starpractice/admin						                com.sparkydots.starpractice.controllers.admin.Admin.index
+POST	/activityServer/admin/activity						    com.sparkydots.activityServer.controllers.admin.Activities.save
+POST	/activityServer/admin/activity/:id					    com.sparkydots.activityServer.controllers.admin.Activities.update(id: String)
+DELETE	/activityServer/admin/activity/:id			            com.sparkydots.activityServer.controllers.admin.Activities.delete(id: String)
 
-# Activities
-GET 	/starpractice/admin/activity						    com.sparkydots.starpractice.controllers.admin.Activities.list
-GET		/starpractice/admin/activity/add					    com.sparkydots.starpractice.controllers.admin.Activities.add
-GET		/starpractice/admin/activity/:id				        com.sparkydots.starpractice.controllers.admin.Activities.edit(id: String)
+# channels
+GET 	/activityServer/admin/channel						        com.sparkydots.activityServer.controllers.admin.Channels.list
+GET 	/activityServer/admin/channel/add						    com.sparkydots.activityServer.controllers.admin.Channels.add
+GET 	/activityServer/admin/channel/:chid						com.sparkydots.activityServer.controllers.admin.Channels.edit(chid: Int)
 
-POST	/starpractice/admin/activity						    com.sparkydots.starpractice.controllers.admin.Activities.save
-POST	/starpractice/admin/activity/:id					    com.sparkydots.starpractice.controllers.admin.Activities.update(id: String)
-DELETE	/starpractice/admin/activity/:id			            com.sparkydots.starpractice.controllers.admin.Activities.delete(id: String)
+POST	/activityServer/admin/channel						        com.sparkydots.activityServer.controllers.admin.Channels.save
+POST	/activityServer/admin/channel/:chid					    com.sparkydots.activityServer.controllers.admin.Channels.update(chid: Int)
+DELETE	/activityServer/admin/channel/:chid			            com.sparkydots.activityServer.controllers.admin.Channels.delete(chid: Int)
 
+POST	/activityServer/admin/channel/:chid/add/:id               com.sparkydots.activityServer.controllers.admin.Channels.addToChannel(id: String, chid: Int)
+POST	/activityServer/admin/channel/:chid/remove/:id            com.sparkydots.activityServer.controllers.admin.Channels.removeFromChannel(id: String, chid: Int)
 
-# Activities
-GET 	/starpractice/admin/channel						        com.sparkydots.starpractice.controllers.admin.Channels.list
-GET 	/starpractice/admin/channel/add						    com.sparkydots.starpractice.controllers.admin.Channels.add
-GET 	/starpractice/admin/channel/:chid						com.sparkydots.starpractice.controllers.admin.Channels.edit(chid: Int)
+# userProfiles
+GET 	/activityServer/admin/profile						        com.sparkydots.activityServer.controllers.admin.EndUserProfiles.list
+GET 	/activityServer/admin/profile/:id						    com.sparkydots.activityServer.controllers.admin.EndUserProfiles.edit(id: String)
 
-POST	/starpractice/admin/channel						        com.sparkydots.starpractice.controllers.admin.Channels.save
-POST	/starpractice/admin/channel/:chid					    com.sparkydots.starpractice.controllers.admin.Channels.update(chid: Int)
-DELETE	/starpractice/admin/channel/:chid			            com.sparkydots.starpractice.controllers.admin.Channels.delete(chid: Int)
+POST 	/activityServer/admin/profile/:id						    com.sparkydots.activityServer.controllers.admin.EndUserProfiles.update(id: String)
 
-
-POST	/starpractice/admin/channel/:chid/add/:id               com.sparkydots.starpractice.controllers.admin.Channels.addToChannel(id: String, chid: Int)
-POST	/starpractice/admin/channel/:chid/remove/:id            com.sparkydots.starpractice.controllers.admin.Channels.removeFromChannel(id: String, chid: Int)
-
-
-# UserProfiles
-GET 	/starpractice/admin/profile						        com.sparkydots.starpractice.controllers.admin.EndUserProfiles.list
-GET 	/starpractice/admin/profile/:id						    com.sparkydots.starpractice.controllers.admin.EndUserProfiles.edit(id: String)
-
-POST 	/starpractice/admin/profile/:id						    com.sparkydots.starpractice.controllers.admin.EndUserProfiles.update(id: String)
-
-
-POST	/starpractice/admin/profile/:id/add/:chid               com.sparkydots.starpractice.controllers.admin.EndUserProfiles.addToEndUser(id: String, chid: Int)
-POST	/starpractice/admin/profile/:id/remove/:chid            com.sparkydots.starpractice.controllers.admin.EndUserProfiles.removeFromEndUser(id: String, chid: Int)
+POST	/activityServer/admin/profile/:id/add/:chid               com.sparkydots.activityServer.controllers.admin.EndUserProfiles.addToEndUser(id: String, chid: Int)
+POST	/activityServer/admin/profile/:id/remove/:chid            com.sparkydots.activityServer.controllers.admin.EndUserProfiles.removeFromEndUser(id: String, chid: Int)
