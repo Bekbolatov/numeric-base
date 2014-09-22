@@ -1,4 +1,4 @@
-angular.module('EarnIt')
+angular.module('ActivityLib')
 
 .factory "StarPracticeApi", ['DataPack', 'DataUtilities', 'RandomFunctions', 'TextFunctions', 'MathFunctions', 'HyperTextManager', 'GraphicsManager', (DataPack, DataUtilities, RandomFunctions, TextFunctions, MathFunctions, HyperTextManager, GraphicsManager ) ->
     class StarPracticeApi
@@ -17,5 +17,4 @@ angular.module('EarnIt')
     starPracticeApi = new StarPracticeApi()
     document.numeric.modules.StarPracticeApi = starPracticeApi
     starPracticeApi
-
     ]

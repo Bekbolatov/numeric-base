@@ -23,6 +23,8 @@ module.exports = function(grunt) {
                     sourceJs + 'libs/communication/HttpLib/**',
                     sourceJs + 'libs/communication/MessageLib/**',
 
+                    sourceJs + 'libs/integrated/ActivityLib/**',
+
                     sourceJs + 'apps/' + appLoc + '/**',
                     ];
     var appJsSourcesCordova = appJsSources.concat( [ sourceJs + 'apps/' + appLoc + 'Cordova/**' ] );

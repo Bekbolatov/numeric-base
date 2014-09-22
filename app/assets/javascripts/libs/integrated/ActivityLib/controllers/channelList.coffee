@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ActivityLib')
 
 .controller 'ChannelListCtrl', ['$scope', '$location', '$sce', 'Settings', 'Tracker', 'Channels', ($scope, $location, $sce, Settings, Tracker, Channels ) ->
     if !Settings.ready

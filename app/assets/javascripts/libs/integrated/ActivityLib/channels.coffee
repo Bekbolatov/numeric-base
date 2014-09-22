@@ -1,4 +1,4 @@
-angular.module('EarnIt')
+angular.module('ActivityLib')
 
 .factory("Channels", ['$q', '$location', 'Settings', 'ServerHttp', 'PersistenceManager', ($q, $location, Settings, ServerHttp,PersistenceManager ) ->
     class Channels

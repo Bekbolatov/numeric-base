@@ -1,4 +1,4 @@
-angular.module('EarnIt')
+angular.module('ActivityLib')
 
 .controller 'HistoryCtrl', ['$scope', '$location', 'Settings', 'ActivitySummary', 'Tracker', ($scope, $location, Settings, ActivitySummary, Tracker ) ->
 

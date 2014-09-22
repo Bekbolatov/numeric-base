@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ActivityLib')
 
 .factory "TaskCtrlState", ['$location', ($location) ->
     class TaskCtrlState

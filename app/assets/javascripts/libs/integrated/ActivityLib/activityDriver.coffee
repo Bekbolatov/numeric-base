@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ActivityLib')
 
 .factory("ActivityDriver", ['$timeout','$sce', '$q', 'ActivityLoader', 'ActivitySummary', ($timeout, $sce, $q, ActivityLoader, ActivitySummary ) ->
     class Activity

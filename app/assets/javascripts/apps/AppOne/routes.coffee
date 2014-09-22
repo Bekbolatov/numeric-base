@@ -11,11 +11,11 @@ angular.module('AppOne')
         controller: 'InfoCtrl'
     })
     .when('/channelList', {
-        templateUrl: '/assets/templates/oneApp/channelList.html'
+        templateUrl: '/assets/templates/activityLib/channelList.html'
         controller: 'ChannelListCtrl'
     })
     .when('/channel', {
-        templateUrl: '/assets/templates/oneApp/channel.html'
+        templateUrl: '/assets/templates/activityLib/channel.html'
         controller: 'ChannelCtrl'
     })
     .when('/tags', {
@@ -23,15 +23,15 @@ angular.module('AppOne')
         controller: 'TagsCtrl'
     })
     .when('/task', {
-        templateUrl: '/assets/templates/oneApp/task.html'
+        templateUrl: '/assets/templates/activityLib/task.html'
         controller: 'TaskCtrl'
     })
     .when('/history', {
-        templateUrl: '/assets/templates/oneApp/history.html'
+        templateUrl: '/assets/templates/activityLib/history.html'
         controller: 'HistoryCtrl'
     })
     .when('/historyItem', {
-        templateUrl: '/assets/templates/oneApp/historyItem.html'
+        templateUrl: '/assets/templates/activityLib/historyItem.html'
         controller: 'HistoryItemCtrl'
     })
 

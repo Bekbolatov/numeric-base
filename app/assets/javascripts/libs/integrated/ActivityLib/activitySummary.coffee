@@ -1,4 +1,4 @@
-angular.module('EarnIt')
+angular.module('ActivityLib')
 
 .factory("ActivitySummary", ['$q', 'FS', 'PersistenceManager', ($q, FS, PersistenceManager ) ->
     class ActivitySummary

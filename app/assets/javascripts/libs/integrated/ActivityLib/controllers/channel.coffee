@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('ActivityLib')
 
 .controller 'ChannelCtrl', ['$scope', '$routeParams', '$location', '$sce', 'Settings', 'Tracker', 'Channels', 'ActivityDriver',  'StarPracticeApi', ($scope, $routeParams, $location, $sce, Settings, Tracker, Channels, ActivityDriver, StarPracticeApi ) ->
     if !Settings.ready

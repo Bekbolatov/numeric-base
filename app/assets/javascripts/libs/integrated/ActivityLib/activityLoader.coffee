@@ -95,7 +95,7 @@ class ActivityLoader
         .catch (status) => deferred.reject(status)
         deferred.promise
 
-angular.module('EarnIt')
+angular.module('ActivityLib')
 .factory("ActivityLoader", ['$q', 'Settings', 'ServerHttp', 'FS', ($q, Settings, ServerHttp, FS ) ->
     new ActivityLoader($q, Settings, ServerHttp, FS )
 ])

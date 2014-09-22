@@ -1,4 +1,4 @@
-angular.module('EarnIt')
+angular.module('ActivityLib')
 
 # Task Controller
 .controller 'TaskCtrl', ['$scope', '$rootScope', '$location', 'Settings', 'Tracker', 'TaskCtrlState', 'ActivityDriver', 'ActivitySummary', 'StarPracticeApi', ($scope, $rootScope, $location, Settings, Tracker, TaskCtrlState, ActivityDriver, ActivitySummary, StarPracticeApi ) ->
