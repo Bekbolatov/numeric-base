@@ -12,6 +12,8 @@ angular.module 'ModuleCommunication'
             else
                 @_baseChrome()
         version: -> document.numeric.appVersion
+        appName: -> document.numeric.appName
+        auth: -> '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + @appName() + ':' + @version()
 
         get: (url, options, cbtime) ->
             deferred = $q.defer()
@@ -29,11 +31,11 @@ angular.module 'ModuleCommunication'
                 if options.timeout == undefined
                     options.timeout = 7000
                 if options.headers == undefined
-                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + @version() }
+                    options.headers = { "Authorization": @auth() }
                 else if options.headers.Authorization == undefined
                     options.headers.Authorization = '' + DeviceId.deviceSecretId
             else
-                options = { cache: false, timeout: 7000, headers: { "Authorization": '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version() } }
+                options = { cache: false, timeout: 7000, headers: { "Authorization": @auth() } }
             $http.get(url , options)
             .then (response) =>
                 data = response.data
@@ -62,19 +64,11 @@ angular.module 'ModuleCommunication'
             deferred.promise
 
 
-        delete: (url, options) ->
+        delete: (url) ->
             console.log("delete url: " + url)
             deferred = $q.defer()
 
-            if options != undefined
-                if options.headers == undefined
-                    options.headers = { "Authorization": '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + @version() }
-                else if options.headers.Authorization == undefined
-                    options.headers.Authorization = '' + DeviceId.deviceSecretId
-            else
-                options = { headers: { "Authorization": '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version() } }
-
-            $http.defaults.headers.common.Authorization = '' + DeviceId.deviceSecretId  + ':' + DeviceId.devicePublicId + ':' + @version()
+            $http.defaults.headers.common.Authorization = @auth()
             $http.delete(url)
 
             .then (response) =>

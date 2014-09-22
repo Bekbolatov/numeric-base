@@ -1,20 +1,20 @@
 document.numeric =
     appVersion: 1
-    appName: 'starpractice'
+    appName: 'earnit'
 
     modules: {}
     numericTasks: {}
 
     key:
-        settings: 'numericSettings'
-        deviceId: 'numericDeviceId'
-        currentActivitySummary: 'numericCurrentActivitySummary'
-        storedActivitySummaries: 'numericStoredActivitySummaries'
-        messages: 'numericMessages'
-        channelActivities: 'numericChannelActivitiesCache'
+        settings: 'numericEarnItSettings'
+        deviceId: 'numericEarnItDeviceId'
+        currentActivitySummary: 'numericEarnItCurrentActivitySummary'
+        storedActivitySummaries: 'numericEarnItStoredActivitySummaries'
+        messages: 'numericEarnItMessages'
+        channelActivities: 'numericEarnItChannelActivitiesCache'
     url:
         base:
-            fs: 'numericdata/'
+            fs: 'numericdataEarnIt/'
             cdv: 'cdvfile://localhost/persistent/'
             chrome: 'filesystem:SERVERNAME/temporary/'
             server: 'https://www.sparkydots.com/starpractice/data/'
