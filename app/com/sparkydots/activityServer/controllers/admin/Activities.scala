@@ -2,6 +2,7 @@ package com.sparkydots.activityServer.controllers.admin
 
 import com.sparkydots.activityServer.forms.admin.ActivityForm
 import com.sparkydots.activityServer.models.Activity
+import com.sparkydots.activityServer.services.Authenticator
 import com.sparkydots.activityServer.views
 import play.api.mvc._
 
@@ -50,9 +51,12 @@ object Activities extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def delete(id: String) = Action {
-    Activity.delete(id)
-    Redirect(routes.Activities.list).flashing("success" -> "Activity successfully deleted!")
+  def delete(id: String) = Authenticator {
+    profile =>
+      Action {
+        Activity.delete(id)
+        Redirect(routes.Activities.list).flashing("success" -> "Activity successfully deleted!")
+      }
   }
 
 }
