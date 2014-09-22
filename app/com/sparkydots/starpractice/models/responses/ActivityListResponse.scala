@@ -10,4 +10,12 @@ import play.api.libs.json.Json
 case class ActivityListResponse(messages: List[Message], activities: List[Activity])
 object ActivityListResponse {
   implicit val activityListResponseFormat = Json.format[ActivityListResponse]
+
+  def containing(activities: List[Activity]) = {
+    val messages: List[Message] = List()
+    ActivityListResponse(messages, activities)
+  }
+
+  def jsonContaining(activities: List[Activity]) = Json.toJson(containing(activities))
+
 }

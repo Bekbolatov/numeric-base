@@ -18,10 +18,7 @@ object ChannelController extends Controller {
             ssi = 100
           }
 
-          val activities = Activity.pageOfChannel(chid, st, ssi)
-          val messages: List[Message] = List()
-          val activitiesResponse = ActivityListResponse(messages, activities)
-          Ok(Json.toJson(activitiesResponse))
+          Ok(ActivityListResponse jsonContaining Activity.pageOfChannel(chid, st, ssi))
 
         } catch {
           case e: Exception => Ok("{}")
@@ -38,10 +35,7 @@ object ChannelController extends Controller {
             ssi = 100
           }
 
-        val channels = Channel.pageForEndUser(id, st, ssi)
-        val messages: List[Message] = List()
-        val channelsResponse = ChannelListResponse(messages, channels)
-        Ok(Json.toJson(channelsResponse))
+          Ok(ChannelListResponse jsonContaining Channel.pageForEndUser(id, st, ssi))
 
         } catch {
           case e: Exception => Ok("{}")
