@@ -12,7 +12,11 @@
     <div ng-show="showEditName">
         Channel:
         @form(com.sparkydots.activityServer.controllers.admin.routes.Channels.update(channel.id)) {
-        @helper.inputText(channelForm("name"), 'size -> 50)
+        @inputText(channelForm("name"), 'size -> 50)
+        <span style="display: none;">
+            @inputText(channelForm("id"))
+            @inputText(channelForm("createDate"))
+        </span>
         <button type="submit">Update</button> <a href class="icon icon-close" ng-click="toggleEditName()"></a>
 
         }

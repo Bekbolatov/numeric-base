@@ -1,4 +1,4 @@
-angular.module('AppOne')
+angular.module('EarnIt')
 
 .controller 'HomeCtrl', ['$scope', '$sce', 'Settings','Tracker', 'StarPracticeApi', 'MessageDispatcher', 'Channels', 'ActivitySummary', 'Tags', ($scope, $sce, Settings, Tracker, StarPracticeApi, MessageDispatcher, Channels, ActivitySummary, Tags ) ->
 

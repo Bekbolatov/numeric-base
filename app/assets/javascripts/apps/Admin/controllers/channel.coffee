@@ -15,6 +15,19 @@ angular.module('adminActivities')
             $scope.showEditName = true
 ]
 
-.controller 'channelList', ['$scope', ($scope) ->
+.controller 'channelList', ['$scope', 'ServerHttp', ($scope, ServerHttp) ->
     console.log("list channels")
+
+    $scope.deleteChannel = (url, id) ->
+        protocol = location.protocol
+        server = location.hostname
+        port = location.port
+        if port.length > 0
+            port = ":" + port
+        servername = protocol + "//" + server + port
+        ServerHttp.delete(servername + url, id)
+        .then (response) -> console.log('ok')
+        .catch (status) -> console.log(status)
+        .then (r) ->
+            window.location.reload()
 ]

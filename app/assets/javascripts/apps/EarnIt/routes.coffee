@@ -3,69 +3,69 @@ angular.module('EarnIt')
 .config(['$routeProvider', ($routeProvider) ->
     $routeProvider
     .when('/', {
-        templateUrl: '/assets/templates/home.html'
+        templateUrl: '/assets/templates/oneApp/home.html'
         controller: 'HomeCtrl'
     })
     .when('/info', {
-        templateUrl: '/assets/templates/info.html'
+        templateUrl: '/assets/templates/oneApp/info.html'
         controller: 'InfoCtrl'
     })
     .when('/channelList', {
-        templateUrl: '/assets/templates/channelList.html'
+        templateUrl: '/assets/templates/oneApp/channelList.html'
         controller: 'ChannelListCtrl'
     })
     .when('/channel', {
-        templateUrl: '/assets/templates/channel.html'
+        templateUrl: '/assets/templates/oneApp/channel.html'
         controller: 'ChannelCtrl'
     })
     .when('/tags', {
-        templateUrl: '/assets/templates/tags.html'
+        templateUrl: '/assets/templates/oneApp/tags.html'
         controller: 'TagsCtrl'
     })
     .when('/task', {
-        templateUrl: '/assets/templates/task.html'
+        templateUrl: '/assets/templates/oneApp/task.html'
         controller: 'TaskCtrl'
     })
     .when('/history', {
-        templateUrl: '/assets/templates/history.html'
+        templateUrl: '/assets/templates/oneApp/history.html'
         controller: 'HistoryCtrl'
     })
     .when('/historyItem', {
-        templateUrl: '/assets/templates/historyItem.html'
+        templateUrl: '/assets/templates/oneApp/historyItem.html'
         controller: 'HistoryItemCtrl'
     })
 
     # Settings
     .when('/settings', {
-        templateUrl: '/assets/templates/settings.html'
+        templateUrl: '/assets/templates/oneApp/settings.html'
         controller: 'SettingsCtrl'
     })
 
     # Connect
     .when('/connect', {
-        templateUrl: '/assets/templates/connect.html'
+        templateUrl: '/assets/templates/oneApp/connect.html'
         controller: 'ConnectCtrl'
     })
     .when('/myIdentity', {
-        templateUrl: '/assets/templates/myIdentity.html'
+        templateUrl: '/assets/templates/oneApp/myIdentity.html'
         controller: 'MyIdentityCtrl'
     })
     .when('/teachers', {
-        templateUrl: '/assets/templates/teachers.html'
+        templateUrl: '/assets/templates/oneApp/teachers.html'
         controller: 'TeachersCtrl'
     })
     .when('/addTeacher', {
-        templateUrl: '/assets/templates/addTeacher.html'
+        templateUrl: '/assets/templates/oneApp/addTeacher.html'
         controller: 'AddTeacherCtrl'
     })
 
     # for testing only
     .when('/test', {
-        templateUrl: '/assets/templates/test.html'
+        templateUrl: '/assets/templates/oneApp/test.html'
         controller: 'TestCtrl'
     })
     .when('/sampleQuestion', {
-        templateUrl: '/assets/templates/sampleQuestion.html'
+        templateUrl: '/assets/templates/oneApp/sampleQuestion.html'
         controller: 'SampleQuestionCtrl'
     })
 

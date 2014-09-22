@@ -27,6 +27,7 @@ document.numeric =
         result: 'result/'
 
     defaultSettings:
+        defaultChannel: 1
         pageSize: 10
         historyServerSync: false
         mainServerAddress: 'https://www.sparkydots.com/activityServer/data/'
