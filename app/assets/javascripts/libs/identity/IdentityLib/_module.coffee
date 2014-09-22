@@ -1,1 +1,0 @@
-angular.module 'ModuleIdentity', ['ngMd5', 'ModulePersistence', 'BaseLib']

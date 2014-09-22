@@ -6,8 +6,8 @@
         <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/ratchet/2.0.2/css/ratchet.min.css'>
         <!--<link rel="stylesheet" href='@routes.Assets.at("bower_components/ratchet/dist/css/ratchet.min.css")'>-->
 
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/numeric.css?v=2.4")'>
-        <link rel="stylesheet" href='@routes.Assets.at("stylesheets/main.css")'>
+        <link rel="stylesheet" href='@routes.Assets.at("apps/stylesheets/numeric.css?v=0.03")'>
+        <link rel="stylesheet" href='@routes.Assets.at("apps/stylesheets/main.css")'>
         <meta property="og:image" content='@routes.Assets.at("images/logo-large.png")' />
         <meta property="og:title" content="StarPractice" />
         <meta property="og:description" content="StarPractice helps students, educators and parents by providing easy ways of generating new practice questions and tracking completed work."/>
@@ -21,7 +21,7 @@
             <img src='@routes.Assets.at("images/phone-frame.png")' height="760">
         </div>
         <div class="app-frame">
-            <div ng-include="'/assets/templates/activityLib/base.html'"></div>
+            <div ng-include="'/assets/apps/templates/appOne/base.html'"></div>
         </div>
 
         <div id="releaseNotes">
@@ -40,14 +40,14 @@
 
         <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js' type="text/javascript"></script>
         <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.min.js' type="text/javascript"></script>
-
-        <!--    <script src='@routes.Assets.at("bower_components/angular/angular.min.js")' type="text/javascript"></script>
-            <script src='@routes.Assets.at("bower_components/angular-route/angular-route.min.js")' type="text/javascript"></script> -->
-
+        <!--<script src='@routes.Assets.at("bower_components/angular/angular.min.js")' type="text/javascript"></script>-->
+        <!--<script src='@routes.Assets.at("bower_components/angular-route/angular-route.min.js")' type="text/javascript"></script> -->
 
         <script src='@routes.Assets.at("bower_components/angular-timer/dist/angular-timer.min.js")' type="text/javascript"></script>
         <script src='@routes.Assets.at("bower_components/angular-md5/angular-md5.min.js")' type="text/javascript"></script>
 
-        <script src='@routes.Assets.at("/javascripts/dists/oneApp.dist.min.js?v=2.4")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("/apps/javascripts/library.min.js?v=0.03")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("/apps/javascripts/appOne.min.js?v=0.03")' type="text/javascript"></script>
+
         </body>
     </html>
