@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     publicDir = 'public/'
     appDir = 'public/apps/'
 
-    apps = ['appOne','earnIt', 'admin', 'testApp']
+    apps = ['StarPractice', 'EarnIt', 'Admin', 'TestApp']
     appFiles = []
 
     for app in apps
