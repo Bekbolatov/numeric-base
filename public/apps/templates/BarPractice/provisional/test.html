@@ -1,0 +1,70 @@
+<div class="content">
+<div class="content-inner content-inner-marketplace">
+<div class="media-body">
+<div class="content-inner">
+
+
+<hr>
+<a href="#/addStudent">addStudent</a>
+<hr>
+<a href="#/addTeacher">addTeacher</a>
+<hr>
+<a href="#/myIdentity">myIdentity</a>
+<hr>
+
+<br><button ng-click="getHttpsData()">Test encrypted request</button><br>
+Encrypted response: {{ httpsdata.id }}
+
+
+<hr>
+<button ng-click="writeToFile()">Test write</button><br>
+<button ng-click="readFromFile()">Test read</button><br>
+data: {{ readData }}
+
+
+
+<hr>
+<input ng-model="query" type="text">
+<button ng-click="getContentsRaw(query)">getcontents: ?</button><br>
+<button ng-click="testmd5(query)">md5: ?</button><br>
+<button ng-click="getFromLocal(numericStoredActivitySummaries)">numericStoredActivitySummaries</button><br>
+data: {{ localData }}
+
+
+<hr>
+<br><button ng-click="showScriptsInHead()">show scripts in head</button><br>
+<ol>
+    <li ng-repeat="script in scripts">
+        <span ng-class-odd="'test-odd'" ng-class-even="'test-even'">
+            <b>id:{{ script.id }}</b>
+            <br>
+            src:{{ script.src }}
+            </span>
+    </li>
+</ol>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!--  BOTTOM NAV -->
+<div class="bar bar-standard bar-footer">
+    <a class="tab-item active" href="#/home">
+        <span class="icon icon-home"></span>
+        <span class="tab-label">Home</span>
+    </a>
+    <a class="tab-item active" href="#/history">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">History</span>
+    </a>
+    <a class="tab-item active" href="#/test">
+        <span class="icon icon-pages"></span>
+        <span class="tab-label">TestPage</span>
+    </a>
+    <a class="tab-item active" href="#/settings">
+        <span class="icon icon-gear"></span>
+        <span class="tab-label">Settings</span>
+    </a>
+</div>

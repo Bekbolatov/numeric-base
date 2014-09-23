@@ -14,6 +14,10 @@
     </div>
     <div class="optionBlock" ng-show="settingsLoaded">
 
+        <div class="paramName" ng-show="customDisplay">
+            <div ng-bind-html="customDisplay.content"></div>
+        </div>
+
         <p class="paramName">
             &nbsp;
         </p>
@@ -24,6 +28,11 @@
 
         <div class="paramName" ng-show="hasHistory">
             <a href="#/history"><button class="btn btn-primary btn-block navigate-right">History</button></a>
+        </div>
+
+
+        <div class="paramName" ng-repeat="customTab in customTabs">
+            <a href="{{ customTab.href }}"><button class="btn btn-primary btn-block navigate-right">{{ customTab.text }}</button></a>
         </div>
 
 

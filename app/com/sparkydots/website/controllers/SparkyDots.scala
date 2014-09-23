@@ -16,4 +16,8 @@ object SparkyDots extends Controller {
      Ok(views.html.sparkydots.index())
    }
 
+  def appDemo(appName: String) = Action {
+    Ok(views.html.sparkydots.appDemo(appName))
+  }
+
  }

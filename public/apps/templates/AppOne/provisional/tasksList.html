@@ -1,0 +1,46 @@
+<header class="bar bar-nav background-color-practice">
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
+    <h2 class="title">Pick Activity</h2>
+    <a class="icon icon-plus pull-right" href="#/tasksMarketplace"></a>
+    <!-- <a class="pull-right" href="#/history"><button class="btn btn-primary">History</button></a> -->
+</header>
+
+<div class="content content-bg">
+
+    <div ng-show="showMessage">
+        <div class="app-message">
+            <p ng-bind-html="message"></p>
+        </div>
+    </div>
+
+    <ul class="table-view table-view-list">
+        <li class="table-view-cell" ng-show="noActivities">
+            <p>
+                It looks like you do not have any activities installed.
+                <br>(use <span class="icon icon-plus"></span> to get new activities)
+            </p>
+        </li>
+
+        <li class="table-view-cell color-practice" ng-repeat="(id, meta) in tableOfAvailableActivities">
+            <a class="navigate-right color-practice" ng-href="#/task/{{ id }}/{{meta.version}}">
+                {{ meta.name }}
+                <p class="color-practice">{{ meta.shortDescription }}</p>
+            </a>
+        </li>
+    </ul>
+
+    <!--
+    <div class="clearfix"></div>
+    <p>
+        <a class="center" ng-href="#/tasksMarketplace">
+            <p class="content-paragraph">
+                <button class="btn btn-primary">
+                    <i>Manage activities ...</i>
+                </button>
+            </p>
+        </a>
+    </p>
+    -->
+
+
+</div>

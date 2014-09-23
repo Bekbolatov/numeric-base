@@ -29,7 +29,6 @@
                 <p>{{activitySummaryInfo.timestamp | date:'MMM d, y hh:mm a' }}</p>
                 <p>
                     Total questions: {{ activitySummaryInfo.numberCorrect + activitySummaryInfo.numberWrong }}
-                    ({{ activitySummaryInfo.numberCorrect }} correct and {{ activitySummaryInfo.numberWrong }} wrong)
                 </p>
                 <p>
                     Time spent: {{ activitySummaryInfo.totalTime | secsToMillis | secondsToHuman }}

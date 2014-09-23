@@ -1,32 +1,27 @@
 module.exports = (grunt) ->
+    watchFile = '/Users/renatb/projects/90_scratch/Bekbolatov/ActivityClient/.completed'
     distDir = '/Users/renatb/projects/90_scratch/Bekbolatov/ActivityClient/target/dist/'
     publicDir = 'public/'
     appDir = 'public/apps/'
 
-    apps = ['StarPractice', 'EarnIt', 'Admin', 'TestApp']
     appFiles = []
 
-    for app in apps
-        appFiles.push
-            expand: true
-            cwd: distDir + 'js/'
-            src: [app + '.min.js']
-            dest: appDir + 'javascripts/'
-        appFiles.push
-            expand: true
-            cwd: distDir + 'templates/apps/'
-            src: [app + '/**/*']
-            dest: appDir + 'templates/'
+    appFiles.push
+        expand: true
+        cwd: distDir + 'templates/apps/'
+        src: ['**/*']
+        dest: appDir + 'templates/'
     appFiles.push
         expand: true
         cwd: distDir + 'js/'
-        src: ['library.min.js']
+        src: ['**/*.min.js']
         dest: appDir + 'javascripts/'
     appFiles.push
         expand: true
         cwd: distDir + 'css/'
         src: ['**/*']
         dest: appDir + 'stylesheets/'
+
     appFiles.push
         expand: true
         cwd: distDir + 'images/'
@@ -35,12 +30,18 @@ module.exports = (grunt) ->
 
     grunt.initConfig
         copy:
-            common:
+            modules:
                 files: appFiles
+        watch:
+            modules:
+                files: watchFile
+                tasks: 'default'
+
 
     grunt.loadNpmTasks 'grunt-contrib-copy'
+    grunt.loadNpmTasks 'grunt-contrib-watch'
 
-    grunt.registerTask 'default', [ 'copy:common' ]
+    grunt.registerTask 'default', [ 'copy:modules' ]
 
 
 
