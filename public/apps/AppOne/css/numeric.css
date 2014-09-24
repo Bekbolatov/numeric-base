@@ -122,7 +122,7 @@ input[type=text].inputmodified {
   margin-right: 5px;
 }
 .content-bg {
-  background-image: url(/assets/images/road3.png);
+  background-image: url('../img/background.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }

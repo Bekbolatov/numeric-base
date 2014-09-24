@@ -8,7 +8,7 @@ _initLocal = function(d) {
   }
   n = d.numeric;
   n.appVersion = 1;
-  n.appName = 'EarnIt';
+  n.appName = 'StarPractice';
   n.key.settings = 'numeric' + n.appName + 'Settings';
   n.key.deviceId = 'numeric' + n.appName + 'DeviceId';
   n.key.currentActivitySummary = 'numeric' + n.appName + 'CurrentActivitySummary';
@@ -17,11 +17,20 @@ _initLocal = function(d) {
   n.key.channelActivities = 'numeric' + n.appName + 'ChannelActivitiesCache';
   n.url.base.numeric = 'numericdata/';
   n.url.base.fs = 'numericdata/' + n.appName + '/';
-  n.defaultSettings.defaultChannel = 1;
-  n.defaultSettings.stringTitle = 'EarnIt';
+  n.path.touch = 'touch';
+  n.path.channels = 'channels';
+  n.path.list = 'activity/list';
+  n.path.activity = 'activity/';
+  n.path.body = 'activity/body/';
+  n.path.result = 'result/';
+  if (n.defaultSettings === void 0) {
+    n.defaultSettings === {};
+  }
+  n.defaultSettings.defaultChannel = 0;
+  n.defaultSettings.stringTitle = n.appName;
   n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistory = 'History';
-  return n.defaultSettings.stringHistoryItem = 'Activity Summary';
+  return n.defaultSettings.stringHistoryItem = 'Task Summary';
 };
 
 _initLocal(document);
@@ -48,10 +57,10 @@ try {
   console.log(e);
 }
 
-angular.module('EarnIt', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
+angular.module('StarPractice', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
 
 
-angular.module('EarnIt').controller('ApplicationCtrl', [
+angular.module('StarPractice').controller('ApplicationCtrl', [
   '$scope', '$location', 'Settings', 'Application', function($scope, $location, Settings, Application) {
     var initApplication;
     initApplication = function() {
@@ -74,108 +83,55 @@ angular.module('EarnIt').controller('ApplicationCtrl', [
   }
 ]);
 
-angular.module('ActivityLib').controller('HomeCtrl', [
-  '$scope', '$location', '$sce', 'Settings', 'Tracker', 'StarPracticeApi', 'MessageDispatcher', 'Channels', 'ActivitySummary', 'Tags', function($scope, $location, $sce, Settings, Tracker, StarPracticeApi, MessageDispatcher, Channels, ActivitySummary, Tags) {
-    var setScopeVars;
-    setScopeVars = function() {
-      var application, msg;
-      Tracker.touch('home');
-      $scope.settingsLoaded = true;
-      msg = MessageDispatcher.getMessageToShow();
-      if (msg !== void 0) {
-        $scope.showMessage = true;
-        $scope.message = $sce.trustAsHtml(msg.content);
-      } else {
-        $scope.showMessage = false;
-        $scope.message = '';
-      }
-      $scope.navigateToTagsOrChannel = function(id, name) {
-        if (Tags.hasTags()) {
-          return Tags.navigateToTags();
-        } else {
-          if (id === void 0 || name === void 0) {
-            id = Settings.get('defaultChannel');
-            name = 'Public';
-          }
-          return Channels.navigateToChannel(id, name, '#/');
-        }
-      };
-      $scope.hasHistory = ActivitySummary.hasHistory();
-      $scope.stringTitle = Settings.get('stringTitle');
-      $scope.showSettings = Settings.get('showSettings');
-      application = document.numeric.application;
-      if (application === void 0) {
-        return $location.path('/');
-      }
-      $scope.customTabs = application.customTabs;
-      return $scope.customDisplay = application.customDisplay;
-    };
-    if (Settings.ready) {
-      return setScopeVars();
-    } else {
-      $scope.settingsLoaded = false;
-      return Settings.init(document.numeric.key.settings, document.numeric.defaultSettings).then((function(_this) {
-        return function() {
-          return setScopeVars();
-        };
-      })(this))["catch"]((function(_this) {
-        return function(t) {
-          return $scope.errorMessage = 'Application needs some local storage enabled to work.';
-        };
-      })(this));
-    }
-  }
-]);
-
-angular.module('EarnIt').config([
+angular.module('StarPractice').config([
   '$routeProvider', function($routeProvider) {
     return $routeProvider.when('/', {
-      templateUrl: '/assets/apps/EarnIt/templates/home.html',
+      templateUrl: '/assets/apps/StarPractice/templates/home.html',
       controller: 'ApplicationCtrl'
     }).when('/home', {
-      templateUrl: '/assets/apps/EarnIt/templates/home.html',
+      templateUrl: '/assets/apps/StarPractice/templates/home.html',
       controller: 'HomeCtrl'
     }).when('/info', {
-      templateUrl: '/assets/apps/EarnIt/templates/info.html',
+      templateUrl: '/assets/apps/StarPractice/templates/info.html',
       controller: 'InfoCtrl'
     }).when('/channelList', {
-      templateUrl: '/assets/apps/EarnIt/templates/channelList.html',
+      templateUrl: '/assets/apps/StarPractice/templates/channelList.html',
       controller: 'ChannelListCtrl'
     }).when('/channel', {
-      templateUrl: '/assets/apps/EarnIt/templates/channel.html',
+      templateUrl: '/assets/apps/StarPractice/templates/channel.html',
       controller: 'ChannelCtrl'
     }).when('/tags', {
-      templateUrl: '/assets/apps/EarnIt/templates/tags.html',
+      templateUrl: '/assets/apps/StarPractice/templates/tags.html',
       controller: 'TagsCtrl'
     }).when('/task', {
-      templateUrl: '/assets/apps/EarnIt/templates/task.html',
+      templateUrl: '/assets/apps/StarPractice/templates/task.html',
       controller: 'TaskCtrl'
     }).when('/history', {
-      templateUrl: '/assets/apps/EarnIt/templates/history.html',
+      templateUrl: '/assets/apps/StarPractice/templates/history.html',
       controller: 'HistoryCtrl'
     }).when('/historyItem', {
-      templateUrl: '/assets/apps/EarnIt/templates/historyItem.html',
+      templateUrl: '/assets/apps/StarPractice/templates/historyItem.html',
       controller: 'HistoryItemCtrl'
     }).when('/settings', {
-      templateUrl: '/assets/apps/EarnIt/templates/settings.html',
+      templateUrl: '/assets/apps/StarPractice/templates/settings.html',
       controller: 'SettingsCtrl'
     }).when('/connect', {
-      templateUrl: '/assets/apps/EarnIt/templates/connect.html',
+      templateUrl: '/assets/apps/StarPractice/templates/connect.html',
       controller: 'ConnectCtrl'
     }).when('/myIdentity', {
-      templateUrl: '/assets/apps/EarnIt/templates/myIdentity.html',
+      templateUrl: '/assets/apps/StarPractice/templates/myIdentity.html',
       controller: 'MyIdentityCtrl'
     }).when('/teachers', {
-      templateUrl: '/assets/apps/EarnIt/templates/teachers.html',
+      templateUrl: '/assets/apps/StarPractice/templates/teachers.html',
       controller: 'TeachersCtrl'
     }).when('/addTeacher', {
-      templateUrl: '/assets/apps/EarnIt/templates/addTeacher.html',
+      templateUrl: '/assets/apps/StarPractice/templates/addTeacher.html',
       controller: 'AddTeacherCtrl'
     }).when('/test', {
-      templateUrl: '/assets/apps/EarnIt/templates/test.html',
+      templateUrl: '/assets/apps/StarPractice/templates/test.html',
       controller: 'TestCtrl'
     }).when('/sampleQuestion', {
-      templateUrl: '/assets/apps/EarnIt/templates/sampleQuestion.html',
+      templateUrl: '/assets/apps/StarPractice/templates/sampleQuestion.html',
       controller: 'SampleQuestionCtrl'
     }).otherwise({
       redirectTo: '/'
@@ -223,23 +179,11 @@ angular.module('EarnIt').config([
 ]);
 
 
-angular.module('EarnIt').factory('Application', [
+angular.module('StarPractice').factory('Application', [
   '$sce', 'Settings', function($sce, Settings) {
     var Application, application;
     Application = (function() {
-      function Application() {
-        this.customTabs = [];
-        this.customTabs.push({
-          href: '#/history',
-          text: 'Withdraw'
-        });
-        this.customTabs.push({
-          href: '#/history',
-          text: 'Set Exchange Rate'
-        });
-        this.customDisplay = {};
-        this.customDisplay.content = $sce.trustAsHtml('<div class="center-inline-child"><span class="hello">Balance: <b>$25.35</b></span></div>');
-      }
+      function Application() {}
 
       return Application;
 

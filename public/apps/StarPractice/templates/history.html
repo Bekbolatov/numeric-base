@@ -1,0 +1,39 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
+    <h2 class="title">{{ stringHistory }}</h2>
+</header>
+
+<div class="content content-bg">
+
+    <div class="clearfix"></div>
+    <div class="table-view-cell-right" ng-show="!littleHistory">
+            <span class="span-history-pages">
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize*10)">&#xe82d;&#xe82d;</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize)">&#xe82d;</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages">{{ startIndex + 1 }} - {{ endIndex }} ({{ totalItems }})</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(pageSize)">&#xe818;</button>
+                <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(pageSize*10)">&#xe818;&#xe818;</button>
+            </span>
+    </div>
+    <div class="clearfix"></div>
+
+    <ul class="table-view table-view-history">
+        <li class="table-view-cell" ng-show="noHistory">
+            <p>
+                There is no record of any completed activities.
+            </p>
+        </li>
+        <li class="table-view-cell" ng-repeat="activitySummaryInfo in activitySummariesInfo">
+            <a href class="navigate-right" ng-click="navigateToItem(activitySummaryInfo.timestamp)">
+                {{ activitySummaryInfo.activityName | truncate:25 }}
+                <p>{{activitySummaryInfo.timestamp | date:'MMM d, y hh:mm a' }}</p>
+                <p>
+                    Total questions: {{ activitySummaryInfo.numberCorrect + activitySummaryInfo.numberWrong }}
+                </p>
+                <p>
+                    Time spent: {{ activitySummaryInfo.totalTime | secsToMillis | secondsToHuman }}
+                </p>
+            </a>
+        </li>
+    </ul>
+</div>

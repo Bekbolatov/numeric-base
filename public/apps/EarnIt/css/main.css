@@ -28,7 +28,7 @@ ul {
   width: 300px;
 }
 .content-bg {
-  background-image: url(/assets/images/road3.png);
+  background-image: url(../img/background.png);
 }
 .bar {
   position: relative;
