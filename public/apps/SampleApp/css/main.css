@@ -1,0 +1,86 @@
+.bordered {
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+.red-background {
+  background: red;
+}
+ul {
+  background: #0372cd;
+}
+.box {
+  color: #cc5854;
+  border-top: dotted 1px black;
+  border-bottom: solid 2px black;
+}
+.button {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+#header {
+  color: black;
+}
+#header .navigation {
+  font-size: 12px;
+}
+#header .logo {
+  width: 300px;
+}
+.content-bg {
+  background-image: url(/assets/images/road3.png);
+}
+.bar {
+  position: relative;
+}
+.bar-header-secondary {
+  top: 0px;
+}
+.app-frame {
+  z-index: 2;
+  position: absolute;
+  top: 80px;
+  left: 18px;
+  width: 340px;
+  height: 600px;
+  border: 2px solid black;
+}
+.phone-frame {
+  z-index: -3;
+}
+.phone-frame img {
+  z-index: -3;
+}
+#releaseNotes {
+  position: absolute;
+  top: 30px;
+  left: 420px;
+}
+.flip-content {
+  margin-top: 0px;
+  overflow-y: auto;
+}
+.flip {
+  height: 610px;
+}
+.ol-mult-choice {
+  font-size: 14px;
+  color: #777;
+}
+.allActivitiesHolder {
+  display: inline-block;
+  width: 40%;
+}
+.defaultChannelHolder {
+  display: inline-block;
+  width: 40%;
+}
+.position-relative {
+  position: relative;
+}
+.table-view-cell > .btn-noposition {
+  position: relative;
+}
+.logo {
+  padding-bottom: 10px;
+}

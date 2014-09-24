@@ -4,13 +4,13 @@
 <html ng-app="@appName">
     <head>
         <title>@appName</title>
-        <link rel="icon" href='@routes.Assets.at("images/favicon.ico")' type="image/x-icon" />
+        <link rel="icon" href='@routes.Assets.at(s"apps/$appName/img/favicon.ico")' type="image/x-icon" />
         <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/ratchet/2.0.2/css/ratchet.min.css'>
         <!--<link rel="stylesheet" href='@routes.Assets.at("bower_components/ratchet/dist/css/ratchet.min.css")'>-->
 
-        <link rel="stylesheet" href='@routes.Assets.at("apps/stylesheets/numeric.css?v=0.03")'>
-        <link rel="stylesheet" href='@routes.Assets.at("apps/stylesheets/main.css")'>
-        <link rel="stylesheet" href='@routes.Assets.at("apps/stylesheets/apps/" + appName + "/custom.css")'>
+        <link rel="stylesheet" href='@routes.Assets.at(s"apps/$appName/css/numeric.css?v=0.03")'>
+        <link rel="stylesheet" href='@routes.Assets.at(s"apps/$appName/css/main.css")'>
+        <link rel="stylesheet" href='@routes.Assets.at(s"apps/$appName/css/custom.css")'>
         <meta property="og:image" content='@routes.Assets.at("images/logo-large.png")' />
         <meta property="og:title" content="@appName" />
         <meta property="og:description" content="@appName helps students, educators and parents by providing easy ways of generating new practice questions and tracking completed work."/>
@@ -24,7 +24,7 @@
             <img src='@routes.Assets.at("images/phone-frame.png")' height="760">
         </div>
         <div class="app-frame">
-            <div ng-include="'/assets/apps/templates/@appName/base.html'"></div>
+            <div ng-include="'/assets/apps/@appName/templates/base.html'"></div>
         </div>
 
         <div id="releaseNotes">
@@ -41,8 +41,8 @@
         <script src='@routes.Assets.at("bower_components/angular-timer/dist/angular-timer.min.js")' type="text/javascript"></script>
         <script src='@routes.Assets.at("bower_components/angular-md5/angular-md5.min.js")' type="text/javascript"></script>
 
-        <script src='@routes.Assets.at("/apps/javascripts/library.min.js?v=0.03")' type="text/javascript"></script>
-        <script src='@routes.Assets.at("/apps/javascripts/" + appName + ".min.js?v=0.03")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("/libs/library/js/library.min.js?v=0.03")' type="text/javascript"></script>
+        <script src='@routes.Assets.at(s"/apps/$appName/js/$appName.min.js?v=0.03")' type="text/javascript"></script>
 
         </body>
     </html>
