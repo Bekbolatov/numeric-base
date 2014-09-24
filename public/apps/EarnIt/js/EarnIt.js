@@ -74,59 +74,6 @@ angular.module('EarnIt').controller('ApplicationCtrl', [
   }
 ]);
 
-angular.module('ActivityLib').controller('HomeCtrl', [
-  '$scope', '$location', '$sce', 'Settings', 'Tracker', 'StarPracticeApi', 'MessageDispatcher', 'Channels', 'ActivitySummary', 'Tags', function($scope, $location, $sce, Settings, Tracker, StarPracticeApi, MessageDispatcher, Channels, ActivitySummary, Tags) {
-    var setScopeVars;
-    setScopeVars = function() {
-      var application, msg;
-      Tracker.touch('home');
-      $scope.settingsLoaded = true;
-      msg = MessageDispatcher.getMessageToShow();
-      if (msg !== void 0) {
-        $scope.showMessage = true;
-        $scope.message = $sce.trustAsHtml(msg.content);
-      } else {
-        $scope.showMessage = false;
-        $scope.message = '';
-      }
-      $scope.navigateToTagsOrChannel = function(id, name) {
-        if (Tags.hasTags()) {
-          return Tags.navigateToTags();
-        } else {
-          if (id === void 0 || name === void 0) {
-            id = Settings.get('defaultChannel');
-            name = 'Public';
-          }
-          return Channels.navigateToChannel(id, name, '#/');
-        }
-      };
-      $scope.hasHistory = ActivitySummary.hasHistory();
-      $scope.stringTitle = Settings.get('stringTitle');
-      $scope.showSettings = Settings.get('showSettings');
-      application = document.numeric.application;
-      if (application === void 0) {
-        return $location.path('/');
-      }
-      $scope.customTabs = application.customTabs;
-      return $scope.customDisplay = application.customDisplay;
-    };
-    if (Settings.ready) {
-      return setScopeVars();
-    } else {
-      $scope.settingsLoaded = false;
-      return Settings.init(document.numeric.key.settings, document.numeric.defaultSettings).then((function(_this) {
-        return function() {
-          return setScopeVars();
-        };
-      })(this))["catch"]((function(_this) {
-        return function(t) {
-          return $scope.errorMessage = 'Application needs some local storage enabled to work.';
-        };
-      })(this));
-    }
-  }
-]);
-
 angular.module('EarnIt').config([
   '$routeProvider', function($routeProvider) {
     return $routeProvider.when('/', {
@@ -228,6 +175,7 @@ angular.module('EarnIt').factory('Application', [
     var Application, application;
     Application = (function() {
       function Application() {
+        var infoHtml;
         this.customTabs = [];
         this.customTabs.push({
           href: '#/history',
@@ -239,6 +187,9 @@ angular.module('EarnIt').factory('Application', [
         });
         this.customDisplay = {};
         this.customDisplay.content = $sce.trustAsHtml('<div class="center-inline-child"><span class="hello">Balance: <b>$25.35</b></span></div>');
+        this.stringInfoTitle = 'About';
+        infoHtml = '<p class="paramName"> <b>EarnIt</b> helps parents give their children math assignments, by allowing them to set up workable contracts with their children. </p> <p class="paramName"> Whenever you work on an activity, you are earning credits - which are translated into dollars at the rate set by you parent. </p> <p class="paramName"> When you complete an activity, history of this activity is automatically saved and can be reviewed later by going to "History". </p> <p class="paramName"> If you want to get these additional features, please contact <a href="mailto:info@sparkydots.com?subject=Customized%20Activities">info@sparkydots.com</a> for more information. </p>';
+        this.stringInfoHtml = $sce.trustAsHtml(infoHtml);
       }
 
       return Application;

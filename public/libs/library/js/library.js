@@ -6212,12 +6212,18 @@ angular.module('ActivityLib').controller('HomeCtrl', [
 ]);
 
 angular.module('ActivityLib').controller('InfoCtrl', [
-  '$scope', '$location', 'Settings', 'Tracker', function($scope, $location, Settings, Tracker) {
+  '$scope', '$location', 'Settings', 'Application', 'Tracker', function($scope, $location, Settings, Application, Tracker) {
+    var infoTitle;
     if (!Settings.ready) {
       return $location.path('/');
     } else {
-      return Tracker.touch('info');
+      Tracker.touch('info');
     }
+    $scope.infoTitle = Application.stringInfoTitle;
+    if (infoTitle === void 0) {
+      infoTitle = 'Info';
+    }
+    return $scope.infoHtml = Application.stringInfoHtml;
   }
 ]);
 

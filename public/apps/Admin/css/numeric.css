@@ -3,6 +3,14 @@
   font-size: 14px;
   color: #777;
 }
+.info-container {
+  padding: 20px;
+  padding-bottom: 30px;
+}
+.veil-background {
+  background-color: #fff;
+  opacity: 0.90;
+}
 .app-message {
   padding: 10px 20px 20px 20px;
   background-color: #F8F88C;

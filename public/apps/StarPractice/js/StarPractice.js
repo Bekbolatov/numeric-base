@@ -30,7 +30,7 @@ _initLocal = function(d) {
   n.defaultSettings.stringTitle = n.appName;
   n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistory = 'History';
-  return n.defaultSettings.stringHistoryItem = 'Task Summary';
+  return n.defaultSettings.stringHistoryItem = 'Activity Summary';
 };
 
 _initLocal(document);
@@ -183,7 +183,12 @@ angular.module('StarPractice').factory('Application', [
   '$sce', 'Settings', function($sce, Settings) {
     var Application, application;
     Application = (function() {
-      function Application() {}
+      function Application() {
+        var infoHtml;
+        this.stringInfoTitle = 'About';
+        infoHtml = '<p class="paramName"> <b>StarPractice</b> helps students, educators and parents by providing easy ways of generating new practice questions and tracking completed work. </p> <p class="paramName"> When you complete an activity, its history is automatically saved and can be reviewed later by going to "History". </p> <p class="paramName"> In customized versions of this service, educators are provided with additional functionalities: <ul class="ul-info"> <li>create own tests</li> <li>choose from provided question templates</li> <li>tailor practice sets for individual students or groups</li> <li>receive student responses</li> </ul> </p> <p class="paramName"> If you want to get these additional features, please contact <a href="mailto:info@sparkydots.com?subject=Customized%20Activities">info@sparkydots.com</a> for more information. </p>';
+        this.stringInfoHtml = $sce.trustAsHtml(infoHtml);
+      }
 
       return Application;
 
