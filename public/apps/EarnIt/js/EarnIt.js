@@ -17,11 +17,20 @@ _initLocal = function(d) {
   n.key.channelActivities = 'numeric' + n.appName + 'ChannelActivitiesCache';
   n.url.base.numeric = 'numericdata/';
   n.url.base.fs = 'numericdata/' + n.appName + '/';
-  n.defaultSettings.defaultChannel = 1;
+  n.defaultSettings.defaultChannel = 'public.EarnIt';
   n.defaultSettings.stringTitle = 'EarnIt';
   n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistory = 'History';
-  return n.defaultSettings.stringHistoryItem = 'Activity Summary';
+  n.defaultSettings.stringHistoryItem = 'Activity Summary';
+  return n.customTabs = [
+    {
+      page: 'history',
+      text: 'Redeem'
+    }, {
+      page: 'history',
+      text: 'Set Exchange Rate'
+    }
+  ];
 };
 
 _initLocal(document);
@@ -176,15 +185,6 @@ angular.module('EarnIt').factory('Application', [
     Application = (function() {
       function Application() {
         var infoHtml;
-        this.customTabs = [];
-        this.customTabs.push({
-          href: '#/history',
-          text: 'Withdraw'
-        });
-        this.customTabs.push({
-          href: '#/history',
-          text: 'Set Exchange Rate'
-        });
         this.customDisplay = {};
         this.customDisplay.content = $sce.trustAsHtml('<div class="center-inline-child"><span class="hello">Balance: <b>$25.35</b></span></div>');
         this.stringInfoTitle = 'About';

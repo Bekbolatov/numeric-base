@@ -1,0 +1,50 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
+    <h2 class="title">Settings</h2>
+</header>
+
+
+<div class="content content-bg">
+    <div class="content-inner content-inner-marketplace veil-background">
+
+        <hr>
+        <h4>Listings</h4>
+        <p>
+            <b>Page size:</b>&nbsp;
+            <button class="btn {{ 2 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 2)">2</button>
+            <button class="btn {{ 10 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 10)">10</button>
+            <button class="btn {{ 20 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 20)">20</button>
+            <button class="btn {{ 30 == getAttr('pageSize') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('pageSize', 30)">30</button>
+        </p>
+
+        <hr>
+        <h4>History</h4>
+        <p>
+            <b>Sync with server:</b>&nbsp;
+            <button class="btn {{ true == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', true)">yes</button>
+            <button class="btn {{ false == getAttr('historyServerSync') && ' btn-primary' || 'btn-outlined' }}" ng-click="setAttr('historyServerSync', false)">no</button>
+        </p>
+
+        <hr>
+        <h4>Server</h4>
+        <p>
+            <b>Main server address:</b><br>
+            <input type="text" ng-model="newMainServerAddress" ng-class="{inputmodified: getAttr('mainServerAddress') != newMainServerAddress}">
+
+            <button class="btn" ng-class="{'btn-primary' : getAttr('mainServerAddress') != newMainServerAddress}" ng-click="mainServerAddress_set()">set</button>
+            <button class="btn" ng-class="{'btn-primary' : defaultMainServerAddress != newMainServerAddress}" ng-click="mainServerAddress_reset()">reset</button>
+        </p>
+
+        <hr>
+
+        <p>
+            <div>
+                <!--<a href="#/test" style="color: white;">t</a>-->
+            </div>
+        </p>
+
+
+
+
+    </div>
+</div>

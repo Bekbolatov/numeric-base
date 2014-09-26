@@ -1,0 +1,50 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href="#/"></a>
+    <h1 class="title">All EndUserProfiles</h1>
+</header>
+
+<div class="content content-bg">
+    <div class="content-inner content-inner-marketplace">
+        <div class="media-body">
+
+
+            <div class="content-inner">
+
+            <div ng-bind-html="htmlData">
+            </div>
+
+            <div>
+                <ul class="table-view table-marketplace">
+                    <li ng-repeat="meta in endUserProfiles" class="table-view-cell media activityMarketplace">
+
+                        <div class="media-body" ng-click="toggleDetailsId(meta.id)">
+                            {{ meta.name }}
+                            <p>
+                                <i>{{ meta.id }}</i><br>
+                                <span>
+                                    <i>
+                                        <br>&nbsp;
+                                        <br>Creation Date: {{ meta.createDate | epochToDate }}
+                                    </i>
+                                </span>
+
+                            <div>
+
+                                <a href ng-click="1">
+                                    <button class="btn btn-positive pull-right btn-channel">
+                                        Edit
+                                    </button>
+                                </a>
+
+
+                            </div>
+                            </p>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

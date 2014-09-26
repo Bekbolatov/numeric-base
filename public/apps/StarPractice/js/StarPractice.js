@@ -26,7 +26,7 @@ _initLocal = function(d) {
   if (n.defaultSettings === void 0) {
     n.defaultSettings === {};
   }
-  n.defaultSettings.defaultChannel = 0;
+  n.defaultSettings.defaultChannel = 'public.1000';
   n.defaultSettings.stringTitle = n.appName;
   n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistory = 'History';

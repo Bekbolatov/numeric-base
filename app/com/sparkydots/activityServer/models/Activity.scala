@@ -119,8 +119,8 @@ object Activity {
 
 
   // Channels (Activity Lists)
-  def listForChannel(channel: Int) = pageOfChannel(channel, 0, 1000)
-  def pageOfChannel(channelId: Int, startIndex: Int, size: Int) = {
+  def listForChannel(channel: String) = pageOfChannel(channel, 0, 1000)
+  def pageOfChannel(channelId: String, startIndex: Int, size: Int) = {
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -135,7 +135,7 @@ object Activity {
     }
   }
 
-  def addToChannel(id: String, chid: Int) {
+  def addToChannel(id: String, chid: String) {
     DB.withConnection { implicit connection =>
       SQL("REPLACE INTO channel_activity (activity_id, channel_id) values ({id}, {chid})")
         .on('id -> id, 'chid -> chid)
@@ -143,7 +143,7 @@ object Activity {
     }
   }
 
-  def removeFromChannel(id: String, chid: Int) {
+  def removeFromChannel(id: String, chid: String) {
     DB.withConnection { implicit connection =>
       SQL("DELETE FROM channel_activity where activity_id = {id} and channel_id = {chid}")
         .on('id -> id, 'chid -> chid)

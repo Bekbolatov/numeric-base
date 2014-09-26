@@ -8,15 +8,16 @@ import play.api.db.DB
 import play.api.libs.json.Json
 import play.api.Play.current
 
-case class Channel(id: Int, name: String, createDate: Date)
+case class Channel(id: String, name: String, description: String, createDate: Date)
 
 object Channel {
   implicit val format = Json.format[Channel]
   private val parser: RowParser[Channel] = {
-    get[Int]("id") ~
+    get[String]("id") ~
       get[String]("name") ~
+      get[String]("description") ~
       get[Date]("create_date") map {
-      case id ~ name ~ createDate => Channel(id, name, createDate)
+      case id ~ name ~ description ~ createDate => Channel(id, name, description, createDate)
     }
   }
 
@@ -30,7 +31,7 @@ object Channel {
     }
   }
 
-  def load(id: Int): Option[Channel] = {
+  def load(id: String): Option[Channel] = {
     DB.withConnection { implicit connection =>
       SQL("SELECT * from channel where id = {id}")
         .on('id -> id)
@@ -41,8 +42,8 @@ object Channel {
   def save(channel: Channel): Boolean = {
     try {
       DB.withConnection { implicit connection =>
-        SQL("insert into channel (id, name, create_date) values ({id}, {name}, {createDate})")
-          .on('id -> channel.id, 'name -> channel.name, 'createDate -> channel.createDate)
+        SQL("insert into channel (id, name, description, create_date) values ({id}, {name}, {description}, {createDate})")
+          .on('id -> channel.id, 'name -> channel.name, 'description -> channel.description, 'createDate -> channel.createDate)
           .executeUpdate
       }
       true
@@ -52,15 +53,15 @@ object Channel {
     }
   }
 
-  def update(id: Int, channel: Channel) {
+  def update(id: String, channel: Channel) {
     DB.withConnection { implicit connection =>
-      SQL("UPDATE channel SET name = {name} WHERE id = {id}")
-        .on('id -> id, 'name -> channel.name)
+      SQL("UPDATE channel SET name = {name}, description = {description} WHERE id = {id}")
+        .on('id -> id, 'name -> channel.name, 'description -> channel.description)
         .executeUpdate
     }
   }
 
-  def delete(id: Int) {
+  def delete(id: String) {
     DB.withConnection { implicit connection =>
       SQL("delete from end_user_channel where channel_id = {id}")
         .on('id -> id)

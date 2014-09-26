@@ -1,6 +1,8 @@
 package com.sparkydots.activityServer.controllers.admin
 
+import com.sparkydots.activityServer.controllers.admin.Activities._
 import com.sparkydots.activityServer.forms.admin.ChannelForm
+import com.sparkydots.activityServer.models.responses.{ChannelListResponse, ActivityListResponse}
 import com.sparkydots.activityServer.models.{Activity, Channel}
 import com.sparkydots.activityServer.views
 import play.api.mvc._
@@ -21,49 +23,49 @@ object Channels extends Controller {
       formWithErrors => BadRequest(views.html.admin.channels.add(formWithErrors)),
       channel => {
         if (Channel.save(channel)) {
-          Redirect(routes.Channels.list).flashing("success" -> "Channel successfully created!")
+          Ok("ok")
         } else {
           BadRequest(views.html.admin.channels.add(boundForm)(Flash(Map("failure" -> "Channel was not created because this id is already used (duplicate Id)"))))
         }
       })
   }
 
-  def list = Action { implicit request =>
-    Ok(views.html.admin.channels.list(Channel.list))
+  def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
+    Ok(ChannelListResponse jsonContaining Channel.page(startIndex.getOrElse(0), size.getOrElse(100)))
   }
 
-  def edit(id: Int) = Action {
+  def edit(id: String) = Action {
     Channel.load(id).map { channel =>
       val boundForm = form.fill(channel)
       Ok(views.html.admin.channels.details(channel, boundForm, Activity.listForChannel(channel.id), Activity.list))
     }.getOrElse(NotFound)
   }
 
-  def update(id: Int) = Action { implicit request =>
+  def update(id: String) = Action { implicit request =>
     Channel.load(id).map { channel =>
       form.bindFromRequest.fold(
         formWithErrors => BadRequest(views.html.admin.channels.details(channel, formWithErrors, Activity.listForChannel(channel.id), Activity.list)),
         channelWithNewValues => {
           Channel.update(id, channelWithNewValues)
-          Redirect(routes.Channels.list).flashing("success" -> "Channel successfully updated!")
+          Ok("ok")
         })
     }.getOrElse(NotFound)
   }
 
-  def delete(id: Int) = Action {
+  def delete(id: String) = Action {
     Channel.delete(id)
-    Redirect(routes.Channels.list).flashing("success" -> "Channel successfully deleted!")
+    Ok("ok")
   }
 
 
-  def addToChannel(id: String, chid: Int) = Action {
-    Activity.addToChannel(id, chid)
-    Redirect(routes.Channels.edit(chid)).flashing("success" -> s"Activity ${id} successfully added to channel ${chid}!")
+  def addActivityToChannel(activityId: String, channelId: String) = Action {
+    Activity.addToChannel(activityId, channelId)
+    Ok("ok")
   }
 
-  def removeFromChannel(id: String, chid: Int) = Action {
-    Activity.removeFromChannel(id, chid)
-    Redirect(routes.Channels.edit(chid)).flashing("success" -> s"Activity ${id} successfully removed from channel ${chid}!")
+  def removeActivityFromChannel(activityId: String, channelId: String) = Action {
+    Activity.removeFromChannel(activityId, channelId)
+    Ok("ok")
   }
 
 

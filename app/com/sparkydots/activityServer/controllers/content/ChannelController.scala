@@ -9,7 +9,7 @@ import play.api.mvc.{ResponseHeader, Result, Action, Controller}
 
 object ChannelController extends Controller {
 
-  def channel(chid: Int, st: Int, si: Int) = WithCors("GET") (Authenticator {
+  def channel(chid: String, st: Int, si: Int) = WithCors("GET") (Authenticator {
     profile =>
       Action { request =>
         try {

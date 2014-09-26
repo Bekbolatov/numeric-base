@@ -1,7 +1,9 @@
 package com.sparkydots.activityServer.controllers.admin
 
+import com.sparkydots.activityServer.controllers.admin.Channels._
 import com.sparkydots.activityServer.forms.admin.EndUserProfileForm
-import com.sparkydots.activityServer.models.EndUserProfile
+import com.sparkydots.activityServer.models.{Channel, EndUserProfile}
+import com.sparkydots.activityServer.models.responses.{EndUserProfileListResponse, ActivityListResponse}
 import com.sparkydots.activityServer.views
 import play.api.mvc._
 
@@ -12,8 +14,8 @@ object EndUserProfiles extends Controller {
 
   val form = EndUserProfileForm
 
-  def list = Action { implicit request =>
-    Ok(views.html.admin.endUserProfiles.list(EndUserProfile.list))
+  def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
+    Ok(EndUserProfileListResponse jsonContaining EndUserProfile.page(startIndex.getOrElse(0), size.getOrElse(100)))
   }
 
   def edit(id: String) = Action { implicit request =>
@@ -22,7 +24,7 @@ object EndUserProfiles extends Controller {
       val boundForm = form.fill(profile.get)
       Ok(views.html.admin.endUserProfiles.edit(id, boundForm))
     } else {
-      Ok(views.html.admin.endUserProfiles.list(EndUserProfile.list))
+      NotFound
     }
   }
 
@@ -32,20 +34,9 @@ object EndUserProfiles extends Controller {
         formWithErrors => BadRequest(views.html.admin.endUserProfiles.edit(id, formWithErrors)),
         updatedProfile => {
           EndUserProfile.update(updatedProfile)
-          Redirect(routes.EndUserProfiles.list).flashing("success" -> "Profile successfully updated!")
+          Ok("ok")
         })
     }.getOrElse(NotFound)
   }
-
-  def addToEndUser(userId: String, chid: Int) = Action {
-    EndUserProfile.addChannel(userId, chid)
-    Ok("added")
-  }
-
-  def removeFromEndUser(userId: String, chid: Int) = Action {
-    EndUserProfile.removeChannel(userId, chid)
-    Ok("removed")
-  }
-
 
 }

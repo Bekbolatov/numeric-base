@@ -1,7 +1,9 @@
 package com.sparkydots.activityServer.controllers.admin
 
+import com.sparkydots.activityServer.controllers.content.ChannelController._
 import com.sparkydots.activityServer.forms.admin.ActivityForm
 import com.sparkydots.activityServer.models.Activity
+import com.sparkydots.activityServer.models.responses.ActivityListResponse
 import com.sparkydots.activityServer.services.Authenticator
 import com.sparkydots.activityServer.views
 import play.api.mvc._
@@ -22,15 +24,26 @@ object Activities extends Controller {
       formWithErrors => BadRequest(views.html.admin.activities.add(formWithErrors)),
       activity => {
         if (Activity.save(activity)) {
-          Redirect(routes.Activities.list).flashing("success" -> "Activity successfully created!")
+          Ok("ok")
         } else {
           BadRequest(views.html.admin.activities.add(boundForm)(Flash(Map("failure" -> "Activity was not created because this id is already used (duplicate Id)"))))
         }
       })
   }
 
-  def list = Action { implicit request =>
-    Ok(views.html.admin.activities.list(Activity.list))
+  def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
+    Ok(ActivityListResponse jsonContaining Activity.page(startIndex.getOrElse(0), size.getOrElse(100)))
+  }
+
+  def update(id: String) = Action { implicit request =>
+    Activity.load(id).map { activity =>
+      form.bindFromRequest.fold(
+        formWithErrors => BadRequest(views.html.admin.activities.edit(id, formWithErrors)),
+        activityWithNewValues => {
+          Activity.update(id, activityWithNewValues)
+          Ok("ok")
+        })
+    }.getOrElse(NotFound)
   }
 
   def edit(id: String) = Action {
@@ -40,22 +53,11 @@ object Activities extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def update(id: String) = Action { implicit request =>
-    Activity.load(id).map { activity =>
-      form.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.admin.activities.edit(id, formWithErrors)),
-        activityWithNewValues => {
-          Activity.update(id, activityWithNewValues)
-          Redirect(routes.Activities.list).flashing("success" -> "Activity successfully updated!")
-        })
-    }.getOrElse(NotFound)
-  }
-
   def delete(id: String) = Authenticator {
     profile =>
       Action {
         Activity.delete(id)
-        Redirect(routes.Activities.list).flashing("success" -> "Activity successfully deleted!")
+        Ok("ok")
       }
   }
 

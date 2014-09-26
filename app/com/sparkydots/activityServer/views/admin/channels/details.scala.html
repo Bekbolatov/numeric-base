@@ -38,7 +38,7 @@
                         @activity.shortDescription<br>
                         @activity.authorDate<br>
                     </a>
-                    @helper.form(com.sparkydots.activityServer.controllers.admin.routes.Channels.addToChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">Add to Channel @channel.name (@channel.id)</button>}
+                    @helper.form(com.sparkydots.activityServer.controllers.admin.routes.Channels.addActivityToChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">Add to Channel @channel.name (@channel.id)</button>}
                 </li>
                 }
             </ul>
@@ -61,7 +61,7 @@
                         @activity.shortDescription<br>
                         @activity.authorDate<br>
                     </a>
-                    @helper.form(com.sparkydots.activityServer.controllers.admin.routes.Channels.removeFromChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">&lt;&lt; Remove From Channel @channel.name (@channel.id)</button>}
+                    @helper.form(com.sparkydots.activityServer.controllers.admin.routes.Channels.removeActivityFromChannel(activity.id, channel.id)){<button type="submit" class="btn btn-link">&lt;&lt; Remove From Channel @channel.name (@channel.id)</button>}
                 </li>
                 }
             </ul>

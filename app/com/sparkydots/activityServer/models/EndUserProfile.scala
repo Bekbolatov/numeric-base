@@ -104,20 +104,25 @@ object EndUserProfile {
     }
   }
 
-  def addChannel(id: String, chid: Int) {
+  def setPermissionChannel(userProfileId: String, channelId: String, permission: Int) { // read, write, execute - style  - if can x a channel, then can x any
     DB.withConnection { implicit connection =>
-      SQL("REPLACE INTO end_user_channel (end_user_profile_id, channel_id) values ({id}, {chid})")
-        .on('id -> id, 'chid -> chid)
-        .executeUpdate
+      if (permission > 0) {
+        SQL("REPLACE INTO end_user_profile_permissions (end_user_profile_id, resource_type, resource_id, permission) values ({userProfileId}, {resourceType}, {resourceId}, {permission})")
+          .on('userProfileId -> userProfileId, 'resourceType -> "channel", 'resourceId -> channelId, 'permission -> permission)
+          .executeUpdate
+      } else {
+        SQL("DELETE FROM end_user_profile_permissions where end_user_profile_id = {id} and resource_type = {resourceType} and resource_id =  {resourceId} ")
+          .on('userProfileId -> userProfileId, 'resourceType -> "channel", 'resourceId -> channelId)
+          .executeUpdate
+      }
     }
   }
 
-  def removeChannel(id: String, chid: Int) {
+  def setPermissionActivity(userProfileId: String, activityId: String, permission: Int) { // read, write, execute - style
     DB.withConnection { implicit connection =>
-      SQL("DELETE FROM end_user_channel where end_user_profile_id = {id} and channel_id = {chid}")
-        .on('id -> id, 'chid -> chid)
+      SQL("REPLACE INTO end_user_profile_permissions (end_user_profile_id, resource_type, resource_id, permission) values ({userProfileId}, {resourceType}, {resourceId}, {permission})")
+        .on('userProfileId -> userProfileId, 'resourceType -> "activity", 'resourceId -> activityId, 'permission -> permission)
         .executeUpdate
     }
   }
-
 }

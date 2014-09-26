@@ -7,8 +7,9 @@ _initLocal = function(d) {
     return;
   }
   n = d.numeric;
+  n.appGroup = 'com.sparkydots.apps';
   n.appVersion = 1;
-  n.appName = 'AppOne';
+  n.appName = 'ExampleApp';
   n.key.settings = 'numeric' + n.appName + 'Settings';
   n.key.deviceId = 'numeric' + n.appName + 'DeviceId';
   n.key.currentActivitySummary = 'numeric' + n.appName + 'CurrentActivitySummary';
@@ -23,14 +24,14 @@ _initLocal = function(d) {
   n.path.activity = 'activity/';
   n.path.body = 'activity/body/';
   n.path.result = 'result/';
-  if (n.defaultSettings === void 0) {
-    n.defaultSettings === {};
-  }
   n.defaultSettings.defaultChannel = 'public.1000';
   n.defaultSettings.stringTitle = n.appName;
-  n.defaultSettings.stringActivities = 'Activities';
+  n.defaultSettings.showTabPractice = true;
+  n.defaultSettings.stringPractice = 'Practice';
+  n.defaultSettings.showTabHistory = true;
   n.defaultSettings.stringHistory = 'History';
-  return n.defaultSettings.stringHistoryItem = 'Task Summary';
+  n.defaultSettings.stringActivities = 'Activities';
+  return n.defaultSettings.stringHistoryItem = 'Activity Summary';
 };
 
 _initLocal(document);
@@ -57,10 +58,10 @@ try {
   console.log(e);
 }
 
-angular.module('AppOne', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
+angular.module('ExampleApp', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
 
 
-angular.module('AppOne').controller('ApplicationCtrl', [
+angular.module('ExampleApp').controller('ApplicationCtrl', [
   '$scope', '$location', 'Settings', 'Application', function($scope, $location, Settings, Application) {
     var initApplication;
     initApplication = function() {
@@ -83,147 +84,55 @@ angular.module('AppOne').controller('ApplicationCtrl', [
   }
 ]);
 
-
-angular.module('AppOne').controller('SampleQuestionCtrl', [
-  '$scope', '$sce', 'PersistenceManager', 'KristaQuestions', function($scope, $sce, PersistenceManager, KristaQuestions) {
-    $scope.browserGood = typeof navigator.webkitPersistentStorage !== 'undefined';
-    window.pers = PersistenceManager;
-    $scope.regen = function(num) {
-      var choice, qa;
-      PersistenceManager.save('testikl', {
-        s: 1,
-        b: 'as',
-        c: {
-          h: 'yello'
-        }
-      }).then(function() {
-        return PersistenceManager.read('testikl').then(function(obj) {
-          return $scope.testik = obj;
-        });
-      })["catch"](function(t) {
-        return console.log(t);
-      });
-      $scope.showAnswer = false;
-      qa = KristaQuestions.generate(num);
-      $scope.question = $sce.trustAsHtml('' + qa[0][0]);
-      if (qa[0].length > 1) {
-        $scope.choices = (function() {
-          var _i, _len, _ref, _results;
-          _ref = qa[0][1];
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            choice = _ref[_i];
-            _results.push($sce.trustAsHtml('' + choice));
-          }
-          return _results;
-        })();
-        return $scope.answer = $sce.trustAsHtml('' + qa[0][1][qa[1]]);
-      } else {
-        $scope.choices = void 0;
-        return $scope.answer = $sce.trustAsHtml('' + qa[1]);
-      }
-    };
-    return $scope.regen(4);
-  }
-]);
-
-angular.module('AppOne').controller('TestCtrl', [
-  '$scope', '$rootScope', '$routeParams', '$http', 'md5', 'FS', 'Settings', function($scope, $rootScope, $routeParams, $http, md5, FS, Settings) {
-    $scope.showScriptsInHead = function() {
-      var tag, tags, _i, _len, _results;
-      tags = document.getElementsByTagName('script');
-      $scope.scripts = [];
-      _results = [];
-      for (_i = 0, _len = tags.length; _i < _len; _i++) {
-        tag = tags[_i];
-        if (tag.id !== void 0 && tag.id !== '') {
-          _results.push($scope.scripts.push(tag));
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    };
-    $scope.getHttpsData = function() {
-      return $http.get('https://www.vicinitalk.com/api/v1/post/375/?format=json').then(function(response) {
-        console.log(response);
-        return $scope.httpsdata = response.data;
-      }, function(status) {
-        return console.log('error: ' + status);
-      });
-    };
-    $scope.writeToFile = function() {
-      return FS.writeToFile('testdata.txt', 'hsellodata');
-    };
-    $scope.readFromFile = function() {
-      return FS.readFromFile('testdata.txt').then(function(data) {
-        return $scope.readData = data;
-      });
-    };
-    $scope.getContentsRaw = function(path) {
-      return FS.getContents(path);
-    };
-    $scope.getFromLocal = function(key) {
-      return $scope.localData = window.localStorage.getItem(key);
-    };
-    $scope.testmd5 = function(txt) {
-      return $scope.localData = md5.createHash(txt);
-    };
-    return $scope.setServerToLocalHost = function() {
-      return Settings.set("mainServerAddress", "http://localhost:9000/starpractice/data/");
-    };
-  }
-]);
-
-angular.module('AppOne').config([
+angular.module('ExampleApp').config([
   '$routeProvider', function($routeProvider) {
     return $routeProvider.when('/', {
-      templateUrl: '/assets/apps/AppOne/templates/home.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/home.html',
       controller: 'ApplicationCtrl'
     }).when('/home', {
-      templateUrl: '/assets/apps/AppOne/templates/home.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/home.html',
       controller: 'HomeCtrl'
     }).when('/info', {
-      templateUrl: '/assets/apps/AppOne/templates/info.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/info.html',
       controller: 'InfoCtrl'
     }).when('/channelList', {
-      templateUrl: '/assets/apps/AppOne/templates/channelList.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/channelList.html',
       controller: 'ChannelListCtrl'
     }).when('/channel', {
-      templateUrl: '/assets/apps/AppOne/templates/channel.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/channel.html',
       controller: 'ChannelCtrl'
     }).when('/tags', {
-      templateUrl: '/assets/apps/AppOne/templates/tags.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/tags.html',
       controller: 'TagsCtrl'
     }).when('/task', {
-      templateUrl: '/assets/apps/AppOne/templates/task.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/task.html',
       controller: 'TaskCtrl'
     }).when('/history', {
-      templateUrl: '/assets/apps/AppOne/templates/history.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/history.html',
       controller: 'HistoryCtrl'
     }).when('/historyItem', {
-      templateUrl: '/assets/apps/AppOne/templates/historyItem.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/historyItem.html',
       controller: 'HistoryItemCtrl'
     }).when('/settings', {
-      templateUrl: '/assets/apps/AppOne/templates/settings.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/settings.html',
       controller: 'SettingsCtrl'
     }).when('/connect', {
-      templateUrl: '/assets/apps/AppOne/templates/connect.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/connect.html',
       controller: 'ConnectCtrl'
     }).when('/myIdentity', {
-      templateUrl: '/assets/apps/AppOne/templates/myIdentity.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/myIdentity.html',
       controller: 'MyIdentityCtrl'
     }).when('/teachers', {
-      templateUrl: '/assets/apps/AppOne/templates/teachers.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/teachers.html',
       controller: 'TeachersCtrl'
     }).when('/addTeacher', {
-      templateUrl: '/assets/apps/AppOne/templates/addTeacher.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/addTeacher.html',
       controller: 'AddTeacherCtrl'
     }).when('/test', {
-      templateUrl: '/assets/apps/AppOne/templates/test.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/test.html',
       controller: 'TestCtrl'
     }).when('/sampleQuestion', {
-      templateUrl: '/assets/apps/AppOne/templates/sampleQuestion.html',
+      templateUrl: '/assets/apps/ExampleApp/templates/sampleQuestion.html',
       controller: 'SampleQuestionCtrl'
     }).otherwise({
       redirectTo: '/'
@@ -271,7 +180,7 @@ angular.module('AppOne').config([
 ]);
 
 
-angular.module('AppOne').factory('Application', [
+angular.module('ExampleApp').factory('Application', [
   '$sce', 'Settings', function($sce, Settings) {
     var Application, application;
     Application = (function() {

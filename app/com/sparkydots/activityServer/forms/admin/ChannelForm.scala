@@ -9,8 +9,9 @@ import play.api.data._
  */
 object ChannelForm extends Form[Channel](
   mapping(
-    "id" -> number,
+    "id" -> nonEmptyText,
     "name" -> nonEmptyText,
+    "description" -> nonEmptyText,
     "createDate" -> date)
     (Channel.apply)(Channel.unapply), Map.empty, Nil, None
 )

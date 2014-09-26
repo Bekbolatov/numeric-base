@@ -15,24 +15,28 @@
     <div class="optionBlock" ng-show="settingsLoaded">
 
         <div class="paramName" ng-show="customDisplay">
-            <div ng-bind-html="customDisplay.content"></div>
+            <div class="center-inline-child">
+                <div class="div-inline">
+                    <div ng-bind-html="customDisplay.content"></div>
+                </div>
+            </div>
         </div>
 
         <p class="paramName">
             &nbsp;
         </p>
 
-        <div class="paramName">
-            <a href ng-click="navigateToTagsOrChannel()"><button class="btn btn-positive btn-block navigate-right">Practice</button></a>
+        <div class="paramName" ng-show="showTabPractice">
+            <a href ng-click="navigateToTagsOrChannel()"><button class="btn btn-positive btn-block navigate-right">{{ stringPractice }}</button></a>
         </div>
 
-        <div class="paramName" ng-show="hasHistory">
-            <a href="#/history"><button class="btn btn-primary btn-block navigate-right">History</button></a>
+        <div class="paramName" ng-show="hasHistory && showTabHistory">
+            <a href="#/history"><button class="btn btn-primary btn-block navigate-right">{{ stringHistory }}</button></a>
         </div>
 
 
         <div class="paramName" ng-repeat="customTab in customTabs">
-            <a href="{{ customTab.href }}"><button class="btn btn-primary btn-block navigate-right">{{ customTab.text }}</button></a>
+            <a href="#/{{ customTab.page }}"><button class="btn btn-primary btn-block navigate-right {{ customTab.class }}">{{ customTab.text }}</button></a>
         </div>
 
 

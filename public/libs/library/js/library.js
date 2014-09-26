@@ -5615,16 +5615,20 @@ angular.module('ModuleCommunication').factory('ServerHttp', [
         }
       };
 
-      ServerHttp.prototype.version = function() {
-        return document.numeric.appVersion;
+      ServerHttp.prototype.appGroup = function() {
+        return document.numeric.appGroup;
       };
 
       ServerHttp.prototype.appName = function() {
         return document.numeric.appName;
       };
 
+      ServerHttp.prototype.version = function() {
+        return document.numeric.appVersion;
+      };
+
       ServerHttp.prototype.auth = function() {
-        return '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + this.appName() + ':' + this.version();
+        return '' + DeviceId.deviceSecretId + ':' + DeviceId.devicePublicId + ':' + this.appGroup() + ':' + this.appName() + ':' + this.version();
       };
 
       ServerHttp.prototype.get = function(url, options, cbtime) {
@@ -5907,7 +5911,7 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
   }
 ]);
 
-angular.module('ActivityLib', ['ModuleSettings', 'ModuleCommunication', 'ModulePersistence', 'ModuleDataPack', 'ModuleDataUtilities', 'BaseLib']);
+angular.module('ActivityLib', ['ngRoute', 'ModuleSettings', 'ModuleCommunication', 'ModulePersistence', 'ModuleDataPack', 'ModuleDataUtilities', 'BaseLib']);
 
 
 angular.module('ActivityLib').controller('ChannelCtrl', [
@@ -6187,12 +6191,16 @@ angular.module('ActivityLib').controller('HomeCtrl', [
       $scope.hasHistory = ActivitySummary.hasHistory();
       $scope.stringTitle = Settings.get('stringTitle');
       $scope.showSettings = Settings.get('showSettings');
+      $scope.showTabPractice = Settings.get('showTabPractice');
+      $scope.stringPractice = Settings.get('stringPractice');
+      $scope.showTabHistory = Settings.get('showTabHistory');
+      $scope.stringHistory = Settings.get('stringHistory');
       application = document.numeric.application;
       if (application === void 0) {
         return $location.path('/');
       }
-      $scope.customTabs = application.customTabs;
-      return $scope.customDisplay = application.customDisplay;
+      $scope.customDisplay = application.customDisplay;
+      return $scope.customTabs = document.numeric.customTabs;
     };
     if (Settings.ready) {
       return setScopeVars();
@@ -6493,6 +6501,123 @@ angular.module('ActivityLib').factory("TaskCtrlState", [
 
     })();
     return new TaskCtrlState();
+  }
+]);
+
+angular.module('ActivityLib').config([
+  '$routeProvider', function($routeProvider) {
+    var appName, customTabs, firstCapital, tab, _i, _len, _results;
+    appName = document.numeric.appName;
+    $routeProvider.when('/', {
+      templateUrl: '/assets/apps/' + appName + '/templates/home.html',
+      controller: 'ApplicationCtrl'
+    }).when('/home', {
+      templateUrl: '/assets/apps/' + appName + '/templates/home.html',
+      controller: 'HomeCtrl'
+    }).when('/info', {
+      templateUrl: '/assets/apps/' + appName + '/templates/info.html',
+      controller: 'InfoCtrl'
+    }).when('/channelList', {
+      templateUrl: '/assets/apps/' + appName + '/templates/channelList.html',
+      controller: 'ChannelListCtrl'
+    }).when('/channel', {
+      templateUrl: '/assets/apps/' + appName + '/templates/channel.html',
+      controller: 'ChannelCtrl'
+    }).when('/tags', {
+      templateUrl: '/assets/apps/' + appName + '/templates/tags.html',
+      controller: 'TagsCtrl'
+    }).when('/task', {
+      templateUrl: '/assets/apps/' + appName + '/templates/task.html',
+      controller: 'TaskCtrl'
+    }).when('/history', {
+      templateUrl: '/assets/apps/' + appName + '/templates/history.html',
+      controller: 'HistoryCtrl'
+    }).when('/historyItem', {
+      templateUrl: '/assets/apps/' + appName + '/templates/historyItem.html',
+      controller: 'HistoryItemCtrl'
+    }).when('/settings', {
+      templateUrl: '/assets/apps/' + appName + '/templates/settings.html',
+      controller: 'SettingsCtrl'
+    }).when('/connect', {
+      templateUrl: '/assets/apps/' + appName + '/templates/connect.html',
+      controller: 'ConnectCtrl'
+    }).when('/myIdentity', {
+      templateUrl: '/assets/apps/' + appName + '/templates/myIdentity.html',
+      controller: 'MyIdentityCtrl'
+    }).when('/teachers', {
+      templateUrl: '/assets/apps/' + appName + '/templates/teachers.html',
+      controller: 'TeachersCtrl'
+    }).when('/addTeacher', {
+      templateUrl: '/assets/apps/' + appName + '/templates/addTeacher.html',
+      controller: 'AddTeacherCtrl'
+    }).when('/test', {
+      templateUrl: '/assets/apps/' + appName + '/templates/test.html',
+      controller: 'TestCtrl'
+    }).when('/sampleQuestion', {
+      templateUrl: '/assets/apps/' + appName + '/templates/sampleQuestion.html',
+      controller: 'SampleQuestionCtrl'
+    }).otherwise({
+      redirectTo: '/'
+    });
+    firstCapital = function(input) {
+      if (input === void 0) {
+        return '';
+      } else {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+      }
+    };
+    customTabs = document.numeric.customTabs;
+    if (customTabs !== void 0) {
+      _results = [];
+      for (_i = 0, _len = customTabs.length; _i < _len; _i++) {
+        tab = customTabs[_i];
+        $routeProvider.when('/' + tab.page, {
+          templateUrl: '/assets/apps/' + appName + '/templates/' + tab.page + '.html',
+          controller: firstCapital(tab.page) + 'Ctrl'
+        });
+        _results.push(console.log('adding: ' + tab.page));
+      }
+      return _results;
+    }
+  }
+]).run([
+  '$route', '$location', 'TaskCtrlState', function($route, $location, TaskCtrlState) {
+    $route.reload();
+    document.addEventListener("backbutton", (function(_this) {
+      return function() {
+        var currentPath;
+        currentPath = $location.path();
+        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 5) === "/task") {
+          return TaskCtrlState.backButton();
+        }
+        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 12) === "/historyItem") {
+          $location.path('/history');
+        } else {
+          $location.path('/');
+        }
+        return $route.reload();
+      };
+    })(this), false);
+    return document.addEventListener("menubutton", (function(_this) {
+      return function() {
+        var currentPath;
+        currentPath = $location.path();
+        console.log('menu button, current: ' + currentPath);
+        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 5) === "/task") {
+          return;
+        }
+        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 9) === "/settings") {
+          return;
+        }
+        $location.path('/settings');
+        return $route.reload();
+      };
+    })(this), false);
+  }
+]).config([
+  '$compileProvider', '$httpProvider', function($compileProvider, $httpProvider) {
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|cdvfile|ftp|mailto|file|tel):/);
+    return $httpProvider.defaults.useXDomain = true;
   }
 ]);
 
@@ -7290,6 +7415,23 @@ angular.module('ActivityLib').factory("Channels", [
   }
 ]);
 
+angular.module('ActivityLib').factory("Pagination", [
+  '$location', 'Settings', 'ServerHttp', function($location, Settings, ServerHttp) {
+    var Pagination;
+    Pagination = (function() {
+      function Pagination() {}
+
+      Pagination.prototype.init = function(scope, tryAgain, startIndex, varLittleHistory, varStartIndex, varEndIndex, varTurnPage) {
+        return scope[varLittleHistory] = true;
+      };
+
+      return Pagination;
+
+    })();
+    return new Pagination();
+  }
+]);
+
 angular.module('ActivityLib').factory("StarPracticeApi", [
   'DataPack', 'DataUtilities', 'RandomFunctions', 'TextFunctions', 'MathFunctions', 'HyperTextManager', 'GraphicsManager', function(DataPack, DataUtilities, RandomFunctions, TextFunctions, MathFunctions, HyperTextManager, GraphicsManager) {
     var StarPracticeApi, starPracticeApi;
@@ -7343,8 +7485,9 @@ _initGlobal = function(d) {
     d.numeric = {};
   }
   n = d.numeric;
-  n.appVersion = 1;
+  n.appGroup = 'com.sparkydots.apps';
   n.appName = 'AppOne';
+  n.appVersion = 1;
   n.modules = {};
   n.numericTasks = {};
   if (n.key === void 0) {
@@ -7379,10 +7522,13 @@ _initGlobal = function(d) {
   if (n.defaultSettings === void 0) {
     n.defaultSettings = {};
   }
-  n.defaultSettings.defaultChannel = 0;
+  n.defaultSettings.defaultChannel = 'public.1000';
   n.defaultSettings.stringTitle = 'AppOne';
-  n.defaultSettings.stringActivities = 'Activities';
+  n.defaultSettings.showTabPractice = true;
+  n.defaultSettings.stringPractice = 'Practice';
+  n.defaultSettings.showTabHistory = true;
   n.defaultSettings.stringHistory = 'History';
+  n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistoryItem = 'Task Summary';
   n.defaultSettings.showSettings = false;
   n.defaultSettings.showSubmitLink = false;

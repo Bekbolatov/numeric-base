@@ -1,0 +1,57 @@
+<header class="bar bar-nav">
+    <a class="icon icon-left-nav pull-left" href ng-click="backButton()"></a>
+    <h1 class="title">All Activities</h1>
+    <button class="btn btn-primary pull-right" ng-show="showHtmlData" ng-click="saveForm()">Save</button>
+</header>
+
+<div class="content content-bg">
+    <div class="veil-background">
+
+            <div class="media-body">
+
+
+                <div class="content-inner">
+
+                    <div ng-show="showHtmlData" ng-bind-html="htmlData">
+                    </div>
+
+                    <div ng-show="!showHtmlData">
+                        <ul class="table-view table-marketplace">
+                            <li ng-repeat="meta in activities" class="table-view-cell media activityMarketplace">
+
+                                <div class="media-body" ng-click="toggleDetailsId(meta.id)">
+                                    {{ meta.name }}
+                                    <p>
+                                        <i>{{meta.id}}</i><br>
+                                        <span>{{ meta.shortDescription }}</span>
+                                        <span>
+                                            {{ meta.description }}
+                                            <i>
+                                                <br>&nbsp;
+                                                <br>Creation Date: {{ meta.authorDate | epochToDate }}
+                                                <br>Author: {{ meta.authorName }}
+                                                <br>Email: {{ meta.authorEmail }}
+                                            </i>
+                                        </span>
+
+                                    <div>
+
+                                        <a href ng-click="editForm(meta.id)">
+                                            <button class="btn btn-positive pull-right btn-channel">
+                                                Edit
+                                            </button>
+                                        </a>
+
+
+                                    </div>
+                                    </p>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>

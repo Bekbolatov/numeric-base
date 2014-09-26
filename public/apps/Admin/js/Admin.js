@@ -7,6 +7,7 @@ _initLocal = function(d) {
     return;
   }
   n = d.numeric;
+  n.appGroup = 'com.sparkydots.apps';
   n.appVersion = 1;
   n.appName = 'Admin';
   n.key.settings = 'numeric' + n.appName + 'Settings';
@@ -17,11 +18,35 @@ _initLocal = function(d) {
   n.key.channelActivities = 'numeric' + n.appName + 'ChannelActivitiesCache';
   n.url.base.numeric = 'numericdata/';
   n.url.base.fs = 'numericdata/' + n.appName + '/';
-  n.defaultSettings.defaultChannel = 0;
+  n.path.touch = 'touch';
+  n.path.channels = 'channels';
+  n.path.list = 'activity/list';
+  n.path.activity = 'activity/';
+  n.path.body = 'activity/body/';
+  n.path.result = 'result/';
+  if (n.defaultSettings === void 0) {
+    n.defaultSettings === {};
+  }
+  n.defaultSettings.defaultChannel = 'public.1000';
   n.defaultSettings.stringTitle = n.appName;
   n.defaultSettings.stringActivities = 'Activities';
   n.defaultSettings.stringHistory = 'History';
-  return n.defaultSettings.stringHistoryItem = 'Activity Summary';
+  n.defaultSettings.stringHistoryItem = 'Activity Summary';
+  n.defaultSettings.showTabPractice = false;
+  n.defaultSettings.showTabHistory = false;
+  n.defaultSettings.showSettings = true;
+  return n.customTabs = [
+    {
+      page: 'activities',
+      text: 'Activities'
+    }, {
+      page: 'channels',
+      text: 'Channels'
+    }, {
+      page: 'endUserProfiles',
+      text: 'EndUserProfiles'
+    }
+  ];
 };
 
 _initLocal(document);
@@ -39,7 +64,8 @@ try {
     w.document.numeric.url.base.chrome = w.document.numeric.url.base.chrome.replace("SERVERNAME", servername);
     if (server === 'localhost' && port === ':9000') {
       w.document.numeric.url.base.chrome = "filesystem:http://localhost:9000/temporary/";
-      return w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/activityServer/data/";
+      w.document.numeric.defaultSettings.mainServerAddress = "http://localhost:9000/activityServer/data/";
+      return w.document.numeric.defaultSettings.showSettings = true;
     }
   })(this);
 } catch (_error) {
@@ -47,16 +73,101 @@ try {
   console.log(e);
 }
 
-angular.module('adminActivities', ['ngRoute', 'ModuleIdentity', 'ModuleCommunication']);
+angular.module('Admin', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
 
-angular.module('adminActivities').controller('mainPage', [
-  '$scope', function($scope) {
-    return console.log("gello");
+
+angular.module('Admin').controller('ActivitiesCtrl', [
+  '$scope', '$location', '$route', '$sce', 'Settings', 'Application', 'ServerHttp', function($scope, $location, $route, $sce, Settings, Application, ServerHttp) {
+    $scope.showHtmlData = false;
+    ServerHttp.get('/activityServer/admin/activity?startIndex=0&size=100').then(function(response) {
+      return $scope.activities = response.data.activities;
+    });
+    $scope.editForm = function(activityId) {
+      $scope.showHtmlData = true;
+      return ServerHttp.get("/activityServer/admin/activity/" + activityId).then(function(response) {
+        return $scope.htmlData = $sce.trustAsHtml(response.data);
+      })["catch"](function(status) {
+        console.log(status);
+        return $scope.showHtmlData = false;
+      });
+    };
+    $scope.saveForm = function() {
+      var form;
+      form = angular.element(document.querySelector('#serverForm'));
+      console.log(form);
+      window.rr = form;
+      $scope.showHtmlData = false;
+      return $scope.htmlData = '';
+    };
+    $scope.backButton = function() {
+      if ($scope.showHtmlData === true) {
+        $scope.showHtmlData = false;
+        return $scope.htmlData = '';
+      } else {
+        return $location.path('/');
+      }
+    };
+    return $scope.deleteActivity = function(url, id) {
+      var port, protocol, server, servername;
+      protocol = location.protocol;
+      server = location.hostname;
+      port = location.port;
+      if (port.length > 0) {
+        port = ":" + port;
+      }
+      servername = protocol + "//" + server + port;
+      return ServerHttp["delete"](servername + url, id).then(function(response) {
+        return console.log('ok');
+      })["catch"](function(status) {
+        return console.log(status);
+      }).then(function(r) {
+        return window.location.reload();
+      });
+    };
   }
 ]);
 
+angular.module('Admin').controller('ApplicationCtrl', [
+  '$scope', '$location', '$route', 'Settings', 'Application', function($scope, $location, $route, Settings, Application) {
+    var initApplication;
+    initApplication = function() {
+      $location.path('/home');
+      return $route.reload();
+    };
+    if (Settings.ready) {
+      return initApplication();
+    } else {
+      $scope.settingsLoaded = false;
+      return Settings.init(document.numeric.key.settings, document.numeric.defaultSettings).then((function(_this) {
+        return function() {
+          return initApplication();
+        };
+      })(this))["catch"]((function(_this) {
+        return function(t) {
+          return $scope.errorMessage = 'Application needs some local storage enabled to work.';
+        };
+      })(this));
+    }
+  }
+]);
 
-angular.module('adminActivities').controller('activityAdd', [
+angular.module('Admin').controller('ChannelsCtrl', [
+  '$scope', '$location', '$sce', 'Settings', 'Application', 'ServerHttp', function($scope, $location, $sce, Settings, Application, ServerHttp) {
+    return ServerHttp.get('/activityServer/admin/channel?startIndex=0&size=100').then(function(response) {
+      return $scope.channels = response.data.channels;
+    });
+  }
+]);
+
+angular.module('Admin').controller('EndUserProfilesCtrl', [
+  '$scope', '$location', '$sce', 'Settings', 'Application', 'ServerHttp', function($scope, $location, $sce, Settings, Application, ServerHttp) {
+    return ServerHttp.get('/activityServer/admin/profile?startIndex=0&size=100').then(function(response) {
+      return $scope.endUserProfiles = response.data.endUserProfiles;
+    });
+  }
+]);
+
+angular.module('Admin').controller('activityAdd', [
   '$scope', function($scope) {
     return console.log("add activity");
   }
@@ -88,65 +199,30 @@ angular.module('adminActivities').controller('activityAdd', [
   }
 ]);
 
-angular.module('adminActivities').controller('channelAdd', [
-  '$scope', function($scope) {
-    return console.log("add channel");
-  }
-]).controller('channelDetail', [
-  '$scope', function($scope) {
-    console.log("detail channel");
-    $scope.showEditName = false;
-    return $scope.toggleEditName = function() {
-      if ($scope.showEditName) {
-        return $scope.showEditName = false;
-      } else {
-        return $scope.showEditName = true;
-      }
-    };
-  }
-]).controller('channelList', [
-  '$scope', 'ServerHttp', function($scope, ServerHttp) {
-    console.log("list channels");
-    return $scope.deleteChannel = function(url, id) {
-      var port, protocol, server, servername;
-      protocol = location.protocol;
-      server = location.hostname;
-      port = location.port;
-      if (port.length > 0) {
-        port = ":" + port;
-      }
-      servername = protocol + "//" + server + port;
-      return ServerHttp["delete"](servername + url, id).then(function(response) {
-        return console.log('ok');
-      })["catch"](function(status) {
-        return console.log(status);
-      }).then(function(r) {
-        return window.location.reload();
-      });
-    };
+angular.module('Admin').config([
+  '$routeProvider', function($routeProvider) {
+    return $routeProvider.when('/jojo', {
+      templateUrl: '/assets/apps/Admin/templates/history.html',
+      controller: 'HistoryCtrl'
+    });
   }
 ]);
 
-angular.module('adminActivities').controller('endUserProfileEdit', ['$scope', '$location', '$route', 'DeviceId', 'ServerHttp', function($scope, $location, $route, DeviceId, ServerHttp) {}]).controller('endUserProfileList', [
-  '$scope', '$location', '$route', 'DeviceId', 'ServerHttp', function($scope, $location, $route, DeviceId, ServerHttp) {
-    console.log("list profile");
-    console.log(DeviceId.devicePublicId);
-    return $scope.deleteActivity = function(url, id) {
-      var port, protocol, server, servername;
-      protocol = location.protocol;
-      server = location.hostname;
-      port = location.port;
-      if (port.length > 0) {
-        port = ":" + port;
+
+angular.module('Admin').factory('Application', [
+  '$sce', 'Settings', 'DeviceId', function($sce, Settings, DeviceId) {
+    var Application, application;
+    Application = (function() {
+      function Application() {
+        this.customDisplay = {};
+        this.customDisplay.content = $sce.trustAsHtml('<span class="yourId">Your ID:<br>' + DeviceId.devicePublicId + '</span>');
       }
-      servername = protocol + "//" + server + port;
-      return ServerHttp["delete"](servername + url, id).then(function(response) {
-        return console.log('ok');
-      })["catch"](function(status) {
-        return console.log(status);
-      }).then(function(r) {
-        return window.location.reload();
-      });
-    };
+
+      return Application;
+
+    })();
+    application = new Application;
+    document.numeric.application = application;
+    return application;
   }
 ]);
