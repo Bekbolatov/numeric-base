@@ -11,6 +11,7 @@ import play.api.Play.current
 case class Channel(id: String, name: String, description: String, createDate: Date)
 
 object Channel {
+
   implicit val format = Json.format[Channel]
   private val parser: RowParser[Channel] = {
     get[String]("id") ~
@@ -29,6 +30,22 @@ object Channel {
         .on('startIndex -> startIndex, 'size -> size)
         .as(parser *)
     }
+  }
+
+  def pageOfActivity(activityId: String, startIndex: Int, size: Int): List[Channel] = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+        select c.* from channel c
+        left join channel_activity ala on (ala.channel_id = c.id and ala.activity_id = {activityId})
+        where ala.channel_id is not null
+        limit {startIndex},{size}
+        """
+      )
+        .on('startIndex -> startIndex, 'size -> size, 'activityId -> activityId)
+        .as(parser *)
+    }
+
   }
 
   def load(id: String): Option[Channel] = {

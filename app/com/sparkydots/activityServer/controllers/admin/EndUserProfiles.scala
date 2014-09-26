@@ -3,7 +3,7 @@ package com.sparkydots.activityServer.controllers.admin
 import com.sparkydots.activityServer.controllers.admin.Channels._
 import com.sparkydots.activityServer.forms.admin.EndUserProfileForm
 import com.sparkydots.activityServer.models.{Channel, EndUserProfile}
-import com.sparkydots.activityServer.models.responses.{EndUserProfileListResponse, ActivityListResponse}
+import com.sparkydots.activityServer.models.responses.{EndUserProfileList, ActivityList}
 import com.sparkydots.activityServer.views
 import play.api.mvc._
 
@@ -15,7 +15,7 @@ object EndUserProfiles extends Controller {
   val form = EndUserProfileForm
 
   def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
-    Ok(EndUserProfileListResponse jsonContaining EndUserProfile.page(startIndex.getOrElse(0), size.getOrElse(100)))
+    Ok(EndUserProfileList jsonContaining EndUserProfile.page(startIndex.getOrElse(0), size.getOrElse(100)))
   }
 
   def edit(id: String) = Action { implicit request =>

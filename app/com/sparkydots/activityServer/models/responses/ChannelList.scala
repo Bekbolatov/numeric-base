@@ -7,13 +7,13 @@ import play.api.libs.json.Json
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 9:33 PM
  */
 
-case class ChannelListResponse(messages: List[Message], channels: List[Channel])
-object ChannelListResponse {
-  implicit val channelListResponseFormat = Json.format[ChannelListResponse]
+case class ChannelList(messages: List[Message], channels: List[Channel])
+object ChannelList {
+  implicit val channelListResponseFormat = Json.format[ChannelList]
 
   def containing(channels: List[Channel]) = {
     val messages: List[Message] = List()
-    ChannelListResponse(messages, channels)
+    ChannelList(messages, channels)
   }
 
   def jsonContaining(channels: List[Channel]) = Json.toJson(containing(channels))

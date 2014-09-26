@@ -89,7 +89,6 @@ object Activity {
     		  description = {description},
     		  author_name = {authorName},
     		  author_email = {authorEmail},
-    		  author_date = {authorDate},
     		  version = {version}
     		  WHERE id = {id}
            """).on(
@@ -100,7 +99,6 @@ object Activity {
           'description -> activity.description,
           'authorName -> activity.authorName,
           'authorEmail -> activity.authorEmail,
-          'authorDate -> activity.authorDate,
           'version -> activity.version
         ).executeUpdate
     }

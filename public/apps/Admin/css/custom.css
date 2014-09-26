@@ -1,0 +1,9 @@
+.input-group input,
+.input-group textarea {
+  border: solid 1px black;
+  border-radius: 3px;
+}
+.input-group input.input-error,
+.input-group textarea.input-error {
+  border: solid 1px red;
+}

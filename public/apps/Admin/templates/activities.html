@@ -1,57 +1,117 @@
 <header class="bar bar-nav">
     <a class="icon icon-left-nav pull-left" href ng-click="backButton()"></a>
     <h1 class="title">All Activities</h1>
-    <button class="btn btn-primary pull-right" ng-show="showHtmlData" ng-click="saveForm()">Save</button>
+    <button class="btn btn-primary pull-right" ng-show="editing" ng-click="updateForm()">Update</button>
+    <button class="btn btn-primary pull-right" ng-show="adding" ng-click="createForm()">Save</button>
 </header>
 
 <div class="content content-bg">
+
+    <div class="clearfix"></div>
+    <div class="table-view-cell-right" ng-show="!deleting">
+                    <span class="span-history-pages">
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-10*pageSize)">&#xe82d;&#xe82d;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize)">&#xe82d;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages">{{ startIndex + 1 }} - {{ endIndex }}</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(pageSize)">&#xe818;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(10*pageSize)">&#xe818;&#xe818;</button>
+                    </span>
+    </div>
+    <div class="clearfix"></div>
+
     <div class="veil-background">
 
-            <div class="media-body">
+        <div class="media-body">
 
 
-                <div class="content-inner">
+            <div class="content-inner">
 
-                    <div ng-show="showHtmlData" ng-bind-html="htmlData">
-                    </div>
 
-                    <div ng-show="!showHtmlData">
-                        <ul class="table-view table-marketplace">
-                            <li ng-repeat="meta in activities" class="table-view-cell media activityMarketplace">
 
-                                <div class="media-body" ng-click="toggleDetailsId(meta.id)">
-                                    {{ meta.name }}
-                                    <p>
-                                        <i>{{meta.id}}</i><br>
-                                        <span>{{ meta.shortDescription }}</span>
+
+                <div ng-show="showFormEdit">
+                    <form class="input-group">
+                        <label>Id</label>
+                        <input ng-class="{ 'input-error' : formData.errors.id}" type="text" ng-model="formData.id">
+
+                        <label>Name</label>
+                        <input ng-class="{ 'input-error' : formData.errors.name}" type="text" ng-model="formData.name">
+
+                        <label>Short Description</label>
+                        <input ng-class="{ 'input-error' : formData.errors.shortDescription}" type="text" ng-model="formData.shortDescription">
+
+                        <label>Description</label>
+                        <textarea ng-class="{ 'input-error' : formData.errors.description}" rows="4" ng-model="formData.description"></textarea>
+
+                        <label>Author Name</label>
+                        <input ng-class="{ 'input-error' : formData.errors.authorName}" type="text" ng-model="formData.authorName">
+
+                        <label>Author Email</label>
+                        <input ng-class="{ 'input-error' : formData.errors.authorEmail}" type="text" ng-model="formData.authorEmail">
+
+                        <label>Creation Date</label>
+                        <input ng-class="{ 'input-error' : formData.errors.authorDate}" type="text" ng-model="formData.authorDate" formatdate>
+
+                        <label>Version Number</label>
+                        <input ng-class="{ 'input-error' : formData.errors.version}" type="text" ng-model="formData.version">
+
+                    </form>
+                </div>
+
+
+                <div ng-show="deleting">
+                    <button class="btn btn-block btn-primary" ng-click="deleting = false">Cancel</button>
+                    <button class="btn btn-block btn-negative" ng-click="deleteActivity(deletingActivity)">Delete Activity</button>
+                </div>
+
+                <div ng-show="!showFormEdit && !deleting">
+                    <ul class="table-view table-marketplace">
+                        <li ng-repeat="meta in activities" class="table-view-cell media activityMarketplace">
+
+                            <div class="media-body wrap-long-words" ng-click="toggleDetailsId(meta.id)">
+                                {{ meta.name }}
+                                <p>
+                                    <i>{{meta.id}}</i><br>
+                                    <span>{{ meta.shortDescription }}</span>
                                         <span>
                                             {{ meta.description }}
                                             <i>
                                                 <br>&nbsp;
+                                                <br>Version: {{ meta.version }}
                                                 <br>Creation Date: {{ meta.authorDate | epochToDate }}
                                                 <br>Author: {{ meta.authorName }}
                                                 <br>Email: {{ meta.authorEmail }}
                                             </i>
                                         </span>
 
-                                    <div>
+                                <div>
 
-                                        <a href ng-click="editForm(meta.id)">
-                                            <button class="btn btn-positive pull-right btn-channel">
-                                                Edit
-                                            </button>
-                                        </a>
+                                    <a href ng-click="showEditForm(meta.id)">
+                                        <button class="btn btn-positive pull-right btn-channel">
+                                            Edit
+                                        </button>
+                                    </a>
+                                <a href ng-click="showManageChannels(meta.id)">
+                                    <button class="btn btn-positive pull-right btn-channel">
+                                        Channels
+                                    </button>
+                                </a>
+                                <a href ng-click="showDeleteActivity(meta.id)">
+                                    <button class="btn btn-positive pull-right btn-channel">
+                                        Delete
+                                    </button>
+                                </a>
 
 
-                                    </div>
-                                    </p>
                                 </div>
+                                </p>
+                            </div>
 
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
     </div>
 </div>

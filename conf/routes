@@ -9,7 +9,7 @@ GET     /starpractice/web                                   com.sparkydots.websi
 # ActivityServer: Content
 GET     /activityServer/data/touch/:page/:id                  com.sparkydots.activityServer.controllers.content.TouchController.touch(page: String, id: String)
 GET     /activityServer/data/channels                         com.sparkydots.activityServer.controllers.content.ChannelController.channelList(id: String, st: Int, si: Int)
-GET     /activityServer/data/activity/list                    com.sparkydots.activityServer.controllers.content.ChannelController.channel(chid: String, st: Int, si: Int)
+GET     /activityServer/data/activity/list                    com.sparkydots.activityServer.controllers.content.ChannelController.channel(channelId: String, st: Int, si: Int)
 GET     /activityServer/data/activity/body/:id                com.sparkydots.activityServer.controllers.content.ActivityBodyController.activityBody(id: String)
 
 
@@ -18,21 +18,19 @@ GET 	/activityServer/admin						                com.sparkydots.activityServer.co
 
 # activities
 GET 	/activityServer/admin/activity						    com.sparkydots.activityServer.controllers.admin.Activities.list(startIndex: Option[Int], size: Option[Int])
-GET		/activityServer/admin/activity/add					    com.sparkydots.activityServer.controllers.admin.Activities.add
 GET		/activityServer/admin/activity/:id				        com.sparkydots.activityServer.controllers.admin.Activities.edit(id: String)
-
+GET		/activityServer/admin/activity/:id/channels				        com.sparkydots.activityServer.controllers.admin.Channels.activityChannels(id: String, startIndex: Option[Int], size: Option[Int])
 POST	/activityServer/admin/activity						    com.sparkydots.activityServer.controllers.admin.Activities.save
 POST	/activityServer/admin/activity/:id					    com.sparkydots.activityServer.controllers.admin.Activities.update(id: String)
 DELETE	/activityServer/admin/activity/:id			            com.sparkydots.activityServer.controllers.admin.Activities.delete(id: String)
 
 # channels
 GET 	/activityServer/admin/channel						        com.sparkydots.activityServer.controllers.admin.Channels.list(startIndex: Option[Int], size: Option[Int])
-GET 	/activityServer/admin/channel/add						    com.sparkydots.activityServer.controllers.admin.Channels.add
-GET 	/activityServer/admin/channel/:chid						com.sparkydots.activityServer.controllers.admin.Channels.edit(chid: String)
-
+GET 	/activityServer/admin/channel/:channelId						com.sparkydots.activityServer.controllers.admin.Channels.edit(channelId: String)
+GET 	/activityServer/admin/channel/:channelId/activities						com.sparkydots.activityServer.controllers.admin.Activities.channelActivities(channelId: String, startIndex: Option[Int], size: Option[Int])
 POST	/activityServer/admin/channel						        com.sparkydots.activityServer.controllers.admin.Channels.save
-POST	/activityServer/admin/channel/:chid					    com.sparkydots.activityServer.controllers.admin.Channels.update(chid: String)
-DELETE	/activityServer/admin/channel/:chid			            com.sparkydots.activityServer.controllers.admin.Channels.delete(chid: String)
+POST	/activityServer/admin/channel/:channelId					    com.sparkydots.activityServer.controllers.admin.Channels.update(channelId: String)
+DELETE	/activityServer/admin/channel/:channelId			            com.sparkydots.activityServer.controllers.admin.Channels.delete(channelId: String)
 
 POST	/activityServer/admin/channel/:channelId/add/:activityId               com.sparkydots.activityServer.controllers.admin.Channels.addActivityToChannel(activityId: String, channelId: String)
 POST	/activityServer/admin/channel/:channelId/remove/:activityId            com.sparkydots.activityServer.controllers.admin.Channels.removeActivityFromChannel(activityId: String, channelId: String)
