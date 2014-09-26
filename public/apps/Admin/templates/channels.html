@@ -1,6 +1,6 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" ng-show="!managingActivities" href="#/"></a>
-    <a class="icon icon-left-nav pull-left" ng-show="managingActivities" href ng-click="managingActivities = false"></a>
+    <a class="icon icon-left-nav pull-left" ng-click="backButton()" ng-show="!managingActivities" href></a>
+    <a class="icon icon-left-nav pull-left" ng-show="managingActivities" ng-click="managingActivities = false" href></a>
     <h1 class="title">All Channels</h1>
     <button class="btn btn-primary pull-right" ng-show="!adding && !editing && !managingActivities" ng-click="showCreateForm()">New</button>
     <button class="btn btn-primary pull-right" ng-show="editing" ng-click="updateForm()">Update</button>

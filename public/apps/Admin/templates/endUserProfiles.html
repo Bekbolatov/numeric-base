@@ -4,6 +4,21 @@
 </header>
 
 <div class="content content-bg">
+
+    <div class="clearfix"></div>
+    <div class="table-view-cell-right">
+                    <span class="span-history-pages">
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-10*pageSize)">&#xe82d;&#xe82d;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize)">&#xe82d;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages">{{ startIndex + 1 }} - {{ endIndex }}</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(pageSize)">&#xe818;</button>
+                        <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(10*pageSize)">&#xe818;&#xe818;</button>
+                    </span>
+    </div>
+    <div class="clearfix"></div>
+
+
+
     <div class="content-inner content-inner-marketplace">
         <div class="media-body">
 
@@ -23,7 +38,6 @@
                                 <i>{{ meta.id }}</i><br>
                                 <span>
                                     <i>
-                                        <br>&nbsp;
                                         <br>Creation Date: {{ meta.createDate | epochToDate }}
                                     </i>
                                 </span>

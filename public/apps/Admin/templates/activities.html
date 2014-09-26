@@ -1,5 +1,6 @@
 <header class="bar bar-nav">
-    <a class="icon icon-left-nav pull-left" href ng-click="backButton()"></a>
+    <a class="icon icon-left-nav pull-left" href ng-click="backButton()" ng-show="!managingChannels"></a>
+    <a class="icon icon-left-nav pull-left" ng-show="managingChannels" ng-click="managingChannels = false" href></a>
     <h1 class="title">All Activities</h1>
     <button class="btn btn-primary pull-right" ng-show="editing" ng-click="updateForm()">Update</button>
     <button class="btn btn-primary pull-right" ng-show="adding" ng-click="createForm()">Save</button>
@@ -8,7 +9,7 @@
 <div class="content content-bg">
 
     <div class="clearfix"></div>
-    <div class="table-view-cell-right" ng-show="!deleting">
+    <div class="table-view-cell-right" ng-show="!deleting && !managingChannels">
                     <span class="span-history-pages">
                         <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-10*pageSize)">&#xe82d;&#xe82d;</button>
                         <button class="btn btn-primary btn-outlined btn-history-pages" ng-click="turnPage(-pageSize)">&#xe82d;</button>
@@ -25,8 +26,6 @@
 
 
             <div class="content-inner">
-
-
 
 
                 <div ng-show="showFormEdit">
@@ -64,7 +63,7 @@
                     <button class="btn btn-block btn-negative" ng-click="deleteActivity(deletingActivity)">Delete Activity</button>
                 </div>
 
-                <div ng-show="!showFormEdit && !deleting">
+                <div ng-show="!showFormEdit && !deleting && !managingChannels">
                     <ul class="table-view table-marketplace">
                         <li ng-repeat="meta in activities" class="table-view-cell media activityMarketplace">
 
@@ -110,6 +109,23 @@
                         </li>
                     </ul>
                 </div>
+
+                <div ng-show="managingChannels">
+                    <ul class="table-view table-marketplace">
+                        <li ng-repeat="(k,a) in channelsManage" class="table-view-cell media activityMarketplace">
+                            <div class="media-body wrap-long-words" ng-click="toggleMembership(a.id)">
+                                {{a.name}}
+                                <p>
+                                    <input type="checkbox" ng-checked="a.included">
+                                    {{a.id}}
+
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
             </div>
         </div>
 

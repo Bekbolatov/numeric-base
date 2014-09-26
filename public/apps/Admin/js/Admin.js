@@ -200,6 +200,56 @@ angular.module('Admin').controller('ActivitiesCtrl', [
         return $scope.refreshView();
       });
     };
+    $scope.showManageChannels = function(id) {
+      $scope.channelsManage = {};
+      $scope.channelsManageHere = {};
+      $scope.managingChannel = id;
+      $scope.managingChannels = true;
+      return ServerHttp.get("/activityServer/admin/activity/" + id + "/channels").then(function(response) {
+        var channel, _i, _len, _ref;
+        $scope.channelsHere = response.data.channels;
+        _ref = $scope.channelsHere;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          channel = _ref[_i];
+          $scope.channelsManageHere[channel.id] = 1;
+        }
+        return ServerHttp.get("/activityServer/admin/channel").then(function(response) {
+          var _j, _len1, _ref1, _results;
+          $scope.channelsAll = response.data.channels;
+          _ref1 = $scope.channelsAll;
+          _results = [];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            channel = _ref1[_j];
+            $scope.channelsManage[channel.id] = channel;
+            if ($scope.channelsManageHere[channel.id] === 1) {
+              _results.push($scope.channelsManage[channel.id].included = true);
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        });
+      });
+    };
+    $scope.toggleMembership = function(id) {
+      if ($scope.channelsManage[id].included) {
+        $scope.channelsManage[id].included = false;
+        return ServerHttp.post("/activityServer/admin/channel/" + $scope.managingChannel + "/remove/" + id).then(function(response) {
+          return $scope.channelsManage[id].included = false;
+        })["catch"](function(status) {
+          console.log(status);
+          return $scope.channelsManage[id].included = true;
+        });
+      } else {
+        $scope.channelsManage[id].included = true;
+        return ServerHttp.post("/activityServer/admin/channel/" + $scope.managingChannel + "/add/" + id).then(function(response) {
+          return $scope.channelsManage[id].included = true;
+        })["catch"](function(status) {
+          console.log(status);
+          return $scope.channelsManage[id].included = false;
+        });
+      }
+    };
     $scope.backButton = function() {
       if ($scope.showFormEdit === true) {
         $scope.showFormEdit = false;
@@ -417,7 +467,7 @@ angular.module('Admin').controller('ChannelsCtrl', [
       }
     };
     $scope.backButton = function() {
-      if ($scope.showFormEdit === true) {
+      if ($scope.showFormEdit === true || $scope.adding === true) {
         $scope.showFormEdit = false;
         $scope.editing = false;
         $scope.adding = false;
@@ -432,10 +482,39 @@ angular.module('Admin').controller('ChannelsCtrl', [
 ]);
 
 angular.module('Admin').controller('EndUserProfilesCtrl', [
-  '$scope', '$location', '$sce', 'Settings', 'Application', 'ServerHttp', function($scope, $location, $sce, Settings, Application, ServerHttp) {
-    return ServerHttp.get('/activityServer/admin/profile?startIndex=0&size=100').then(function(response) {
-      return $scope.endUserProfiles = response.data.endUserProfiles;
-    });
+  '$scope', '$location', '$sce', 'Settings', 'Application', 'Tracker', 'ServerHttp', function($scope, $location, $sce, Settings, Application, Tracker, ServerHttp) {
+    if (!Settings.ready) {
+      return $location.path('/');
+    } else {
+      Tracker.touch('channels');
+    }
+    $scope.startIndex = Application.getVar('profilesCurrentPage', 0);
+    $scope.pageSize = Settings.get('pageSize');
+    $scope.endIndex = $scope.startIndex + $scope.pageSize;
+    $scope.turnPage = function(distance) {
+      if ($scope.startIndex + distance <= 0) {
+        if ($scope.startIndex === 0) {
+          return 1;
+        } else {
+          $scope.startIndex = 0;
+        }
+      } else if (distance < 0) {
+        $scope.startIndex = $scope.startIndex - $scope.pageSize;
+      } else if ($scope.endIndex < $scope.startIndex + $scope.pageSize) {
+        return 1;
+      } else {
+        $scope.startIndex = $scope.startIndex + $scope.pageSize;
+      }
+      Application.setVar('profilesCurrentPage', $scope.startIndex);
+      $scope.endIndex = $scope.startIndex + $scope.pageSize;
+      return $scope.refreshView();
+    };
+    $scope.refreshView = function() {
+      return ServerHttp.get("/activityServer/admin/profile?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize).then(function(response) {
+        return $scope.endUserProfiles = response.data.endUserProfiles;
+      });
+    };
+    return $scope.refreshView();
   }
 ]);
 
