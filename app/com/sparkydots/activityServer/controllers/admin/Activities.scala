@@ -1,9 +1,9 @@
 package com.sparkydots.activityServer.controllers.admin
 
 import com.sparkydots.activityServer.forms.admin.ActivityForm
-import com.sparkydots.activityServer.models.Activity
+import com.sparkydots.activityServer.models.{Permission, Activity}
 import com.sparkydots.activityServer.models.responses.ActivityList
-import com.sparkydots.activityServer.services.Authenticator
+import com.sparkydots.activityServer.services.{AuthorisationChecker, Authenticator}
 import com.sparkydots.activityServer.views
 import play.api.mvc._
 //import play.libs.Json
@@ -19,7 +19,7 @@ object Activities extends Controller {
     Ok(ActivityList jsonContaining Activity.page(startIndex.getOrElse(0), size.getOrElse(100)))
   }
 
-  def channelActivities(channelId: String, startIndex: Option[Int], size: Option[Int])  = Action { implicit request =>
+  def channelActivities(channelId: String, startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
     Ok(ActivityList jsonContaining Activity.pageOfChannel(channelId, startIndex.getOrElse(0), size.getOrElse(100)))
   }
 
@@ -29,35 +29,45 @@ object Activities extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def update(id: String) = Action { implicit request =>
-    Activity.load(id).map { activity =>
-      form.bindFromRequest.fold(
-        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
-        activityWithNewValues => {
-          Activity.update(id, activityWithNewValues)
-          Ok("ok")
-        })
-    }.getOrElse(NotFound)
+  def update(id: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action { implicit request =>
+        Activity.load(id).map { activity =>
+          form.bindFromRequest.fold(
+            formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+            activityWithNewValues => {
+              Activity.update(id, activityWithNewValues)
+              Ok("ok")
+            })
+        }.getOrElse(NotFound)
+      }
+    }
   }
 
-  def delete(id: String) = Authenticator {
-    profile =>
+  def delete(id: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
       Action {
         Activity.delete(id)
         Ok("ok")
       }
+    }
   }
 
-  def save = Action { implicit request =>
-    val boundForm = form.bindFromRequest
-    boundForm.fold(
-      formWithErrors => BadRequest(formWithErrors.errorsAsJson),
-      activity => {
-        if (Activity.save(activity)) {
-          Ok("ok")
-        } else {
-          BadRequest("{ \"dbError\" : \"error\" }")
-        }
-      })
+  def save = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action { implicit request =>
+
+        val boundForm = form.bindFromRequest
+        boundForm.fold(
+          formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+          activity => {
+            if (Activity.save(activity)) {
+              Ok("ok")
+            } else {
+              BadRequest("{ \"dbError\" : \"error\" }")
+            }
+          })
+      }
+    }
   }
 }

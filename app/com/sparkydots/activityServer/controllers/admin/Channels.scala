@@ -4,7 +4,7 @@ import com.sparkydots.activityServer.controllers.admin.Activities._
 import com.sparkydots.activityServer.forms.admin.ChannelForm
 import com.sparkydots.activityServer.models.responses.{ChannelList, ActivityList}
 import com.sparkydots.activityServer.models.{Activity, Channel}
-import com.sparkydots.activityServer.services.Authenticator
+import com.sparkydots.activityServer.services.{AuthorisationChecker, Authenticator}
 import com.sparkydots.activityServer.views
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -29,48 +29,65 @@ object Channels extends Controller {
     }.getOrElse(NotFound)
   }
 
-  def update(id: String) = Action { implicit request =>
-    Channel.load(id).map { channel =>
-      form.bindFromRequest.fold(
-        formWithErrors => BadRequest(formWithErrors.errorsAsJson),
-        channelWithNewValues => {
-          Channel.update(id, channelWithNewValues)
-          Ok("ok")
-        })
-    }.getOrElse(NotFound)
+  def update(id: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action { implicit request =>
+        Channel.load(id).map { channel =>
+          form.bindFromRequest.fold(
+            formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+            channelWithNewValues => {
+              Channel.update(id, channelWithNewValues)
+              Ok("ok")
+            })
+        }.getOrElse(NotFound)
+      }
+    }
   }
 
-  def delete(id: String) = Authenticator {
-    profile =>
+  def delete(id: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
       Action {
         Channel.delete(id)
         Ok("ok")
       }
+    }
   }
 
-  def save = Action { implicit request =>
-    val boundForm = form.bindFromRequest
-    boundForm.fold(
-      formWithErrors => BadRequest(formWithErrors.errorsAsJson),
-      channel => {
-        if (Channel.save(channel)) {
-          Ok("ok")
-        } else {
-          BadRequest("{ \"dbError\" : \"error\" }")
-        }
-      })
+  def save = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action { implicit request =>
+        val boundForm = form.bindFromRequest
+        boundForm.fold(
+          formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+          channel => {
+            if (Channel.save(channel)) {
+              Ok("ok")
+            } else {
+              BadRequest("{ \"dbError\" : \"error\" }")
+            }
+          })
+      }
+    }
   }
 
 
 
-  def addActivityToChannel(activityId: String, channelId: String) = Action {
-    Activity.addToChannel(activityId, channelId)
-    Ok("ok")
+  def addActivityToChannel(activityId: String, channelId: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action {
+        Activity.addToChannel(activityId, channelId)
+        Ok("ok")
+      }
+    }
   }
 
-  def removeActivityFromChannel(activityId: String, channelId: String) = Action {
-    Activity.removeFromChannel(activityId, channelId)
-    Ok("ok")
+  def removeActivityFromChannel(activityId: String, channelId: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action {
+        Activity.removeFromChannel(activityId, channelId)
+        Ok("ok")
+      }
+    }
   }
 
 

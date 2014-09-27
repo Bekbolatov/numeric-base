@@ -58,8 +58,11 @@ PRIMARY KEY (end_user_profile_id, channel_id)
 
 -- PERSMISSIONS
 drop table if exists end_user_permissions;
-create table end_user_channel (
+create table end_user_permissions (
 end_user_profile_id varchar(50) not null,
-channel_id varchar(50) not null,
-PRIMARY KEY (end_user_profile_id, channel_id)
+resource_type varchar(50) not null,
+resource_id varchar(50) not null,
+permission int not null,
+PRIMARY KEY (end_user_profile_id, resource_type, resource_id),
+INDEX (end_user_profile_id, resource_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

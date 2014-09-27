@@ -6467,10 +6467,9 @@ angular.module('ActivityLib').controller('TaskCtrl', [
         document.getElementById('problemContainer').scrollTop = 0;
         document.getElementById('optionsContainer').scrollTop = 0;
         document.getElementById('prevQuestionContainer').scrollTop = 0;
-        $scope.state.isOnReviewLast = true;
-        $scope.state.isOnOptions = false;
-        $scope.state.isOnNote = false;
-        $scope.state = TaskCtrlState;
+        $scope.isOnReviewLast = true;
+        $scope.isOnOptions = false;
+        $scope.isOnNote = false;
         if (toSave !== void 0 && toSave.note && $scope.noteToAdd !== void 0) {
           val = $scope.noteToAdd.trim();
           if (val.length > 0) {
@@ -6487,19 +6486,19 @@ angular.module('ActivityLib').controller('TaskCtrl', [
         document.getElementById('problemContainer').scrollTop = 0;
         document.getElementById('optionsContainer').scrollTop = 0;
         document.getElementById('prevQuestionContainer').scrollTop = 0;
-        $scope.state.optionsChanged = false;
-        $scope.state.isOnReviewLast = false;
-        $scope.state.isOnOptions = true;
-        return $scope.state.isOnNote = false;
+        $scope.optionsChanged = false;
+        $scope.isOnReviewLast = false;
+        $scope.isOnOptions = true;
+        return $scope.isOnNote = false;
       };
     })(this);
     $scope.toExitWindow = (function(_this) {
       return function() {
-        $scope.state.optionsChanged = false;
-        $scope.state.isOnReviewLast = false;
-        $scope.state.isOnOptions = false;
-        $scope.state.isOnNote = false;
-        return $scope.state.isOnExit = true;
+        $scope.optionsChanged = false;
+        $scope.isOnReviewLast = false;
+        $scope.isOnOptions = false;
+        $scope.isOnNote = false;
+        return $scope.isOnExit = true;
       };
     })(this);
     $scope.toAddNote = (function(_this) {
@@ -6508,10 +6507,10 @@ angular.module('ActivityLib').controller('TaskCtrl', [
         document.getElementById('problemContainer').scrollTop = 0;
         document.getElementById('optionsContainer').scrollTop = 0;
         document.getElementById('prevQuestionContainer').scrollTop = 0;
-        $scope.state.optionsChanged = false;
-        $scope.state.isOnReviewLast = false;
-        $scope.state.isOnOptions = false;
-        $scope.state.isOnNote = true;
+        $scope.optionsChanged = false;
+        $scope.isOnReviewLast = false;
+        $scope.isOnOptions = false;
+        $scope.isOnNote = true;
         if (options !== void 0 && options.prev) {
           prevNote = ActivityDriver.addedNotePrev();
           if (prevNote !== false) {
@@ -6519,14 +6518,14 @@ angular.module('ActivityLib').controller('TaskCtrl', [
           } else {
             $scope.noteToAdd = '';
           }
-          $scope.state.noteToAddDestinationCurrent = false;
+          $scope.noteToAddDestinationCurrent = false;
         } else {
           if (ActivityDriver.addedNote !== false) {
             $scope.noteToAdd = ActivityDriver.addedNote;
           } else {
             $scope.noteToAdd = '';
           }
-          $scope.state.noteToAddDestinationCurrent = true;
+          $scope.noteToAddDestinationCurrent = true;
         }
         return $scope.noteToAddOrig = $scope.noteToAdd;
       };
@@ -6540,14 +6539,14 @@ angular.module('ActivityLib').controller('TaskCtrl', [
         document.getElementById('problemContainer').scrollTop = 0;
         document.getElementById('optionsContainer').scrollTop = 0;
         document.getElementById('prevQuestionContainer').scrollTop = 0;
-        if ($scope.state.optionsChanged && $scope.state.isOnOptions) {
-          $scope.state.optionsChanged = false;
+        if ($scope.optionsChanged && $scope.isOnOptions) {
+          $scope.optionsChanged = false;
           ActivityDriver.newQuestion(true);
         }
-        $scope.state.isOnOptions = false;
-        $scope.state.isOnReviewLast = false;
-        $scope.state.isOnNote = false;
-        $scope.state.isOnExit = false;
+        $scope.isOnOptions = false;
+        $scope.isOnReviewLast = false;
+        $scope.isOnNote = false;
+        $scope.isOnExit = false;
         if (toSave !== void 0 && toSave.note) {
           if ($scope.noteToAdd !== void 0 && (val = $scope.noteToAdd.trim()).length > 0) {
             ActivityDriver.addNote(val);
@@ -6561,7 +6560,7 @@ angular.module('ActivityLib').controller('TaskCtrl', [
     $scope.selectParamValue = (function(_this) {
       return function(paramKey, level) {
         var jump;
-        $scope.state.optionsChanged = true;
+        $scope.optionsChanged = true;
         jump = ActivityDriver.selectParamValue(paramKey, level);
         if (jump) {
           return $scope.backToActivity();
@@ -6605,39 +6604,28 @@ angular.module('ActivityLib').factory("TaskCtrlState", [
     TaskCtrlState = (function() {
       function TaskCtrlState() {}
 
-      TaskCtrlState.prototype.isOnOptions = false;
-
-      TaskCtrlState.prototype.isOnReviewLast = false;
-
-      TaskCtrlState.prototype.isOnNote = false;
-
-      TaskCtrlState.prototype.isOnExit = false;
-
-      TaskCtrlState.prototype.optionsChanged = false;
-
-      TaskCtrlState.prototype.noteToAddDestinationCurrent = true;
-
       TaskCtrlState.prototype.setScope = function(scope) {
         this.scope = scope;
-        this.isOnOptions = false;
-        this.isOnReviewLast = false;
-        this.isOnNote = false;
-        this.isOnExit = false;
-        this.optionsChanged = false;
-        this.noteToAddDestinationCurrent = true;
         return this;
       };
 
       TaskCtrlState.prototype.backButton = function() {
-        if (this.isOnNote && this.noteToAddDestinationCurrent) {
+        console.log((new Date()) - this.lastTime);
+        if (this.lastTime !== void 0 && (new Date()) - this.lastTime < 500) {
+          return 1;
+        }
+        this.lastTime = new Date();
+        console.log(this.scope.isOnNote);
+        console.log(this.scope.isOnOptions);
+        if (this.scope.isOnNote && this.scope.noteToAddDestinationCurrent) {
           this.scope.backToActivity({
             note: true
           });
-        } else if (this.isOnNote && !this.noteToAddDestinationCurrent) {
+        } else if (this.scope.isOnNote && !this.scope.noteToAddDestinationCurrent) {
           this.scope.toPrevQuestion({
             note: true
           });
-        } else if (this.isOnOptions || this.isOnReviewLast || this.isOnExit) {
+        } else if (this.scope.isOnOptions || this.scope.isOnReviewLast || this.scope.isOnExit) {
           this.scope.backToActivity();
         } else {
           this.scope.toExitWindow();
