@@ -34,5 +34,8 @@ insert into activity (id, name, short_description, description, author_name, aut
 
 1bca492c9b197fa9a13c0b0b81222ba0
 5e0536e3ee5c56d03541fd56f4f75eb6
+
+744e9812a44ce67287b38dca22a69901
+
 insert into end_user_permissions (end_user_profile_id, resource_type, resource_id, permission) values
-("5e0536e3ee5c56d03541fd56f4f75eb6", "root", "1", 7);
+("744e9812a44ce67287b38dca22a69901", "root", "1", 7);

@@ -114,7 +114,16 @@ angular.module('Admin').controller('ActivitiesCtrl', [
     $scope.deleting = false;
     $scope.refreshView = function() {
       return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/activity?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
-        return $scope.activities = response.data.activities;
+        var a, _i, _len, _ref, _results;
+        $scope.activities = response.data.activities;
+        _ref = $scope.activities;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          a = _ref[_i];
+          console.log(a);
+          _results.push(console.log(a.id));
+        }
+        return _results;
       });
     };
     $scope.showEditForm = function(activityId) {
