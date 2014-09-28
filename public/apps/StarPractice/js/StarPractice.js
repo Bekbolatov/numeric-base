@@ -57,6 +57,15 @@ try {
   console.log(e);
 }
 
+try {
+  if (!window.cordova) {
+    facebookConnectPlugin.browserInit("627875354000812");
+  }
+} catch (_error) {
+  e = _error;
+  console.log(e);
+}
+
 angular.module('StarPractice', ['ngRoute', 'ngMd5', 'timer', 'ModulePersistence', 'ModuleSettings', 'ModuleMessage', 'BaseLib', 'ModuleIdentity', 'ModuleCommunication', 'ModuleDataPack', 'ModuleDataUtilities', 'ActivityLib']);
 
 
