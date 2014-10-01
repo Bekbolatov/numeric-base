@@ -213,7 +213,7 @@ angular.module('Admin').controller('ActivitiesCtrl', [
     $scope.showManageChannels = function(id) {
       $scope.channelsManage = {};
       $scope.channelsManageHere = {};
-      $scope.managingChannel = id;
+      $scope.managingActivity = id;
       $scope.managingChannels = true;
       return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/activity/" + id + "/channels")).then(function(response) {
         var channel, _i, _len, _ref;
@@ -244,7 +244,7 @@ angular.module('Admin').controller('ActivitiesCtrl', [
     $scope.toggleMembership = function(id) {
       if ($scope.channelsManage[id].included) {
         $scope.channelsManage[id].included = false;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + $scope.managingChannel + "/remove/" + id)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + id + "/remove/" + $scope.managingActivity)).then(function(response) {
           return $scope.channelsManage[id].included = false;
         })["catch"](function(status) {
           console.log(status);
@@ -252,7 +252,7 @@ angular.module('Admin').controller('ActivitiesCtrl', [
         });
       } else {
         $scope.channelsManage[id].included = true;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + $scope.managingChannel + "/add/" + id)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + id + "/add/" + $scope.managingActivity)).then(function(response) {
           return $scope.channelsManage[id].included = true;
         })["catch"](function(status) {
           console.log(status);
