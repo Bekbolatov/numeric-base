@@ -3,7 +3,10 @@ GET     /assets/*file                                       com.sparkydots.commo
 # Web Pages
 GET     /                                                   com.sparkydots.website.controllers.SparkyDots.index
 GET     /appDemo/:appName                                   com.sparkydots.website.controllers.SparkyDots.appDemo(appName: String)
+
+GET     /starpractice                                       com.sparkydots.website.controllers.SparkyDots.starpractice
 GET     /starpractice/web                                   com.sparkydots.website.controllers.SparkyDots.appDemo(appName: String = "StarPractice")
+GET     /starpractice/appDemo                               com.sparkydots.website.controllers.SparkyDots.appDemo(appName: String = "StarPractice")
 
 
 # ActivityServer: Content
