@@ -6440,7 +6440,7 @@ angular.module('ActivityLib').controller('TaskCtrl', [
     } else {
       Tracker.touch('task', ActivityDriver.currentActivity.id);
     }
-    $scope.title = Settings.get('title');
+    $scope.stringTitle = Settings.get('stringTitle');
     $scope.activityDriver = ActivityDriver;
     $scope.currentActivity = ActivityDriver.currentActivity;
     $scope.state = TaskCtrlState.setScope($scope);
@@ -6461,6 +6461,12 @@ angular.module('ActivityLib').controller('TaskCtrl', [
       }
     };
     $rootScope.$on('end-of-test', $scope.finishActivity);
+    $rootScope.$on('new-question-created', function() {
+      document.getElementById('problemContainer').scrollTop = 0;
+      document.getElementById('optionsContainer').scrollTop = 0;
+      document.getElementById('prevQuestionContainer').scrollTop = 0;
+      return document.getElementById('taskContainer').scrollTop = 0;
+    });
     $scope.toPrevQuestion = (function(_this) {
       return function(toSave) {
         var val;
@@ -6640,6 +6646,24 @@ angular.module('ActivityLib').factory("TaskCtrlState", [
   }
 ]);
 
+
+angular.module('ActivityLib').directive('deviceheight', [
+  '$filter', function($filter) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        if (typeof LocalFileSystem !== 'undefined') {
+          console.log('height: ' + window.screen.height);
+          console.log('availHeight: ' + window.screen.availHeight);
+          element.css('position', 'static');
+          element.css('height', '' + window.screen.availHeight + 'px');
+          return element.css('top', '0px');
+        }
+      }
+    };
+  }
+]);
+
 angular.module('ActivityLib').config([
   '$routeProvider', function($routeProvider) {
     var appName, customTabs, firstCapital, tab, _i, _len, _results;
@@ -6715,40 +6739,6 @@ angular.module('ActivityLib').config([
       }
       return _results;
     }
-  }
-]).run([
-  '$route', '$location', 'TaskCtrlState', function($route, $location, TaskCtrlState) {
-    $route.reload();
-    document.addEventListener("backbutton", (function(_this) {
-      return function() {
-        var currentPath;
-        currentPath = $location.path();
-        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 5) === "/task") {
-          return TaskCtrlState.backButton();
-        }
-        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 12) === "/historyItem") {
-          $location.path('/history');
-        } else {
-          $location.path('/');
-        }
-        return $route.reload();
-      };
-    })(this), false);
-    return document.addEventListener("menubutton", (function(_this) {
-      return function() {
-        var currentPath;
-        currentPath = $location.path();
-        console.log('menu button, current: ' + currentPath);
-        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 5) === "/task") {
-          return;
-        }
-        if (typeof currentPath !== 'undefined' && currentPath.substr(0, 9) === "/settings") {
-          return;
-        }
-        $location.path('/settings');
-        return $route.reload();
-      };
-    })(this), false);
   }
 ]).config([
   '$compileProvider', '$httpProvider', function($compileProvider, $httpProvider) {
@@ -7006,6 +6996,8 @@ angular.module('ActivityLib').factory("ActivityDriver", [
         }
         this.questionStatementAsHTML = this.question.questionStatementAsHTML;
         document.getElementById('problemContainer').scrollTop = 0;
+        document.getElementById('taskContainer').scrollTop = 0;
+        this.scope.$broadcast('new-question-created');
         this.clearNotesBuffer();
         if (!keepClock) {
           return this.scope.$broadcast('timer-start');

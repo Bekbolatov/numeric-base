@@ -548,12 +548,9 @@ angular.module('Admin').directive('formatdate', [
   }
 ]);
 
-angular.module('Admin').config([
-  '$routeProvider', function($routeProvider) {
-    return $routeProvider.when('/jojo', {
-      templateUrl: '/assets/apps/Admin/templates/history.html',
-      controller: 'HistoryCtrl'
-    });
+angular.module('Admin').run([
+  '$route', '$location', function($route, $location) {
+    return $route.reload();
   }
 ]);
 

@@ -62,8 +62,8 @@ input[type=text].inputmodified {
   display: block;
 }
 .btn-history-pages {
-  line-height: 110%;
-  font-size: 110%;
+  line-height: 100%;
+  font-size: 100%;
   font-family: Ratchicons;
 }
 .history-item-list {
@@ -122,9 +122,14 @@ input[type=text].inputmodified {
 .paramName {
   padding-bottom: 15px;
 }
+.content {
+  /* border: 1px solid red; */
+  overflow-y: auto;
+}
 .content-inner {
   padding: 15px 5px;
   /* margin-bottom: 50px; */
+  /* border: 1px solid green; */
 }
 .content-inner-marketplace {
   padding-top: 5px;
@@ -348,9 +353,6 @@ body {
   -moz-highlight: none;
   -moz-tap-highlight-color: rgba(0, 0, 0, 0);
   z-index: -5;
-  position: absolute;
-  height: 100%;
-  overflow-y: auto;
 }
 .blackBackground {
   background: black;
@@ -418,6 +420,7 @@ body {
 }
 .content-scrollable {
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .before-footer {
   margin-bottom: 6px;
