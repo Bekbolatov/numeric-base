@@ -42,8 +42,21 @@
         <div id="releaseNotes">
             <div><i>(this presentation works only in Chrome)</i></div>
 
-            <div>
+            <div id="comments">
                 <div id="disqus_thread"></div>
+                <script type="text/javascript">
+            var disqus_shortname = 'starpractice';
+            var disqus_identifier = 'demoPage';
+            var disqus_title = 'Demo';
+            var disqus_url = 'https://www.sparkydots.com/appDemo';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+        </script>
             </div>
 
         </div>
@@ -61,19 +74,6 @@
         <script src='@routes.Assets.at(s"apps/$appName/js/$appName.min.js?v=0.03")' type="text/javascript"></script>
 
 
-        <script type="text/javascript">
-            var disqus_shortname = 'starpractice';
-            var disqus_identifier = 'demoPage';
-            var disqus_title = 'Demo';
-            var disqus_url = 'www.sparkydots.com/appDemo';
-
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-        </script>
 
 
     </body>
