@@ -1,0 +1,12 @@
+
+~/bekbolatov/projects/starpractice/numeric-base/vim% ls ~/.vim       
+autoload bundle
+
+~/bekbolatov/projects/starpractice/numeric-base/vim% ls ~/.vim/bundle  
+Vundle.vim              rainbow_parentheses.vim vim-scala
+numbers.vim             vim-colorschemes        vim-sensible
+
+~/bekbolatov/projects/starpractice/numeric-base/vim% ls ~/.vim/autoload
+~/bekbolatov/projects/starpractice/numeric-base/vim%
+
+

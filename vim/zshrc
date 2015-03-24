@@ -1,0 +1,98 @@
+export LSCOLORS=gxfxcxdxbxegedabagacad
+alias ls='ls -G'
+
+# zsh tweaks
+if [ -n "$ZSH_NAME" ] ; then
+  export HISTFILE=~/.zsh_history
+  # Advanced completion 
+  autoload -U compinit && compinit
+
+  # Show git information
+  setopt prompt_subst
+  autoload -Uz vcs_info
+  zstyle ':vcs_info:*' actionformats \
+      '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+  zstyle ':vcs_info:*' formats       \
+      '%F{5}[%F{2}%b%F{5}]%f '
+  zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+  zstyle ':vcs_info:*' enable git cvs svn
+  # or use pre_cmd, see man zshcontrib
+  vcs_info_wrapper() {
+    vcs_info
+    if [ -n "$vcs_info_msg_0_" ]; then
+      echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+    fi
+  }
+  PROMPT='%~%% '
+  RPROMPT=$'$(vcs_info_wrapper)'
+fi
+
+INST=/Users/renat/installations
+
+# MAANA paths + java opts + hadoop
+export MAANA_ROOT=$HOME/maana/maanalabs
+export PATH=${HOME}/bin:${HOME}/maana/maanalabs/scripts:/usr/local/bin:${PATH}
+export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_TOOL_OPTIONS=-Djava.awt.headless=true
+
+#export HADOOP_CONF_DIR=${HOME}/maana/maanalabs/external/conf
+export HADOOP_CONF_DIR=/Users/renat/installations/hadoop-2/etc/hadoop
+export YARN_CONF_DIR=/Users/renat/installations/hadoop-2/etc/hadoop
+export MAPRED_CONF_DIR=/Users/renat/installations/hadoop-2/etc/hadoop
+
+HADOOP_BASE_DIR=${INST}/hadoop-2
+# Update classpath and path for HADOOP
+export CLASSPATH=${CLASSPATH}:${HADOOP_CONF_DIR}
+# Finally update your PATH
+export PATH=${HADOOP_BASE_DIR}/bin:${HADOOP_BASE_DIR}/sbin:${HADOOP_BASE_DIR}/libexec:${PATH}
+
+# Set environment variables for running local spark cluster
+export SPARK_HOME=$INST/spark
+export SPARK_WORKER_DIR=${HOME}/logs/spark
+
+# Set SCALA_HOME required by spark-shell
+export SCALA_HOME=/usr/local/bin/scala
+
+
+export SBT_OPTS="-Xms512M -Xmx6G -Xss2M -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:MaxPermSize=1G"
+
+export PATH=${PATH}:$INST/zookeeper/bin
+
+# DOCKER
+export DOCKER_TLS_VERIFY=1
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/renat/.boot2docker/certs/boot2docker-vm
+
+# moved to an installations dir
+export ZOOKEEPER_HOME=${INST}/zookeeper
+export ACCUMULO_ROOT=$INST/accumulo
+#export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_PREFIX/lib/native
+#export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib"
+export SCALA_LIBRARY_2114=/usr/local/Cellar/scala/2.11.4/libexec/lib/scala-library.jar
+
+alias accumstart="$INST/accumulo/bin/start-here.sh"
+alias accumstop="$INST/accumulo/bin/stop-here.sh"
+alias shell-accum="$INST/accumulo/bin/accumulo shell -u root -p maana"
+alias shell-spark="$INST/spark/bin/spark-shell"
+alias spark="$INST/spark/bin/spark-shell"
+
+alias hls='hdfs dfs -ls'
+alias hcat='hdfs dfs -cat'
+alias hmkdir='hdfs dfs -mkdir'
+alias hput='hdfs dfs -put'
+alias hget='hdfs dfs -get'
+
+alias unknownjps='jps -lvm | grep -v "accumulo" | grep -v "hdfs" | grep -v "zookeeper" | grep -v "sun.tools.jps.Jps"'
+
+hless () { hcat "$@" | less }
+
+unset JAVA_TOOL_OPTIONS
+#alias java="`which java` -Djava.awt.headless=true"
+
+export HISTSIZE=20000
+export HISTFILE=$HOME/.history
+export SAVEHIST=$HISTSIZE
+
+export MESOS_NATIVE_LIBRARY=/usr/local/lib/libmesos.dylib
+
+
