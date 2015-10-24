@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Sparky Dots</title>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <body>
+
+Which one of: criminal defense, sex crime, dui, speeding<br>
+
+<textarea id="text"></textarea><br>
+
+<button id="classify_button">classify</button>
+<br>
+
+<span id="guess"></span>
+
+
+</body>
+
+<script>
+    $("#classify_button").click(function(){
+        $.post("/classify/service",
+            { text: $("#text").val() },
+            function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+                $("#guess").text(data.guess);
+            },
+            'json');
+    });
+</script>
+
+</html>
+

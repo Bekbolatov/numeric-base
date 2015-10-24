@@ -1,11 +1,11 @@
 import Grunt._
 import play.PlayImport.PlayKeys.playRunHooks
 
-name := """Numeric StarPractice"""
+name := """SparkyDots Server"""
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.10.3"  //"2.11.1"
+scalaVersion := "2.10.4"  //"2.11.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
