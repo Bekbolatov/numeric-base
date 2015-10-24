@@ -29,11 +29,12 @@ Which one of: criminal defense, sex crime, dui, speeding<br>
                 type: "POST",
                 url: "/classify/service",
                 dataType: 'json',
+                contentType: 'application/json',
                 async: false,
-                data: JSON.stringify({text: $("#text").val() }),
-                success: function () {
-
-                alert("Thanks!");
+                data: {text: $("#text").val() },
+                success: function(data, status){
+                    alert("Data: " + data + "\nStatus: " + status);
+                    $("#guess").text(data.guess);
                 }
             })
 
