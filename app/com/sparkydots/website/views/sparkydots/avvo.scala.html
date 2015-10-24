@@ -24,29 +24,19 @@ Which one of: criminal defense, sex crime, dui, speeding<br>
 <script>
     $("#classify_button").click(function(){
 
-$.ajax
-    ({
-        type: "POST",
-        url: "/classify/service",
-        dataType: 'json',
-        async: false,
-        data: JSON.stringify({text: $("#text").val() }),
-        success: function () {
+        $.ajax
+            ({
+                type: "POST",
+                url: "/classify/service",
+                dataType: 'json',
+                async: false,
+                data: JSON.stringify({text: $("#text").val() }),
+                success: function () {
 
-        alert("Thanks!");
-        }
-    })
+                alert("Thanks!");
+                }
+            })
 
-
-        $.post(,
-
-
-            { text: $("#text").val()},
-            function(data, status){
-                alert("Data: " + data + "\nStatus: " + status);
-                $("#guess").text(data.guess);
-            },
-            'json');
     });
 </script>
 
