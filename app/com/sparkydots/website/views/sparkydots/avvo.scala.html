@@ -13,15 +13,35 @@ Which one of: criminal defense, sex crime, dui, speeding<br>
 <button id="classify_button">classify</button>
 <br>
 
-<span id="guess"></span>
+
+<div id="guess"></div>
+
+
 
 
 </body>
 
 <script>
     $("#classify_button").click(function(){
-        $.post("/classify/service",
-            { text: $("#text").val() },
+
+$.ajax
+    ({
+        type: "POST",
+        url: "/classify/service",
+        dataType: 'json',
+        async: false,
+        data: JSON.stringify({text: $("#text").val() }),
+        success: function () {
+
+        alert("Thanks!");
+        }
+    })
+
+
+        $.post(,
+
+
+            { text: $("#text").val()},
             function(data, status){
                 alert("Data: " + data + "\nStatus: " + status);
                 $("#guess").text(data.guess);
