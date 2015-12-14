@@ -1,0 +1,6 @@
+@(translateForm: Form[PhraseRequest])
+
+@import helper._
+
+@textarea(translateForm("phrase"), 'rows -> 5, 'cols -> 40, '_label -> "French phrase", '_showConstraints -> false)
+

@@ -1,0 +1,49 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@title</title>
+        <link rel="icon" href='@routes.Assets.at("images/favicon.ico")' type="image/x-icon" />
+        <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/ratchet/2.0.2/css/ratchet.min.css'>
+        <!--<link rel="stylesheet" media="screen" href='@routes.Assets.at("apps/stylesheets/numeric.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("apps/stylesheets/main.css")'>-->
+        <script src='@routes.Assets.at("bower_components/jquery/dist/jquery.min.js")' type="text/javascript"></script>
+    </head>
+
+    <body>
+        <header class="bar bar-nav">
+            <a class="pull-left" href='@com.sparkydots.nlp.controllers.routes.MT.index'>
+                <button class="btn">
+                    Info
+                </button>
+            </a>
+            <a class="pull-left" href='@com.sparkydots.nlp.controllers.routes.MT.phrase'>
+                <button class="btn">
+                    Phrase
+                </button>
+            </a>
+            <a class="pull-left" href='@com.sparkydots.nlp.controllers.routes.MT.translate'>
+                <button class="btn">
+                    Translate
+                </button>
+            </a>
+        </header>
+
+        <div class="content content-bg">
+            <div>
+                @content
+            </div>
+        </div>
+
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.js' type="text/javascript"></script>
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.min.js' type="text/javascript"></script>
+
+        <script src='@routes.Assets.at("bower_components/angular-timer/dist/angular-timer.min.js")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("bower_components/angular-md5/angular-md5.min.js")' type="text/javascript"></script>
+
+        <!--script src='@routes.Assets.at("/apps/javascripts/library.min.js?v=0.03")' type="text/javascript"></script-->
+
+    </body>
+</html>

@@ -1,0 +1,15 @@
+@(translateForm: Form[TranslateRequest])
+
+@import helper._
+
+@com.sparkydots.nlp.views.html.nlp.main("Translate a French sentence") {
+<div>
+
+    <h1>Translate a French sentence</h1>
+
+    @form(com.sparkydots.nlp.controllers.routes.MT.translate()) {
+        @translateFormFields(translateForm)
+        <button type="submit">Translate</button>
+    }
+</div>
+}

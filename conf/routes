@@ -44,3 +44,11 @@ GET 	/activityServer/admin/profile						        com.sparkydots.activityServer.co
 GET 	/activityServer/admin/profile/:id						    com.sparkydots.activityServer.controllers.admin.EndUserProfiles.edit(id: String)
 
 POST 	/activityServer/admin/profile/:id						    com.sparkydots.activityServer.controllers.admin.EndUserProfiles.update(id: String)
+
+# NLP
+GET     /nlp                                               com.sparkydots.nlp.controllers.MT.index
+GET     /nlp/phrase                                               com.sparkydots.nlp.controllers.MT.phrase_input
+GET     /nlp/translate                                               com.sparkydots.nlp.controllers.MT.translate_input
+
+POST     /nlp/phrase                                               com.sparkydots.nlp.controllers.MT.phrase
+POST     /nlp/translate                                               com.sparkydots.nlp.controllers.MT.translate

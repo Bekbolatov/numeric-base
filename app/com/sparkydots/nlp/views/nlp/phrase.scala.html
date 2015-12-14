@@ -1,0 +1,18 @@
+@(phraseForm: Form[PhraseRequest])
+
+@import helper._
+
+@com.sparkydots.nlp.views.html.nlp.main("Find phrase scores") {
+<div>
+
+    <h1>Phrase translations and scores</h1>
+
+    @form(com.sparkydots.nlp.controllers.routes.MT.phrase()) {
+        @phraseFormFields(phraseForm)
+        <button type="submit">Get scores</button>
+        @helper.repeat(phraseForm("options")) { option =>
+            @helper.inputText(option, '_label -> "")
+        }
+    }
+</div>
+}
