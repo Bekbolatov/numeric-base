@@ -1,7 +1,0 @@
-@(endUserProfileForm: Form[EndUserProfile])
-
-@import helper._
-
-@inputText(endUserProfileForm("id"), 'size -> 50, 'readonly -> "readonly")
-@inputText(endUserProfileForm("name"), 'size -> 50)
-@inputText(endUserProfileForm("createDate"), 'readonly -> "readonly")

@@ -1,6 +1,5 @@
 package com.sparkydots.nlp.controllers
 
-import com.sparkydots.activityServer.forms.admin.ActivityForm
 import com.sparkydots.nlp.forms.nlp.{PhraseForm, TranslateForm}
 import com.sparkydots.nlp.models.{PhraseRequest, TranslateRequest}
 import com.sparkydots.nlp.mt.PhraseTranslation
