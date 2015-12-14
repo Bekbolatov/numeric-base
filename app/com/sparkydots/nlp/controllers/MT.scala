@@ -6,6 +6,8 @@ import com.sparkydots.nlp.mt.PhraseTranslation
 import com.sparkydots.nlp.views
 import play.api.data.Form
 
+import scala.util.Try
+
 //import play.api.Play.current
 //import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
@@ -27,7 +29,9 @@ object MT extends Controller {
           formWithErrors => BadRequest(formWithErrors.errorsAsJson),
           translateRequest => {
             if (true) {
-              val translated = PhraseTranslation.translate(translateRequest.text)
+              val translated = Try {
+                PhraseTranslation.translate(translateRequest.text)
+              }.getOrElse("No translation found.")
 //              val translated = clean(translateRequest.text).mkString
               val newForm = form.fill(translateRequest.copy(translation = Some(translated)))
               Ok(views.html.nlp.translate(newForm))
@@ -46,7 +50,10 @@ object MT extends Controller {
         if (true) {
           val cleanText = PhraseTranslation.clean(translateRequest.phrase)
 
-          val translated = PhraseTranslation.phrases(cleanText).toList
+          val translated = Try {
+            PhraseTranslation.phrases(cleanText).toList
+          }.getOrElse(List("Phrase not found."))
+
           val newForm = phrasesForm.fill(translateRequest.copy(options = Some(translated)))
           Ok(views.html.nlp.phrase(newForm))
         } else {
