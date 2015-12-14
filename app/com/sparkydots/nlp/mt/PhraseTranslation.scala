@@ -134,9 +134,7 @@ object PhraseTranslation {
     ss = ss.filter(!_.isEmpty)
     ss = ss.flatMap { c =>
 
-      println(c)
       val cs: Seq[String] = c.split(",")
-      println("s:" + cs)
       if (cs.size == 1) {
         Seq(c)
       } else if (cs.size > 1) {
@@ -172,6 +170,7 @@ object PhraseTranslation {
 
 
   def translate(s: String): String = {
+    println(s.take(2000))
     val decoder = decfac.newDecoder(phraseTable, lm, dm)
     val ff = decoder.decode(clean(s))
     extractEnglish(ff)
@@ -179,6 +178,7 @@ object PhraseTranslation {
 
 
   def phrases(s: Seq[String]): Seq[String] = {
+    println(s.take(2000))
     val ttt: Seq[ScoredPhrasePairForSentence] = tt(s.mkString(" "))
     ttt.map { t =>
       s"[LM: ${lmest(t.getEnglish.mkString(" "))}}]: [TM: " + t.toString + "]"

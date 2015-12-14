@@ -10,6 +10,8 @@
     @form(com.sparkydots.nlp.controllers.routes.MT.translate()) {
         @translateFormFields(translateForm)
         <button type="submit">Translate</button>
+        @textarea(translateForm("translation"), 'rows -> 5, 'cols -> 40, '_label -> "English sentence", '_showConstraints -> false)
+
     }
 </div>
 }
