@@ -1,7 +1,7 @@
 GET     /assets/*file                                       com.sparkydots.common.controllers.Assets.at(path="/public", file)
 
 # Web Pages
-GET     /                                                   com.sparkydots.nlp.controllers.MT.index
+GET     /                                                   com.sparkydots.nlp.controllers.MT.root
 
 # NLP
 GET     /nlp                                               com.sparkydots.nlp.controllers.MT.index

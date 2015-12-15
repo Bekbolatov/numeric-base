@@ -69,6 +69,10 @@ object MT extends Controller {
 //    Ok
 //  }
 
+  def root = Action {
+    Ok(views.html.nlp.index())
+  }
+
    def index = Action {
      Ok(views.html.nlp.index())
    }
