@@ -6,40 +6,29 @@ import com.sparkydots.activityServer.models.{Channel, Message, Activity}
 import com.sparkydots.activityServer.services.Authenticator
 import play.api.libs.json.Json
 import play.api.mvc.{ResponseHeader, Result, Action, Controller}
+import Math.min
+import scala.util.Try
 
 object ChannelController extends Controller {
 
-  def channel(chid: String, st: Int, si: Int) = WithCors("GET") (Authenticator {
-    profile =>
+  def channel(chid: String, st: Int, si: Int) = WithCors("GET")(
+    Authenticator { profile =>
       Action { request =>
-        try {
-          var ssi = si
-          if (si > 100) {
-            ssi = 100
-          }
-
-          Ok(ActivityList jsonContaining Activity.pageOfChannel(chid, st, ssi))
-
-        } catch {
-          case e: Exception => Ok("{}")
-        }
+        Try {
+          Ok(ActivityList jsonContaining Activity.pageOfChannel(chid, st, min(si, 100)))
+        } getOrElse Ok("{}")
       }
-  })
+    }
+  )
 
-  def channelList(id: String, st: Int, si: Int) = WithCors("GET") (Authenticator {
-    profile =>
+  def channelList(id: String, st: Int, si: Int) = WithCors("GET")(
+    Authenticator { profile =>
       Action { request =>
-        try {
-          var ssi = si
-          if (si > 100) {
-            ssi = 100
-          }
-
-          Ok(ChannelList jsonContaining Channel.pageForEndUser(id, st, ssi))
-
-        } catch {
-          case e: Exception => Ok("{}")
-        }
+        Try {
+          Ok(ChannelList jsonContaining Channel.pageForEndUser(id, st, min(si, 100)))
+        } getOrElse Ok("{}")
       }
-  })
+    }
+  )
+
 }

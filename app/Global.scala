@@ -8,18 +8,18 @@ object AccessLoggingFilter extends Filter {
 
   val accessLogger = Logger("access")
 
-  def apply(next: (RequestHeader) => Future[Result])(request: RequestHeader): Future[Result] = {
-    val resultFuture = next(request)
+  def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
+    val resultFuture = next(rh)
 
     resultFuture.foreach(result => {
-      //val msg = s"method=${request.method} uri=${request.uri} remote-address=${request.remoteAddress}" +
-      //  s" status=${result.header.status}";
-
-
-      val msg = s"method=${request.method} uri=${request.uri} remote-address=${request.remoteAddress} " +
-        s"domain=${request.domain} query-string=${request.rawQueryString} " +
-        s"referer=${request.headers.get("referer").getOrElse("N/A")} " +
-        s"user-agent=[${request.headers.get("user-agent").getOrElse("N/A")}]"
+      val msg =
+        "" +
+          s"method=${rh.method} uri=${rh.uri} " +
+          s"remote-address=${rh.remoteAddress} " +
+          s"domain=${rh.domain} " +
+          s"query-string=${rh.rawQueryString} " +
+          s"referer=${rh.headers.get("referer").getOrElse("N/A")} " +
+          s"user-agent=[${rh.headers.get("user-agent").getOrElse("N/A")}]"
 
       accessLogger.info(msg)
     })
@@ -28,7 +28,23 @@ object AccessLoggingFilter extends Filter {
   }
 }
 
-object Global extends WithFilters(AccessLoggingFilter) {
+object HTTPSRedirectFilter extends Filter {
+
+  def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
+    rh.headers.get("x-forwarded-proto") match {
+      case Some(header) => {
+        if ("https" == header) {
+          next(rh).map { result => result.withHeaders(("Strict-Transport-Security", "max-age=31536000")) }
+        } else {
+          Future.successful(Results.Redirect("https://" + rh.host + rh.uri, 301))
+        }
+      }
+      case None => next(rh)
+    }
+  }
+}
+
+object Global extends WithFilters(HTTPSRedirectFilter, AccessLoggingFilter) {
 
   override def onStart(app: Application) {
     Logger.info("Application [Krista] has started")

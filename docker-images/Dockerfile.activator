@@ -1,0 +1,10 @@
+FROM jdk8
+MAINTAINER Renat Bekbolatov <renatbek@gmail.com>
+
+RUN yum update -y && yum install -y unzip
+
+RUN mkdir /activators
+RUN mkdir /app
+
+ENV PATH $PATH:/activators/current/bin
+

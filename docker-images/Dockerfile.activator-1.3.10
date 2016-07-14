@@ -1,0 +1,13 @@
+FROM renatbek/activator:base
+MAINTAINER Renat Bekbolatov <renatbek@gmail.com>
+
+COPY typesafe-activator-1.3.10.zip /activators/.
+
+WORKDIR /activators
+RUN unzip typesafe-activator-1.3.10.zip 
+RUN rm typesafe-activator-1.3.10.zip
+RUN chmod a+x activator-dist-1.3.10/bin/activator
+
+RUN rm -rf /activators/current
+RUN ln -s activator-dist-1.3.10 /activators/current
+

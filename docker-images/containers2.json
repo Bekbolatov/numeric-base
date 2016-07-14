@@ -1,0 +1,34 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "StarPractice",
+            "image": "445803720301.dkr.ecr.us-west-2.amazonaws.com/renatbek/starpractice:latest",
+            "memory": "500",
+            "cpu": "500",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "8080",
+                    "containerPort": "9000",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": null,
+            "mountPoints": null,
+            "volumesFrom": null,
+            "extraHosts": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "starpractice",
+                    "awslogs-region": "us-west-2"
+                }
+            },
+            "ulimits": null,
+            "dockerLabels": null
+        }
+    ],
+    "volumes": [],
+    "family": "StarPractice"
+}
+

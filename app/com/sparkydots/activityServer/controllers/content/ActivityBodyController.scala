@@ -8,6 +8,7 @@ import com.sparkydots.activityServer.services.Authenticator
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
+import scala.util.Try
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -23,20 +24,18 @@ object ActivityBodyController extends Controller {
     fileContent
   }
 
-  def activityBody(id: String) = WithCors("GET") (Authenticator {
-    profile =>
+  def activityBody(id: String) = WithCors("GET")(
+    Authenticator { profile =>
       Action { request =>
-        try {
+        Try {
           val fileContent = getFileContent("/var/lib/starpractice/activity/body/" + id)
           Result(
             header = ResponseHeader(200),
             body = fileContent
           )
-        } catch {
-          case e: Exception => Ok("{}")
-        }
+        } getOrElse Ok("{}")
       }
-  })
-
+    }
+  )
 
 }
