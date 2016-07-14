@@ -1,0 +1,33 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "starpractice",
+            "image": "445803720301.dkr.ecr.us-west-2.amazonaws.com/renatbek/starpractice:latest",
+            "memory": "2000",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "8080",
+                    "containerPort": "9000",
+                    "protocol": "tcp"
+                }
+            ],
+            "entryPoint": [],
+            "command": [
+                "activator",
+                "run"
+            ],
+            "environment": null,
+            "mountPoints": null,
+            "volumesFrom": null,
+            "workingDirectory": "/app",
+            "extraHosts": null,
+            "logConfiguration": null,
+            "ulimits": null,
+            "dockerLabels": null
+        }
+    ],
+    "volumes": []
+}
+
+

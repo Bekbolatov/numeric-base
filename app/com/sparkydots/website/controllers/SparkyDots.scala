@@ -20,6 +20,10 @@ object SparkyDots extends Controller {
     Ok(views.html.sparkydots.avvo())
   }
 
+  def health = Action {
+    Ok(views.html.sparkydots.health())
+  }
+
   def starpractice = Action {
     Ok(views.html.sparkydots.starpractice())
   }
