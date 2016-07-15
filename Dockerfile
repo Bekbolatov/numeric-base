@@ -1,17 +1,13 @@
-FROM renatbek/play:cached
+FROM renatbek/activator:1.3.10
 MAINTAINER Renat Bekbolatov <renatbek@gmail.com>
 
-COPY ./ /app/.
-
-RUN mkdir -p /var/lib/starpractice/activity
-COPY activity /var/lib/starpractice/activity/.
-
-EXPOSE 9000 
-WORKDIR /app
-RUN activator dist
-
 RUN mkdir /deployment
-RUN unzip target/universal/sparkydots-server-1.0-SNAPSHOT.zip -d /deployment/
+COPY logging_conf/docker_logback.xml /deployment/
+COPY target/universal/sparkydots-server-1.0-SNAPSHOT.zip /deployment
+RUN unzip /deployment/sparkydots-server-1.0-SNAPSHOT.zip -d /deployment/
+RUN rm /deployment/sparkydots-server-1.0-SNAPSHOT.zip
 
-CMD ["/deployment/sparkydots-server-1.0-SNAPSHOT/bin/sparkydots-server"]
-
+RUN mkdir /logs
+RUN mkdir /deployment/logs
+EXPOSE 9000
+CMD ["/deployment/sparkydots-server-1.0-SNAPSHOT/bin/sparkydots-server", "-Dlogger.file=/deployment/docker_logback.xml"]
