@@ -15,7 +15,8 @@ object ActivityForm extends Form[Activity](
     "authorName" -> nonEmptyText,
     "authorEmail" -> email,
     "authorDate" -> date,
-    "version" -> number)
+    "version" -> number,
+    "content" -> text)
     (Activity.apply)(Activity.unapply), Map.empty, Nil, None
 )
 

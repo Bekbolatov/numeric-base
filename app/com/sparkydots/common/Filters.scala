@@ -30,6 +30,7 @@ class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionCont
 }
 
 class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+  Logger.info("AccessLoggingFilter object started")
 
   val accessLogger = Logger("access")
 
@@ -54,6 +55,7 @@ class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: Executi
 }
 
 class HTTPSRedirectFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+  Logger.info("HTTPSRedirectFilter object started")
 
   def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
     rh.headers.get("x-forwarded-proto") match {
@@ -69,4 +71,7 @@ class HTTPSRedirectFilter @Inject() (implicit val mat: Materializer, ec: Executi
   }
 }
 
-class Filters @Inject() (httpRedirect: HTTPSRedirectFilter, accessLog: AccessLoggingFilter) extends DefaultHttpFilters(httpRedirect, accessLog)
+class Filters @Inject() (httpRedirect: HTTPSRedirectFilter, accessLog: AccessLoggingFilter) extends DefaultHttpFilters(httpRedirect, accessLog) {
+  println("Filters starting")
+  Logger.info("Filters object started")
+}

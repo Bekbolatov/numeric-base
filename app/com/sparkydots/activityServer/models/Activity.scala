@@ -11,7 +11,7 @@ import play.api.libs.json.Json
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 6:36 PM
  */
-case class Activity(id: String, name: String, shortDescription: String, description: String, authorName: String, authorEmail: String, authorDate: Date, version: Int)
+case class Activity(id: String, name: String, shortDescription: String, description: String, authorName: String, authorEmail: String, authorDate: Date, version: Int, content: String)
 
 object Activity {
 
@@ -26,7 +26,7 @@ object Activity {
       get[String]("author_email") ~
       get[Date]("author_date") ~
       get[Int]("version") map {
-      case id ~ name ~ shortDescription ~ description ~ authorName ~ authorEmail ~ authorDate ~ version => Activity(id, name, shortDescription, description, authorName, authorEmail, authorDate, version)
+      case id ~ name ~ shortDescription ~ description ~ authorName ~ authorEmail ~ authorDate ~ version => Activity(id, name, shortDescription, description, authorName, authorEmail, authorDate, version, "<data>")
     }
   }
 

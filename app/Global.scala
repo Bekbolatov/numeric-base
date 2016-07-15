@@ -18,7 +18,7 @@ class ExampleOnStop @Inject() (lifecycle: ApplicationLifecycle) {
   lifecycle.addStopHook { () =>
 //    Future.successful(connection.stop())
     Logger.info("Application [Krista] has stopped")
-    Future.successful()
+    Future.successful(())
   }
 }
 

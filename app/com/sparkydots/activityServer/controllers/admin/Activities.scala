@@ -7,6 +7,8 @@ import com.sparkydots.activityServer.services.{AuthorisationChecker, Authenticat
 import com.sparkydots.activityServer.views
 import play.api.mvc._
 //import play.libs.Json
+import javax.inject.Inject
+
 import play.api.libs.json.Json
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -14,7 +16,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 7:08 PM
  */
-class Activities extends Controller {
+class Activities @Inject() (activitiesData: com.sparkydots.activityServer.ActivitiesData) extends Controller {
   val form = ActivityForm
 
   def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>
@@ -40,6 +42,27 @@ class Activities extends Controller {
             activityWithNewValues => {
               Activity.update(id, activityWithNewValues)
               Ok("ok")
+            })
+        }.getOrElse(NotFound)
+      }
+    }
+  }
+
+  def updateContent(id: String) = Authenticator { profile =>
+    AuthorisationChecker(profile).onlyRoot {
+      Action { implicit request =>
+        Activity.load(id).map { activity =>
+          form.bindFromRequest.fold(
+            formWithErrors => BadRequest(formWithErrors.errorsAsJson),
+            activityWithNewValues => {
+              val content = activityWithNewValues.content
+              if (content.length > 30) {
+                val version = activityWithNewValues.version.toString
+                activitiesData.putActivityBody(id, version, content)
+                Ok("ok")
+              } else {
+                Ok("too short")
+              }
             })
         }.getOrElse(NotFound)
       }

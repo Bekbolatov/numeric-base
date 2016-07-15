@@ -28,6 +28,7 @@ GET		/activityServer/admin/activity/:id				        com.sparkydots.activityServer
 GET		/activityServer/admin/activity/:id/channels				        com.sparkydots.activityServer.controllers.admin.Channels.activityChannels(id: String, startIndex: Option[Int], size: Option[Int])
 POST	/activityServer/admin/activity						    com.sparkydots.activityServer.controllers.admin.Activities.save
 POST	/activityServer/admin/activity/:id					    com.sparkydots.activityServer.controllers.admin.Activities.update(id: String)
+POST	/activityServer/admin/activity/content/:id					    com.sparkydots.activityServer.controllers.admin.Activities.updateContent(id: String)
 DELETE	/activityServer/admin/activity/:id			            com.sparkydots.activityServer.controllers.admin.Activities.delete(id: String)
 
 # channels
