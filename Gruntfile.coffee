@@ -1,6 +1,6 @@
 module.exports = (grunt) ->
-    watchFile = '/Users/renatb/projects/90_scratch/Bekbolatov/ActivityClient/.completed'
-    distDir = '/Users/renatb/projects/90_scratch/Bekbolatov/ActivityClient/target/dist/'
+    watchFile = '../ActivityClient/.completed'
+    distDir = '../ActivityClient/target/dist/'
     publicDir = 'public/'
 
     appFiles = []
