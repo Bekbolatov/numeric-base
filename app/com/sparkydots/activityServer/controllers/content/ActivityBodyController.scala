@@ -42,6 +42,7 @@ class ActivityBodyController @Inject() (activitiesData: com.sparkydots.activityS
     Authenticator { profile =>
       Action { request =>
         Activity.load(id).map { activity =>
+          import scala.util.{Failure, Success}
           Try {
 //            val data = getFileContent("/var/lib/starpractice/activity/body/" + id)
             val data = getActivityContent(activity)
@@ -49,7 +50,11 @@ class ActivityBodyController @Inject() (activitiesData: com.sparkydots.activityS
               header = ResponseHeader(200),
               body = HttpEntity.Strict(data, Some(MimeTypes.TEXT))
             )
-          } getOrElse Ok("{}")
+          } match {
+            case Success(result) => result
+            case Failure(ex) => Ok(s"""{"msg": "Problem: ${ex.getMessage}"}""") // println(s"Problem rendering URL content: ${ex.getMessage}")
+          }
+//          getOrElse Ok("{}")
         }.get
       }
     }

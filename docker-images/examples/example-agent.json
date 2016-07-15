@@ -1,0 +1,237 @@
+[ec2-user@ip-10-0-0-192 ecs]$ docker inspect ecs-agent
+[
+    {
+        "Id": "9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f",
+        "Created": "2016-07-14T02:03:22.53966669Z",
+        "Path": "/agent",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 2940,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2016-07-14T02:03:24.244324559Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:d51cf3065cef0ac47f460c03649259b2dc3df16d4c5ce36408d76eb84d7e92f7",
+        "ResolvConfPath": "/var/lib/docker/containers/9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f/hostname",
+        "HostsPath": "/var/lib/docker/containers/9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f/hosts",
+        "LogPath": "/var/lib/docker/containers/9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f/9a72088e154a707a00d6fab2f76ee54390a651d9c0c9764e769a629fa7df414f-json.log",
+        "Name": "/ecs-agent",
+        "RestartCount": 0,
+        "Driver": "devicemapper",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/var/run:/var/run",
+                "/var/log/ecs:/log",
+                "/var/lib/ecs/data:/data",
+                "/etc/ecs:/etc/ecs",
+                "/var/cache/ecs:/var/cache/ecs"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "default",
+            "PortBindings": {
+                "51678/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "51678"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "CapAdd": null,
+            "CapDrop": null,
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "StorageOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DiskQuota": 0,
+            "KernelMemory": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": -1,
+            "OomKillDisable": false,
+            "PidsLimit": 0,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "BlkioIOps": 0,
+            "BlkioBps": 0,
+            "SandboxSize": 0
+        },
+        "GraphDriver": {
+            "Name": "devicemapper",
+            "Data": {
+                "DeviceId": "9",
+                "DeviceName": "docker-202:1-263168-d6e1fd2d6fd772ebcb39e9a042553f0b17d20b7bec9d87340235d2a8e374f442",
+                "DeviceSize": "10737418240"
+            }
+        },
+        "Mounts": [
+            {
+                "Source": "/var/run",
+                "Destination": "/var/run",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Source": "/var/log/ecs",
+                "Destination": "/log",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Source": "/var/lib/ecs/data",
+                "Destination": "/data",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Source": "/etc/ecs",
+                "Destination": "/etc/ecs",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Source": "/var/cache/ecs",
+                "Destination": "/var/cache/ecs",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "9a72088e154a",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "51678/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "ECS_UPDATE_DOWNLOAD_DIR=/var/cache/ecs",
+                "ECS_CLUSTER=mini",
+                "ECS_LOGFILE=/log/ecs-agent.log",
+                "ECS_DATADIR=/data",
+                "ECS_UPDATES_ENABLED=true",
+                "ECS_AVAILABLE_LOGGING_DRIVERS=[\"json-file\",\"syslog\",\"awslogs\"]",
+                "ECS_AGENT_CONFIG_FILE_PATH=/etc/ecs/ecs.config.json",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": null,
+            "Image": "amazon/amazon-ecs-agent:latest",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/agent"
+            ],
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "93a9b139ad65021519ac8906b0abef2eebe1e73086f5949538e2c6b517d964b9",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "51678/tcp": [
+                    {
+                        "HostIp": "127.0.0.1",
+                        "HostPort": "51678"
+                    }
+                ]
+            },
+            "SandboxKey": "/var/run/docker/netns/93a9b139ad65",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "de692d0f191d4f7f7dc9f04f472796d63c51b2bb995836fc3965f857e2edb217",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "1ffd2432f984795a429c541b00e440f254d7f95439cd092432d222d49c8619b3",
+                    "EndpointID": "de692d0f191d4f7f7dc9f04f472796d63c51b2bb995836fc3965f857e2edb217",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:11:00:02"
+                }
+            }
+        }
+    }
+]
+

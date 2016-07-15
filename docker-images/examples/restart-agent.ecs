@@ -1,0 +1,35 @@
+sudo docker run --name ecs-agent \
+--detach=true \
+--restart=on-failure:10 \
+--volume=/var/run/docker.sock:/var/run/docker.sock \
+--volume=/var/log/ecs/:/log \
+--volume=/var/lib/ecs/data:/data \
+--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
+--volume=/var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro \
+--net=host \
+--env=ECS_LOGFILE=/log/ecs-agent.log \
+--env=ECS_LOGLEVEL=info \
+--env=ECS_DATADIR=/data \
+--env=ECS_CLUSTER=cluster_name \
+--env=ECS_ENABLE_TASK_IAM_ROLE=true \
+amazon/amazon-ecs-agent:latest
+
+sudo docker run --name ecs-agent \
+--detach=true \
+--restart=on-failure:10 \
+--volume=/var/run/docker.sock:/var/run/docker.sock \
+--volume=/var/log/ecs/:/log \
+--volume=/var/lib/ecs/data:/data \
+--volume=/etc/ecs:/etc/ecs \
+--volume=/var/cache/ecs:/var/cache/ecs \
+--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
+--net=host \
+--env=ECS_LOGFILE=/log/ecs-agent.log \
+--env=ECS_LOGLEVEL=info \
+--env=ECS_DATADIR=/data \
+--env=ECS_CLUSTER=mini \
+--env=ECS_LOGLEVEL=debug \
+--env=ECS_ENABLE_TASK_IAM_ROLE=true \
+amazon/amazon-ecs-agent:latest
+
+

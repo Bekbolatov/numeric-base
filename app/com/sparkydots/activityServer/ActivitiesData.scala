@@ -1,24 +1,26 @@
 package com.sparkydots.activityServer
 
+import play.api.Logger
 import javax.inject.Inject
+import awscala._, dynamodbv2._
 
 class ActivitiesData { //@Inject() (configuration: play.api.Configuration) {
-
-  import play.api.Logger
-
 
 //  val activitiesContentTable = configuration.underlying.getString("starpractice.activities.table")
   val activitiesContentTable = "starpractice_activities"
   val activitiesContentBodyField = "body"
-
   Logger.info(s"ActivitiesData with activitiesContentTable = $activitiesContentTable")
+  val awsCredentialsURI = sys.env("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI")
+  println(s"Credential URI length: ${awsCredentialsURI.length}")
 
   def getData(id: String,
               version: String,
               attributes: Seq[String] = Seq(activitiesContentBodyField),
               tableName: String = activitiesContentTable): Map[String, String] = {
 
-    import awscala._, dynamodbv2._
+//    if (awsCredentialsURI.length > 3) {
+//    }
+
     implicit val dynamoDB = DynamoDB.at(Region.US_WEST_2)
 
     dynamoDB.table(tableName).flatMap { table =>
@@ -40,7 +42,6 @@ class ActivitiesData { //@Inject() (configuration: play.api.Configuration) {
               attribute: String = activitiesContentBodyField,
               tableName: String = activitiesContentTable) = {
 
-    import awscala._, dynamodbv2._
     implicit val dynamoDB = DynamoDB.at(Region.US_WEST_2)
 
     dynamoDB.table(tableName).foreach { table =>
