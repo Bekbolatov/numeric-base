@@ -1,17 +1,19 @@
 package com.sparkydots.activityServer.controllers.admin
 
-import com.sparkydots.activityServer.controllers.admin.Channels._
+import javax.inject.Inject
+
 import com.sparkydots.activityServer.forms.admin.EndUserProfileForm
-import com.sparkydots.activityServer.models.{Channel, EndUserProfile}
-import com.sparkydots.activityServer.models.responses.{EndUserProfileList, ActivityList}
-import com.sparkydots.activityServer.services.{Authenticator, AuthorisationChecker}
+import com.sparkydots.activityServer.models.{EndUserProfile, Channel}
+import com.sparkydots.activityServer.models.responses.{ActivityList, EndUserProfileList}
+import com.sparkydots.activityServer.services.{AuthorisationChecker, Authenticator}
 import com.sparkydots.activityServer.views
 import play.api.mvc._
+import play.api.i18n.{I18nSupport, MessagesApi}
 
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 7:08 PM
  */
-object EndUserProfiles extends Controller {
+class EndUserProfiles @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   val form = EndUserProfileForm
 

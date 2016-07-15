@@ -16,22 +16,30 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 8/4/14 9:22 PM
  */
-object ActivityBodyController extends Controller {
+class ActivityBodyController extends Controller {
 
-  private def getFileContent(pathName: String) = {
+  import akka.util.ByteString
+
+  private def getFileContent(pathName: String): ByteString = {
+    import akka.util.ByteString
     val file = new File(pathName)
-    val fileContent: Enumerator[Array[Byte]] = Enumerator.fromFile(file)
-    fileContent
+    val source = scala.io.Source.fromFile(file)
+    val byteArray = source.map(_.toByte).toArray
+    source.close()
+
+    ByteString(byteArray)
   }
 
   def activityBody(id: String) = WithCors("GET")(
     Authenticator { profile =>
       Action { request =>
         Try {
+          import play.api.http.HttpEntity
+          import play.mvc.Http.MimeTypes
           val fileContent = getFileContent("/var/lib/starpractice/activity/body/" + id)
           Result(
             header = ResponseHeader(200),
-            body = fileContent
+            body = HttpEntity.Strict(fileContent, Some(MimeTypes.TEXT))
           )
         } getOrElse Ok("{}")
       }

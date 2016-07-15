@@ -1,4 +1,4 @@
-@(activities: Iterable[Activity])(implicit flash:Flash)
+@(activities: Iterable[Activity])(implicit flash:Flash, messages: Messages)
 
 @com.sparkydots.activityServer.views.html.admin.main("All activities") {
 <div ng-controller="activityList">

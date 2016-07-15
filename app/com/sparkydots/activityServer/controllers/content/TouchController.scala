@@ -4,7 +4,7 @@ import com.sparkydots.common.util.WithCors
 import com.sparkydots.activityServer.services.Authenticator
 import play.api.mvc.{Action, Controller}
 
-object TouchController extends Controller {
+class TouchController extends Controller {
 
   def touch(page: String, id: String) = WithCors("GET")(
     Authenticator { profile =>

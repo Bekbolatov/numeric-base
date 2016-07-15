@@ -8,11 +8,13 @@ import com.sparkydots.activityServer.views
 import play.api.mvc._
 //import play.libs.Json
 import play.api.libs.json.Json
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 7:08 PM
  */
-object Activities extends Controller {
+class Activities extends Controller {
   val form = ActivityForm
 
   def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>

@@ -1,11 +1,11 @@
 import Grunt._
-import play.PlayImport.PlayKeys.playRunHooks
+import play.sbt.PlayImport.PlayKeys.playRunHooks
 
 name := """SparkyDots Server"""
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.10.6"  //"2.11.1"
+scalaVersion := "2.11.8" //2.10.6"  //"2.11.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -32,10 +32,11 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 
 libraryDependencies ++= Seq(
   jdbc,
-  anorm,
   cache,
   ws,
-  "org.sorm-framework" % "sorm" % "0.3.15"
+  "com.typesafe.play" %% "anorm" % "2.4.0",
+  "org.sorm-framework" % "sorm" % "0.3.15",
+  "com.github.seratch" %% "awscala" % "0.5.+"
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"

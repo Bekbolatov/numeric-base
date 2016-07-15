@@ -1,4 +1,4 @@
-@(channels: Iterable[Channel])(implicit flash:Flash)
+@(channels: Iterable[Channel])(implicit flash:Flash, messages: Messages)
 
 @com.sparkydots.activityServer.views.html.admin.main("All channels") {
 <div ng-controller="channelList">

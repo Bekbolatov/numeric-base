@@ -1,6 +1,5 @@
 package com.sparkydots.activityServer.controllers.admin
 
-import com.sparkydots.activityServer.controllers.admin.Activities._
 import com.sparkydots.activityServer.forms.admin.ChannelForm
 import com.sparkydots.activityServer.models.responses.{ChannelList, ActivityList}
 import com.sparkydots.activityServer.models.{Activity, Channel}
@@ -8,11 +7,13 @@ import com.sparkydots.activityServer.services.{AuthorisationChecker, Authenticat
 import com.sparkydots.activityServer.views
 import play.api.libs.json.Json
 import play.api.mvc._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 
 /**
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/13/14 7:08 PM
  */
-object Channels extends Controller {
+class Channels extends Controller {
   val form = ChannelForm
 
   def list(startIndex: Option[Int], size: Option[Int]) = Action { implicit request =>

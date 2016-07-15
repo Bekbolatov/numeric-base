@@ -1,4 +1,4 @@
-@(profiles: Iterable[EndUserProfile])
+@(profiles: Iterable[EndUserProfile])(implicit messages: Messages)
 
 @com.sparkydots.activityServer.views.html.admin.main("All profiles") {
 <div ng-controller="endUserProfileList">

@@ -3,14 +3,17 @@ package com.sparkydots.website.controllers
 import com.sparkydots.website.views
 //import play.api.Play.current
 //import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import javax.inject.Inject
+
 import play.api.mvc._
 
 import scala.concurrent.Future
+import play.api.i18n.{I18nSupport, MessagesApi}
 
 /**
   * @author Renat Bekbolatov (renatb@sparkydots.com) 7/29/14 11:24 PM
   */
-object SparkyDots extends Controller {
+class SparkyDots @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
    def index = Action {
      Ok(views.html.sparkydots.index())
