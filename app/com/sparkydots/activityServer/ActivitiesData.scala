@@ -10,8 +10,9 @@ class ActivitiesData { //@Inject() (configuration: play.api.Configuration) {
   val activitiesContentTable = "starpractice_activities"
   val activitiesContentBodyField = "body"
   Logger.info(s"ActivitiesData with activitiesContentTable = $activitiesContentTable")
-  val awsCredentialsURI = sys.env("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI")
-  println(s"Credential URI length: ${awsCredentialsURI.length}")
+
+  val awsCredentialsURI = sys.env.get("AWS_CONTAINER_CREDENTIALS_RELATIVE_URI")
+  println(s"Credential URI length: ${awsCredentialsURI.map(_.length).getOrElse(0)}")
 
   def getData(id: String,
               version: String,
