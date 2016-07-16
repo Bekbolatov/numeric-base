@@ -13,8 +13,8 @@
     {
       "name": "StarPractice",
       "image": "445803720301.dkr.ecr.us-west-2.amazonaws.com/renatbek/starpractice:play254",
-      "memory": "700",
-      "cpu": "700",
+      "memory": 700,
+      "cpu": 700,
       "essential": true,
       "portMappings": [
         {
@@ -29,9 +29,6 @@
           "containerPath": "/EFS"
         }
       ],
-      "environment": null,
-      "volumesFrom": null,
-      "extraHosts": null,
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -39,8 +36,11 @@
           "awslogs-region": "us-west-2"
         }
       },
-      "ulimits": null,
-      "dockerLabels": null
+      "volumesFrom": [],
+      "environment": [],
+      "extraHosts": [],
+      "ulimits": [],
+      "dockerLabels": {}
     }
   ]
 }
