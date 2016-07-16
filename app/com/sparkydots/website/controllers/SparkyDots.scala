@@ -9,6 +9,7 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 import play.api.i18n.{I18nSupport, MessagesApi}
+import java.net.InetAddress
 
 /**
   * @author Renat Bekbolatov (renatb@sparkydots.com) 7/29/14 11:24 PM
@@ -25,6 +26,12 @@ class SparkyDots @Inject() (val messagesApi: MessagesApi) extends Controller wit
 
   def health = Action {
     Ok(views.html.sparkydots.health())
+  }
+
+  def machine = Action {
+    val localhost = InetAddress.getLocalHost
+//    val localIpAddress = localhost.getHostAddress
+    Ok(localhost.toString)
   }
 
   def starpractice = Action {
