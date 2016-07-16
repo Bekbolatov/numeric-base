@@ -40,7 +40,6 @@ class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: Executi
           "" +
             s"method=${rh.method} uri=${rh.uri} " +
             s"remote-address=${rh.remoteAddress} " +
-            s"X-Forwarded-For=${rh.headers.get("X-Forwarded-For")} " +
             s"x-forwarded-for=${rh.headers.get("x-forwarded-for")} " +
             s"domain=${rh.domain} " +
             s"query-string=${rh.rawQueryString} " +
