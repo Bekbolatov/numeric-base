@@ -32,22 +32,26 @@ class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionCont
 class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
   Logger.info("AccessLoggingFilter object started")
 
-  val accessLogger = Logger("access")
-
   def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
     val resultFuture = next(rh)
 
     resultFuture.foreach(result => {
-      val msg =
-        "" +
-          s"method=${rh.method} uri=${rh.uri} " +
-          s"remote-address=${rh.remoteAddress} " +
-          s"domain=${rh.domain} " +
-          s"query-string=${rh.rawQueryString} " +
-          s"referer=${rh.headers.get("referer").getOrElse("N/A")} " +
-          s"user-agent=[${rh.headers.get("user-agent").getOrElse("N/A")}]"
+        val msg =
+          "" +
+            s"method=${rh.method} uri=${rh.uri} " +
+            s"remote-address=${rh.remoteAddress} " +
+            s"X-Forwarded-For=${rh.headers.get("X-Forwarded-For")} " +
+            s"x-forwarded-for=${rh.headers.get("x-forwarded-for")} " +
+            s"domain=${rh.domain} " +
+            s"query-string=${rh.rawQueryString} " +
+            s"referer=${rh.headers.get("referer").getOrElse("N/A")} " +
+            s"user-agent=[${rh.headers.get("user-agent").getOrElse("N/A")}]"
 
-      accessLogger.info(msg)
+      if (rh.uri == "/health") {
+        Logger("health")
+      } else {
+        Logger("access")
+      } info msg
     })
 
     resultFuture

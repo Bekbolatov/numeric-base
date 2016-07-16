@@ -27,6 +27,8 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
   def apply(rh: RequestHeader) = {
     implicit val executionContext: ExecutionContext = play.api.libs.concurrent.Execution.defaultContext
     val ip =  rh.remoteAddress
+    val XFor =  rh.headers.get("X-Forwarded-For").getOrElse(" ")
+    val xfor =  rh.headers.get("x-forwarded-for").getOrElse(" ")
     val path = rh.path
     val ua = rh.headers.get("User-Agent").getOrElse("")
     val authorization = rh.headers.get(AUTHORIZATION).getOrElse("")
@@ -36,7 +38,7 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
       case Array(secret, public, appGroup, appName, version) =>
         val check = md5check(public, secret)
         if (check) {
-          starLogger.info(s"$ip$sep$method$sep$path$sep$public$sep$appGroup$sep$appName$sep$version$sep$ua")
+          starLogger.info(s"$ip$XFor$xfor$sep$method$sep$path$sep$public$sep$appGroup$sep$appName$sep$version$sep$ua")
           val profile = EndUserProfile.getOrCreate(public)
           if (profile.nonEmpty) {
             action(profile.get)(rh)
@@ -44,11 +46,11 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
             emptyEssentialAction(rh)
           }
         } else {
-          starLogger.info(s"$ip$sep$method${sep}${path}${sep}NO:$public$sep$appGroup$sep$appName$sep$version$sep$ua")
+          starLogger.info(s"$ip$XFor$xfor$sep$method${sep}${path}${sep}NO:$public$sep$appGroup$sep$appName$sep$version$sep$ua")
           emptyEssentialAction(rh)
         }
       case _ =>
-        starLogger.info(s"$ip$sep$method$sep${path}${sep}NA${sep}NA${sep}NA${sep}NA$sep$ua")
+        starLogger.info(s"$ip$XFor$xfor$sep$method$sep${path}${sep}NA${sep}NA${sep}NA${sep}NA$sep$ua")
         emptyEssentialAction(rh)
     }
   }
