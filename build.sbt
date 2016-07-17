@@ -35,7 +35,8 @@ libraryDependencies ++= Seq(
   ws,
   "com.typesafe.play" %% "anorm" % "2.4.0",
   "org.sorm-framework" % "sorm" % "0.3.15",
-  "com.github.seratch" %% "awscala" % "0.5.+"
+  "com.github.seratch" %% "awscala" % "0.5.+",
+  "joda-time" % "joda-time" % "2.9.4"
 )
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"

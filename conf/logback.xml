@@ -4,65 +4,33 @@
     
     <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${BASE_LOC}/app.${HOSTNAME}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${BASE_LOC}/app.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
-            <maxHistory>1000</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="STAR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${BASE_LOC}/star.${HOSTNAME}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${BASE_LOC}/${HOSTNAME}/star.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
-            <maxHistory>1000</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss}#%message%n</pattern>
-            <immediateFlush>true</immediateFlush>
-        </encoder>
-    </appender>
-
-    <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${BASE_LOC}/access.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
-            <fileNamePattern>${BASE_LOC}/access.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
-            <maxHistory>1000</maxHistory>
+            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] %logger: %message%n</pattern>
             <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
 
-    <appender name="HEALTH" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${BASE_LOC}/health.${HOSTNAME}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
-            <fileNamePattern>${BASE_LOC}/health.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
-            <maxHistory>60</maxHistory>
+    <appender name="EVENTS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${BASE_LOC}/events.${HOSTNAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>
+            <maxHistory>1000</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
-            <immediateFlush>true</immediateFlush>
+            <pattern>%message%n</pattern>
         </encoder>
     </appender>
+
+    <logger name="events" level="ALL" additivity="false">
+        <appender-ref ref="EVENTS" />
+    </logger>
 
     <root level="INFO">
         <appender-ref ref="APP"/>
     </root>
-
-    <logger name="star" level="ALL" additivity="false">
-        <appender-ref ref="STAR" />
-    </logger>
-
-    <logger name="access" level="INFO" additivity="false">
-        <appender-ref ref="ACCESS" />
-    </logger>
-
-    <logger name="health" level="INFO" additivity="false">
-        <appender-ref ref="HEALTH" />
-    </logger>
 
 </configuration>

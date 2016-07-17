@@ -8,7 +8,9 @@ import javax.inject.Inject
 
 import play.api.http.DefaultHttpFilters
 import akka.stream.Materializer
-
+import com.sparkydots.common.events.AppEvent$
+import com.sparkydots.common.events.Event
+import play.libs.Json
 
 class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
@@ -30,28 +32,18 @@ class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionCont
 }
 
 class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+
   Logger.info("AccessLoggingFilter object started")
 
   def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
     val resultFuture = next(rh)
 
-    resultFuture.foreach(result => {
-        val msg =
-          "" +
-            s"method=${rh.method} uri=${rh.uri} " +
-            s"remote-address=${rh.remoteAddress} " +
-            s"x-forwarded-for=${rh.headers.get("x-forwarded-for")} " +
-            s"domain=${rh.domain} " +
-            s"query-string=${rh.rawQueryString} " +
-            s"referer=${rh.headers.get("referer").getOrElse("N/A")} " +
-            s"user-agent=[${rh.headers.get("user-agent").getOrElse("N/A")}]"
+    resultFuture foreach { result =>
 
-      if (rh.uri == "/health") {
-        Logger("health")
-      } else {
-        Logger("access")
-      } info msg
-    })
+      val event = Event.createAccessEvent(rh)
+      Logger("events") info event.jsonString
+
+    }
 
     resultFuture
   }

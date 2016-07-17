@@ -2,11 +2,12 @@ package com.sparkydots.starpractice.common.services
 
 import java.security.MessageDigest
 
+import com.sparkydots.common.events.Event
 import com.sparkydots.starpractice.common.models._
 import play.api.Logger
 import play.api.http.HeaderNames._
 import play.api.libs.ws.WS
-import play.api.mvc.{Action, EssentialAction, RequestHeader, Results}
+import play.api.mvc.{Results, RequestHeader, EssentialAction, Action}
 
 import scala.concurrent.ExecutionContext
 
@@ -14,7 +15,7 @@ import scala.concurrent.ExecutionContext
  * @author Renat Bekbolatov (renatb@sparkydots.com) 9/18/14 9:14 PM
  */
 case class Authenticator(action: EndUserProfile => EssentialAction) extends EssentialAction with Results {
-  val starLogger = Logger("star")
+  val eventLogger = Logger("events")
   val sep = " # "
 
   val digest = MessageDigest.getInstance("MD5")
@@ -36,20 +37,24 @@ case class Authenticator(action: EndUserProfile => EssentialAction) extends Esse
     authorization.split(":") match {
       case Array(secret, public, appGroup, appName, version) =>
         val check = md5check(public, secret)
+          val event = Event.createAppEvent(rh, check, Some(public), Some(appGroup), Some(appName), Some(version))
+          eventLogger info event.jsonString
         if (check) {
-          starLogger.info(s"$ip$xfor$sep$method$sep$path$sep$public$sep$appGroup$sep$appName$sep$version$sep$ua")
           val profile = EndUserProfile.getOrCreate(public)
           if (profile.nonEmpty) {
+            if (rh.uri.startsWith("/activityServer/data/touch")) {
+              eventLogger info Event.createTouchEvent(rh, appName).jsonString
+            }
             action(profile.get)(rh)
           } else {
             emptyEssentialAction(rh)
           }
         } else {
-          starLogger.info(s"$ip$xfor$sep$method${sep}${path}${sep}NO:$public$sep$appGroup$sep$appName$sep$version$sep$ua")
           emptyEssentialAction(rh)
         }
       case _ =>
-        starLogger.info(s"$ip$xfor$sep$method$sep${path}${sep}NA${sep}NA${sep}NA${sep}NA$sep$ua")
+        val event = Event.createAppEvent(rh, false)
+        eventLogger info event.jsonString
         emptyEssentialAction(rh)
     }
   }
