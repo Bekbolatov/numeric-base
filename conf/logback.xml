@@ -1,10 +1,12 @@
 <configuration>
 
+    <property name="BASE_LOC" value="/EFS/logs/starpractice" />
+    
     <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/EFS/logs/starpractice/${HOSTNAME}/app.log</file>
+        <file>${BASE_LOC}/app.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/EFS/logs/starpractice/${HOSTNAME}/log-app-%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${BASE_LOC}/app.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
+            <maxHistory>1000</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
@@ -12,10 +14,10 @@
     </appender>
 
     <appender name="STAR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/EFS/logs/starpractice/${HOSTNAME}/star.log</file>
+        <file>${BASE_LOC}/star.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/EFS/logs/starpractice/${HOSTNAME}/log-star-%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${BASE_LOC}/${HOSTNAME}/star.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
+            <maxHistory>1000</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%date{yyyy-MM-dd HH:mm:ss}#%message%n</pattern>
@@ -24,10 +26,10 @@
     </appender>
 
     <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/EFS/logs/starpractice/${HOSTNAME}/access.log</file>
+        <file>${BASE_LOC}/access.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
-            <fileNamePattern>/EFS/logs/starpractice/${HOSTNAME}/log-access-%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${BASE_LOC}/access.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
+            <maxHistory>1000</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
@@ -36,14 +38,14 @@
     </appender>
 
     <appender name="HEALTH" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/EFS/logs/starpractice/${HOSTNAME}/health.log</file>
+        <file>${BASE_LOC}/health.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
-            <fileNamePattern>/EFS/logs/starpractice/${HOSTNAME}/log-health-%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>1</maxHistory>
+            <fileNamePattern>${BASE_LOC}/health.${HOSTNAME}.%d{yyyyMMddHHmm}.log.gz</fileNamePattern>
+            <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
-            <immediateFlush>false</immediateFlush>
+            <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
 

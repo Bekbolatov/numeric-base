@@ -1,0 +1,7 @@
+
+# ActivityServer: Content
+GET     /data/touch/:page/:id                  com.sparkydots.starpractice.common.controllers.TouchController.touch(page: String, id: String)
+GET     /data/channels                         com.sparkydots.starpractice.content.controllers.ChannelController.channelList(id: String, st: Int, si: Int)
+GET     /data/activity/list                    com.sparkydots.starpractice.content.controllers.ChannelController.channel(channelId: String, st: Int, si: Int)
+GET     /data/activity/body/:id                com.sparkydots.starpractice.content.controllers.ActivityBodyController.activityBody(id: String)
+

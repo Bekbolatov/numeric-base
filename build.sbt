@@ -1,5 +1,3 @@
-import Grunt._
-import play.sbt.PlayImport.PlayKeys.playRunHooks
 
 name := """SparkyDots Server"""
 
@@ -16,9 +14,11 @@ CoffeeScriptKeys.bare := true
 
 includeFilter in (Assets, LessKeys.less) := "*.less"
 
+//import Grunt._
+//import play.sbt.PlayImport.PlayKeys.playRunHooks
+
 // need to disable for prod
 //playRunHooks <+= baseDirectory.map(base => Grunt(base))  // (base / "app" / "assets"))
-
 
 //pipelineStages := Seq(uglify)
 //includeFilter in uglify := GlobFilter("javascripts/*.js")
@@ -26,7 +26,6 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 //  js =>
 //    Seq( (js.sortBy(_._2), "myconcat.min.js"))
 //}
-
 
 
 
@@ -41,9 +40,11 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
 
-TwirlKeys.templateImports += "com.sparkydots.activityServer.models._"
-
+TwirlKeys.templateImports += "com.sparkydots.starpractice.common.models._"
 TwirlKeys.templateImports += "com.sparkydots.common.controllers.routes"
+TwirlKeys.templateImports += "com.sparkydots._"
+
+routesGenerator := InjectedRoutesGenerator
 
 net.virtualvoid.sbt.graph.Plugin.graphSettings
 

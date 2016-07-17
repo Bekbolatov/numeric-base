@@ -1,0 +1,61 @@
+@(title: String)(content: Html)(implicit messages: Messages)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@title</title>
+        <link rel="icon" href='@routes.Assets.at("images/favicon.ico")' type="image/x-icon" />
+        <link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/ratchet/2.0.2/css/ratchet.min.css'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("apps/Admin/css/numeric.css")'>
+        <link rel="stylesheet" media="screen" href='@routes.Assets.at("apps/Admin/css/main.css")'>
+        <script src='//code.jquery.com/jquery-3.1.0.min.js' type="text/javascript"></script>
+    </head>
+
+    <body>
+        <header class="bar bar-nav">
+            <a class="pull-left" href='@starpractice.admin.controllers.routes.Admin.index'>
+                <button class="btn">
+                    Main
+                </button>
+            </a>
+            <a class="pull-left" href='@starpractice.admin.controllers.routes.Activities.list(Some(0),Some(200))'>
+                <button class="btn">
+                    Activities
+                </button>
+            </a>
+            <a class="pull-left" href='@starpractice.admin.controllers.routes.Channels.list(Some(0),Some(200))'>
+                <button class="btn">
+                    Channels
+                </button>
+            </a>
+            <a class="pull-left" href='@starpractice.admin.controllers.routes.EndUserProfiles.list(Some(0),Some(200))'>
+                <button class="btn">
+                    EndUserProfiles
+                </button>
+            </a>
+            <a class="pull-left" href='@starpractice.admin.controllers.routes.EndUserProfiles.list(Some(0),Some(200))'>
+                <button class="btn">
+                    Messages
+                </button>
+            </a>
+        </header>
+
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js' type="text/javascript"></script>
+        <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js' type="text/javascript"></script>
+
+        <script src='@routes.Assets.at("bower_components/angular-timer/dist/angular-timer.min.js")' type="text/javascript"></script>
+        <script src='@routes.Assets.at("bower_components/angular-md5/angular-md5.min.js")' type="text/javascript"></script>
+
+        <script src='@routes.Assets.at("/libs/library/js/library.min.js?v=0.03")' type="text/javascript"></script>
+
+        <script src='@routes.Assets.at("/apps/Admin/js/admin.js?v=0.03")' type="text/javascript"></script>
+
+        <div class="content content-bg">
+            <div ng-app="Admin">
+                @content
+            </div>
+        </div>
+
+    </body>
+</html>

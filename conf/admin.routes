@@ -1,0 +1,30 @@
+
+# StarPractice: Management
+
+GET     /                                         com.sparkydots.starpractice.admin.controllers.Admin.index
+
+# activities
+GET     /activity                                 com.sparkydots.starpractice.admin.controllers.Activities.list(startIndex: Option[Int], size: Option[Int])
+GET     /activity/:id                             com.sparkydots.starpractice.admin.controllers.Activities.edit(id: String)
+GET     /activity/:id/channels                    com.sparkydots.starpractice.admin.controllers.Channels.activityChannels(id: String, startIndex: Option[Int], size: Option[Int])
+POST    /activity                                 com.sparkydots.starpractice.admin.controllers.Activities.save
+POST    /activity/:id                             com.sparkydots.starpractice.admin.controllers.Activities.update(id: String)
+POST    /activity/content/:id                     com.sparkydots.starpractice.admin.controllers.Activities.updateContent(id: String)
+DELETE  /activity/:id                             com.sparkydots.starpractice.admin.controllers.Activities.delete(id: String)
+
+# channels
+GET     /channel                                  com.sparkydots.starpractice.admin.controllers.Channels.list(startIndex: Option[Int], size: Option[Int])
+GET     /channel/:channelId                       com.sparkydots.starpractice.admin.controllers.Channels.edit(channelId: String)
+GET     /channel/:channelId/activities            com.sparkydots.starpractice.admin.controllers.Activities.channelActivities(channelId: String, startIndex: Option[Int], size: Option[Int])
+POST    /channel                                  com.sparkydots.starpractice.admin.controllers.Channels.save
+POST    /channel/:channelId                       com.sparkydots.starpractice.admin.controllers.Channels.update(channelId: String)
+DELETE  /channel/:channelId                       com.sparkydots.starpractice.admin.controllers.Channels.delete(channelId: String)
+
+POST    /channel/:channelId/add/:activityId       com.sparkydots.starpractice.admin.controllers.Channels.addActivityToChannel(activityId: String, channelId: String)
+POST    /channel/:channelId/remove/:activityId    com.sparkydots.starpractice.admin.controllers.Channels.removeActivityFromChannel(activityId: String, channelId: String)
+
+# userProfiles
+GET     /profile                                  com.sparkydots.starpractice.admin.controllers.EndUserProfiles.list(startIndex: Option[Int], size: Option[Int])
+GET     /profile/:id                              com.sparkydots.starpractice.admin.controllers.EndUserProfiles.edit(id: String)
+
+POST    /profile/:id                              com.sparkydots.starpractice.admin.controllers.EndUserProfiles.update(id: String)
