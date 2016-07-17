@@ -1,4 +1,4 @@
-var e, _initLocal;
+var _initLocal, e, error;
 
 _initLocal = function(d) {
   var n;
@@ -52,8 +52,8 @@ try {
       return w.document.numeric.defaultSettings.showSettings = true;
     }
   })(this);
-} catch (_error) {
-  e = _error;
+} catch (error) {
+  e = error;
   console.log(e);
 }
 
