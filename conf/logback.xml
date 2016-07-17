@@ -5,7 +5,8 @@
     <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${BASE_LOC}/app.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
-            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>
+            <!--<fileNamePattern>${BASE_LOC}/app.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
             <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -17,13 +18,32 @@
     <appender name="EVENTS" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${BASE_LOC}/events.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>
-            <maxHistory>1000</maxHistory>
+            <!--<fileNamePattern>${BASE_LOC}/events.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%message%n</pattern>
+            <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
+
+    <appender name="HEALTH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${BASE_LOC}/health.${HOSTNAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--<fileNamePattern>${BASE_LOC}/health.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%message%n</pattern>
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <logger name="health" level="ALL" additivity="false">
+        <appender-ref ref="HEALTH" />
+    </logger>
 
     <logger name="events" level="ALL" additivity="false">
         <appender-ref ref="EVENTS" />

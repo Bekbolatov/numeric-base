@@ -39,10 +39,12 @@ class AccessLoggingFilter @Inject() (implicit val mat: Materializer, ec: Executi
     val resultFuture = next(rh)
 
     resultFuture foreach { result =>
-
       val event = Event.createAccessEvent(rh)
-      Logger("events") info event.jsonString
-
+      if (rh.uri == "/health") {
+        Logger("health") info event.jsonString
+      } else {
+        Logger("events") info event.jsonString
+      }
     }
 
     resultFuture
