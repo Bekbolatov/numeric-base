@@ -1,0 +1,5 @@
+[
+  {
+    "Path": "s3://support.elasticmapreduce/bootstrap-actions/ami/3.3.1/ridetherocket-workaround.bash"
+  }
+]

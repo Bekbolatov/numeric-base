@@ -1,0 +1,6 @@
+{
+    "KeyName": "panerapig",
+    "InstanceProfile": "EMR_EC2_DefaultRole",
+    "SubnetId": "subnet-04299373"
+}
+

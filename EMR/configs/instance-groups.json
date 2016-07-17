@@ -1,0 +1,17 @@
+// m3.xlarge ~0.10 95% of the time
+[
+  {
+    "InstanceCount": 1,
+    "Name": "mas",
+    "InstanceGroupType": "MASTER",
+    "BidPrice": "0.10",
+    "InstanceType": "m3.xlarge"
+  },
+  {
+    "InstanceCount": 2,
+    "Name": "sla",
+    "InstanceGroupType": "CORE",
+    "BidPrice": "0.10",
+    "InstanceType": "m3.xlarge"
+  }
+]
