@@ -1,12 +1,14 @@
 <configuration>
 
+    <!-- b T 1 0 125 -->
     <property name="BASE_LOC" value="/EFS/logs/starpractice" />
     
     <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${BASE_LOC}/app.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
             <!--<fileNamePattern>${BASE_LOC}/app.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
+            <!--<fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
             <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -19,7 +21,8 @@
         <file>${BASE_LOC}/events.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--<fileNamePattern>${BASE_LOC}/events.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
+            <!--<fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
             <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -32,7 +35,8 @@
         <file>${BASE_LOC}/health.${HOSTNAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--<fileNamePattern>${BASE_LOC}/health.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>
+            <!--<fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
+            <fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
         <encoder>
