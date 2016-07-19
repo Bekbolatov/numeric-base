@@ -5,10 +5,10 @@ import play.api.Environment
 import play.api.inject.Binding
 import play.api.inject.Module
 
-class MyModule extends Module {
+class LoggingModule extends Module {
   def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[MyComponent].to[MyComponentImpl]
+      bind[LogHelper].to[LogHelperImpl]
     )
   }
 }
