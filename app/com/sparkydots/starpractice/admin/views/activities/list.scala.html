@@ -1,0 +1,35 @@
+@(activities: Iterable[Activity])(implicit flash:Flash, messages: Messages)
+
+@starpractice.admin.views.html.main("All activities") {
+<div ng-controller="activityList">
+
+    @flash.get("success").map { msg =>
+        <div class="flash">@msg</div>
+    }
+
+
+    <div>
+        <h3>All activities</h3>
+
+        @if(activities.isEmpty) {
+            <p>No activities found</p>
+        } else {
+            <ul class="table-view table-view-list">
+                @for(activity <- activities) {
+                    <li class="table-view-cell">
+                        <button class="btn btn-primary btn-noposition" ng-click="deleteActivity('@starpractice.admin.controllers.routes.Activities.delete(activity.id)', '@activity.id')" class="btn btn-link icon icon-close">DELETE</button>
+                        <br>
+                        <a class="color-practice div-inline" href="@starpractice.admin.controllers.routes.Activities.edit(activity.id)">
+                            [@activity.id:@activity.version]<br>
+                            @activity.name<br>
+                            @activity.shortDescription<br>
+                            @activity.authorDate<br>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+</div>
+}

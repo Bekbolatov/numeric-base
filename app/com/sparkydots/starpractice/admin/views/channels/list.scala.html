@@ -1,0 +1,38 @@
+@(channels: Iterable[Channel])(implicit flash:Flash, messages: Messages)
+
+@starpractice.admin.views.html.main("All channels") {
+<div ng-controller="channelList">
+
+    @flash.get("success").map { msg =>
+        <div class="flash">@msg</div>
+    }
+
+
+
+    <div>
+        <div class="allChannelsHolder">
+            <h3>All channels</h3>
+
+            @if(channels.isEmpty) {
+                <p>No channels found</p>
+            } else {
+                <ul class="table-view table-view-list">
+                    @for(channel <- channels) {
+                        <li class="table-view-cell">
+                            <button class="btn btn-primary btn-noposition" ng-click="deleteChannel('@starpractice.admin.controllers.routes.Channels.delete(channel.id)', '@channel.id')" class="btn btn-link icon icon-close">DELETE</button>
+                            <br>
+                            <a class="navigate-right color-practice div-inline" href="@starpractice.admin.controllers.routes.Channels.edit(channel.id)">
+                                [@channel.id]<br>
+                                @channel.name<br>
+                                @channel.createDate<br>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+
+    </div>
+</div>
+}

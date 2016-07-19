@@ -1,4 +1,4 @@
-var e, _initLocal;
+var _initLocal, e, error;
 
 _initLocal = function(d) {
   var n;
@@ -52,8 +52,8 @@ try {
       return w.document.numeric.defaultSettings.showSettings = true;
     }
   })(this);
-} catch (_error) {
-  e = _error;
+} catch (error) {
+  e = error;
   console.log(e);
 }
 
@@ -108,14 +108,14 @@ angular.module('AppOne').controller('SampleQuestionCtrl', [
       $scope.question = $sce.trustAsHtml('' + qa[0][0]);
       if (qa[0].length > 1) {
         $scope.choices = (function() {
-          var _i, _len, _ref, _results;
-          _ref = qa[0][1];
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            choice = _ref[_i];
-            _results.push($sce.trustAsHtml('' + choice));
+          var i, len, ref, results;
+          ref = qa[0][1];
+          results = [];
+          for (i = 0, len = ref.length; i < len; i++) {
+            choice = ref[i];
+            results.push($sce.trustAsHtml('' + choice));
           }
-          return _results;
+          return results;
         })();
         return $scope.answer = $sce.trustAsHtml('' + qa[0][1][qa[1]]);
       } else {
@@ -130,19 +130,19 @@ angular.module('AppOne').controller('SampleQuestionCtrl', [
 angular.module('AppOne').controller('TestCtrl', [
   '$scope', '$rootScope', '$routeParams', '$http', 'md5', 'FS', 'Settings', function($scope, $rootScope, $routeParams, $http, md5, FS, Settings) {
     $scope.showScriptsInHead = function() {
-      var tag, tags, _i, _len, _results;
+      var i, len, results, tag, tags;
       tags = document.getElementsByTagName('script');
       $scope.scripts = [];
-      _results = [];
-      for (_i = 0, _len = tags.length; _i < _len; _i++) {
-        tag = tags[_i];
+      results = [];
+      for (i = 0, len = tags.length; i < len; i++) {
+        tag = tags[i];
         if (tag.id !== void 0 && tag.id !== '') {
-          _results.push($scope.scripts.push(tag));
+          results.push($scope.scripts.push(tag));
         } else {
-          _results.push(void 0);
+          results.push(void 0);
         }
       }
-      return _results;
+      return results;
     };
     $scope.getHttpsData = function() {
       return $http.get('https://www.vicinitalk.com/api/v1/post/375/?format=json').then(function(response) {

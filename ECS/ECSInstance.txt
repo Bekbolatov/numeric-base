@@ -1,0 +1,44 @@
+User Data:
+
+#=====================================================================================
+#!/bin/bash
+
+# ECS
+echo ECS_CLUSTER=mini >> /etc/ecs/ecs.config
+
+# EFS
+yum update -y
+yum install -y nfs-utils
+echo "$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-6f996fc6.efs.us-west-2.amazonaws.com:/ /EFS nfs4 defaults" | sudo tee -a /etc/fstab
+mkdir -p /EFS
+mount -t nfs4 -o nfsvers=4.1 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-6f996fc6.efs.us-west-2.amazonaws.com:/ /EFS
+chmod a+rw /EFS
+service docker restart && start ecs
+#=====================================================================================
+
+# is docker needs to know about /EFS
+sudo service docker restart && sudo start ecs
+
+#replace logs
+"$(curl http://169.254.169.254/latest/meta-data/hostname)"
+
+
+/EFS available
+/EFS/logs
+/EFS/conf
+
+
+
+
+
+#cloud-config
+package_upgrade: true
+packages:
+- nfs-utils
+runcmd:
+- echo "$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).file-system-id.efs.aws-region.amazonaws.com:/    /var/www/html/efs-mount-point   nfs4    defaults" >> /etc/fstab
+- mkdir /var/www/html/efs-mount-point
+- mount -a
+
+
+

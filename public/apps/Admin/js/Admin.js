@@ -1,4 +1,4 @@
-var e, _initLocal;
+var _initLocal, e, error;
 
 _initLocal = function(d) {
   var n;
@@ -71,8 +71,8 @@ try {
       return w.document.numeric.defaultSettings.showSettings = true;
     }
   })(this);
-} catch (_error) {
-  e = _error;
+} catch (error) {
+  e = error;
   console.log(e);
 }
 
@@ -113,17 +113,17 @@ angular.module('Admin').controller('ActivitiesCtrl', [
     $scope.adding = false;
     $scope.deleting = false;
     $scope.refreshView = function() {
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/activity?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
-        var a, _i, _len, _ref, _results;
+      return ServerHttp.get($scope.serverAddress + ("/admin/activity?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
+        var a, i, len, ref, results;
         $scope.activities = response.data.activities;
-        _ref = $scope.activities;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          a = _ref[_i];
+        ref = $scope.activities;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          a = ref[i];
           console.log(a);
-          _results.push(console.log(a.id));
+          results.push(console.log(a.id));
         }
-        return _results;
+        return results;
       });
     };
     $scope.showEditForm = function(activityId) {
@@ -131,8 +131,9 @@ angular.module('Admin').controller('ActivitiesCtrl', [
       $scope.editing = true;
       $scope.adding = false;
       $scope.deleting = false;
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/activity/" + activityId)).then(function(response) {
+      return ServerHttp.get($scope.serverAddress + ("/admin/activity/" + activityId)).then(function(response) {
         $scope.formData = response.data;
+        $scope.formData.content = '<stored>';
         return $scope.formDataOriginal = angular.copy($scope.formData);
       })["catch"](function(status) {
         console.log(status);
@@ -145,41 +146,52 @@ angular.module('Admin').controller('ActivitiesCtrl', [
     $scope.updateForm = function() {
       $scope.formData.errors = {};
       $scope.formData.authorDate = "2014-09-14";
-      return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/activity/" + $scope.formDataOriginal.id), $scope.formData).then(function(response) {
+      return ServerHttp.post($scope.serverAddress + ("/admin/activity/" + $scope.formDataOriginal.id), $scope.formData).then(function(response) {
         $scope.showFormEdit = false;
         $scope.editing = false;
         $scope.adding = false;
         $scope.deleting = false;
         return $scope.refreshView();
       })["catch"](function(status) {
-        var error, field, _ref, _results;
-        _ref = status.data;
-        _results = [];
-        for (field in _ref) {
-          error = _ref[field];
-          _results.push($scope.formData.errors[field] = 'error');
+        var error, field, ref, results;
+        ref = status.data;
+        results = [];
+        for (field in ref) {
+          error = ref[field];
+          results.push($scope.formData.errors[field] = 'error');
         }
-        return _results;
+        return results;
       });
+    };
+    $scope.updateContent = function() {
+      $scope.formData.errors = {};
+      $scope.formData.authorDate = "2014-09-14";
+      if ($scope.formData.content.length > 30) {
+        return ServerHttp.post($scope.serverAddress + ("/admin/activity/content/" + $scope.formDataOriginal.id), $scope.formData);
+      } else {
+        console.log("Activity content too short - will not update:");
+        console.log($scope.formData.content);
+        return $scope.formData.errors['content'] = 'content small';
+      }
     };
     $scope.createForm = function() {
       $scope.formData.errors = {};
       $scope.formData.authorDate = (new Date()).format("yyyy-mm-dd");
-      return ServerHttp.post($scope.serverAddress + "/activityServer/admin/activity", $scope.formData).then(function(response) {
+      return ServerHttp.post($scope.serverAddress + "/admin/activity", $scope.formData).then(function(response) {
         $scope.showFormEdit = false;
         $scope.editing = false;
         $scope.adding = false;
         $scope.deleting = false;
         return $scope.refreshView();
       })["catch"](function(status) {
-        var error, field, _ref, _results;
-        _ref = status.data;
-        _results = [];
-        for (field in _ref) {
-          error = _ref[field];
-          _results.push($scope.formData.errors[field] = 'error');
+        var error, field, ref, results;
+        ref = status.data;
+        results = [];
+        for (field in ref) {
+          error = ref[field];
+          results.push($scope.formData.errors[field] = 'error');
         }
-        return _results;
+        return results;
       });
     };
     $scope.showDeleteActivity = function(id) {
@@ -197,7 +209,7 @@ angular.module('Admin').controller('ActivitiesCtrl', [
         port = ":" + port;
       }
       servername = protocol + "//" + server + port;
-      url = "/activityServer/admin/activity/" + id;
+      url = "/admin/activity/" + id;
       return ServerHttp["delete"]($scope.serverAddress + url).then(function(response) {
         console.log('ok');
         $scope.showFormEdit = false;
@@ -215,36 +227,36 @@ angular.module('Admin').controller('ActivitiesCtrl', [
       $scope.channelsManageHere = {};
       $scope.managingActivity = id;
       $scope.managingChannels = true;
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/activity/" + id + "/channels")).then(function(response) {
-        var channel, _i, _len, _ref;
+      return ServerHttp.get($scope.serverAddress + ("/admin/activity/" + id + "/channels")).then(function(response) {
+        var channel, i, len, ref;
         $scope.channelsHere = response.data.channels;
-        _ref = $scope.channelsHere;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          channel = _ref[_i];
+        ref = $scope.channelsHere;
+        for (i = 0, len = ref.length; i < len; i++) {
+          channel = ref[i];
           $scope.channelsManageHere[channel.id] = 1;
         }
-        return ServerHttp.get($scope.serverAddress + "/activityServer/admin/channel").then(function(response) {
-          var _j, _len1, _ref1, _results;
+        return ServerHttp.get($scope.serverAddress + "/admin/channel").then(function(response) {
+          var j, len1, ref1, results;
           $scope.channelsAll = response.data.channels;
-          _ref1 = $scope.channelsAll;
-          _results = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            channel = _ref1[_j];
+          ref1 = $scope.channelsAll;
+          results = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            channel = ref1[j];
             $scope.channelsManage[channel.id] = channel;
             if ($scope.channelsManageHere[channel.id] === 1) {
-              _results.push($scope.channelsManage[channel.id].included = true);
+              results.push($scope.channelsManage[channel.id].included = true);
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         });
       });
     };
     $scope.toggleMembership = function(id) {
       if ($scope.channelsManage[id].included) {
         $scope.channelsManage[id].included = false;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + id + "/remove/" + $scope.managingActivity)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/admin/channel/" + id + "/remove/" + $scope.managingActivity)).then(function(response) {
           return $scope.channelsManage[id].included = false;
         })["catch"](function(status) {
           console.log(status);
@@ -252,7 +264,7 @@ angular.module('Admin').controller('ActivitiesCtrl', [
         });
       } else {
         $scope.channelsManage[id].included = true;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + id + "/add/" + $scope.managingActivity)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/admin/channel/" + id + "/add/" + $scope.managingActivity)).then(function(response) {
           return $scope.channelsManage[id].included = true;
         })["catch"](function(status) {
           console.log(status);
@@ -333,7 +345,7 @@ angular.module('Admin').controller('ChannelsCtrl', [
     $scope.deleting = false;
     $scope.managingActivities = false;
     $scope.refreshView = function() {
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/channel?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
+      return ServerHttp.get($scope.serverAddress + ("/admin/channel?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
         return $scope.channels = response.data.channels;
       });
     };
@@ -342,7 +354,7 @@ angular.module('Admin').controller('ChannelsCtrl', [
       $scope.editing = true;
       $scope.adding = false;
       $scope.deleting = false;
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/channel/" + channelId)).then(function(response) {
+      return ServerHttp.get($scope.serverAddress + ("/admin/channel/" + channelId)).then(function(response) {
         $scope.formData = response.data;
         return $scope.formDataOriginal = angular.copy($scope.formData);
       })["catch"](function(status) {
@@ -353,21 +365,21 @@ angular.module('Admin').controller('ChannelsCtrl', [
     $scope.updateForm = function() {
       $scope.formData.errors = {};
       $scope.formData.createDate = "2014-09-14";
-      return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + $scope.formDataOriginal.id), $scope.formData).then(function(response) {
+      return ServerHttp.post($scope.serverAddress + ("/admin/channel/" + $scope.formDataOriginal.id), $scope.formData).then(function(response) {
         $scope.showFormEdit = false;
         $scope.editing = false;
         $scope.adding = false;
         $scope.deleting = false;
         return $scope.refreshView();
       })["catch"](function(status) {
-        var error, field, _ref, _results;
-        _ref = status.data;
-        _results = [];
-        for (field in _ref) {
-          error = _ref[field];
-          _results.push($scope.formData.errors[field] = 'error');
+        var error, field, ref, results;
+        ref = status.data;
+        results = [];
+        for (field in ref) {
+          error = ref[field];
+          results.push($scope.formData.errors[field] = 'error');
         }
-        return _results;
+        return results;
       });
     };
     $scope.showCreateForm = function() {
@@ -382,21 +394,21 @@ angular.module('Admin').controller('ChannelsCtrl', [
     $scope.createForm = function() {
       $scope.formData.errors = {};
       $scope.formData.createDate = (new Date()).format("yyyy-mm-dd");
-      return ServerHttp.post($scope.serverAddress + "/activityServer/admin/channel", $scope.formData).then(function(response) {
+      return ServerHttp.post($scope.serverAddress + "/admin/channel", $scope.formData).then(function(response) {
         $scope.showFormEdit = false;
         $scope.editing = false;
         $scope.adding = false;
         $scope.deleting = false;
         return $scope.refreshView();
       })["catch"](function(status) {
-        var error, field, _ref, _results;
-        _ref = status.data;
-        _results = [];
-        for (field in _ref) {
-          error = _ref[field];
-          _results.push($scope.formData.errors[field] = 'error');
+        var error, field, ref, results;
+        ref = status.data;
+        results = [];
+        for (field in ref) {
+          error = ref[field];
+          results.push($scope.formData.errors[field] = 'error');
         }
-        return _results;
+        return results;
       });
     };
     $scope.showDeleteChannel = function(id) {
@@ -414,7 +426,7 @@ angular.module('Admin').controller('ChannelsCtrl', [
         port = ":" + port;
       }
       servername = protocol + "//" + server + port;
-      url = "/activityServer/admin/channel/" + id;
+      url = "/admin/channel/" + id;
       return ServerHttp["delete"]($scope.serverAddress + url).then(function(response) {
         console.log('ok');
         $scope.showFormEdit = false;
@@ -432,36 +444,36 @@ angular.module('Admin').controller('ChannelsCtrl', [
       $scope.activitiesManageHere = {};
       $scope.managingChannel = id;
       $scope.managingActivities = true;
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/channel/" + id + "/activities")).then(function(response) {
-        var activity, _i, _len, _ref;
+      return ServerHttp.get($scope.serverAddress + ("/admin/channel/" + id + "/activities")).then(function(response) {
+        var activity, i, len, ref;
         $scope.activitiesHere = response.data.activities;
-        _ref = $scope.activitiesHere;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          activity = _ref[_i];
+        ref = $scope.activitiesHere;
+        for (i = 0, len = ref.length; i < len; i++) {
+          activity = ref[i];
           $scope.activitiesManageHere[activity.id] = 1;
         }
-        return ServerHttp.get($scope.serverAddress + "/activityServer/admin/activity").then(function(response) {
-          var _j, _len1, _ref1, _results;
+        return ServerHttp.get($scope.serverAddress + "/admin/activity").then(function(response) {
+          var j, len1, ref1, results;
           $scope.activitiesAll = response.data.activities;
-          _ref1 = $scope.activitiesAll;
-          _results = [];
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            activity = _ref1[_j];
+          ref1 = $scope.activitiesAll;
+          results = [];
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            activity = ref1[j];
             $scope.activitiesManage[activity.id] = activity;
             if ($scope.activitiesManageHere[activity.id] === 1) {
-              _results.push($scope.activitiesManage[activity.id].included = true);
+              results.push($scope.activitiesManage[activity.id].included = true);
             } else {
-              _results.push(void 0);
+              results.push(void 0);
             }
           }
-          return _results;
+          return results;
         });
       });
     };
     $scope.toggleMembership = function(id) {
       if ($scope.activitiesManage[id].included) {
         $scope.activitiesManage[id].included = false;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + $scope.managingChannel + "/remove/" + id)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/admin/channel/" + $scope.managingChannel + "/remove/" + id)).then(function(response) {
           return $scope.activitiesManage[id].included = false;
         })["catch"](function(status) {
           console.log(status);
@@ -469,7 +481,7 @@ angular.module('Admin').controller('ChannelsCtrl', [
         });
       } else {
         $scope.activitiesManage[id].included = true;
-        return ServerHttp.post($scope.serverAddress + ("/activityServer/admin/channel/" + $scope.managingChannel + "/add/" + id)).then(function(response) {
+        return ServerHttp.post($scope.serverAddress + ("/admin/channel/" + $scope.managingChannel + "/add/" + id)).then(function(response) {
           return $scope.activitiesManage[id].included = true;
         })["catch"](function(status) {
           console.log(status);
@@ -522,7 +534,7 @@ angular.module('Admin').controller('EndUserProfilesCtrl', [
       return $scope.refreshView();
     };
     $scope.refreshView = function() {
-      return ServerHttp.get($scope.serverAddress + ("/activityServer/admin/profile?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
+      return ServerHttp.get($scope.serverAddress + ("/admin/profile?startIndex=" + $scope.startIndex + "&size=" + $scope.pageSize)).then(function(response) {
         return $scope.endUserProfiles = response.data.endUserProfiles;
       });
     };

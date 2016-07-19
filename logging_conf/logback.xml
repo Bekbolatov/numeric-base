@@ -1,0 +1,51 @@
+<configuration>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/myapp.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${application.home}/logs/application-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] - from %logger in %thread %n%message%n%xException%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STAR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base/logs/star.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base/logs/star-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss}#%message%n</pattern>
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <appender name="ACCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${application.home}/logs/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
+            <fileNamePattern>${application.home}/logs/access-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} %message%n</pattern>
+            <immediateFlush>false</immediateFlush>
+        </encoder>
+    </appender>
+
+    <!-- additivity=false ensures access log data only goes to the access log -->
+    <logger name="access" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS_FILE" />
+    </logger>
+
+    <logger name="star" level="ALL" additivity="false">
+        <appender-ref ref="STAR_FILE" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

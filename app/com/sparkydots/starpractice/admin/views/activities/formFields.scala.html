@@ -1,0 +1,12 @@
+@(activityForm: Form[Activity])(implicit messages: Messages)
+
+@import helper._
+
+@inputText(activityForm("id"), 'size -> 50)
+@inputText(activityForm("name"), 'size -> 50)
+@inputText(activityForm("shortDescription"), 'size -> 100)
+@inputText(activityForm("description"), 'size -> 200)
+@inputText(activityForm("authorName"), 'size -> 50)
+@inputText(activityForm("authorEmail"), 'size -> 50)
+@inputText(activityForm("authorDate"))
+@inputText(activityForm("version"), 'size -> 5)

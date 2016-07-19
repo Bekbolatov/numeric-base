@@ -1,0 +1,8 @@
+@(id: String, activityForm: Form[Activity])(implicit messages: Messages)
+
+@import helper._
+
+<h1>Edit Activity</h1>
+@form(starpractice.admin.controllers.routes.Activities.update(id), 'id -> "serverForm") {
+    @formFields(activityForm)
+}

@@ -54,6 +54,11 @@
                         <label>Version Number</label>
                         <input ng-class="{ 'input-error' : formData.errors.version}" type="text" ng-model="formData.version">
 
+                        <hr>
+                        <label>Update Content</label>
+                        <br>
+                        <textarea ng-class="{ 'input-error' : formData.errors.content}" ng-model="formData.content"></textarea>
+                        <button class="btn btn-primary" ng-click="updateContent()">Update Content</button>
                     </form>
                 </div>
 

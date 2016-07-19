@@ -1,8 +1,0 @@
-@(id: String, activityForm: Form[Activity])
-
-@import helper._
-
-<h1>Edit Activity</h1>
-@form(com.sparkydots.activityServer.controllers.admin.routes.Activities.update(id), 'id -> "serverForm") {
-    @formFields(activityForm)
-}
