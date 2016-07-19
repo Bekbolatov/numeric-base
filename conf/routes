@@ -1,7 +1,8 @@
 GET /assets/*file                 com.sparkydots.common.controllers.Assets.at(path="/public", file)
 
-GET /health                       com.sparkydots.website.main.controllers.SparkyDots.health
-GET /machine                      com.sparkydots.website.main.controllers.SparkyDots.machine
+GET /health                       com.sparkydots.util.controllers.Utils.health
+GET /machine                      com.sparkydots.util.controllers.Utils.machine
+GET /myip                         com.sparkydots.util.controllers.Utils.myip
 
 # Web Pages
 GET /                             com.sparkydots.website.main.controllers.SparkyDots.index

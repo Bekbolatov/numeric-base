@@ -20,14 +20,6 @@ class SparkyDots @Inject() (val messagesApi: MessagesApi, val myComponent: LogHe
     Ok(views.html.avvo())
   }
 
-  def health = Action {
-    Ok(views.html.health())
-  }
-
-  def machine = Action {
-    Ok(myComponent.getMachineInfo)
-  }
-
   def starpractice = Action {
     Ok(views.html.starpractice())
   }
