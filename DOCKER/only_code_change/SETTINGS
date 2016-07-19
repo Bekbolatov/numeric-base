@@ -1,4 +1,5 @@
 DISTRIB_HOME=/Users/rbekbolatov/repos/gh/bekbolatov/IX/common
+SRC_HOME=/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base
 
 DOCKER_IMAGE=starpractice:play254
 
@@ -17,4 +18,3 @@ AWSLOGS_GROUP=sparkydots
 
 #SKIP_DOCKER_PUSH=true
 #SKIP_TASK_REGISTRATION=true
-
