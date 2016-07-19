@@ -1,10 +1,13 @@
 package com.sparkydots.nlp.controllers
 
+import javax.inject.Inject
+
 import com.sparkydots.nlp.forms.nlp.{PhraseForm, TranslateForm}
 import com.sparkydots.nlp.models.{PhraseRequest, TranslateRequest}
 import com.sparkydots.nlp.mt.PhraseTranslation
 import com.sparkydots.nlp.views
 import play.api.data.Form
+import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.util.Try
 
@@ -15,7 +18,7 @@ import play.api.mvc._
 /**
   * @author Renat Bekbolatov (renatb@sparkydots.com) 7/29/14 11:24 PM
   */
-object MT extends Controller {
+class MT @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   import play.api.libs.json.Json
 

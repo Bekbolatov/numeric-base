@@ -1,0 +1,20 @@
+DISTRIB_HOME=/Users/rbekbolatov/repos/gh/bekbolatov/IX/common
+SRC_HOME=/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base
+
+DOCKER_IMAGE=starpractice:play254
+
+TASK_FAMILY=StarPractice
+TASK_COUNT=2
+SERVICE_TASKCOUNT_MAX=200
+SERVICE_TASKCOUNT_MIN=50
+SERVICENAME=$TASK_FAMILY
+
+SET_MEMORY=700
+SET_CPU=700
+PORT_MAPPING='[ { "hostPort": 8080, "containerPort": 9000, "protocol": "tcp" } ]'
+
+AWSLOGS_GROUP=sparkydots
+
+
+#SKIP_DOCKER_PUSH=true
+#SKIP_TASK_REGISTRATION=true

@@ -5,9 +5,9 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
       return (integer >>> i) & 0x01;
     };
     showByte = function(integer) {
-      var i, out, _i;
+      var i, j, out;
       out = '';
-      for (i = _i = 7; _i >= 0; i = --_i) {
+      for (i = j = 7; j >= 0; i = --j) {
         out += showBit(integer, i);
         if (i % 8 === 0) {
           out += ' ';
@@ -16,9 +16,9 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
       return out;
     };
     showBinary = function(integer) {
-      var i, out, _i;
+      var i, j, out;
       out = '';
-      for (i = _i = 31; _i >= 0; i = --_i) {
+      for (i = j = 31; j >= 0; i = --j) {
         out += showBit(integer, i);
         if (i % 8 === 0) {
           out += ' ';
@@ -27,12 +27,12 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
       return out;
     };
     stringBinary = function(s) {
-      var i, o, _i, _ref;
+      var i, j, o, ref;
       if (s === void 0) {
         return '';
       }
       o = '';
-      for (i = _i = 0, _ref = s.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = j = 0, ref = s.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         o += showByte(s.charCodeAt(i));
       }
       return o;
@@ -102,18 +102,18 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
     };
     p = GenerateImagePng;
     showIntArrayBin = function(ar) {
-      var n, o, _i, _len;
+      var j, len, n, o;
       o = '';
-      for (_i = 0, _len = ar.length; _i < _len; _i++) {
-        n = ar[_i];
+      for (j = 0, len = ar.length; j < len; j++) {
+        n = ar[j];
         o += showBinary(n) + '<br>';
       }
       return o;
     };
     showStringBin = function(str) {
-      var i, o, _i, _ref;
+      var i, j, o, ref;
       o = '';
-      for (i = _i = 0, _ref = str.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = j = 0, ref = str.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
         o += showBinary(str.charCodeAt(i)) + ' ';
       }
       return o;
@@ -135,72 +135,72 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
     $scope.compress = false;
     $scope.filterMethod = 0;
     return $scope.opera = function(o) {
-      var DD, bell, ddi, f, i, n, r, r1, r2, r3, r4, s, thisheight, thiswidth, w, x, y, _i, _j, _k, _ref, _ref1;
+      var DD, bell, ddi, f, i, j, k, l, n, r, r1, r2, r3, r4, ref, ref1, ref2, ref3, s, thisheight, thiswidth, w, x, y;
       if (o === 'in') {
         r = $scope.inputData.split(' ');
         $scope.D = (function() {
-          var _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = r.length; _i < _len; _i++) {
-            n = r[_i];
+          var j, len, results;
+          results = [];
+          for (j = 0, len = r.length; j < len; j++) {
+            n = r[j];
             if (r.length > 0) {
-              _results.push(parseInt(n));
+              results.push(parseInt(n));
             }
           }
-          return _results;
+          return results;
         })();
       } else if (o === 'inn') {
         r1 = (function() {
-          var _i, _len, _ref, _results;
-          _ref = $scope.inputData1.split(' ');
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            n = _ref[_i];
+          var j, len, ref, results;
+          ref = $scope.inputData1.split(' ');
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            n = ref[j];
             if (n.length > 0) {
-              _results.push(parseInt(n));
+              results.push(parseInt(n));
             }
           }
-          return _results;
+          return results;
         })();
         r2 = (function() {
-          var _i, _len, _ref, _results;
-          _ref = $scope.inputData2.split(' ');
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            n = _ref[_i];
+          var j, len, ref, results;
+          ref = $scope.inputData2.split(' ');
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            n = ref[j];
             if (n.length > 0) {
-              _results.push(parseInt(n));
+              results.push(parseInt(n));
             }
           }
-          return _results;
+          return results;
         })();
         r3 = (function() {
-          var _i, _len, _ref, _results;
-          _ref = $scope.inputData3.split(' ');
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            n = _ref[_i];
+          var j, len, ref, results;
+          ref = $scope.inputData3.split(' ');
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            n = ref[j];
             if (n.length > 0) {
-              _results.push(parseInt(n));
+              results.push(parseInt(n));
             }
           }
-          return _results;
+          return results;
         })();
         r4 = (function() {
-          var _i, _len, _ref, _results;
-          _ref = $scope.inputData4.split(' ');
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            n = _ref[_i];
+          var j, len, ref, results;
+          ref = $scope.inputData4.split(' ');
+          results = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            n = ref[j];
             if (n.length > 0) {
-              _results.push(parseInt(n));
+              results.push(parseInt(n));
             }
           }
-          return _results;
+          return results;
         })();
         w = [];
         s = '';
-        for (i = _i = 0, _ref = r1.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = j = 0, ref = r1.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           s += String.fromCharCode(r1[i], r2[i], r3[i], r4[i]);
           w[i] = r1[i] << 24 | r2[i] << 16 | r3[i] << 8 | r4[i];
         }
@@ -224,7 +224,7 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
           $scope.printLogs = false;
         }
         ddi = [];
-        _ref1 = [$scope.width, $scope.height], thiswidth = _ref1[0], thisheight = _ref1[1];
+        ref1 = [$scope.width, $scope.height], thiswidth = ref1[0], thisheight = ref1[1];
         bell = function(x, y) {
           var M, V, v;
           r = (1.0 * Math.sqrt(Math.pow(y - thisheight / 2, 2) + Math.pow(x - thiswidth / 2, 2))) / thisheight;
@@ -243,8 +243,8 @@ angular.module('TestApp', ['ImageLib']).controller('TestCtrl', [
           (V << 16) * (x / thiswidth) | (V << 8) | M;
           return (V << 24) | M;
         };
-        for (y = _j = 0; 0 <= thisheight ? _j < thisheight : _j > thisheight; y = 0 <= thisheight ? ++_j : --_j) {
-          for (x = _k = 0; 0 <= thiswidth ? _k < thiswidth : _k > thiswidth; x = 0 <= thiswidth ? ++_k : --_k) {
+        for (y = k = 0, ref2 = thisheight; 0 <= ref2 ? k < ref2 : k > ref2; y = 0 <= ref2 ? ++k : --k) {
+          for (x = l = 0, ref3 = thiswidth; 0 <= ref3 ? l < ref3 : l > ref3; x = 0 <= ref3 ? ++l : --l) {
             ddi[y * thiswidth + x] = bell(x, y);
           }
         }

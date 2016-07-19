@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 import java.net._
 import java.io.File
-import play.PlayRunHook
+import play.sbt.PlayRunHook
 
 object Grunt {
   def apply(base: File): PlayRunHook = {

@@ -1,0 +1,47 @@
+{
+  "family": "StarPractice",
+  "taskRoleArn": "arn:aws:iam::445803720301:role/EcsTaskStarpractice",
+  "volumes": [
+    {
+      "name": "efs-vol",
+      "host": {
+        "sourcePath": "/EFS"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "StarPractice",
+      "image": "445803720301.dkr.ecr.us-west-2.amazonaws.com/renatbek/starpractice:play254",
+      "memory": 700,
+      "cpu": 700,
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 9000,
+          "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "efs-vol",
+          "containerPath": "/EFS"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "starpractice",
+          "awslogs-region": "us-west-2"
+        }
+      },
+      "volumesFrom": [],
+      "environment": [],
+      "extraHosts": [],
+      "ulimits": [],
+      "dockerLabels": {}
+    }
+  ]
+}
+

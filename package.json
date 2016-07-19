@@ -1,0 +1,32 @@
+{
+  "name": "sparkydots-server",
+  "version": "1.0.0",
+  "description": "numeric-base ============",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-coffee": "^0.11.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-remove": "^0.1.0",
+    "grunt-contrib-uglify": "^0.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bekbolatov/numeric-base.git"
+  },
+  "author": "Renat Bekbolatov <renatbek@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bekbolatov/numeric-base/issues"
+  },
+  "homepage": "https://github.com/Bekbolatov/numeric-base#readme"
+}

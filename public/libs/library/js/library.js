@@ -3024,9 +3024,9 @@ angular.module('ImageLib').factory('GenerateImageBmp', [
       function Encoder() {}
 
       Encoder.prototype._getLittleEndianHex = function(value) {
-        var bytes, result, _i;
+        var bytes, i, result;
         result = [];
-        for (bytes = _i = 4; _i >= 1; bytes = --_i) {
+        for (bytes = i = 4; i >= 1; bytes = --i) {
           result.push(String.fromCharCode(value & 255));
           value >>= 8;
         }
@@ -3070,26 +3070,26 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       }
 
       Chunker.prototype._initTable = function() {
-        var c, k, n, _i, _j, _results;
+        var c, j, k, l, n, results;
         this.table = [];
-        _results = [];
-        for (n = _i = 0; _i < 256; n = ++_i) {
+        results = [];
+        for (n = j = 0; j < 256; n = ++j) {
           c = n;
-          for (k = _j = 0; _j < 8; k = ++_j) {
+          for (k = l = 0; l < 8; k = ++l) {
             if (c & 1) {
               c = 0xedb88320 ^ (c >>> 1);
             } else {
               c = c >>> 1;
             }
           }
-          _results.push(this.table[n] = c);
+          results.push(this.table[n] = c);
         }
-        return _results;
+        return results;
       };
 
       Chunker.prototype._update_crc = function(c, buf) {
-        var b, n, _i, _ref;
-        for (n = _i = 0, _ref = buf.length; 0 <= _ref ? _i < _ref : _i > _ref; n = 0 <= _ref ? ++_i : --_i) {
+        var b, j, n, ref;
+        for (n = j = 0, ref = buf.length; 0 <= ref ? j < ref : j > ref; n = 0 <= ref ? ++j : --j) {
           b = buf.charCodeAt(n);
           c = this.table[(c ^ b) & 0xff] ^ (c >>> 8);
         }
@@ -3151,8 +3151,8 @@ angular.module('ImageLib').factory('GenerateImagePng', [
 
     })();
     Palette = (function() {
-      function Palette(bitDepth) {
-        this.bitDepth = bitDepth;
+      function Palette(bitDepth1) {
+        this.bitDepth = bitDepth1;
         this.sizeMaxValue = Math.pow(2, this.bitDepth) - 1;
         this.size = 0;
         this.entries = {};
@@ -3175,11 +3175,11 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Palette.prototype.getData = function() {
-        var color, s, _i, _len, _ref;
+        var color, j, len, ref, s;
         s = '';
-        _ref = this.colors;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          color = _ref[_i];
+        ref = this.colors;
+        for (j = 0, len = ref.length; j < len; j++) {
+          color = ref[j];
           s += String.fromCharCode(color >>> 24);
           s += String.fromCharCode((color << 8) >>> 24);
           s += String.fromCharCode((color << 16) >>> 24);
@@ -3191,15 +3191,15 @@ angular.module('ImageLib').factory('GenerateImagePng', [
 
     })();
     Data = (function() {
-      function Data(bitDepth, colorType, filterMethod, compressionLevel, inputData, width, height) {
+      function Data(bitDepth1, colorType1, filterMethod1, compressionLevel1, inputData, width1, height1) {
         var COLORTYPE;
-        this.bitDepth = bitDepth;
-        this.colorType = colorType;
-        this.filterMethod = filterMethod;
-        this.compressionLevel = compressionLevel;
+        this.bitDepth = bitDepth1;
+        this.colorType = colorType1;
+        this.filterMethod = filterMethod1;
+        this.compressionLevel = compressionLevel1;
         this.inputData = inputData;
-        this.width = width;
-        this.height = height;
+        this.width = width1;
+        this.height = height1;
         this.h = new Hex();
         this.chunker = new Chunker();
         this.deflate = new Deflate();
@@ -3297,13 +3297,13 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Data.prototype._convertToByteArray = function() {
-        var bits, bitsNow, bitsNowLeftSide, bottomChop, fillByte, fillByteFilled, newByte, newPixel, takeBits, takeData, x, y, _i, _j, _ref, _ref1, _ref2;
+        var bits, bitsNow, bitsNowLeftSide, bottomChop, fillByte, fillByteFilled, j, l, newByte, newPixel, ref, ref1, ref2, takeBits, takeData, x, y;
         this.data = '';
-        for (y = _i = 0, _ref = this.height; 0 <= _ref ? _i < _ref : _i > _ref; y = 0 <= _ref ? ++_i : --_i) {
+        for (y = j = 0, ref = this.height; 0 <= ref ? j < ref : j > ref; y = 0 <= ref ? ++j : --j) {
           fillByte = 0x00;
           fillByteFilled = 0;
-          for (x = _j = 0, _ref1 = this.width; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; x = 0 <= _ref1 ? ++_j : --_j) {
-            _ref2 = this._getPixelData(this.inputData[y * this.width + x]), newPixel = _ref2[0], bits = _ref2[1];
+          for (x = l = 0, ref1 = this.width; 0 <= ref1 ? l < ref1 : l > ref1; x = 0 <= ref1 ? ++l : --l) {
+            ref2 = this._getPixelData(this.inputData[y * this.width + x]), newPixel = ref2[0], bits = ref2[1];
             while (fillByteFilled + bits >= 8) {
               takeBits = 8 - fillByteFilled;
               bottomChop = bits - takeBits;
@@ -3341,7 +3341,7 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Data.prototype._filterSubAndUp = function() {
-        var LINE_FILTER_SUB, LINE_FILTER_UP, cur, filteredData, i, index, prev, step, x, y, _i, _j, _k, _l, _m, _ref, _ref1, _ref2;
+        var LINE_FILTER_SUB, LINE_FILTER_UP, cur, filteredData, i, index, j, l, m, o, p, prev, ref, ref1, ref2, ref3, ref4, ref5, ref6, ref7, step, x, y;
         console.log('filter');
         LINE_FILTER_SUB = String.fromCharCode(1);
         LINE_FILTER_UP = String.fromCharCode(2);
@@ -3351,18 +3351,18 @@ angular.module('ImageLib').factory('GenerateImagePng', [
           step = this.colorDepth / 8;
         }
         filteredData = LINE_FILTER_SUB + this.data.substr(0, step);
-        for (x = _i = step, _ref = this.byteArrayLineWidth; step > 0 ? _i < _ref : _i > _ref; x = _i += step) {
-          for (i = _j = 0; 0 <= step ? _j < step : _j > step; i = 0 <= step ? ++_j : --_j) {
+        for (x = j = ref = step, ref1 = this.byteArrayLineWidth, ref2 = step; ref2 > 0 ? j < ref1 : j > ref1; x = j += ref2) {
+          for (i = l = 0, ref3 = step; 0 <= ref3 ? l < ref3 : l > ref3; i = 0 <= ref3 ? ++l : --l) {
             index = x + i;
             cur = this.data.charCodeAt(index);
             prev = this.data.charCodeAt(index - step);
             filteredData += String.fromCharCode((cur - prev) & 0xFF);
           }
         }
-        for (y = _k = 1, _ref1 = this.height; 1 <= _ref1 ? _k < _ref1 : _k > _ref1; y = 1 <= _ref1 ? ++_k : --_k) {
+        for (y = m = 1, ref4 = this.height; 1 <= ref4 ? m < ref4 : m > ref4; y = 1 <= ref4 ? ++m : --m) {
           filteredData += LINE_FILTER_UP;
-          for (x = _l = 0, _ref2 = this.byteArrayLineWidth; step > 0 ? _l < _ref2 : _l > _ref2; x = _l += step) {
-            for (i = _m = 0; 0 <= step ? _m < step : _m > step; i = 0 <= step ? ++_m : --_m) {
+          for (x = o = 0, ref5 = this.byteArrayLineWidth, ref6 = step; ref6 > 0 ? o < ref5 : o > ref5; x = o += ref6) {
+            for (i = p = 0, ref7 = step; 0 <= ref7 ? p < ref7 : p > ref7; i = 0 <= ref7 ? ++p : --p) {
               index = y * this.byteArrayLineWidth + x + i;
               cur = this.data.charCodeAt(index);
               prev = this.data.charCodeAt(index - this.byteArrayLineWidth);
@@ -3374,23 +3374,23 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Data.prototype._filterZero = function() {
-        var LINE_FILTER, filteredData, y, _i, _ref;
+        var LINE_FILTER, filteredData, j, ref, y;
         LINE_FILTER = String.fromCharCode(0);
         filteredData = '';
-        for (y = _i = 0, _ref = this.height; 0 <= _ref ? _i < _ref : _i > _ref; y = 0 <= _ref ? ++_i : --_i) {
+        for (y = j = 0, ref = this.height; 0 <= ref ? j < ref : j > ref; y = 0 <= ref ? ++j : --j) {
           filteredData += LINE_FILTER + this.data.substr(y * this.byteArrayLineWidth, this.byteArrayLineWidth);
         }
         return filteredData;
       };
 
       Data.prototype._adler32 = function(data) {
-        var FLUSH, MOD_ADLER, a, b, i, n, _i, _ref;
+        var FLUSH, MOD_ADLER, a, b, i, j, n, ref;
         MOD_ADLER = 65521;
         FLUSH = 5550;
         a = 1;
         b = 0;
         n = 0;
-        for (i = _i = 0, _ref = data.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = j = 0, ref = data.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           a += data.charCodeAt(i);
           b += a;
           if ((n += 1) > FLUSH) {
@@ -3440,11 +3440,11 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Data.prototype._deflateNoCompression = function(data) {
-        var DATA_COMPRESSION_METHOD, MAX_STORE_LENGTH, blockType, i, remaining, storeBuffer, _i, _ref;
+        var DATA_COMPRESSION_METHOD, MAX_STORE_LENGTH, blockType, i, j, ref, ref1, remaining, storeBuffer;
         DATA_COMPRESSION_METHOD = String.fromCharCode(0x08, 0x1D);
         MAX_STORE_LENGTH = 65535;
         storeBuffer = '';
-        for (i = _i = 0, _ref = data.length; MAX_STORE_LENGTH > 0 ? _i < _ref : _i > _ref; i = _i += MAX_STORE_LENGTH) {
+        for (i = j = 0, ref = data.length, ref1 = MAX_STORE_LENGTH; ref1 > 0 ? j < ref : j > ref; i = j += ref1) {
           remaining = data.length - i;
           if (remaining <= MAX_STORE_LENGTH) {
             blockType = String.fromCharCode(0x01);
@@ -3526,13 +3526,13 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Hex.prototype.hex = function(ins, maybeName, hf) {
-        var footer, header, i, s, _i, _ref;
+        var footer, header, i, j, ref, s;
         if (hf) {
           header = hf[0];
           footer = hf[1];
         }
         s = '';
-        for (i = _i = 0, _ref = ins.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = j = 0, ref = ins.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           s += this.hexStringOfByte(ins.charCodeAt(i));
           if (hf && i === header - 1) {
             s += '[ ';
@@ -3552,20 +3552,20 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Hex.prototype.printHexOfListOfStrings = function(list, label) {
-        var s, w, _i, _len;
+        var j, len, s, w;
         s = '';
-        for (_i = 0, _len = list.length; _i < _len; _i++) {
-          w = list[_i];
+        for (j = 0, len = list.length; j < len; j++) {
+          w = list[j];
           s += this.hexOfString(w);
         }
         return console.log('[' + label + '] ' + s);
       };
 
       Hex.prototype.printHexOfListOfInts = function(list, label) {
-        var s, w, _i, _len;
+        var j, len, s, w;
         s = '';
-        for (_i = 0, _len = list.length; _i < _len; _i++) {
-          w = list[_i];
+        for (j = 0, len = list.length; j < len; j++) {
+          w = list[j];
           s += this.hexOfInt(w);
         }
         return console.log('[' + label + '] ' + s);
@@ -3576,9 +3576,9 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       };
 
       Hex.prototype.hexOfString = function(string, label) {
-        var i, s, word, _i, _ref;
+        var i, j, ref, s, word;
         s = '';
-        for (i = _i = 0, _ref = string.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = j = 0, ref = string.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           word = string.charCodeAt(i);
           s += this.hexOfInt(word);
         }
@@ -3603,7 +3603,7 @@ angular.module('ImageLib').factory('GenerateImagePng', [
       }
 
       Encoder.prototype.encode = function(stringData, width, height, colorStyle, filterMethod, compressionLevel) {
-        var a, b, g, image, intData, r, s, x, y, _i, _j;
+        var a, b, g, image, intData, j, l, r, ref, ref1, s, x, y;
         if (compressionLevel === void 0) {
           compressionLevel = this.COMPRESSION_LEVEL;
         }
@@ -3614,8 +3614,8 @@ angular.module('ImageLib').factory('GenerateImagePng', [
           colorStyle = this.COLOR_GRAYSCALE;
         }
         intData = [];
-        for (y = _i = 0; 0 <= height ? _i < height : _i > height; y = 0 <= height ? ++_i : --_i) {
-          for (x = _j = 0; 0 <= width ? _j < width : _j > width; x = 0 <= width ? ++_j : --_j) {
+        for (y = j = 0, ref = height; 0 <= ref ? j < ref : j > ref; y = 0 <= ref ? ++j : --j) {
+          for (x = l = 0, ref1 = width; 0 <= ref1 ? l < ref1 : l > ref1; x = 0 <= ref1 ? ++l : --l) {
             s = stringData[(height - y - 1) * width + x];
             r = s.charCodeAt(0);
             g = s.charCodeAt(1);
@@ -3657,15 +3657,15 @@ angular.module('ImageLib').factory('GenerateImageUsingCanvas', [
       };
 
       CanvasWrapper.prototype.encode = function(stringData, width, height) {
-        var a, b, canvas, canvasData, context, g, index, r, s, x, y, _i, _j;
+        var a, b, canvas, canvasData, context, g, i, index, j, r, ref, ref1, s, x, y;
         canvas = this.getCanvas();
         canvas.setAttribute('width', width);
         canvas.setAttribute('height', height);
         context = this.getContext();
         canvasData = context.getImageData(0, 0, width, height);
         if (canvasData) {
-          for (y = _i = 0; 0 <= height ? _i < height : _i > height; y = 0 <= height ? ++_i : --_i) {
-            for (x = _j = 0; 0 <= width ? _j < width : _j > width; x = 0 <= width ? ++_j : --_j) {
+          for (y = i = 0, ref = height; 0 <= ref ? i < ref : i > ref; y = 0 <= ref ? ++i : --i) {
+            for (x = j = 0, ref1 = width; 0 <= ref1 ? j < ref1 : j > ref1; x = 0 <= ref1 ? ++j : --j) {
               s = stringData[(height - y - 1) * width + x];
               r = s.charCodeAt(0);
               g = s.charCodeAt(1);
@@ -3692,18 +3692,18 @@ angular.module('ImageLib').factory('GenerateImageUsingCanvas', [
   }
 ]);
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ImageLib').factory("GraphicsManager", [
   'ImageData', 'GenerateImagePng', 'GenerateImageUsingCanvas', function(ImageData, GenerateImagePng, GenerateImageUsingCanvas) {
     var GraphicsManager, Image, graphicsManager;
     Image = (function() {
-      function Image(imageData, width, height, backgroundColor, offsetleft, offsetright, offsettop, offsetbottom) {
-        var color, i, _i, _ref;
+      function Image(imageData, width1, height1, backgroundColor, offsetleft, offsetright, offsettop, offsetbottom) {
+        var color, i, j, ref;
         this.imageData = imageData;
-        this.width = width;
-        this.height = height;
-        this.flipImage = __bind(this.flipImage, this);
+        this.width = width1;
+        this.height = height1;
+        this.flipImage = bind(this.flipImage, this);
         this.width = Math.round(this.width);
         this.height = Math.round(this.height);
         this.colors = this.imageData.colors[0];
@@ -3732,7 +3732,7 @@ angular.module('ImageLib').factory("GraphicsManager", [
           if (color === void 0) {
             color = this.colors['w'];
           }
-          for (i = _i = 0, _ref = this.width * this.height - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+          for (i = j = 0, ref = this.width * this.height - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
             this.data[i] = color;
           }
         }
@@ -3748,7 +3748,7 @@ angular.module('ImageLib').factory("GraphicsManager", [
       };
 
       Image.prototype.placeChar = function(x, y, c, colorLetter) {
-        var char, color, i, xx, yy, _i, _ref, _results;
+        var char, color, i, j, ref, ref1, results, xx, yy;
         x = Math.round(x);
         y = Math.round(y);
         color = this.colorOrBlack(colorLetter);
@@ -3757,34 +3757,34 @@ angular.module('ImageLib').factory("GraphicsManager", [
           char = this.chars['?'];
         }
         i = 0;
-        _results = [];
-        for (yy = _i = _ref = y + char[1] - 1; _ref <= y ? _i <= y : _i >= y; yy = _ref <= y ? ++_i : --_i) {
-          _results.push((function() {
-            var _j, _ref1, _results1;
-            _results1 = [];
-            for (xx = _j = x, _ref1 = x + char[0] - 1; x <= _ref1 ? _j <= _ref1 : _j >= _ref1; xx = x <= _ref1 ? ++_j : --_j) {
+        results = [];
+        for (yy = j = ref = y + char[1] - 1, ref1 = y; ref <= ref1 ? j <= ref1 : j >= ref1; yy = ref <= ref1 ? ++j : --j) {
+          results.push((function() {
+            var l, ref2, ref3, results1;
+            results1 = [];
+            for (xx = l = ref2 = x, ref3 = x + char[0] - 1; ref2 <= ref3 ? l <= ref3 : l >= ref3; xx = ref2 <= ref3 ? ++l : --l) {
               if (char[2][i] > 0) {
                 this.setPoint(xx, yy, color);
               }
-              _results1.push(i = i + 1);
+              results1.push(i = i + 1);
             }
-            return _results1;
+            return results1;
           }).call(this));
         }
-        return _results;
+        return results;
       };
 
       Image.prototype.placeCharSequence = function(x, y, cc, colorLetter) {
-        var i, w, _i, _ref, _results;
+        var i, j, ref, results, w;
         if (cc === void 0 || cc.length < 1) {
           return;
         }
         w = 6;
-        _results = [];
-        for (i = _i = 0, _ref = cc.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-          _results.push(this.placeChar(x + i * w, y, cc[i], colorLetter));
+        results = [];
+        for (i = j = 0, ref = cc.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+          results.push(this.placeChar(x + i * w, y, cc[i], colorLetter));
         }
-        return _results;
+        return results;
       };
 
       Image.prototype.placeCharSequenceCentered = function(x, y, cc, colorLetter) {
@@ -3806,7 +3806,7 @@ angular.module('ImageLib').factory("GraphicsManager", [
       };
 
       Image.prototype.drawLine = function(x1, y1, x2, y2, colorLetter) {
-        var color, fx2y, fy2x, k, x, y, _i, _j;
+        var color, fx2y, fy2x, j, k, l, ref, ref1, ref2, ref3, x, y;
         color = this.colorOrBlack(colorLetter);
         if (y2 === y1 && x2 === x1) {
           this.setPoint(x1, y1, color);
@@ -3817,7 +3817,7 @@ angular.module('ImageLib').factory("GraphicsManager", [
           fy2x = function(y) {
             return Math.round(k * (y - y1)) + x1;
           };
-          for (y = _i = y1; y1 <= y2 ? _i <= y2 : _i >= y2; y = y1 <= y2 ? ++_i : --_i) {
+          for (y = j = ref = y1, ref1 = y2; ref <= ref1 ? j <= ref1 : j >= ref1; y = ref <= ref1 ? ++j : --j) {
             this.setPoint(fy2x(y), y, color);
           }
         } else {
@@ -3825,7 +3825,7 @@ angular.module('ImageLib').factory("GraphicsManager", [
           fx2y = function(x) {
             return Math.round(k * (x - x1)) + y1;
           };
-          for (x = _j = x1; x1 <= x2 ? _j <= x2 : _j >= x2; x = x1 <= x2 ? ++_j : --_j) {
+          for (x = l = ref2 = x1, ref3 = x2; ref2 <= ref3 ? l <= ref3 : l >= ref3; x = ref2 <= ref3 ? ++l : --l) {
             this.setPoint(x, fx2y(x), color);
           }
         }
@@ -3846,14 +3846,14 @@ angular.module('ImageLib').factory("GraphicsManager", [
       };
 
       Image.prototype.fillRectangle = function(x, y, w, h, colorLetter) {
-        var color, nx, ny, _i, _j, _ref, _ref1;
+        var color, j, l, nx, ny, ref, ref1, ref2, ref3;
         x = Math.round(x);
         y = Math.round(y);
         w = Math.round(w);
         h = Math.round(h);
         color = this.colorOrBlack(colorLetter);
-        for (ny = _i = y, _ref = y + h - 1; y <= _ref ? _i <= _ref : _i >= _ref; ny = y <= _ref ? ++_i : --_i) {
-          for (nx = _j = x, _ref1 = x + w - 1; x <= _ref1 ? _j <= _ref1 : _j >= _ref1; nx = x <= _ref1 ? ++_j : --_j) {
+        for (ny = j = ref = y, ref1 = y + h - 1; ref <= ref1 ? j <= ref1 : j >= ref1; ny = ref <= ref1 ? ++j : --j) {
+          for (nx = l = ref2 = x, ref3 = x + w - 1; ref2 <= ref3 ? l <= ref3 : l >= ref3; nx = ref2 <= ref3 ? ++l : --l) {
             this.setPoint(nx, ny, color);
           }
         }
@@ -3865,11 +3865,11 @@ angular.module('ImageLib').factory("GraphicsManager", [
       };
 
       Image.prototype.transform = function(fxy) {
-        var nx, ny, x, y, _i, _j, _ref, _ref1, _ref2;
+        var j, l, nx, ny, ref, ref1, ref2, x, y;
         this.buffer = [];
-        for (x = _i = 0, _ref = this.width - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
-          for (y = _j = 0, _ref1 = this.height - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
-            _ref2 = fxy(x, y), nx = _ref2[0], ny = _ref2[1];
+        for (x = j = 0, ref = this.width - 1; 0 <= ref ? j <= ref : j >= ref; x = 0 <= ref ? ++j : --j) {
+          for (y = l = 0, ref1 = this.height - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; y = 0 <= ref1 ? ++l : --l) {
+            ref2 = fxy(x, y), nx = ref2[0], ny = ref2[1];
             this.buffer[ny * this.width + nx] = this.data[y * this.width + x];
           }
         }
@@ -4081,7 +4081,7 @@ angular.module('ModuleDataPack').factory('DataPack', [
   }
 ]);
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ModuleDataUtilities', ['ModuleDataPack', 'BaseLib']);
 
@@ -4090,7 +4090,7 @@ angular.module('ModuleDataUtilities').factory('DataUtilities', [
     var DataUtilities, dataUtilities;
     DataUtilities = (function() {
       function DataUtilities() {
-        this.randomName = __bind(this.randomName, this);
+        this.randomName = bind(this.randomName, this);
       }
 
       DataUtilities.prototype.d = DataPack;
@@ -4112,13 +4112,13 @@ angular.module('ModuleDataUtilities').factory('DataUtilities', [
       };
 
       DataUtilities.prototype.randomNames = function(n, filter) {
-        var f, i, name, names, o, _i;
+        var f, i, j, name, names, o, ref;
         o = [];
         names = [];
         f = function(n) {
           return (filter === void 0) || filter(n);
         };
-        for (i = _i = 1; 1 <= n ? _i <= n : _i >= n; i = 1 <= n ? ++_i : --_i) {
+        for (i = j = 1, ref = n; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
           name = this.randomName();
           while ((o.indexOf(name[0]) > -1) || (!f(name[0]))) {
             name = this.randomName();
@@ -4150,14 +4150,14 @@ angular.module('BaseLib').filter('questionMark', function() {
   };
 }).filter('epochToDate', function() {
   return function(input) {
-    var e, r;
+    var e, error, r;
     if (input === void 0) {
       return '';
     } else {
       try {
         r = (new Date(input)).toUTCString().substr(5, 11);
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
         r = '';
       }
       return r;
@@ -4296,7 +4296,7 @@ angular.module('BaseLib').factory("MathFunctions", [
       function MathFunctions() {}
 
       MathFunctions.prototype.gcd = function(a, b) {
-        var c, _ref;
+        var c, ref;
         if (a < 0) {
           a = -a;
         }
@@ -4304,7 +4304,7 @@ angular.module('BaseLib').factory("MathFunctions", [
           b = -b;
         }
         if (a > b) {
-          _ref = [b, a], a = _ref[0], b = _ref[1];
+          ref = [b, a], a = ref[0], b = ref[1];
         }
         if (a === 0) {
           b;
@@ -4413,13 +4413,13 @@ angular.module('BaseLib').factory("RandomFunctions", [
       };
 
       RandomFunctions.prototype.shuffleListInPlace = function(a) {
-        var i, j, _i, _ref, _ref1;
+        var i, j, k, ref, ref1;
         if (a === void 0 || a.length < 2) {
           return;
         }
-        for (i = _i = _ref = a.length - 1; _ref <= 1 ? _i <= 1 : _i >= 1; i = _ref <= 1 ? ++_i : --_i) {
+        for (i = k = ref = a.length - 1; ref <= 1 ? k <= 1 : k >= 1; i = ref <= 1 ? ++k : --k) {
           j = Math.floor(Math.random() * (i + 1));
-          _ref1 = [a[j], a[i]], a[i] = _ref1[0], a[j] = _ref1[1];
+          ref1 = [a[j], a[i]], a[i] = ref1[0], a[j] = ref1[1];
         }
         return a;
       };
@@ -4440,9 +4440,9 @@ angular.module('BaseLib').factory("RandomFunctions", [
       };
 
       RandomFunctions.prototype.randomSomeString = function(n) {
-        var i, s, _i;
+        var i, k, ref, s;
         s = '';
-        for (i = _i = 1; 1 <= n ? _i <= n : _i >= n; i = 1 <= n ? ++_i : --_i) {
+        for (i = k = 1, ref = n; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
           s = s + this._randomSomeChar();
         }
         return s;
@@ -4457,20 +4457,20 @@ angular.module('BaseLib').factory("RandomFunctions", [
   }
 ]);
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('BaseLib').factory("TextFunctions", [
   'RandomFunctions', function(RandomFunctions) {
     var TextFunctions, textFunctions;
     TextFunctions = (function() {
       function TextFunctions() {
-        this.combine2 = __bind(this.combine2, this);
-        this.combine3 = __bind(this.combine3, this);
-        this.ifBthenwhatC = __bind(this.ifBthenwhatC, this);
-        this.AwhatCifB = __bind(this.AwhatCifB, this);
-        this.whatCifAandB = __bind(this.whatCifAandB, this);
-        this.AandBwhatC = __bind(this.AandBwhatC, this);
-        this.AifBthenwhatC = __bind(this.AifBthenwhatC, this);
+        this.combine2 = bind(this.combine2, this);
+        this.combine3 = bind(this.combine3, this);
+        this.ifBthenwhatC = bind(this.ifBthenwhatC, this);
+        this.AwhatCifB = bind(this.AwhatCifB, this);
+        this.whatCifAandB = bind(this.whatCifAandB, this);
+        this.AandBwhatC = bind(this.AandBwhatC, this);
+        this.AifBthenwhatC = bind(this.AifBthenwhatC, this);
       }
 
       TextFunctions.prototype.r = RandomFunctions;
@@ -4483,7 +4483,7 @@ angular.module('BaseLib').factory("TextFunctions", [
       };
 
       TextFunctions.prototype.prettify = function(text) {
-        var afterSpaced, append, az, letter, output, previousLetter, sentenceStop, skipBlack, skipBlank, upperCaseNext, _i, _len;
+        var afterSpaced, append, az, i, len, letter, output, previousLetter, sentenceStop, skipBlack, skipBlank, upperCaseNext;
         if (text === void 0) {
           return '';
         }
@@ -4494,8 +4494,8 @@ angular.module('BaseLib').factory("TextFunctions", [
         previousLetter = void 0;
         upperCaseNext = true;
         skipBlack = true;
-        for (_i = 0, _len = text.length; _i < _len; _i++) {
-          letter = text[_i];
+        for (i = 0, len = text.length; i < len; i++) {
+          letter = text[i];
           append = letter.toLowerCase();
           if (az.indexOf(append) > -1 && upperCaseNext) {
             append = letter.toUpperCase();
@@ -4619,21 +4619,21 @@ angular.module('BaseLib').factory("HyperTextManager", [
       function HyperTextManager() {}
 
       HyperTextManager.prototype.table = function(rows, headers) {
-        var header, item, o, row, _i, _j, _k, _len, _len1, _len2;
+        var header, i, item, j, k, len, len1, len2, o, row;
         o = '<table class="problem-generated-table">';
         if (headers !== void 0) {
           o += '<tr>';
-          for (_i = 0, _len = headers.length; _i < _len; _i++) {
-            header = headers[_i];
+          for (i = 0, len = headers.length; i < len; i++) {
+            header = headers[i];
             o += '<th>' + header + '</th>';
           }
           o += '</tr>';
         }
-        for (_j = 0, _len1 = rows.length; _j < _len1; _j++) {
-          row = rows[_j];
+        for (j = 0, len1 = rows.length; j < len1; j++) {
+          row = rows[j];
           o += '<tr>';
-          for (_k = 0, _len2 = row.length; _k < _len2; _k++) {
-            item = row[_k];
+          for (k = 0, len2 = row.length; k < len2; k++) {
+            item = row[k];
             o += '<td>' + item + '</td>';
           }
           o += '</tr>';
@@ -4739,7 +4739,7 @@ angular.module('ModuleSettings').factory("Settings", [
 
 angular.module('ModulePersistence', []);
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ModulePersistence').factory('PersistenceManager', [
   '$q', 'SerializationMethods', 'LocalStorageManager', 'FileStorageManager', 'ServerStorageManager', function($q, SerializationMethods, LocalStorageManager, FileStorageManager, ServerStorageManager) {
@@ -4776,12 +4776,12 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
       };
 
       PersistenceManager.prototype.saveObject = function(store, key, object) {
-        var deferred, t, textData;
+        var deferred, error, t, textData;
         deferred = $q.defer();
         try {
           textData = this.serialize(object);
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           deferred.reject([1, t]);
           return deferred.promise;
         }
@@ -4798,12 +4798,12 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
         deferred = $q.defer();
         this.readText(store, key).then((function(_this) {
           return function(textData) {
-            var obj, t;
+            var error, obj, t;
             try {
               obj = _this.deserialize(textData);
               deferred.resolve(obj);
-            } catch (_error) {
-              t = _error;
+            } catch (error) {
+              t = error;
               deferred.reject([1, t]);
               return deferred.promise;
             }
@@ -4816,24 +4816,24 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
       };
 
       PersistenceManager.prototype.saveObjectBlocking = function(store, key, object) {
-        var t, textData;
+        var error, t, textData;
         try {
           textData = this.serialize(object);
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           return null;
         }
         return this.saveTextBlocking(store, key, textData);
       };
 
       PersistenceManager.prototype.readObjectBlocking = function(store, key) {
-        var obj, t, textData;
+        var error, obj, t, textData;
         try {
           textData = this.readTextBlocking(store, key);
           obj = this.deserialize(textData);
           return obj;
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           return null;
         }
       };
@@ -4870,10 +4870,10 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 
     })();
     StorePersister = (function() {
-      function StorePersister(persistenceManager, store, key) {
+      function StorePersister(persistenceManager, store1, key1) {
         this.persistenceManager = persistenceManager;
-        this.store = store;
-        this.key = key;
+        this.store = store1;
+        this.key = key1;
       }
 
       StorePersister.prototype.read = function() {
@@ -4892,10 +4892,10 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 
     })();
     StoreBlockingPersister = (function() {
-      function StoreBlockingPersister(persistenceManager, store, key) {
+      function StoreBlockingPersister(persistenceManager, store1, key1) {
         this.persistenceManager = persistenceManager;
-        this.store = store;
-        this.key = key;
+        this.store = store1;
+        this.key = key1;
       }
 
       StoreBlockingPersister.prototype.read = function() {
@@ -4914,13 +4914,13 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 
     })();
     DictionaryStorePersister = (function() {
-      function DictionaryStorePersister(persistenceManager, store, objkey) {
+      function DictionaryStorePersister(persistenceManager, store1, objkey) {
         this.persistenceManager = persistenceManager;
-        this.store = store;
+        this.store = store1;
         this.objkey = objkey;
-        this.remove = __bind(this.remove, this);
-        this.set = __bind(this.set, this);
-        this.get = __bind(this.get, this);
+        this.remove = bind(this.remove, this);
+        this.set = bind(this.set, this);
+        this.get = bind(this.get, this);
         this.persister = new StorePersister(this.persistenceManager, this.store, this.objkey);
       }
 
@@ -4991,14 +4991,14 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 
     })();
     DictionaryStoreBlockingPersister = (function() {
-      function DictionaryStoreBlockingPersister(persistenceManager, store, objkey) {
+      function DictionaryStoreBlockingPersister(persistenceManager, store1, objkey) {
         this.persistenceManager = persistenceManager;
-        this.store = store;
+        this.store = store1;
         this.objkey = objkey;
-        this.remove = __bind(this.remove, this);
-        this.set = __bind(this.set, this);
-        this.get = __bind(this.get, this);
-        this.getAll = __bind(this.getAll, this);
+        this.remove = bind(this.remove, this);
+        this.set = bind(this.set, this);
+        this.get = bind(this.get, this);
+        this.getAll = bind(this.getAll, this);
         this.persister = new StoreBlockingPersister(this.persistenceManager, this.store, this.objkey);
       }
 
@@ -5047,9 +5047,9 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 
     })();
     DictionaryCacheWriteThruStorePersister = (function() {
-      function DictionaryCacheWriteThruStorePersister(persistenceManager, store, objkey) {
+      function DictionaryCacheWriteThruStorePersister(persistenceManager, store1, objkey) {
         this.persistenceManager = persistenceManager;
-        this.store = store;
+        this.store = store1;
         this.objkey = objkey;
         this.cache = {};
         this.persister = new DictionaryStorePersister(this.persistenceManager, this.store, this.objkey);
@@ -5090,10 +5090,10 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
       };
 
       DictionaryCacheWriteThruStorePersister.prototype.clear = function() {
-        var key, val, _ref;
-        _ref = this.cache;
-        for (key in _ref) {
-          val = _ref[key];
+        var key, ref, val;
+        ref = this.cache;
+        for (key in ref) {
+          val = ref[key];
           delete this.cache[key];
         }
         return this.persister.clear();
@@ -5107,18 +5107,18 @@ angular.module('ModulePersistence').factory('PersistenceManager', [
 ]);
 
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ModulePersistence').factory("FS", [
   '$q', 'md5', function($q, md5) {
     var FS;
     FS = (function() {
       function FS() {
-        this.tryDeleteFile = __bind(this.tryDeleteFile, this);
-        this.readDataFromFile = __bind(this.readDataFromFile, this);
-        this.writeDataToFile = __bind(this.writeDataToFile, this);
-        this.getContents = __bind(this.getContents, this);
-        this.getFileSystem = __bind(this.getFileSystem, this);
+        this.tryDeleteFile = bind(this.tryDeleteFile, this);
+        this.readDataFromFile = bind(this.readDataFromFile, this);
+        this.writeDataToFile = bind(this.writeDataToFile, this);
+        this.getContents = bind(this.getContents, this);
+        this.getFileSystem = bind(this.getFileSystem, this);
         this.quota = 10;
         this.salt = 'only the first line of defence';
         window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
@@ -5180,14 +5180,14 @@ angular.module('ModulePersistence').factory("FS", [
       };
 
       FS.prototype._printEntries = function(entries) {
-        var entry, _i, _len, _results;
+        var entry, i, len, results;
         console.log('entries:');
-        _results = [];
-        for (_i = 0, _len = entries.length; _i < _len; _i++) {
-          entry = entries[_i];
-          _results.push(console.log(entry.name));
+        results = [];
+        for (i = 0, len = entries.length; i < len; i++) {
+          entry = entries[i];
+          results.push(console.log(entry.name));
         }
-        return _results;
+        return results;
       };
 
       FS.prototype._requestQuota = function() {
@@ -5546,7 +5546,7 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
       };
 
       ModuleLocalStorage.prototype.readText = function(key) {
-        var deferred, t, textData;
+        var deferred, error, t, textData;
         deferred = $q.defer();
         if (this.rawStore.isAvailable()) {
           try {
@@ -5556,8 +5556,8 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
             } else {
               deferred.resolve(textData);
             }
-          } catch (_error) {
-            t = _error;
+          } catch (error) {
+            t = error;
             deferred.reject([1, t]);
           }
         } else {
@@ -5567,14 +5567,14 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
       };
 
       ModuleLocalStorage.prototype.saveText = function(key, textData) {
-        var deferred, t;
+        var deferred, error, t;
         deferred = $q.defer();
         if (this.rawStore.isAvailable()) {
           try {
             this.rawStore.setItem(key, textData);
             deferred.resolve(textData);
-          } catch (_error) {
-            t = _error;
+          } catch (error) {
+            t = error;
             deferred.reject([1, t]);
           }
         } else {
@@ -5584,7 +5584,7 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
       };
 
       ModuleLocalStorage.prototype.readTextBlocking = function(key) {
-        var t, textData;
+        var error, t, textData;
         if (this.rawStore.isAvailable()) {
           try {
             textData = this.rawStore.getItem(key);
@@ -5593,8 +5593,8 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
             } else {
               return textData;
             }
-          } catch (_error) {
-            t = _error;
+          } catch (error) {
+            t = error;
             return null;
           }
         } else {
@@ -5603,13 +5603,13 @@ angular.module('ModulePersistence').factory('LocalStorageManager', [
       };
 
       ModuleLocalStorage.prototype.saveTextBlocking = function(key, textData) {
-        var t;
+        var error, t;
         if (this.rawStore.isAvailable()) {
           try {
             this.rawStore.setItem(key, textData);
             return textData;
-          } catch (_error) {
-            t = _error;
+          } catch (error) {
+            t = error;
             return null;
           }
         } else {
@@ -5663,7 +5663,7 @@ angular.module('ModuleIdentity').factory('QRSignature', [
       function QRSignature() {}
 
       QRSignature.prototype.encode = function(input, dotsize) {
-        var QRCodeVersion, black, c, canvas, err, errorChild, errorMSG, imgElement, padding, qr, qrCanvasContext, qrsize, r, shiftForPadding, white, _i, _j, _ref, _ref1;
+        var QRCodeVersion, black, c, canvas, err, error, errorChild, errorMSG, i, imgElement, j, padding, qr, qrCanvasContext, qrsize, r, ref, ref1, shiftForPadding, white;
         padding = 10;
         black = "rgb(0,0,0)";
         white = "rgb(255,255,255)";
@@ -5674,8 +5674,8 @@ angular.module('ModuleIdentity').factory('QRSignature', [
           qr = new QRCode(QRCodeVersion, QRErrorCorrectLevel.L);
           qr.addData(input);
           qr.make();
-        } catch (_error) {
-          err = _error;
+        } catch (error) {
+          err = error;
           errorChild = document.createElement("p");
           errorMSG = document.createTextNode("QR Code generation failed: " + err);
           errorChild.appendChild(errorMSG);
@@ -5686,8 +5686,8 @@ angular.module('ModuleIdentity').factory('QRSignature', [
         canvas.setAttribute('width', (qrsize * dotsize) + padding);
         shiftForPadding = padding / 2;
         if (canvas.getContext) {
-          for (r = _i = 0, _ref = qrsize - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; r = 0 <= _ref ? ++_i : --_i) {
-            for (c = _j = 0, _ref1 = qrsize - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; c = 0 <= _ref1 ? ++_j : --_j) {
+          for (r = i = 0, ref = qrsize - 1; 0 <= ref ? i <= ref : i >= ref; r = 0 <= ref ? ++i : --i) {
+            for (c = j = 0, ref1 = qrsize - 1; 0 <= ref1 ? j <= ref1 : j >= ref1; c = 0 <= ref1 ? ++j : --j) {
               if (qr.isDark(r, c)) {
                 qrCanvasContext.fillStyle = black;
               } else {
@@ -5820,7 +5820,7 @@ angular.module('ModuleCommunication').factory('ServerHttp', [
         }).then((function(_this) {
           return function(result) {
             return _this.get(url).then(function(response) {
-              var data, t;
+              var data, error, t;
               try {
                 data = response.data;
                 return FS.writeToFile(filePath, data).then(function(response) {
@@ -5828,8 +5828,8 @@ angular.module('ModuleCommunication').factory('ServerHttp', [
                 })["catch"](function(e) {
                   return deferred.reject(e);
                 });
-              } catch (_error) {
-                t = _error;
+              } catch (error) {
+                t = error;
                 return deferred.reject(t);
               }
             })["catch"](function(e) {
@@ -5943,22 +5943,22 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
       };
 
       MessageDispatcher.prototype.addNewMessages = function(msgs) {
-        var msg, t, _i, _len, _results;
+        var error, i, len, msg, results, t;
         try {
-          _results = [];
-          for (_i = 0, _len = msgs.length; _i < _len; _i++) {
-            msg = msgs[_i];
-            _results.push(this.addNewMessage(msg));
+          results = [];
+          for (i = 0, len = msgs.length; i < len; i++) {
+            msg = msgs[i];
+            results.push(this.addNewMessage(msg));
           }
-          return _results;
-        } catch (_error) {
-          t = _error;
+          return results;
+        } catch (error) {
+          t = error;
           return console.log('could not add messages from server');
         }
       };
 
       MessageDispatcher.prototype.addNewMessage = function(msg) {
-        var id, prev, priority, t;
+        var error, id, prev, priority, t;
         try {
           if (msg === void 0 || msg.content === void 0 || msg.id === void 0 || msg.priority === void 0) {
             return void 0;
@@ -5976,8 +5976,8 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
             msg.rcvdTime = (new Date()).getTime();
             return this.persister.set(msg.id, msg);
           }
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           return console.log('could not add new message');
         }
       };
@@ -5993,19 +5993,19 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
       };
 
       MessageDispatcher.prototype.removeOneSeenMessageIfCloseToMax = function(all) {
-        var id, msg, seen, t;
+        var error, id, msg, seen, t;
         try {
           if (all.length > this.MAXSEENMSG) {
             seen = (function() {
-              var _results;
-              _results = [];
+              var results;
+              results = [];
               for (id in all) {
                 msg = all[id];
                 if (msg.seen) {
-                  _results.push([msg.rcvdTime, msg]);
+                  results.push([msg.rcvdTime, msg]);
                 }
               }
-              return _results;
+              return results;
             })();
             if (seen.length < 1) {
               return void 0;
@@ -6014,14 +6014,14 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
             msg = seen[0][1];
             return this.removeMessage(msg);
           }
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           return void 0;
         }
       };
 
       MessageDispatcher.prototype.getMessageToShow = function() {
-        var all, id, msg, t, unseen;
+        var all, error, id, msg, t, unseen;
         try {
           all = this.persister.getAll();
           if (all === void 0 || all.length < 1) {
@@ -6029,15 +6029,15 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
           }
           this.removeOneSeenMessageIfCloseToMax(all);
           unseen = (function() {
-            var _results;
-            _results = [];
+            var results;
+            results = [];
             for (id in all) {
               msg = all[id];
               if (!msg.seen) {
-                _results.push([msg.priority, msg]);
+                results.push([msg.priority, msg]);
               }
             }
-            return _results;
+            return results;
           })();
           if (unseen.length < 1) {
             return void 0;
@@ -6046,8 +6046,8 @@ angular.module('ModuleMessage').factory("MessageDispatcher", [
           msg = unseen[0][1];
           this.markAsSeen(msg);
           return msg;
-        } catch (_error) {
-          t = _error;
+        } catch (error) {
+          t = error;
           return void 0;
         }
       };
@@ -6286,14 +6286,14 @@ angular.module('ActivityLib').controller('HistoryCtrl', [
         $scope.activityName = data.activityName;
         $scope.timestamp = data.endTime;
         $scope.responses = (function() {
-          var _i, _len, _ref, _results;
-          _ref = data.responses;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            response = _ref[_i];
-            _results.push([$sce.trustAsHtml('' + response[0]), $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4], response[5]]);
+          var i, len, ref, results;
+          ref = data.responses;
+          results = [];
+          for (i = 0, len = ref.length; i < len; i++) {
+            response = ref[i];
+            results.push([$sce.trustAsHtml('' + response[0]), $sce.trustAsHtml('' + response[1]), $sce.trustAsHtml('' + response[2]), response[3], response[4], response[5]]);
           }
-          return _results;
+          return results;
         })();
         $scope.correct = data.runningTotals.correct;
         $scope.wrong = data.runningTotals.wrong;
@@ -6666,7 +6666,7 @@ angular.module('ActivityLib').directive('deviceheight', [
 
 angular.module('ActivityLib').config([
   '$routeProvider', function($routeProvider) {
-    var appName, customTabs, firstCapital, tab, _i, _len, _results;
+    var appName, customTabs, firstCapital, i, len, results, tab;
     appName = document.numeric.appName;
     $routeProvider.when('/', {
       templateUrl: '/assets/apps/' + appName + '/templates/home.html',
@@ -6728,16 +6728,16 @@ angular.module('ActivityLib').config([
     };
     customTabs = document.numeric.customTabs;
     if (customTabs !== void 0) {
-      _results = [];
-      for (_i = 0, _len = customTabs.length; _i < _len; _i++) {
-        tab = customTabs[_i];
+      results = [];
+      for (i = 0, len = customTabs.length; i < len; i++) {
+        tab = customTabs[i];
         $routeProvider.when('/' + tab.page, {
           templateUrl: '/assets/apps/' + appName + '/templates/' + tab.page + '.html',
           controller: firstCapital(tab.page) + 'Ctrl'
         });
-        _results.push(console.log('adding: ' + tab.page));
+        results.push(console.log('adding: ' + tab.page));
       }
-      return _results;
+      return results;
     }
   }
 ]).config([
@@ -6748,7 +6748,7 @@ angular.module('ActivityLib').config([
 ]);
 
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ActivityLib').factory("ActivityDriver", [
   '$timeout', '$sce', '$q', 'ActivityLoader', 'ActivitySummary', function($timeout, $sce, $q, ActivityLoader, ActivitySummary) {
@@ -6766,7 +6766,7 @@ angular.module('ActivityLib').factory("ActivityDriver", [
       };
 
       Activity.prototype.newQuestion = function() {
-        var choice, i, questionStatement, _ref;
+        var choice, i, questionStatement, ref;
         this.question = this.currentTask.createNextQuestion();
         if (this.question === void 0) {
           return void 0;
@@ -6782,9 +6782,9 @@ angular.module('ActivityLib').factory("ActivityDriver", [
           this.inputTypeMultipleChoice = true;
           this.questionStatementChoices_ = this.question.choices;
           questionStatement = this.question.statement + '<div class="problem-ol-mult-choice-holder"><ol type="A" class="problem-ol-mult-choice">';
-          _ref = this.question.choices;
-          for (i in _ref) {
-            choice = _ref[i];
+          ref = this.question.choices;
+          for (i in ref) {
+            choice = ref[i];
             questionStatement += '<li>' + choice + '</li>';
           }
           questionStatement += '</ol></div>';
@@ -6966,23 +6966,23 @@ angular.module('ActivityLib').factory("ActivityDriver", [
       };
 
       ActivityDriver.prototype.newQuestion = function(keepClock) {
-        var e;
+        var e, error, error1, error2;
         this.totalTime = Math.round((new Date() - this.startTime) / 1000);
         this.answer = void 0;
         try {
           this.question = this.currentActivity.newQuestion();
-        } catch (_error) {
-          e = _error;
+        } catch (error) {
+          e = error;
           console.log(e);
           try {
             this.question = this.currentActivity.newQuestion();
-          } catch (_error) {
-            e = _error;
+          } catch (error1) {
+            e = error1;
             console.log(e);
             try {
               this.question = this.currentActivity.newQuestion();
-            } catch (_error) {
-              e = _error;
+            } catch (error2) {
+              e = error2;
               console.log(e);
               alert('activity exited');
               this.question = void 0;
@@ -7050,7 +7050,7 @@ angular.module('ActivityLib').factory("ActivityDriver", [
       };
 
       function ActivityDriver() {
-        this._checkAnswer = __bind(this._checkAnswer, this);
+        this._checkAnswer = bind(this._checkAnswer, this);
         this.clearResult();
         this.resetStats();
         this._clearLastQuestion();
@@ -7064,19 +7064,19 @@ angular.module('ActivityLib').factory("ActivityDriver", [
 ]);
 
 var ActivityLoader,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 ActivityLoader = (function() {
-  function ActivityLoader($q, Settings, ServerHttp, FS) {
-    this.$q = $q;
-    this.Settings = Settings;
-    this.ServerHttp = ServerHttp;
-    this.FS = FS;
-    this.removeCachedActivity = __bind(this.removeCachedActivity, this);
-    this.loadActivity = __bind(this.loadActivity, this);
-    this._tryCachedActivity = __bind(this._tryCachedActivity, this);
-    this._loadScriptFromCache = __bind(this._loadScriptFromCache, this);
-    this._createScriptTagAndLoad = __bind(this._createScriptTagAndLoad, this);
+  function ActivityLoader($q1, Settings1, ServerHttp1, FS1) {
+    this.$q = $q1;
+    this.Settings = Settings1;
+    this.ServerHttp = ServerHttp1;
+    this.FS = FS1;
+    this.removeCachedActivity = bind(this.removeCachedActivity, this);
+    this.loadActivity = bind(this.loadActivity, this);
+    this._tryCachedActivity = bind(this._tryCachedActivity, this);
+    this._loadScriptFromCache = bind(this._loadScriptFromCache, this);
+    this._createScriptTagAndLoad = bind(this._createScriptTagAndLoad, this);
   }
 
   ActivityLoader.prototype._pathToBody = function(activityId) {
@@ -7101,7 +7101,7 @@ ActivityLoader = (function() {
   };
 
   ActivityLoader.prototype._createScriptTagAndLoad = function(uri, activityId) {
-    var deferred, e, newScript;
+    var deferred, e, error, error1, newScript;
     console.log('__ attempt to load script with activityId: ' + activityId + ' and uri: ' + uri);
     deferred = this.$q.defer();
     try {
@@ -7128,12 +7128,12 @@ ActivityLoader = (function() {
       newScript.src = uri;
       try {
         document.getElementsByTagName('head')[0].removeChild(document.getElementById(this._scriptId));
-      } catch (_error) {
-        e = _error;
+      } catch (error) {
+        e = error;
       }
       document.getElementsByTagName('head')[0].appendChild(newScript);
-    } catch (_error) {
-      e = _error;
+    } catch (error1) {
+      e = error1;
       deferred.reject(e);
     }
     return deferred.promise;
@@ -7144,21 +7144,21 @@ ActivityLoader = (function() {
     deferred = this.$q.defer();
     this._createScriptTagAndLoad(this._uriCache(activityId), activityId).then((function(_this) {
       return function(activity) {
-        var e;
+        var e, error;
         try {
           document.getElementsByTagName('head')[0].removeChild(document.getElementById(_this._scriptId));
-        } catch (_error) {
-          e = _error;
+        } catch (error) {
+          e = error;
         }
         return deferred.resolve(activity);
       };
     })(this))["catch"]((function(_this) {
       return function(status) {
-        var e;
+        var e, error;
         try {
           document.getElementsByTagName('head')[0].removeChild(document.getElementById(_this._scriptId));
-        } catch (_error) {
-          e = _error;
+        } catch (error) {
+          e = error;
         }
         return deferred.reject(status);
       };
@@ -7239,7 +7239,7 @@ angular.module('ActivityLib').factory("ActivityLoader", [
   }
 ]);
 
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 angular.module('ActivityLib').factory("ActivitySummary", [
   '$q', 'FS', 'PersistenceManager', function($q, FS, PersistenceManager) {
@@ -7250,8 +7250,8 @@ angular.module('ActivityLib').factory("ActivitySummary", [
       ActivitySummary.prototype.newFirst = 0;
 
       function ActivitySummary() {
-        this.finish = __bind(this.finish, this);
-        this.removeSummaryById = __bind(this.removeSummaryById, this);
+        this.finish = bind(this.finish, this);
+        this.removeSummaryById = bind(this.removeSummaryById, this);
         this.currentActivityPersister = PersistenceManager.localStoreBlockingPersister(document.numeric.key.currentActivitySummary);
         this.activitySummariesPersister = PersistenceManager.localStoreBlockingPersister(document.numeric.key.storedActivitySummaries);
         if (!this.activitySummariesPersister.read()) {
@@ -7287,12 +7287,12 @@ angular.module('ActivityLib').factory("ActivitySummary", [
       };
 
       ActivitySummary.prototype._removeFromAllSummaries = function(timestamp) {
-        var itemToDelete, key, table, val, _ref;
+        var itemToDelete, key, ref, table, val;
         table = this.activitySummariesPersister.read();
         itemToDelete = void 0;
-        _ref = table.items;
-        for (key in _ref) {
-          val = _ref[key];
+        ref = table.items;
+        for (key in ref) {
+          val = ref[key];
           if (Number(val.timestamp) === Number(timestamp)) {
             itemToDelete = key;
           }
@@ -7316,10 +7316,10 @@ angular.module('ActivityLib').factory("ActivitySummary", [
       };
 
       ActivitySummary.prototype.getFromAllSummaries = function(timestamp) {
-        var item, items, _i, _len;
+        var i, item, items, len;
         items = this.getAllSummaries();
-        for (_i = 0, _len = items.length; _i < _len; _i++) {
-          item = items[_i];
+        for (i = 0, len = items.length; i < len; i++) {
+          item = items[i];
           if (parseInt(item.timestamp) === parseInt(timestamp)) {
             return item;
           }
@@ -7605,7 +7605,7 @@ angular.module('ActivityLib').factory("Tags", [
 ]);
 
 
-var e, _initGlobal;
+var _initGlobal, e, error;
 
 _initGlobal = function(d) {
   var n;
@@ -7684,7 +7684,7 @@ try {
       return w.document.numeric.defaultSettings.showSettings = true;
     }
   })(this);
-} catch (_error) {
-  e = _error;
+} catch (error) {
+  e = error;
   console.log(e);
 }

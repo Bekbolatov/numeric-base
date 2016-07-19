@@ -12,9 +12,9 @@
     </appender>
 
     <appender name="STAR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${application.home}/logs/star.log</file>
+        <file>/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base/logs/star.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${application.home}/logs/star-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/Users/rbekbolatov/repos/gh/bekbolatov/numeric-base/logs/star-log-%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
