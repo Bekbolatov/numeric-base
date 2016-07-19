@@ -21,8 +21,6 @@ import scala.util.Try
 
 trait LogHelper {
   def getMachineInfo: String
-
-  val d = 7
 }
 
 

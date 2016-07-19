@@ -8,9 +8,7 @@ import javax.inject.Inject
 
 import play.api.http.DefaultHttpFilters
 import akka.stream.Materializer
-import com.sparkydots.common.events.AppEvent$
 import com.sparkydots.common.events.Event
-import play.libs.Json
 
 class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
@@ -56,13 +54,12 @@ class HTTPSRedirectFilter @Inject() (implicit val mat: Materializer, ec: Executi
 
   def apply(next: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
     rh.headers.get("x-forwarded-proto") match {
-      case Some(header) => {
+      case Some(header) =>
         if ("https" == header) {
           next(rh).map { result => result.withHeaders(("Strict-Transport-Security", "max-age=31536000")) }
         } else {
           Future.successful(Results.Redirect("https://" + rh.host + rh.uri, 301))
         }
-      }
       case None => next(rh)
     }
   }

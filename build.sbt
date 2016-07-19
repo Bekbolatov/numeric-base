@@ -27,6 +27,7 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 //    Seq( (js.sortBy(_._2), "myconcat.min.js"))
 //}
 
+unmanagedSourceDirectories in Compile += baseDirectory.value / "src" / "main" / "scala"
 
 
 libraryDependencies ++= Seq(
