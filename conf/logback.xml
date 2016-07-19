@@ -8,12 +8,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- daily rollover with compression -->
             <!--<fileNamePattern>${BASE_LOC}/app.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
             <!--<fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/app.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
+            <fileNamePattern>${BASE_LOC}/app.${HOSTNAME}.%d{yyyyMMdd}.log.gz</fileNamePattern>
             <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%date{yyyy-MM-dd HH:mm:ss} - [%level] %logger: %message%n</pattern>
-            <immediateFlush>true</immediateFlush>
+            <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
 
@@ -22,12 +22,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--<fileNamePattern>${BASE_LOC}/events.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
             <!--<fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/events.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
+            <fileNamePattern>${BASE_LOC}/events.${HOSTNAME}.%d{yyyyMMdd}.log.gz</fileNamePattern>
             <maxHistory>100</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%message%n</pattern>
-            <immediateFlush>true</immediateFlush>
+            <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
 
@@ -36,12 +36,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--<fileNamePattern>${BASE_LOC}/health.%d{yyyyMMddHHmm}.${HOSTNAME}.log.gz</fileNamePattern>-->
             <!--<fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd_HH}.${HOSTNAME}.log.gz</fileNamePattern>-->
-            <fileNamePattern>${BASE_LOC}/health.%d{yyyyMMdd}.${HOSTNAME}.log.gz</fileNamePattern>
+            <fileNamePattern>${BASE_LOC}/health.${HOSTNAME}.%d{yyyyMMdd}.log.gz</fileNamePattern>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%message%n</pattern>
-            <immediateFlush>true</immediateFlush>
+            <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
 
@@ -57,4 +57,5 @@
         <appender-ref ref="APP"/>
     </root>
 
+    <!--<shutdownHook/>-->
 </configuration>
