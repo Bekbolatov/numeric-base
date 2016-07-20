@@ -14,19 +14,17 @@ import akka.util.ByteString
 
 
 trait LatexService {
-  def convertLatex(tex: String): Future[String] //Array[Byte]
-  def convertLatexFile(tex: String): Future[Result] //Array[Byte]
+  def convertLatex(tex: String, filename: String): Future[String] //Array[Byte]
+  def convertLatexFile(tex: String, filename: String): Future[Result] //Array[Byte]
 }
 
 
-class LatexServiceImpl @Inject()(ws: WSClient) extends LatexService {
-  override def convertLatex(tex: String): Future[String] = {
-    //Array[Byte] = {
+class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
+  override def convertLatex(tex: String, filename: String): Future[String] = {
+    val serviceInstance = serviceDiscovery.findService("latex2pdf").get
+    val host = serviceInstance.host
+    val port = serviceInstance.port
 
-
-    val filename = "huyaks"
-    val host = "52.42.48.92"
-    val port = 6000
     val url = s"http://$host:$port/cgi-bin/latex2pdf.sh?$filename"
 
     val request: WSRequest = ws.url(url).
@@ -39,20 +37,19 @@ class LatexServiceImpl @Inject()(ws: WSClient) extends LatexService {
 
     val futureResult: Future[String] = futureResponse.map {
       response =>
-        (response.json \ "uri").as[String]
+        s"http://$host:$port${(response.json \ "uri").as[String]}"
     }
 
     futureResult
   }
 
   //Array[Byte]
-  override def convertLatexFile(tex: String): Future[Result] = {
+  override def convertLatexFile(tex: String, filename: String): Future[Result] = {
+    val serviceInstance = serviceDiscovery.findService("latex2pdf").get
+    val host = serviceInstance.host
+    val port = serviceInstance.port
 
-    val filename = "huyaks"
-    val host = "52.42.48.92"
-    val port = 6000
     val url = s"http://$host:$port/cgi-bin/latex2pdf.sh?$filename"
-
     val futureResponse: Future[WSResponse] = for {
       responseOne <- ws.url(url).
         withHeaders("Content-Type" -> "application/x-tex").

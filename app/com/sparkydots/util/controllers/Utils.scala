@@ -8,9 +8,11 @@ import play.api.mvc.{Controller, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class Utils @Inject()(val messagesApi: MessagesApi,
-                      val myComponent: LogHelper,
-                      val latexService: LatexService)
+class Utils @Inject()(
+                       val messagesApi: MessagesApi,
+                       val myComponent: LogHelper,
+                       val latexService: LatexService
+                     )
   extends Controller with I18nSupport {
 
   def health = Action {
@@ -28,6 +30,7 @@ class Utils @Inject()(val messagesApi: MessagesApi,
 
   def latex = Action.async {
     val texDoc =
+
     raw"""
       |\documentclass{book}
       |
@@ -41,11 +44,7 @@ class Utils @Inject()(val messagesApi: MessagesApi,
     """.
       stripMargin
 
-//    latexService.convertLatex(texDoc).map { uri =>
-
-      latexService.convertLatexFile(texDoc)
-//    Ok(views.html.latex(uri))
-
+//    latexService.convertLatexFile(texDoc)
+    latexService.convertLatex(texDoc, "huya").map { uri => Ok(views.html.latex(uri)) }
   }
-
 }
