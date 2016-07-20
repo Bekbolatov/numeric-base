@@ -14,14 +14,20 @@ import akka.util.ByteString
 
 
 trait LatexService {
-  def convertLatex(tex: String, filename: String): Future[String] //Array[Byte]
-  def convertLatexFile(tex: String, filename: String): Future[Result] //Array[Byte]
+
+  def convertLatex(tex: String, filename: String,
+                   serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String]
+
+  def convertLatexFile(tex: String, filename: String): Future[Result]
 }
 
 
 class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
-  override def convertLatex(tex: String, filename: String): Future[String] = {
-    val serviceInstance = serviceDiscovery.findService("latex2pdf").get
+
+  override def convertLatex(tex: String, filename: String,
+                            useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String] = {
+
+    val serviceInstance = (useServiceInstance orElse serviceDiscovery.findService("latex2pdf")).get
     val host = serviceInstance.host
     val port = serviceInstance.port
 
@@ -37,7 +43,14 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
 
     val futureResult: Future[String] = futureResponse.map {
       response =>
-        s"http://$host:$port${(response.json \ "uri").as[String]}"
+        val jresponse = response.json
+        val error = jresponse \ "error"
+
+        if (error.toOption.isDefined) {
+          error.as[String]
+        } else {
+          s"http://$host:$port${(response.json \ "uri").as[String]}"
+        }
     }
 
     futureResult
@@ -46,20 +59,14 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
   //Array[Byte]
   override def convertLatexFile(tex: String, filename: String): Future[Result] = {
     val serviceInstance = serviceDiscovery.findService("latex2pdf").get
+
     val host = serviceInstance.host
     val port = serviceInstance.port
 
-    val url = s"http://$host:$port/cgi-bin/latex2pdf.sh?$filename"
     val futureResponse: Future[WSResponse] = for {
-      responseOne <- ws.url(url).
-        withHeaders("Content-Type" -> "application/x-tex").
-        withHeaders("Accept" -> "application/json").
-        withRequestTimeout(10000.millis).
-        post(tex)
-
-      responseTwo <- ws.url((responseOne.json \ "uri").as[String]).
-        get()
-    } yield responseTwo
+      uri <- convertLatex(tex, filename, Some(serviceInstance))
+      fileResponse <- ws.url(uri).get()
+    } yield fileResponse
 
     val futureResult: Future[Result] = futureResponse.map { response =>
       Result(

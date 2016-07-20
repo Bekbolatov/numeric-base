@@ -44,7 +44,7 @@ class Utils @Inject()(
     """.
       stripMargin
 
-//    latexService.convertLatexFile(texDoc)
-    latexService.convertLatex(texDoc, "huya").map { uri => Ok(views.html.latex(uri)) }
+    latexService.convertLatexFile(texDoc, "huy")
+//    latexService.convertLatex(texDoc, "huya").map { uri => Ok(views.html.latex(uri)) }
   }
 }
