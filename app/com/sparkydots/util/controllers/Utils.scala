@@ -2,12 +2,16 @@ package com.sparkydots.util.controllers
 
 import javax.inject.Inject
 
-import com.sparkydots.modules.LogHelper
-import com.sparkydots.website.main.views
+import com.sparkydots.modules.{LogHelper, LatexService}
+import com.sparkydots.util.views
 import play.api.mvc.{Controller, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class Utils @Inject()(val messagesApi: MessagesApi, val myComponent: LogHelper) extends Controller with I18nSupport {
+class Utils @Inject()(val messagesApi: MessagesApi,
+                      val myComponent: LogHelper,
+                      val latexService: LatexService)
+  extends Controller with I18nSupport {
 
   def health = Action {
     Ok(views.html.health())
@@ -20,6 +24,28 @@ class Utils @Inject()(val messagesApi: MessagesApi, val myComponent: LogHelper) 
   def myip = Action { request =>
     val ip = request.headers.get("x-forwarded-for").getOrElse("null")
     Ok(ip)
+  }
+
+  def latex = Action.async {
+    val texDoc =
+    raw"""
+      |\documentclass{book}
+      |
+      |
+      |\begin{document}
+      |\chapter{Sample}
+      |
+      |Huyaks
+      |
+      |\end{document}
+    """.
+      stripMargin
+
+//    latexService.convertLatex(texDoc).map { uri =>
+
+      latexService.convertLatexFile(texDoc)
+//    Ok(views.html.latex(uri))
+
   }
 
 }

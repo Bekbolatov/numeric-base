@@ -3,6 +3,7 @@ GET /assets/*file                 com.sparkydots.common.controllers.Assets.at(pa
 GET /health                       com.sparkydots.util.controllers.Utils.health
 GET /machine                      com.sparkydots.util.controllers.Utils.machine
 GET /myip                         com.sparkydots.util.controllers.Utils.myip
+GET /latex                         com.sparkydots.util.controllers.Utils.latex
 
 # Web Pages
 GET /                             com.sparkydots.website.main.controllers.SparkyDots.index
