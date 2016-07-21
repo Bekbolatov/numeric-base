@@ -37,6 +37,7 @@ class Utils @Inject()(
   }
 
   def createLatex = Action.async { request =>
+
     val texDoc = request.body.asRaw.get.asBytes().get.utf8String
     if (texDoc.size > 50000) {
       Future.successful(Result(
@@ -50,6 +51,16 @@ class Utils @Inject()(
 
     }
   }
+
+  def makeq1() = Action.async {
+    val content = com.sparkydots.util.views.txt.q1(3, 4)
+    val body = content.body
+    println(body)
+    latexService.convertLatexFile(body).map { case (success, result) =>
+      result
+    }
+  }
+
 
 }
 

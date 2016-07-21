@@ -1,0 +1,10 @@
+@(arg1: Int, arg2: Int)
+
+\documentclass{book}
+
+
+\begin{document}
+
+$ @arg1 + @arg2 = ? $
+
+\end{document}
