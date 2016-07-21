@@ -72,7 +72,7 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
       Result(
         header = ResponseHeader(200),
         body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
-      )
+      ).withHeaders(("Content-Disposition", "inline; filename=\"" + filename + ".pdf\"" ))
     }
 
     futureResult

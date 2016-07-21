@@ -28,7 +28,16 @@ class Utils @Inject()(
     Ok(ip)
   }
 
-  def latex = Action.async {
+  def latex = Action {
+    Ok(views.html.latex())
+  }
+
+  def createLatex(filename: String) = Action.async {
+    var file = filename.take(20)
+
+    if (file.toLowerCase.endsWith(".pdf")) {
+      file = file.dropRight(4)
+    }
     val texDoc =
 
     raw"""
@@ -44,7 +53,7 @@ class Utils @Inject()(
     """.
       stripMargin
 
-    latexService.convertLatexFile(texDoc, "huy")
+    latexService.convertLatexFile(texDoc, file)
 //    latexService.convertLatex(texDoc, "huya").map { uri => Ok(views.html.latex(uri)) }
   }
 }

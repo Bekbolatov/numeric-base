@@ -1,0 +1,4 @@
+# Latex to PDF
+
+GET   /                         com.sparkydots.util.controllers.Utils.latex
+POST  /convert2pdf/:filename    com.sparkydots.util.controllers.Utils.createLatex(filename: String)

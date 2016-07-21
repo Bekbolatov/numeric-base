@@ -1,4 +1,4 @@
-@(pdfurl: String)
+@import helper._
 
 <!DOCTYPE html>
 
@@ -6,21 +6,26 @@
 <head>
     <title>Sparky Dots</title>
     <!--<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>-->
-    <body>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
+    <script src='@routes.Assets.at("javascripts/latex.js")' type="text/javascript"></script>
 
-<a href="@pdfurl">Latex doc</a>
+</head>
+<body>
+<div ng-app="Latex">
 
-<!--  disabled it
+    <div ng-controller="LatexCtrl">
+        <hr>
 
-<textarea id="text" rows="10" cols="90"></textarea><br>
+        Write LaTeX below and generate PDF<br>
+        <textarea id="text" ng-model="raw_latex" rows="10" cols="90" ngMaxlength="10000"></textarea><br>
 
-<button id="classify_button">classify</button>
+        <input ng-model="filename">
+        <button id="button_genpdf" ng-click="generate_pdf()">Generate PDF</button>
+        <a href="{{download_link_url}}" ng-show="show_download_link">Download link {{filename}}</a>
 
-&nbsp; &nbsp;
- Guess: <div id="guess"></div>
-
--->
-
+    </div>
+</div>
 
 </body>
 
