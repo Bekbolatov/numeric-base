@@ -15,9 +15,9 @@ angular.module 'Latex'
     senddata = () ->
         deferred = $q.defer()
 
-        url = 'http://localhost:9000/latex/convert2pdf/' + $scope.filename
+        url = 'http://localhost:9000/latex/convert2pdf'
         data = $scope.raw_latex
-        $http.post(url, data, {responseType: "arraybuffer"})
+        $http.post(url, data, {responseType: "arraybuffer", headers: { 'Content-Type': 'application/plain-text'} })
         .then (response) =>
             data = response.data
             blob = new Blob([data], { type: 'application/pdf' })

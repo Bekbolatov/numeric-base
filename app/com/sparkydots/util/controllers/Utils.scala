@@ -32,28 +32,10 @@ class Utils @Inject()(
     Ok(views.html.latex())
   }
 
-  def createLatex(filename: String) = Action.async {
-    var file = filename.take(20)
-
-    if (file.toLowerCase.endsWith(".pdf")) {
-      file = file.dropRight(4)
-    }
-    val texDoc =
-
-    raw"""
-      |\documentclass{book}
-      |
-      |
-      |\begin{document}
-      |\chapter{Sample}
-      |
-      |Huyaks
-      |
-      |\end{document}
-    """.
-      stripMargin
-
-    latexService.convertLatexFile(texDoc, file)
-//    latexService.convertLatex(texDoc, "huya").map { uri => Ok(views.html.latex(uri)) }
+  def createLatex = Action.async { request =>
+    val texDoc = request.body.asRaw.get.asBytes().get.utf8String
+    latexService.convertLatexFile(texDoc)
   }
+  
 }
+

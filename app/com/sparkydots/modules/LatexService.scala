@@ -15,29 +15,27 @@ import akka.util.ByteString
 
 trait LatexService {
 
-  def convertLatex(tex: String, filename: String,
-                   serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String]
+  def convertLatex(tex: String, serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String]
 
-  def convertLatexFile(tex: String, filename: String): Future[Result]
+  def convertLatexFile(tex: String): Future[Result]
+
 }
 
 
 class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
 
-  override def convertLatex(tex: String, filename: String,
-                            useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String] = {
+  override def convertLatex(tex: String, useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String] = {
 
     val serviceInstance = (useServiceInstance orElse serviceDiscovery.findService("latex2pdf")).get
     val host = serviceInstance.host
     val port = serviceInstance.port
 
-    val url = s"http://$host:$port/cgi-bin/latex2pdf.sh?$filename"
+    val url = s"http://$host:$port/cgi-bin/latex2pdf.sh"
 
     val request: WSRequest = ws.url(url).
       withHeaders("Content-Type" -> "application/x-tex").
       withHeaders("Accept" -> "application/json").
       withRequestTimeout(10000.millis)
-    // withQueryString("search" -> "play")
 
     val futureResponse: Future[WSResponse] = request.post(tex)
 
@@ -56,15 +54,14 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
     futureResult
   }
 
-  //Array[Byte]
-  override def convertLatexFile(tex: String, filename: String): Future[Result] = {
+  override def convertLatexFile(tex: String): Future[Result] = {
     val serviceInstance = serviceDiscovery.findService("latex2pdf").get
 
     val host = serviceInstance.host
     val port = serviceInstance.port
 
     val futureResponse: Future[WSResponse] = for {
-      uri <- convertLatex(tex, filename, Some(serviceInstance))
+      uri <- convertLatex(tex, Some(serviceInstance))
       fileResponse <- ws.url(uri).get()
     } yield fileResponse
 
@@ -72,7 +69,7 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
       Result(
         header = ResponseHeader(200),
         body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
-      ).withHeaders(("Content-Disposition", "inline; filename=\"" + filename + ".pdf\"" ))
+      ).withHeaders("Content-Disposition" -> "inline; filename=\"result.pdf\"" )
     }
 
     futureResult
