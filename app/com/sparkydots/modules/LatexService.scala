@@ -15,16 +15,18 @@ import akka.util.ByteString
 
 trait LatexService {
 
-  def convertLatex(tex: String, serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String]
+  def convertLatex(tex: String, serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[(Boolean, String)]
 
-  def convertLatexFile(tex: String): Future[Result]
+  def convertLatexFile(tex: String): Future[(Boolean, Result)]
 
 }
 
 
 class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
 
-  override def convertLatex(tex: String, useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[String] = {
+  override def convertLatex(tex: String,
+                            useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None
+                           ): Future[(Boolean, String)] = {
 
     val serviceInstance = (useServiceInstance orElse serviceDiscovery.findService("latex2pdf")).get
     val host = serviceInstance.host
@@ -39,39 +41,45 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
 
     val futureResponse: Future[WSResponse] = request.post(tex)
 
-    val futureResult: Future[String] = futureResponse.map {
+    val futureResult: Future[(Boolean, String)] = futureResponse.map {
       response =>
         val jresponse = response.json
         val error = jresponse \ "error"
 
         if (error.toOption.isDefined) {
-          error.as[String]
+          (false, s"http://$host:$port${(response.json \ "log").as[String]}")
         } else {
-          s"http://$host:$port${(response.json \ "uri").as[String]}"
+          (true, s"http://$host:$port${(response.json \ "uri").as[String]}")
         }
     }
 
     futureResult
   }
 
-  override def convertLatexFile(tex: String): Future[Result] = {
+  override def convertLatexFile(tex: String): Future[(Boolean, Result)] = {
     val serviceInstance = serviceDiscovery.findService("latex2pdf").get
 
     val host = serviceInstance.host
     val port = serviceInstance.port
 
-    val futureResponse: Future[WSResponse] = for {
-      uri <- convertLatex(tex, Some(serviceInstance))
+    val futureResponse: Future[(Boolean, WSResponse)] = for {
+      (success, uri) <- convertLatex(tex, Some(serviceInstance))
       fileResponse <- ws.url(uri).get()
-    } yield fileResponse
+    } yield (success, fileResponse)
 
-    val futureResult: Future[Result] = futureResponse.map { response =>
-      Result(
-        header = ResponseHeader(200),
-        body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
-      ).withHeaders("Content-Disposition" -> "inline; filename=\"result.pdf\"" )
+    val futureResult: Future[(Boolean, Result)] = futureResponse.map { case (success, response) =>
+      (success, if (success) {
+        Result(
+          header = ResponseHeader(200),
+          body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
+        ).withHeaders("Content-Disposition" -> "inline; filename=\"result.pdf\"")
+      } else {
+        Result(
+          header = ResponseHeader(200),
+          body = HttpEntity.Strict(response.bodyAsBytes, Some("plain/text"))
+        )
+      })
     }
-
     futureResult
   }
 }

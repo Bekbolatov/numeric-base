@@ -4,28 +4,41 @@
 
 <html>
 <head>
-    <title>Sparky Dots</title>
+    <title>Sparky Dots Latex2pdf</title>
     <!--<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>-->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
     <script src='@routes.Assets.at("javascripts/latex.js")' type="text/javascript"></script>
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/latex.css")'>
+    <!--<link rel="stylesheet" href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css'>-->
 
 </head>
 <body>
-<div ng-app="Latex">
+    <div ng-app="Latex">
+        <div ng-controller="LatexCtrl">
+            <section class="container">
+                <div class="left-half">
+                    <article>
+                        <h1>Write LaTeX</h1>
 
-    <div ng-controller="LatexCtrl">
-        <hr>
+                        <textarea class="boxsizingBorder" id="text" ng-model="raw_latex" ngMaxlength="50000"></textarea>
+                        <br>
+                        <button id="button_clear" ng-click="clear_tex()">Clear</button>
+                        <input ng-model="filename">
+                        <button id="button_genpdf" ng-click="generate_pdf()">Generate PDF</button>
 
-        Write LaTeX below and generate PDF<br>
-        <textarea id="text" ng-model="raw_latex" rows="10" cols="90" ngMaxlength="10000"></textarea><br>
+                    </article>
+                </div>
+                <div ng-show="show_errors" class="right-half">
+                    <article>
+                        <h1>error log</h1>
 
-        <input ng-model="filename">
-        <button id="button_genpdf" ng-click="generate_pdf()">Generate PDF</button>
-        <a href="{{download_link_url}}" ng-show="show_download_link">Download link {{filename}}</a>
-
+                        <textarea ng-model="logs"></textarea>
+                    </article>
+                </div>
+            </section>
+        </div>
     </div>
-</div>
 
 </body>
 
