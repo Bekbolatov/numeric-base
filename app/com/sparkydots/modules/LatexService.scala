@@ -11,11 +11,14 @@ import play.api.mvc.{Result, ResponseHeader}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.util.ByteString
+import play.api.http.Status._
+import play.api.mvc.{Controller, _}
+import play.api.mvc.Results.Ok
 
 
 trait LatexService {
 
-  def convertLatex(tex: String, serviceInstance: Option[ServiceDiscovery.ServiceInstance] = None): Future[(Boolean, String)]
+  def convertLatex(tex: String, serviceInstance: ServiceDiscovery.ServiceInstance): Future[(Boolean, String)]
 
   def convertLatexFile(tex: String): Future[(Boolean, Result)]
 
@@ -24,11 +27,8 @@ trait LatexService {
 
 class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
 
-  override def convertLatex(tex: String,
-                            useServiceInstance: Option[ServiceDiscovery.ServiceInstance] = None
-                           ): Future[(Boolean, String)] = {
+  override def convertLatex(tex: String, serviceInstance: ServiceDiscovery.ServiceInstance): Future[(Boolean, String)] = {
 
-    val serviceInstance = (useServiceInstance orElse serviceDiscovery.findService("latex2pdf")).get
     val host = serviceInstance.host
     val port = serviceInstance.port
 
@@ -57,29 +57,35 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
   }
 
   override def convertLatexFile(tex: String): Future[(Boolean, Result)] = {
-    val serviceInstance = serviceDiscovery.findService("latex2pdf").get
 
-    val host = serviceInstance.host
-    val port = serviceInstance.port
+    serviceDiscovery.call[Future[(Boolean, Result)]]("latex2pdf") { serviceInstance=>
 
-    val futureResponse: Future[(Boolean, WSResponse)] = for {
-      (success, uri) <- convertLatex(tex, Some(serviceInstance))
-      fileResponse <- ws.url(uri).get()
-    } yield (success, fileResponse)
+      val host = serviceInstance.host
+      val port = serviceInstance.port
 
-    val futureResult: Future[(Boolean, Result)] = futureResponse.map { case (success, response) =>
-      (success, if (success) {
-        Result(
-          header = ResponseHeader(200),
-          body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
-        ).withHeaders("Content-Disposition" -> "inline; filename=\"result.pdf\"")
-      } else {
-        Result(
-          header = ResponseHeader(200),
-          body = HttpEntity.Strict(response.bodyAsBytes, Some("plain/text"))
-        )
-      })
+      val futureResponse: Future[(Boolean, WSResponse)] = for {
+        (success, uri) <- convertLatex(tex, serviceInstance)
+        fileResponse <- ws.url(uri).get()
+      } yield (success, fileResponse)
+
+      val futureResult: Future[(Boolean, Result)] = futureResponse.map { case (success, response) =>
+        (success, if (success) {
+          Result(
+            header = ResponseHeader(200),
+            body = HttpEntity.Strict(response.bodyAsBytes, Some("application/pdf"))
+          ).withHeaders("Content-Disposition" -> "inline; filename=\"result.pdf\"")
+        } else {
+          Result(
+            header = ResponseHeader(200),
+            body = HttpEntity.Strict(response.bodyAsBytes, Some("plain/text"))
+          )
+        })
+      }
+      Some(futureResult)
     }
-    futureResult
+  }.getOrElse {
+    Future.successful {
+      (false, Ok("Server error"))
+    }
   }
 }

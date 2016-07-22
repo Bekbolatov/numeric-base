@@ -43,6 +43,8 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
 
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+
 TwirlKeys.templateImports += "com.sparkydots.starpractice.common.models._"
 TwirlKeys.templateImports += "com.sparkydots.common.controllers.routes"
 TwirlKeys.templateImports += "com.sparkydots._"

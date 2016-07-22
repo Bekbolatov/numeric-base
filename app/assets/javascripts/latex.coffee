@@ -32,7 +32,7 @@ angular.module 'Latex'
         data = $scope.raw_latex
         $http.post(url, data, {responseType: "arraybuffer", headers: { 'Content-Type': 'plain/text'} })
         .then (response) =>
-            if response.headers('Content-Type') == 'plain/text'
+            if response.headers('Content-Type') != 'application/pdf'
                 document.aaa = response
                 $scope.logs = new TextDecoder("UTF-8").decode(response.data)
                 $scope.show_errors = true
