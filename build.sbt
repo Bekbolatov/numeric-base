@@ -29,6 +29,7 @@ includeFilter in (Assets, LessKeys.less) := "*.less"
 
 unmanagedSourceDirectories in Compile += baseDirectory.value / "src" / "main" / "scala"
 
+//javacOptions += "-Xno-uescape"
 
 libraryDependencies ++= Seq(
   jdbc,

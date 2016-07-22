@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import akka.util.ByteString
 import com.sparkydots.modules.{LogHelper, LatexService}
+import com.sparkydots.util.questions.QuestionsGeneration
 import com.sparkydots.util.views
 import play.api.http.HttpEntity
 import play.api.mvc.{Controller, _}
@@ -18,6 +19,8 @@ class Utils @Inject()(
                        val latexService: LatexService
                      )
   extends Controller with I18nSupport {
+
+  val qgen = new QuestionsGeneration()
 
   def health = Action {
     Ok(views.html.health())
@@ -52,10 +55,10 @@ class Utils @Inject()(
     }
   }
 
-  def makeq1() = Action.async {
-    val content = com.sparkydots.util.views.txt.q1(3, 4)
-    val body = content.body
+  def makeq(qid: String) = Action.async {
+    val body = qgen.createQuestion(qid)
     println(body)
+
     latexService.convertLatexFile(body).map { case (success, result) =>
       result
     }

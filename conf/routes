@@ -4,7 +4,7 @@ GET /health                       com.sparkydots.util.controllers.Utils.health
 GET /machine                      com.sparkydots.util.controllers.Utils.machine
 GET /myip                         com.sparkydots.util.controllers.Utils.myip
 -> /latex                         latex.Routes
-GET /makeq1                       com.sparkydots.util.controllers.Utils.makeq1
+GET /makeq/:qnum                      com.sparkydots.util.controllers.Utils.makeq(qnum)
 
 # Web Pages
 GET /                             com.sparkydots.website.main.controllers.SparkyDots.index

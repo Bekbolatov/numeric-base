@@ -1,0 +1,31 @@
+@(blocks: Seq[(String, String)], blockPrefix: String)
+
+
+\documentclass{article}
+
+\\usepackage[margin=1.0in, bottom=1.0in]{geometry}
+
+ 
+\begin{document}
+
+
+  \twocolumn[
+  \centerline{\sc \large Practice Exam For Jacob}
+  \vspace{0.3pc}
+  \centerline{\sc by Renat Bekbolatov (\today) }
+  \vspace{0.8pc}
+  ]
+  
+  
+  @for((name, content) <- blocks) {
+  
+    \subsection*{@blockPrefix@name}
+  
+    @content
+  
+  }
+  
+  
+
+\end{document}
+
