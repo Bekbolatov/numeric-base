@@ -11,6 +11,7 @@ import play.api.mvc.{Result, ResponseHeader}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.util.ByteString
+import com.sparkydots.utils.{ServiceInstance, ServiceDiscovery}
 import play.api.http.Status._
 import play.api.mvc.{Controller, _}
 import play.api.mvc.Results.Ok
@@ -18,7 +19,7 @@ import play.api.mvc.Results.Ok
 
 trait LatexService {
 
-  def convertLatex(tex: String, serviceInstance: ServiceDiscovery.ServiceInstance): Future[(Boolean, String)]
+  def convertLatex(tex: String, serviceInstance: ServiceInstance): Future[(Boolean, String)]
 
   def convertLatexFile(tex: String): Future[(Boolean, Result)]
 
@@ -27,7 +28,7 @@ trait LatexService {
 
 class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
 
-  override def convertLatex(tex: String, serviceInstance: ServiceDiscovery.ServiceInstance): Future[(Boolean, String)] = {
+  override def convertLatex(tex: String, serviceInstance: ServiceInstance): Future[(Boolean, String)] = {
 
     val host = serviceInstance.host
     val port = serviceInstance.port

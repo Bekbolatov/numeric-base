@@ -8,7 +8,6 @@ import play.api.inject.Module
 class LoggingModule extends Module {
   def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     Seq(
-      bind[ServiceDiscovery].to[ServiceDiscoveryImpl],
       bind[LogHelper].to[LogHelperImpl],
       bind[LatexService].to[LatexServiceImpl]
     )
