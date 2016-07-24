@@ -42,6 +42,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "com.sparkydots.utils" %% "servicediscovery" % "1.0-SNAPSHOT"
+libraryDependencies += "com.sparkydots.contentservice" %% "content-server-client" % "1.0-SNAPSHOT"
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.27"
 

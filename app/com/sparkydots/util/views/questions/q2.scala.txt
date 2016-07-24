@@ -1,3 +1,0 @@
-@(arg1: Int)
-
-Which of the following is closest in value to @arg1?

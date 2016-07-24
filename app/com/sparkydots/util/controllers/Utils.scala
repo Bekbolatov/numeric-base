@@ -3,24 +3,23 @@ package com.sparkydots.util.controllers
 import javax.inject.Inject
 
 import akka.util.ByteString
-import com.sparkydots.services.{LogHelper, LatexService}
-import com.sparkydots.util.questions.QuestionsGeneration
+import com.sparkydots.services._
 import com.sparkydots.util.views
 import play.api.http.HttpEntity
 import play.api.mvc.{Controller, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
 
-//import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, ExecutionContext}
+import com.sparkydots.contentservice._
+import com.sparkydots.latexservice._
 
 class Utils @Inject() (
                        val messagesApi: MessagesApi,
-                       val myComponent: LogHelper,
-                       val latexService: LatexService
+                       myComponent: LogHelper,
+                       latexService: LatexService,
+                       questionService: QuestionsService
                      )(implicit exec: ExecutionContext)
   extends Controller with I18nSupport {
-
-  val qgen = new QuestionsGeneration()
 
   def health = Action {
     Ok(views.html.health())
@@ -55,15 +54,32 @@ class Utils @Inject() (
     }
   }
 
-  def makeq(qid: String) = Action.async {
-    val body = qgen.createQuestion(qid)
-    println(body)
+  def generatePracticeSet = Action.async {
+    val spec = PracticeSetSpecification(
+      "Example Practice Set",
+      "Subtitle of the test",
+      "Description here ",
+      Seq(
+        PracticeQuestionCount(
+          PracticeQuestion(
+            "com.sp.qw.qw.question",
+            "1",
+            1),
+          2),
+        PracticeQuestionCount(
+          PracticeQuestion(
+            "com.sp.qw.qw.question",
+            "1",
+            2),
+          3)
+      ),
+      None
+    )
+    println(spec)
 
-    latexService.convertLatexFile(body).map { case (success, result) =>
-      result
-    }
+    questionService.generateDocument(spec)
+
   }
-
 
 }
 
