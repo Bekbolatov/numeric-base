@@ -9,6 +9,7 @@ import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
 import akka.stream.Materializer
 import com.sparkydots.common.events.Event
+import com.sparkydots.services.LogHelper
 
 class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
@@ -65,7 +66,8 @@ class HTTPSRedirectFilter @Inject() (implicit val mat: Materializer, ec: Executi
   }
 }
 
-class Filters @Inject() (httpRedirect: HTTPSRedirectFilter, accessLog: AccessLoggingFilter) extends DefaultHttpFilters(httpRedirect, accessLog) {
+class Filters @Inject() (httpRedirect: HTTPSRedirectFilter, accessLog: AccessLoggingFilter, logHelper: LogHelper) extends DefaultHttpFilters(httpRedirect, accessLog) {
   println("Filters starting")
-  Logger.info("Filters object started")
+  Logger.info(s"Filters object started on ${logHelper.getMachineInfo}")
+
 }

@@ -3,21 +3,21 @@ package com.sparkydots.util.controllers
 import javax.inject.Inject
 
 import akka.util.ByteString
-import com.sparkydots.modules.{LogHelper, LatexService}
+import com.sparkydots.services.{LogHelper, LatexService}
 import com.sparkydots.util.questions.QuestionsGeneration
 import com.sparkydots.util.views
 import play.api.http.HttpEntity
 import play.api.mvc.{Controller, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+//import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Future, ExecutionContext}
 
-class Utils @Inject()(
+class Utils @Inject() (
                        val messagesApi: MessagesApi,
                        val myComponent: LogHelper,
                        val latexService: LatexService
-                     )
+                     )(implicit exec: ExecutionContext)
   extends Controller with I18nSupport {
 
   val qgen = new QuestionsGeneration()

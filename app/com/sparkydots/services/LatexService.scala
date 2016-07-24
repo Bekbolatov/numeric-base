@@ -1,6 +1,6 @@
-package com.sparkydots.modules
+package com.sparkydots.services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import play.api.http.HttpEntity
 
@@ -10,25 +10,14 @@ import play.api.libs.ws._
 import play.api.mvc.{Result, ResponseHeader}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import akka.util.ByteString
 import com.sparkydots.utils.{ServiceInstance, ServiceDiscovery}
-import play.api.http.Status._
-import play.api.mvc.{Controller, _}
 import play.api.mvc.Results.Ok
 
 
-trait LatexService {
+@Singleton
+class LatexService @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) {
 
-  def convertLatex(tex: String, serviceInstance: ServiceInstance): Future[(Boolean, String)]
-
-  def convertLatexFile(tex: String): Future[(Boolean, Result)]
-
-}
-
-
-class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscovery) extends LatexService {
-
-  override def convertLatex(tex: String, serviceInstance: ServiceInstance): Future[(Boolean, String)] = {
+  def convertLatex(tex: String, serviceInstance: ServiceInstance): Future[(Boolean, String)] = {
 
     val host = serviceInstance.host
     val port = serviceInstance.port
@@ -57,7 +46,7 @@ class LatexServiceImpl @Inject()(ws: WSClient, serviceDiscovery: ServiceDiscover
     futureResult
   }
 
-  override def convertLatexFile(tex: String): Future[(Boolean, Result)] = {
+  def convertLatexFile(tex: String): Future[(Boolean, Result)] = {
 
     serviceDiscovery.call[Future[(Boolean, Result)]]("latex2pdf") { serviceInstance=>
 
