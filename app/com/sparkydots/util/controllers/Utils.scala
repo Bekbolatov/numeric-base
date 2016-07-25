@@ -10,16 +10,18 @@ import play.api.mvc.{Controller, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
 
 import scala.concurrent.{Future, ExecutionContext}
-import com.sparkydots.contentservice._
-import com.sparkydots.latexservice._
+import com.sparkydots.service.content._
+import com.sparkydots.service.latex._
 
 class Utils @Inject() (
-                       val messagesApi: MessagesApi,
-                       myComponent: LogHelper,
-                       latexService: LatexService,
-                       questionService: QuestionsService
+                        val messagesApi: MessagesApi,
+                        myComponent: LogHelper,
+                        latexService: LatexService,
+                        contentService: ContentService
                      )(implicit exec: ExecutionContext)
   extends Controller with I18nSupport {
+
+  def simplelog(msg: => String): Unit = println(msg)
 
   def health = Action {
     Ok(views.html.health())
@@ -47,8 +49,8 @@ class Utils @Inject() (
         HttpEntity.Strict(ByteString("We can only allow documents less that 50K chars.".getBytes("UTF-8")), Some("plain/text"))
       ))
     } else {
-      latexService.convertLatexFile(texDoc).map { case (success, result) =>
-        result
+      latexService.convertLatexFile(texDoc, timeoutMillis=5000, log = Some(simplelog)).map { case (success, result) =>
+        result.withHeaders("Content-Disposition" -> "attachment; filename=\"attachment.pdf\"")
       }
 
     }
@@ -56,7 +58,7 @@ class Utils @Inject() (
 
   def generatePracticeSet = Action.async {
     val spec = PracticeSetSpecification(
-      "Example Practice Set",
+      "REN Example Practice Set",
       "Subtitle of the test",
       "Description here ",
       Seq(
@@ -77,7 +79,10 @@ class Utils @Inject() (
     )
     println(spec)
 
-    questionService.generateDocument(spec)
+    contentService.generatePracticeSet(spec, timeoutMillis=5000, log = Some(simplelog)).map {
+      result =>
+        result.withHeaders("Content-Disposition" -> "attachment; filename=\"attachment.pdf\"")
+    }
 
   }
 
