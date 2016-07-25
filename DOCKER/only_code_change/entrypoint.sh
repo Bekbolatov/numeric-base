@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-ln -s /EFS/distrib/lib/* /deployment/lib/
+#ln -s /EFS/distrib/lib/* /deployment/lib/
 
 #register
 THIS_HOST=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)

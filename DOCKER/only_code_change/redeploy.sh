@@ -15,7 +15,8 @@ rm -rf target
 mkdir -p target/lib
 
 unzip $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT.zip -d $SRC_HOME/target/universal/
-cp -rf $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT/lib/sparkydots-server* target/lib/.
+#cp -rf $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT/lib/sparkydots-server* target/lib/.
+cp -rf $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT/lib/* target/lib/.
 cp -rf $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT/bin target/.
 cp -rf $SRC_HOME/target/universal/sparkydots-server-1.0-SNAPSHOT/conf target/.
 
