@@ -11,7 +11,7 @@ SERVICENAME=$TASK_FAMILY
 
 SET_MEMORY=1400
 SET_CPU=200
-PORT_MAPPING='[ { "hostPort": 8080, "containerPort": 9000, "protocol": "tcp" } ]'
+PORT_MAPPING='[ { "hostPort": 8080, "containerPort": 9000, "protocol": "tcp" }, { "hostPort": 12552, "containerPort": 2552, "protocol": "tcp" } ]'
 
 AWSLOGS_GROUP=sparkydots
 

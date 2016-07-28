@@ -41,6 +41,8 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.4"
 )
 
+libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.4.4"
+
 libraryDependencies += "com.sparkydots" %% "service-discovery" % "1.0-SNAPSHOT"
 libraryDependencies += "com.sparkydots" %% "content-service-client" % "1.0-SNAPSHOT"
 libraryDependencies += "com.sparkydots" %% "latex-service-client" % "1.0-SNAPSHOT"
