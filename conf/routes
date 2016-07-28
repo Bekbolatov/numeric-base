@@ -17,3 +17,8 @@ GET /starpractice/appDemo         com.sparkydots.website.main.controllers.Sparky
 
 ->  /activityServer               activity_server.Routes
 ->  /admin                        admin.Routes
+
+
+
+GET     /ws1                        com.sparkydots.util.controllers.Controller1.socket
+GET     /ws3                        com.sparkydots.util.controllers.Controller3.socket
