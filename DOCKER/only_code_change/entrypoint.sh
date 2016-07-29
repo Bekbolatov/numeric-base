@@ -1,17 +1,19 @@
 #!/bin/bash
 
-
+set -a
 #ln -s /EFS/distrib/lib/* /deployment/lib/
 
 #register
-THIS_HOST=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-touch /EFS/run/services/webserver/$THIS_HOST:8080
+HOST_LOCAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+touch /EFS/run/services/webserver/$HOST_LOCAL_IP:8080
+
+HOST_PUBLIC_HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
+HOST_AKKA_PORT=12552
+echo "THIS_PUBLIC_HOSTNAME=$HOST_PUBLIC_HOSTNAME="
 
 
-THIS_NAME=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
-echo "THIS_NAME=$THIS_NAME:HELLO"
+CONTAINER_LOCAL_IP=$(hostname -I)
+CONTAINER_AKKA_PORT=2552
+echo "CONTAINER_LOCAL_IP=$CONTAINER_LOCAL_IP="
 
-LOCAL_IP=$(hostname -I)
-echo "LOCAL_IP=$LOCAL_IP:HELLO"
-
-exec $@ -Dmy-akka.akka.remote.netty.tcp.hostname=$THIS_NAME
+exec $@

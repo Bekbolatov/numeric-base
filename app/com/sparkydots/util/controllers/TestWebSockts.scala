@@ -78,18 +78,17 @@ class Controller1 @Inject()(implicit system: ActorSystem, materializer: Material
     implicit val system = ActorSystem("locals")
 
     class LocalActor extends Actor {
-//      val remote = context.actorSelection("akka.tcp://application@127.0.0.1:2552/user/$a/flowActor")
-//      val remote = context.actorSelection("akka.tcp://application@127.0.0.1:9010/user/$a/flowActor")
 //      val remote = context.actorSelection("akka.tcp://application@192.168.99.1:2552/user/$a/flowActor")
-//      val remote = context.actorSelection("akka.tcp://application@52.42.129.116:12552/user/$a/flowActor")
-      val remote = context.actorSelection("akka.tcp://application@ec2-52-35-198-161.us-west-2.compute.amazonaws.com:12552/user/$a/flowActor")
+      val remote = context.actorSelection("akka.tcp://application@ec2-52-43-3-58.us-west-2.compute.amazonaws.com:12552/user/$a/flowActor")
+//      val remote = context.actorSelection("akka.tcp://application@127.0.0.1:2552/user/$a/flowActor")
+//      val remote = context.actorSelection("akka.tcp://application@ec2-52-35-198-161.us-west-2.compute.amazonaws.com:12552/user/$a/flowActor")
 
       def receive = {
         case msg: String => remote ! msg
       }
     }
 
-    val localActor = system.actorOf(Props[LocalActor], name = "LocalActor16")
+    val localActor = system.actorOf(Props[LocalActor], name = "LocalActor3")
 
     localActor ! "sendall"
 
