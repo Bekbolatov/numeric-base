@@ -84,11 +84,12 @@ class Controller1 @Inject()(implicit system: ActorSystem, materializer: Material
 //      val remote = context.actorSelection("akka.tcp://application@ec2-52-35-198-161.us-west-2.compute.amazonaws.com:12552/user/$a/flowActor")
 
       def receive = {
+        case "HUY" => println("HUY received")
         case msg: String => remote ! msg
       }
     }
 
-    val localActor = system.actorOf(Props[LocalActor], name = "LocalActor3")
+    val localActor = system.actorOf(Props[LocalActor], name = "LocalActor5")
 
     localActor ! "sendall"
 
@@ -161,7 +162,8 @@ class MyWebSocketActor(out: ActorRef) extends Actor {
       myrec = Some(sender())
 
     case "blah" =>
-      myrec.map(r => r ! "HUY")
+      println("received blah")
+      sender() ! "HUY"
 
     case MessageSending(msg) =>
       println("Received " + msg)
