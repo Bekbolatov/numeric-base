@@ -22,3 +22,6 @@ GET /starpractice/appDemo         com.sparkydots.website.main.controllers.Sparky
 
 GET     /ws1                        com.sparkydots.util.controllers.Controller1.socket
 GET     /ws3                        com.sparkydots.util.controllers.Controller3.socket
+
+POST     /slack/:name                        com.sparkydots.util.controllers.SlackController.fromSlack(name)
+

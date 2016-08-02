@@ -1,13 +1,15 @@
 package com.sparkydots.util.controllers
 
-import javax.inject.Inject
+import javax.inject._
 
 import akka.actor.{OneForOneStrategy, ActorRefFactory, SupervisorStrategy, Props, Terminated, PoisonPill, Actor, ActorSystem, ActorRef, Status, _}
 import play.api.mvc._
 import akka.stream.{OverflowStrategy, Materializer}
 import akka.stream.scaladsl.{Keep, Sink, Source, Flow, RunnableGraph}
+import com.sparkydots.util.controllers.HelloActor.{ResponseToSlack, SayHello, FromSlack}
+import play.api.libs.json.{Format, Json, JsValue}
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.duration._
 import scala.util.Try
 
@@ -128,6 +130,7 @@ class Controller1 @Inject()(implicit system: ActorSystem, materializer: Material
 
 }
 
+
 import scala.concurrent.Future
 import play.api.mvc._
 import play.api.libs.streams._
@@ -212,5 +215,93 @@ class MyWebSocketActor(out: ActorRef) extends Actor {
 
   def killmyself = {
     self ! PoisonPill
+  }
+}
+
+
+object HelloActor {
+  def props = Props[HelloActor]
+
+  case class SayHello(name: String)
+  case class FromSlack(user_name: String, text: String)
+  case class ResponseToSlack(text: String)
+
+}
+
+class HelloActor extends Actor {
+  import HelloActor._
+  implicit val ResponseToSlackFormat = Json.format[ResponseToSlack]
+
+  var items: Seq[String] = Seq()
+
+  def receive = {
+    case SayHello(name: String) =>
+      sender() ! "Hello, " + name
+    case FromSlack(user_name, text) =>
+      val response_text = if (user_name == "slackbot") {
+        ""
+      } else {
+        s"Oh yeah, $user_name, $text"
+      }
+      def jsonString = Json.toJson(ResponseToSlack(response_text)).toString
+      sender() ! jsonString
+  }
+}
+
+import scala.concurrent.duration._
+import akka.pattern.ask
+
+
+@Singleton
+class SlackController @Inject()(implicit system: ActorSystem, materializer: Materializer, ec: ExecutionContext) extends Controller {
+
+  implicit val timeout: akka.util.Timeout = 5.seconds
+
+  val helloActor = system.actorOf(HelloActor.props, "hello-actor")
+
+  def fromSlack(name: String) = Action.async { request =>
+
+    if (name == "roblox") {
+
+      println(request.body)
+
+      request.body.asJson.map { data =>
+        println(data)
+
+        val token = (data \ "token").as[String]
+        if (token == "bqXUvO3W0WOgc5Cykl9aOVTG") {
+          //      (helloActor ? SayHello("g")).mapTo[String].map { message =>
+          val text = (data \ "text").as[String]
+          val user_name = (data \ "user_name").as[String]
+
+          (helloActor ? FromSlack(user_name, text)).mapTo[String].map { message =>
+            Ok(message)
+          }
+        } else {
+          Future.successful(Ok(""))
+        }
+      }.orElse {
+        request.body.asFormUrlEncoded.map { data =>
+          println(data)
+
+          val token = data("token").head
+          if (token == "bqXUvO3W0WOgc5Cykl9aOVTG") {
+            val text = data("text").head
+            val user_name = data("user_name").head
+
+            (helloActor ? FromSlack(user_name, text)).mapTo[String].map { message =>
+              Ok(message)
+            }
+          } else {
+            Future.successful(Ok(""))
+          }
+
+        }
+      }.getOrElse {
+        Future.successful(Ok(""))
+      }
+    } else {
+      Future.successful(Ok("hello"))
+    }
   }
 }
